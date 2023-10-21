@@ -1,15 +1,31 @@
 import React, { useEffect, useState,useRef } from 'react';
-import PeopleScreen from "../PeopleScreen";
-// import ChatWindow from "./ChatWindow";
 import { connect } from 'react-redux';
 import TabPanel from '../TabPanel';
 import Grid from '@mui/material/Grid'; // Import Grid
-import Hidden from '@mui/material/Hidden'; // Import Hidden
-import ImageCircles from './ImageCircle';
-import BlankChatScreen from './BlankChatScreen';
+// import BlankChatScreen from './BlankChatScreen';
 
 
-import RequestScreen from "../RequestScreen";
+
+const imageStyle = {
+  backgroundImage: `url('https://dhankosh.s3.ap-south-1.amazonaws.com/assets/Frame+967.svg')`,
+  backgroundSize: '200px 200px', // Set the image size to 200x200
+  backgroundPosition: 'center', // Center the image horizontally
+  display: 'flex',
+  alignItems: 'center', // Center the image vertically
+  height: '600px',
+  backgroundRepeat: 'no-repeat', // Turn off background image repeat
+  border:"1px solid grey",
+  width: '700px',
+};
+
+export function BlankChatScreen() {
+  return (
+    <div style={imageStyle}>
+      {/* Your content goes here */}
+    </div>
+  );
+}
+
 
 export function ChatScreen({ chats, to_email,sendMsg }) {
   const [textareaValue, setTextareaValue] = useState('');
@@ -98,7 +114,6 @@ export function ChatScreen({ chats, to_email,sendMsg }) {
 function ChatWindow({ with_email, with_userid }) {
   // console.log("here we are", rtcData);
   const [loading, setLoading] = useState(true);
-  const [chatHistory, setChatHistory] = useState([]);
   const [chats, setChats] = useState([]);
   const [requestStatus, setRequestStatus] = useState(null);
   const [answer, setAnswer] = useState(false);
@@ -487,7 +502,8 @@ function ChatWindow({ with_email, with_userid }) {
       ) : connection_open ? (
         <ChatScreen with_email={with_email} chats={chats} sendMsg={sendMsg} />
       ) : requestStatus !== "ACCEPTED" ? (
-        <RequestScreen with_email={with_email} />
+        // <RequestScreen with_email={with_email} />
+        <div>REQUST STatus</div>
       ) : (
         <div>Nothing Matched!</div>
       )}
@@ -634,7 +650,6 @@ function Chat({auth_data}) {
 
   return (
     <div>
-      <ImageCircles users={users} />
       <Grid container>
      
       <Grid item xs={12} md={3}>
