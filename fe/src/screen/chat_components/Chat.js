@@ -149,8 +149,7 @@ function ChatWindow({ with_email, with_userid }) {
             Authorization: token,
           },
         }
-      );
-
+    
       if (response.status === 200) {
         const data = await response.json();
         // setRTCData(data);
@@ -162,7 +161,7 @@ function ChatWindow({ with_email, with_userid }) {
               ...myRef.current,
               answer: data.answer,
             };
-            setAnswer(true);
+            setAnswer(tru
           }
         }
         return Object.entries(data).length == 0 ? null : data;
