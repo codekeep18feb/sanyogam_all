@@ -1,0 +1,18 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Flask",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/app.py", // Path to your Flask application entry point
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "FLASK_ENV": "development" // Set Flask environment to development
+            },
+            "envFile": "${workspaceFolder}/.env", // Optional: Load environment variables from a .env file
+            
+        }
+    ]
+}
