@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 
-function LocalVideo({ peerConnection }) {
+function LocalVideo({ localPeerConnection }) {
   const localVideoRef = useRef(null);
   const [localOffer, setLocalOffer] = useState(null);
   const [remoteAnswer, setRemoteAnswer] = useState('');
 
-  console.log('IS IT RE-RENDERING');
-
   useEffect(() => {
+    const peerConnection = localPeerConnection.current;
+
     const startLocalVideo = async () => {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
@@ -22,9 +22,11 @@ function LocalVideo({ peerConnection }) {
     };
 
     startLocalVideo();
-  }, [peerConnection]);
+  }, [localPeerConnection]);
 
   async function generateLocalOffer() {
+    const peerConnection = localPeerConnection.current;
+
     if (!peerConnection) {
       console.error('RTCPeerConnection is not available.');
       return;
@@ -44,6 +46,8 @@ function LocalVideo({ peerConnection }) {
   }
 
   async function handleRemoteAnswerSubmit() {
+    const peerConnection = localPeerConnection.current;
+
     if (!peerConnection) {
       console.error('RTCPeerConnection is not available.');
       return;
@@ -90,12 +94,14 @@ function LocalVideo({ peerConnection }) {
   );
 }
 
-function RemoteVideo({ peerConnection }) {
+function RemoteVideo({ remotePeerConnection }) {
   const remoteVideoRef = useRef(null);
   const [remoteOffer, setRemoteOffer] = useState('');
   const [remoteAnswer, setRemoteAnswer] = useState('');
 
   useEffect(() => {
+    const peerConnection = remotePeerConnection.current;
+
     const startRemoteVideo = async () => {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
@@ -110,29 +116,29 @@ function RemoteVideo({ peerConnection }) {
     };
 
     startRemoteVideo();
-  }, [peerConnection]);
+  }, [remotePeerConnection]);
 
-  const generateRemoteAnswer = async () => {
+  async function generateRemoteAnswer() {
+    const peerConnection = remotePeerConnection.current;
+
     if (!peerConnection) {
       console.error('RTCPeerConnection is not available.');
       return;
     }
 
-    const pc = peerConnection;
-
     const remoteOfferDesc = JSON.parse(remoteOffer);
 
     try {
-      if (pc.signalingState === 'have-local-offer' || pc.signalingState === 'have-remote-offer') {
-        console.log('Before setting remote description, Signaling State:', pc.signalingState);
-        await pc.setRemoteDescription(new RTCSessionDescription(remoteOfferDesc));
+      if (peerConnection.signalingState === 'have-local-offer' || peerConnection.signalingState === 'have-remote-offer') {
+        console.log('Before setting remote description, Signaling State:', peerConnection.signalingState);
+        await peerConnection.setRemoteDescription(new RTCSessionDescription(remoteOfferDesc));
         console.log('Remote description set:', remoteOfferDesc);
-        const answer = await pc.createAnswer();
-        await pc.setLocalDescription(answer);
+        const answer = await peerConnection.createAnswer();
+        await peerConnection.setLocalDescription(answer);
         setRemoteAnswer(JSON.stringify(answer, null, 2));
-        console.log('Signaling State after setting remote description:', pc.signalingState);
+        console.log('Signaling State after setting remote description:', peerConnection.signalingState);
       } else {
-        console.error('Cannot set remote description in the current state:', pc.signalingState);
+        console.error('Cannot set remote description in the current state:', peerConnection.signalingState);
       }
     } catch (error) {
       console.error('Error setting remote description and generating answer:', error);
@@ -161,32 +167,21 @@ function RemoteVideo({ peerConnection }) {
 }
 
 function App() {
-  const [peerConnection, setPeerConnection] = useState(null);
+  const localPeerConnection = useRef(null);
+  const remotePeerConnection = useRef(null);
 
   useEffect(() => {
-    const pc = new RTCPeerConnection();
+    localPeerConnection.current = new RTCPeerConnection();
+    remotePeerConnection.current = new RTCPeerConnection();
 
-    // Add an event listener for ICE connection state changes
-    pc.oniceconnectionstatechange = (event) => {
-      console.log('ICE Connection State:', pc.iceConnectionState);
-    };
+    // Add event listeners and setup your signaling here
 
-    // Add an event listener for signaling state changes
-    pc.onsignalingstatechange = (event) => {
-      console.log('Signaling State:', pc.signalingState);
-    };
-
-    setPeerConnection(pc);
   }, []);
-
-  // Memoize the LocalVideo and RemoteVideo components
-  const MemoizedLocalVideo = useMemo(() => <LocalVideo peerConnection={peerConnection} />, [peerConnection]);
-  const MemoizedRemoteVideo = useMemo(() => <RemoteVideo peerConnection={peerConnection} />, [peerConnection]);
 
   return (
     <div>
-      {MemoizedLocalVideo}
-      {MemoizedRemoteVideo}
+      <LocalVideo localPeerConnection={localPeerConnection} />
+      <RemoteVideo remotePeerConnection={remotePeerConnection} />
     </div>
   );
 }
