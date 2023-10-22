@@ -189,11 +189,20 @@ export default function VideoWindow({ with_email,with_userid }) {
       setStream(stream);
       lc.addStream(stream);
       lc.onaddstream = (event) => {
-        myRef.current = {"srcObject":event.stream};
+        console.log('ON LOCAL @ TRACK',event,event.stream,myRef.current)
+        // myRef.current = {"srcObject":event.stream};
         // remoteVideoRef.current.srcObject = event.stream;
-        setStream(event.stream)
+        yourVideoRef.current.srcObject = event.stream
+
+        // setStream(event.stream)
         // setRemoteStream(event.stream);
       };
+      // lc.onaddstream = (event) => {
+      //   myRef.current = {"srcObject":event.stream};
+      //   // remoteVideoRef.current.srcObject = event.stream;
+      //   setStream(event.stream)
+      //   // setRemoteStream(event.stream);
+      // };
 
       lc.onicecandidate = async (e) => {
         if (e.candidate) {
@@ -226,12 +235,26 @@ export default function VideoWindow({ with_email,with_userid }) {
       const offer = JSON.parse(offer_str['sdp'])
       // console.log("here is your offer love",offer,typeof(offer))
       const rc = new RTCPeerConnection()
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+      console.log("doweseestream",stream)
+      yourVideoRef.current.srcObject = stream
+      // myRef.current = {"srcObject":stream};
+      setStream(stream);
+      rc.addStream(stream);
+      // const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+      console.log("doweseestream",stream)
+      // yourVideoRef.current.srcObject = stream
+      // myRef.current = {"srcObject":stream};
+      // setStream(stream);
+      // rc.addStream(stream);
       rc.onaddstream = (event) => {
-        console.log('AREWEHERE')
+        console.log('ON REMOTE @ TRACK',event,event.stream,myRef.current)
+        // myRef.current = {"srcObject":event.stream};
+        // remoteVideoRef.current.srcObject = event.stream;
+        yourVideoRef.current.srcObject = event.stream
 
-        myRef.current.channel.srcObject = event.stream;
+        // setStream(event.stream)
         // setRemoteStream(event.stream);
-        setStream(event.stream)
       };
 
       rc.ondatachannel = (event) => {
