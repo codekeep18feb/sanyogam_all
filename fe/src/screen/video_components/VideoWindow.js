@@ -411,7 +411,7 @@ export default function VideoWindow({ with_email,with_userid }) {
             //   setConnectionOpened(true);
             // }
           });
-      
+        
       myRef.current.channel.addEventListener('connectionstatechange', () => {
         console.log('Connection State changed:', myRef.current.channel.connectionState);
       
@@ -425,8 +425,7 @@ export default function VideoWindow({ with_email,with_userid }) {
         console.log('AREWHEREWREVER')
         console.log(typeof(myRef.current.channel),myRef.current.channel,'Signaling State changed:', myRef.current.channel.signalingState, myRef.current.channel.iceConnectionState, myRef.current.channel.connectionState);
         if (myRef.current.channel.signalingState === 'stable') {
-          console.log('current signalingState',myRef.current.channel.signalingState)
-          // setConnectionOpened(true);
+          setConnectionOpened(true);
         }
       });
 
@@ -471,12 +470,11 @@ export default function VideoWindow({ with_email,with_userid }) {
  
   console.log("answerishere",answer)
   useEffect(() => {
-    if(myRef.current.channel.connectionState=='connected'){
+    if(connection_open){
       console.log("connectionopened",connection_open)
-      setConnectionOpened(true)
 
     }
-  }, [myRef.current.channel.connectionState])
+  }, [connection_open])
   
 
   console.log("hereis",myRef.current)
@@ -484,7 +482,7 @@ export default function VideoWindow({ with_email,with_userid }) {
 
     <div>
 
-      {connection_open}
+      {JSON.stringify(connection_open)}
       <video
         ref={yourVideoRef} // Add a ref to the video element
         autoPlay
