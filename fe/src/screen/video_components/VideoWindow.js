@@ -237,7 +237,11 @@ export default function VideoWindow({ with_email,with_userid }) {
   
       lc.createOffer()
         .then((o) => lc.setLocalDescription(o))
-        .then((a) => console.log('offer set successfully!'));
+        .then((a) => {
+          console.log('offer set successfully!')
+          console.log('Signaling State after setting local description:', lc.signalingState);
+
+        });
       return [lc]
   
 
@@ -292,11 +296,23 @@ export default function VideoWindow({ with_email,with_userid }) {
 
       // }
 
-      rc.setRemoteDescription(offer).then(a=>console.log("offerset"))
+      rc.setRemoteDescription(offer).then(a=>{
+        console.log("set remoteDescription with local offer")
+        console.log('Signaling State after setting remoteDescription', rc.signalingState);
+
+      })
 
 
 
-      rc.createAnswer().then(a => rc.setLocalDescription(a)).then(a=>console.log("answer created"))
+      rc.createAnswer().then(a => {
+        rc.setLocalDescription(a)
+        console.log('Signaling State after setting Local description set as a provisional answer.:', rc.signalingState);
+
+      }).then(a=>{
+        console.log("answer created")
+        console.log('Signaling State after setting Local description set as a provisional answer.:', rc.signalingState);
+
+      })
       return [rc]
     }
     
@@ -305,75 +321,7 @@ export default function VideoWindow({ with_email,with_userid }) {
   // const respondeWebRTC = () => {
   //   // Implement your response logic here
   // }
-  const respondeWebRTC = async (token) => {
-    console.log("let's grab the offer first..")
-    const offer_str = await fetchRTCOffer()
-    const offer = JSON.parse(offer_str)
-    console.log("here is your offer love",offer,typeof(offer))
-    const rc = new RTCPeerConnection()
-
-    rc.onicecandidate = async (e) => {
-      if (e.candidate) {
-        console.log("herei s the ans" + JSON.stringify(rc.localDescription))
-        const to_user_id = await fetchUserId(token,with_email)
-
-        saveRTCUserAns(false,JSON.stringify(rc.localDescription),to_user_id)
-
-      }
-      
-    }
-
-    rc.ondatachannel=e=>{
-
-        rc=e.channel;
-
-        rc.onmessage = e => console.log("new message from client!!"+e.data)
-
-        rc.onopen = e => console.log("connection opened!")
-
-        
-
-    }
-
-    rc.setRemoteDescription(offer).then(a=>console.log("offerset"))
-
-
-
-    rc.createAnswer().then(a => rc.setLocalDescription(a)).then(a=>console.log("answer created"))
-    // const rc = new RTCPeerConnection()
-    // rc.onicecandidate = e => {
-    //   // const to_user_id = await fetchUserId(token,with_email)
-    //   console.log("this is never getting called??" ,JSON.stringify(rc.localDescription))
-    // }
-    // rc.ondatachannel=e=>{
-    //     rc=e.channel;
-    //     rc.onmessage = e => console.log("new message from client!!"+e.data)
-    //     rc.onopen = e => console.log("connection opened!")
-    // rc.setRemoteDescription(offer).then(a=>console.log("offerset"))
-    // rc.createAnswer().then(a => rc.setLocalDescription(a)).then(a=>console.log("answer created"))
-
-
-
-    // }
-      
-    
-    // }
-    // dc.onmessage = (e) => console.log('msg from B' + e.data);
-    // dc.onopen = (e) => console.log("connection opened!");
-
-    // lc.onicecandidate = (e) => {
-    //   if (e.candidate) {
-    //     // Candidate is available, call addRTCUserInfo
-    //     addRTCUserInfo(true, JSON.stringify(lc.localDescription));
-    //     console.log("Notice how many times it's being called...", JSON.stringify(lc.localDescription));
-    //   }
-    // }
-
-    // lc.createOffer()
-    //   .then((o) => lc.setLocalDescription(o))
-    //   .then((a) => console.log('offer set successfully!'));
-  };
-
+ 
 
   useEffect(async() => {
     fetchRTCUserInfo(); // Fetch data initially
@@ -522,7 +470,14 @@ export default function VideoWindow({ with_email,with_userid }) {
       console.log("DOWESEE ANSWER",answer)
       // myRef.current.channel.send("douseeme!")
       // answer = answer
-      myRef.current.channel.setRemoteDescription(answer)
+      console.log('Signaling State before setting remote description:', myRef.current.channel.signalingState);
+
+      myRef.current.channel.setRemoteDescription(answer).then((a)=>{
+        
+        console.log('dowseseethantythere')
+        console.log('Signaling State after setting answer on setRemoteDescription:', myRef.current.channel.signalingState);
+
+      }).then(a=>console.log('dowe also see this??',myRef.current.channel.signalingState))
       console.log("didweneverreachhere??")
 
         setConnectionOpened(true)
