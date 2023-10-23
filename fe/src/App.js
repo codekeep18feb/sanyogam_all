@@ -83,6 +83,7 @@ export default function App() {
             </PrivateRoute>
           }
         />
+
         <Route
           path="/chat"
           element={
@@ -108,5 +109,4 @@ export default function App() {
   );
     // <MaterialScreen />
     
-  
-}
+  }

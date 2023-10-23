@@ -13,9 +13,9 @@
 ## To run in dev environment
 
 ### `docker-compose up -d --build`
-Open [http://localhost:3001](http://localhost:3001) to view it in the browser.
+Open [http://192.168.1.5:3001](http://192.168.1.5:3001) to view it in the browser.
 
 ## To run in production environment
 
 ### `docker-compose -f docker-compose.prod.yml up -d --build`
-Open [http://localhost:8899](http://localhost:8899) to view it in the browser.
+Open [http://192.168.1.5:8899](http://192.168.1.5:8899) to view it in the browser.
