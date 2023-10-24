@@ -21,7 +21,7 @@ function Login({login,logout}) {
 
   const handleLogin = async () => {
     try {
-      const response = await fetch('http://107.22.47.202:8000/api/login', {
+      const response = await fetch('http://3.90.199.134:8000/api/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -35,7 +35,7 @@ function Login({login,logout}) {
 
 
         if (data){
-          const response = await fetch('http://107.22.47.202:8000/api/me', {
+          const response = await fetch('http://3.90.199.134:8000/api/me', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -72,7 +72,7 @@ function Login({login,logout}) {
 
 
 
-      // const response2 = await fetch('http://107.22.47.202:8000/api/profiles', {
+      // const response2 = await fetch('http://3.90.199.134:8000/api/profiles', {
       //   method: 'GET',
       //   headers: {
       //     'Content-Type': 'application/json',

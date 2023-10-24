@@ -28,7 +28,7 @@ export default function ChatScreen({ chats, to_email,sendMsg }) {
     setSendingMessage(true);
 
     try {
-      const response = await fetch(`http://107.22.47.202:8000/api/send_msg/${to_email}`, {
+      const response = await fetch(`http://3.90.199.134:8000/api/send_msg/${to_email}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
