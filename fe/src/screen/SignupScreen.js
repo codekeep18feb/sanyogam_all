@@ -15,7 +15,7 @@ export default function SignupScreen() {
   // # Google OAuth configuration (replace with your actual credentials)
   const GOOGLE_CLIENT_ID = '93333716320-7ls324ni108j5b3oqtsnp28gc89b0d6s.apps.googleusercontent.com'
   const GOOGLE_CLIENT_SECRET = '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'
-  const GOOGLE_REDIRECT_URI = 'http://54.234.122.52:3000/google_authorized'
+  const GOOGLE_REDIRECT_URI = 'http://107.22.47.202:3000/google_authorized'
   // const # Google OAuth endpoints
   const GOOGLE_AUTH_URL = 'https://accounts.google.com/o/oauth2/auth'
   const GOOGLE_TOKEN_URL = 'https://accounts.google.com/o/oauth2/token'
@@ -57,7 +57,7 @@ export default function SignupScreen() {
 
     try {
       // Send a POST request to your server with the form data
-      const response = await fetch('http://54.234.122.52:8000/api/signup', {
+      const response = await fetch('http://107.22.47.202:8000/api/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

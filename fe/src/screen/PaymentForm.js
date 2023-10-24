@@ -11,7 +11,7 @@ function PaymentForm() {
 
   useEffect(() => {
     // Fetch the client secret from your server
-    fetch('http://54.234.122.52:8000/create-payment-intent', {
+    fetch('http://107.22.47.202:8000/create-payment-intent', {
       method: 'POST',
     })
       .then((response) => response.json())
