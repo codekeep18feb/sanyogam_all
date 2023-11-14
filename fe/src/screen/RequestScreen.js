@@ -12,7 +12,7 @@ export default function RequestScreen({ with_email }) {
       const token = `Bearer ${JWT_TOKEN}`;
 
       try {
-        const response = await fetch(`http://3.90.199.134:8000/api/request_info/${with_email}`, {
+        const response = await fetch(`http://localhost:8000/api/request_info/${with_email}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

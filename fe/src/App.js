@@ -12,7 +12,7 @@ import HomeScreen from './screen/HomeScreen.js';
 import Login from './screen/LoginScreen.js';
 import Chat from './screen/chat_components/Chat';
 import SignupScreen from './screen/SignupScreen';
-import Header from "./screen/Header"
+import HeaderDesktop from "./screen/HeaderDesktop.js"
 import Video from './screen/video_components/Video.js';
 import ModalDialog from "./screen/ModalDialog"
 import SnackbarExample from "./screen/SnackbarExample"
@@ -27,6 +27,8 @@ import Footer from './screen/Footer'
 import FAQ from './component/FAQ'
 import GoogleAuthorize from './screen/GoogleAuthorize'
 import PaymentForm from './screen/PaymentForm'
+import { useEffect } from 'react'
+import { useState } from 'react'
 
 const MaterialUX = ()=>{
 
@@ -56,10 +58,42 @@ function PrivateRoute({ children }) {
 function useAuth() {
   return localStorage.getItem('token') !== null;
 }
+
+const getDeviceType = () => {
+  const width = window.innerWidth;
+  if (width >= 468) {
+    return 'desktop';
+  
+  } else {
+    return 'mobile';
+  }
+};
+
 export default function App() {
+  
+  const [deviceType, setDeviceType] = useState(getDeviceType());
+
+  console.log('deviceType',deviceType)
+  useEffect(() => {
+    const handleResize = () => {
+      setDeviceType(getDeviceType());
+    };
+
+    // Add event listener when the component mounts
+    window.addEventListener('resize', handleResize);
+
+    // Remove event listener when the component unmounts
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []); // Empty dependency array ensures that the effect runs only once when the component mounts
+
+  
+
+
   return (
     <Router>
-      <Header />
+      <HeaderDesktop />
       <Routes>
         {/* <Route exact path="/" element={<HomeScreen />} /> */}
         <Route exact path="/" element={<HomeScreen />} />

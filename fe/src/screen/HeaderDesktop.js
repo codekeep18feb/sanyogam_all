@@ -19,7 +19,7 @@ import Menu from '@mui/material/Menu';
 import Select from '@mui/material/Select';
 import Typography from '@mui/material/Typography';
 
-function Header({ auth_data, logout }) {
+function HeaderDesktop({ auth_data, logout }) {
   const navigate = useNavigate();
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -53,7 +53,7 @@ function Header({ auth_data, logout }) {
       const token = `Bearer ${JWT_TOKEN}`
       console.log("token",token)
 
-      const response = await fetch('http://192.168.1.7:8000/api/logout', {
+      const response = await fetch('http://localhost:8000/api/logout', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -189,4 +189,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { logout })(Header);
+export default connect(mapStateToProps, { logout })(HeaderDesktop);
