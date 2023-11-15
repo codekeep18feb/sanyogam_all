@@ -22,7 +22,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function InboxPractice() {
+export default function HorizontalScrollWithinItemWidthOnly() {
   const classes = useStyles();
   const innerContainerRef = useRef(null);
 
