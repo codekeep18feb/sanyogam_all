@@ -22,7 +22,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function HorizontalScrollWithinItemWidthOnly() {
+export default function HorizontalScrollWithinItemWidthOnly({children}) {
   const classes = useStyles();
   const innerContainerRef = useRef(null);
 
@@ -54,8 +54,8 @@ export default function HorizontalScrollWithinItemWidthOnly() {
   return (
     <div className={classes.scrollContainer} {...bind()}>
       <animated.div className={classes.innerContainer} style={props} ref={innerContainerRef}>
-        <div className={classes.scrollItem}>Content 1</div>
-        <div className={classes.scrollItem}>Content 2</div>
+        
+        {children}
         {/* Add more divs as needed */}
       </animated.div>
     </div>
