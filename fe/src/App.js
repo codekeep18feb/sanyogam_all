@@ -31,6 +31,7 @@ import { useEffect } from 'react'
 import { useState } from 'react'
 import HeaderMobile from './screen/HeaderMobile.js'
 import InboxPractice from './screen/InboxPractice.js'
+import PlayGround from './screen/PlayGround.js'
 
 const MaterialUX = ()=>{
 
@@ -95,10 +96,10 @@ export default function App() {
         />
 
 <Route
-          path="/inbox"
+          path="/practice"
           element={
             // <PrivateRoute>
-              <InboxPractice /> 
+              <PlayGround/> 
             // </PrivateRoute>
           }
         />
