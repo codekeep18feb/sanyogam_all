@@ -148,10 +148,10 @@ function Video({auth_data}) {
   return (
     <div style={{display:"flex"}}>
       <div>
-      <PeopleScreen profiles={profiles} SetWithUserId={SetWithUserId} SetWithEmail={SetWithEmail} with_userid={with_userid}/>
+        <PeopleScreen profiles={profiles} SetWithUserId={SetWithUserId} SetWithEmail={SetWithEmail} with_userid={with_userid}/>
       </div>
       <div>
-      {with_userid?<VideoWindow with_email={with_email} with_userid={with_userid}/>:"loading..."}
+        {with_userid?<VideoWindow with_email={with_email} with_userid={with_userid}/>:"loading..."}
       </div>
     </div>
   );

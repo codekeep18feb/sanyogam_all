@@ -181,15 +181,15 @@ function Chat({auth_data}) {
     <div>
       <ImageCircles users={users} />
       <Grid container>
-      {/* Left Sidebar (PeopleScreen) */}
-      {/* <Hidden smDown>
+        {/* Left Sidebar (PeopleScreen) */}
+        {/* <Hidden smDown>
         <Grid item md={3}>
           <PeopleScreen profiles={profiles} SetWithUserId={SetWithUserId} SetWithEmail={SetWithEmail} with_userid={with_userid} />
         </Grid>
       </Hidden> */}
 
-      {/* Right Content Area */}
-      {/* <Grid container item xs={12}>
+        {/* Right Content Area */}
+        {/* <Grid container item xs={12}>
         <div>1</div>
         <div>2</div>
         <div>3</div>
@@ -197,20 +197,20 @@ function Chat({auth_data}) {
         <div>3</div>
         <div>3</div>
       </Grid> */}
-      <Grid item xs={12} md={3}>
-        <TabPanel profiles={profiles} SetWithUserId={SetWithUserId} SetWithEmail={SetWithEmail} with_userid={with_userid} />
+        <Grid item xs={12} md={3}>
+          <TabPanel profiles={profiles} SetWithUserId={SetWithUserId} SetWithEmail={SetWithEmail} with_userid={with_userid} />
         
-      </Grid>
+        </Grid>
 
-      <Grid item xs={12} md={7}>
+        <Grid item xs={12} md={7}>
       
-      <div>
-          {with_userid ? <ChatWindow with_email={with_email} with_userid={with_userid} /> : <BlankChatScreen />}
-        </div>  
-      </Grid>
+          <div>
+            {with_userid ? <ChatWindow with_email={with_email} with_userid={with_userid} /> : <BlankChatScreen />}
+          </div>  
+        </Grid>
 
       
-    </Grid>
+      </Grid>
     </div>
 
   );

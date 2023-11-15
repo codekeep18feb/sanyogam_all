@@ -514,7 +514,7 @@ export default function VideoWindow({ with_email,with_userid }) {
         // Add other attributes such as width, height, etc.
       ></video>
 
-     </div>
+    </div>
     
   );
 }

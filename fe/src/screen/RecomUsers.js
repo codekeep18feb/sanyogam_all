@@ -25,8 +25,8 @@ export default function RecomUsers() {
 
       <Grid container justifyContent="center" alignItems="center" spacing={2}>
 
-      {data_map}
-    </Grid>
+        {data_map}
+      </Grid>
     </div>
 
     

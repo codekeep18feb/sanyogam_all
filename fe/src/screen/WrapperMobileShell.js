@@ -42,19 +42,19 @@ export default function WrapperMobileShell({children}) {
     <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
       <div style={{ backgroundColor: 'rgba(173, 216, 230, 0.3)', textAlign: 'center' }}>
 
-      {deviceType=='mobile'?<HeaderMobile />:<HeaderDesktop />}
+        {deviceType=='mobile'?<HeaderMobile />:<HeaderDesktop />}
       </div>
 
       {/* Middle Content (Scrollable) */}
       <div style={{ flex: '1', overflowY: 'auto', border: '1px solid blue' }}>
-      {children}
+        {children}
 
       </div>
 
       {/* Bottom Header */}
       <div style={{ textAlign: 'center' }}>
-      {/* <Footer/> */}
-      {deviceType=='mobile'?<BottomMobile />:<Footer />}
+        {/* <Footer/> */}
+        {deviceType=='mobile'?<BottomMobile />:<Footer />}
 
       </div>
     </div>

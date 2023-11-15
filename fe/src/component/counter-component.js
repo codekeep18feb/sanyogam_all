@@ -10,7 +10,7 @@ const CounterComponent = ({currentCounter}) => {
   return (
     <div>
       <Typography className = {style.counterText}>
-      {currentCounter}
+        {currentCounter}
       </Typography>
     </div>
   );

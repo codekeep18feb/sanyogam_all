@@ -27,9 +27,9 @@ export default function PlayGround() {
 
   return (
     <HorizontalScrollWithinItemWidthOnly >
-        <div className={classes.scrollItem}>Content 1</div>
-        <div className={classes.scrollItem}>Content 2</div>
-        <div className={classes.scrollItem}>Content 3</div>
+      <div className={classes.scrollItem}>Content 1</div>
+      <div className={classes.scrollItem}>Content 2</div>
+      <div className={classes.scrollItem}>Content 3</div>
     </HorizontalScrollWithinItemWidthOnly>
   )
 }

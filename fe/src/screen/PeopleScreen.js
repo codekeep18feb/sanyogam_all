@@ -5,17 +5,17 @@ export default function PeopleScreen({profiles,SetWithEmail,SetWithUserId,with_u
   console.log("profileswhatisit?",profiles)
   return (
     <ul>
-        {profiles && profiles.map((profile) => (
-          <li key={profile.id} 
+      {profiles && profiles.map((profile) => (
+        <li key={profile.id} 
           onClick={()=>{
             SetWithUserId(profile.user_id)
             SetWithEmail(profile.user_email)
           }}
           >
-            {profile.user_email} - {profile.online?"ONLINE":"OFFLINE"}
+          {profile.user_email} - {profile.online?"ONLINE":"OFFLINE"}
           {/* {with_email==profile.user_email?<strong>{profile.user_email} - {profile.online?"ONLINE":"OFFLINE"}</strong>:<div>{profile.user_email}</div> } */}
-          </li>
+        </li>
         ))}
-      </ul>
+    </ul>
   )
 }

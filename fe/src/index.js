@@ -136,16 +136,16 @@ ReactDOM.render(
   <Provider store={store}>
     <React.StrictMode>
       <Elements stripe={stripePromise}>
-      {/* <PaymentForm /> */}
+        {/* <PaymentForm /> */}
 
 
         {/* <PersistGate persistor={persistor}> */}
         <ThemeProvider theme={theme}>
           <Router>
 
-                <WrapperMobileShell >
-                <App />
-                </WrapperMobileShell>
+            <WrapperMobileShell >
+              <App />
+            </WrapperMobileShell>
           </Router>
 
         </ThemeProvider>

@@ -94,43 +94,43 @@ function HeaderMobile({ auth_data, logout }) {
     <AppBar position="static" sx={{ background: 'linear-gradient(270.06deg, rgba(46, 27, 254, 0.74) 5.67%, #FF0099 75.76%)' }}>
       {/* <Toolbar> */}
         
-        <div style={headerStyle}>
+      <div style={headerStyle}>
         <div>
-            <Grid container spacing={1}>
-              <Grid item>
-                <Link to="/language" style={linkStyle}>
-                  <div>
-                    <Select
+          <Grid container spacing={1}>
+            <Grid item>
+              <Link to="/language" style={linkStyle}>
+                <div>
+                  <Select
                       value="Eng"
                       onChange={handleLanguageChange}
                     >
-                      <MenuItem value="Eng">Eng</MenuItem>
-                      <MenuItem value="Hindi">Hindi</MenuItem>
-                    </Select>
-                  </div>
-                </Link>
-              </Grid>
-            
+                    <MenuItem value="Eng">Eng</MenuItem>
+                    <MenuItem value="Hindi">Hindi</MenuItem>
+                  </Select>
+                </div>
+              </Link>
             </Grid>
-          </div>
-
-
-          <div style={centerOptionsStyle}>
-            {auth_data && (
-              <>
-                
-                {auth_data && ( // Display "Notifications" only when the user is logged in
-                  <Button color="inherit">
-                    <Link to="/notifications" style={linkStyle}>
-                      <NotificationsIcon />
-                    </Link>
-                  </Button>
-                )}
-              </>
-            )}
-          </div>
-         
+            
+          </Grid>
         </div>
+
+
+        <div style={centerOptionsStyle}>
+          {auth_data && (
+          <>
+                
+            {auth_data && ( // Display "Notifications" only when the user is logged in
+            <Button color="inherit">
+              <Link to="/notifications" style={linkStyle}>
+                <NotificationsIcon />
+              </Link>
+            </Button>
+                )}
+          </>
+            )}
+        </div>
+         
+      </div>
       {/* </Toolbar> */}
     </AppBar>
   );

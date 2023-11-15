@@ -37,16 +37,16 @@ const MaterialUX = ()=>{
 
   return(
     <>
-    <MaterialUIExample />
-    <AdvancedMaterialUIExample />
-    <TabPanel />
-    <ModalDialog />
-    <SnackbarExample />
-    <ItemList />
-    <StepperExample />
-    <AccordionExample />
-    <TooltipExample />
-    <SnackbarWithActions />
+      <MaterialUIExample />
+      <AdvancedMaterialUIExample />
+      <TabPanel />
+      <ModalDialog />
+      <SnackbarExample />
+      <ItemList />
+      <StepperExample />
+      <AccordionExample />
+      <TooltipExample />
+      <SnackbarWithActions />
     </>
   )
 }
@@ -63,14 +63,30 @@ function useAuth() {
 }
 
 
-export default function App() {
+function App({ authData }) {
   
-  
+  // useEffect(() => {
+  //   const handleBeforeUnload = () => {
+  //     // Save the Redux state to localStorage before the page is unloaded
+  //     console.log('BEFORE REFRESH')
+  //     // const meUser = /* Get meUser from your Redux state */;
+  //     // localStorage.setItem('meUser', JSON.stringify(meUser));
+  //   };
+
+  //   // Add the event listener
+  //   window.addEventListener('beforeunload', handleBeforeUnload);
+
+  //   // Remove the event listener when the component is unmounted
+  //   return () => {
+  //     window.removeEventListener('beforeunload', handleBeforeUnload);
+  //   };
+  // }, []); // Dependency array is empty, so the effect runs once after the initial render
+
 
 
   return (
    
-      <>
+    <>
       <Routes>
         {/* <Route exact path="/" element={<HomeScreen />} /> */}
         <Route exact path="/" element={<HomeScreen />} />
@@ -95,11 +111,11 @@ export default function App() {
           }
         />
 
-<Route
+        <Route
           path="/practice"
           element={
             // <PrivateRoute>
-              <PlayGround/> 
+            <PlayGround/> 
             // </PrivateRoute>
           }
         />
@@ -125,9 +141,21 @@ export default function App() {
       </Routes>
 
 
-      </>
+    </>
 
   );
     // <MaterialScreen />
     
   }
+
+
+  const mapStateToProps = (state) => {
+    console.log("authdatawhat", state.auth.data);
+    return {
+      authData: state.auth.data,
+    };
+  };
+  
+
+export default App;
+// export default connect(mapStateToProps, null)(React.memo(App));
