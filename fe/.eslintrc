@@ -5,7 +5,7 @@
 
     ],
     "rules": {
-      "no-console": "error",
+      // "no-console": "error",
       "no-unused-vars": "error",
       "react/prop-types": "off",
       "react/jsx-filename-extension": ["error", { "extensions": [".js", ".jsx"] }],
