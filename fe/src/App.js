@@ -29,6 +29,8 @@ import GoogleAuthorize from './screen/GoogleAuthorize'
 import PaymentForm from './screen/PaymentForm'
 import { useEffect } from 'react'
 import { useState } from 'react'
+import HeaderMobile from './screen/HeaderMobile.js'
+import InboxPractice from './screen/InboxPractice.js'
 
 const MaterialUX = ()=>{
 
@@ -59,41 +61,15 @@ function useAuth() {
   return localStorage.getItem('token') !== null;
 }
 
-const getDeviceType = () => {
-  const width = window.innerWidth;
-  if (width >= 468) {
-    return 'desktop';
-  
-  } else {
-    return 'mobile';
-  }
-};
 
 export default function App() {
   
-  const [deviceType, setDeviceType] = useState(getDeviceType());
-
-  console.log('deviceType',deviceType)
-  useEffect(() => {
-    const handleResize = () => {
-      setDeviceType(getDeviceType());
-    };
-
-    // Add event listener when the component mounts
-    window.addEventListener('resize', handleResize);
-
-    // Remove event listener when the component unmounts
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []); // Empty dependency array ensures that the effect runs only once when the component mounts
-
   
 
 
   return (
-    <Router>
-      <HeaderDesktop />
+   
+      <>
       <Routes>
         {/* <Route exact path="/" element={<HomeScreen />} /> */}
         <Route exact path="/" element={<HomeScreen />} />
@@ -118,6 +94,15 @@ export default function App() {
           }
         />
 
+<Route
+          path="/inbox"
+          element={
+            // <PrivateRoute>
+              <InboxPractice /> 
+            // </PrivateRoute>
+          }
+        />
+
         <Route
           path="/chat"
           element={
@@ -137,9 +122,10 @@ export default function App() {
                 />
 
       </Routes>
-      <Footer />
 
-    </Router>
+
+      </>
+
   );
     // <MaterialScreen />
     

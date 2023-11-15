@@ -94,7 +94,7 @@ function HeaderDesktop({ auth_data, logout }) {
     <AppBar position="static" sx={{ background: 'linear-gradient(270.06deg, rgba(46, 27, 254, 0.74) 5.67%, #FF0099 75.76%)' }}>
       <Toolbar>
         <Typography variant="h6" style={{ marginRight: 'auto', fontFamily: 'cursive' }}>
-          LoveVivah.com
+          NormVinod.com
         </Typography>
         <div style={headerStyle}>
           <div style={centerOptionsStyle}>

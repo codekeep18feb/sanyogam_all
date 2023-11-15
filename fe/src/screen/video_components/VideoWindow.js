@@ -233,7 +233,7 @@ export default function VideoWindow({ with_email,with_userid }) {
       const offer_str = await fetchRTCOffer()
       console.log("offer_str",offer_str,typeof(offer_str))
       const offer = JSON.parse(offer_str['sdp'])
-      // console.log("here is your offer love",offer,typeof(offer))
+      // console.log("here is your offer Norm",offer,typeof(offer))
       const rc = new RTCPeerConnection()
       const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
       console.log("doweseestream",stream)

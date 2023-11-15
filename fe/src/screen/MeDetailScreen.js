@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PhotoCamera from '@mui/icons-material/PhotoCamera';
 
 export default function MeDetailScreen({ authData, editMode, SeteditMode }) {
   // Define state variable for edited data
@@ -52,8 +53,7 @@ export default function MeDetailScreen({ authData, editMode, SeteditMode }) {
         onChange={(e) => setEditedData({ ...editedData, image: e.target.files[0] })}
       />
       {/* Display the image */}
-      <img src={editedData.image} alt="Profile Image" />
-
+      {/* <img src={editedData.image} alt="Profile Image" /> */}
       {/* Add other form fields as needed */}
       <button onClick={(e) => handleSave(e)}>Save</button>
     </form>
@@ -62,12 +62,13 @@ export default function MeDetailScreen({ authData, editMode, SeteditMode }) {
   // Define your div JSX here
   const div = (
     <div>
-      <p>Welcome, {authData.fname} {authData.lname}</p>
+      {/* <p>Welcome, {authData.fname} {authData.lname}</p> */}
       {/* Display the image */}
-      <img src={`data:image/jpeg;base64, ${authData.image}`} alt="Profile Image" />
+      {/* <img src={`data:image/jpeg;base64, ${authData.image}`} alt="Profile Image" /> */}
 
+      <PhotoCamera />
 
-      <button onClick={() => SeteditMode(true)}>Edit</button>
+      {/* <button onClick={() => SeteditMode(true)}>Edit</button> */}
     </div>
   );
 

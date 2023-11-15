@@ -20,9 +20,7 @@ function HomeScreen({ authData }) {
       alignItems="center"
     >
       {/* First column (70%) */}
-      <Grid item md={12}>
-        <div>herei tsis</div>
-      </Grid>
+      
       <Grid item md={6}>
         {/* Content for the first column */}
         <div style={{ backgroundColor: "#f0f0f0", padding: "16px" }}>
@@ -38,7 +36,7 @@ function HomeScreen({ authData }) {
             <p>Please log in to see your data.</p>
           )}
 
-          <Tile>
+          {/* <Tile>
             <Typography variant="h1">Interests sent (2)</Typography>
             <Typography variant="mediumParagraph">
               You have got (2) intrests contact them right away
@@ -50,24 +48,22 @@ function HomeScreen({ authData }) {
             <Typography variant="mediumParagraph">
               You have got (2) intrests contact them right away
             </Typography>
-          </Tile>
+          </Tile> */}
 
-          <Tile>
+          {/* <Tile>
             <Typography variant="h1">Interests sent (2)</Typography>
             <Typography variant="mediumParagraph">
               You have got (2) intrests contact them right away
             </Typography>
-          </Tile>
+          </Tile> */}
         </div>
       </Grid>
       {/* Second column (30%) */}
       <Grid item xs={4}>
         {/* Content for the second column */}
-        <div style={{ backgroundColor: "#ccc", padding: "16px" }}>
-          {/* <div style={{height:'200px',width:"300px"}}> */}
+        {/* <div style={{ backgroundColor: "#ccc", padding: "16px" }}>
           Go Premium
-          {/* </div> */}
-        </div>
+        </div> */}
       </Grid>
       <div>
         <RecomUsers />

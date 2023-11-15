@@ -189,7 +189,7 @@ export default function ChatWindow({ with_email,with_userid }) {
     console.log("let's grab the offer first..")
     const offer_str = await fetchRTCOffer()
     const offer = JSON.parse(offer_str)
-    console.log("here is your offer love",offer,typeof(offer))
+    console.log("here is your offer Norm",offer,typeof(offer))
     const rc = new RTCPeerConnection()
 
     rc.onicecandidate = async (e) => {
