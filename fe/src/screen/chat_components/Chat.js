@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import PeopleScreen from "../PeopleScreen";
+// import PeopleScreen from "../PeopleScreen";
 import ChatWindow from "./ChatWindow";
 import { connect } from 'react-redux';
 import TabPanel from '../TabPanel';
 import Grid from '@mui/material/Grid'; // Import Grid
-import Hidden from '@mui/material/Hidden'; // Import Hidden
+// import Hidden from '@mui/material/Hidden'; // Import Hidden
 import ImageCircles from './ImageCircle';
 import BlankChatScreen from './BlankChatScreen';
 
@@ -73,32 +73,32 @@ function Chat({auth_data}) {
     }
   };
 
-  const fetchRTCUserInfo = async () => {
-    const JWT_TOKEN = localStorage.getItem('token');
-    const token = `Bearer ${JWT_TOKEN}`;
+  // const fetchRTCUserInfo = async () => {
+  //   const JWT_TOKEN = localStorage.getItem('token');
+  //   const token = `Bearer ${JWT_TOKEN}`;
 
-    try {
-      const response = await fetch(`http://localhost:8000/api/rtc_user_info_by_id`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': token,
-        },
-      });
+  //   try {
+  //     const response = await fetch(`http://localhost:8000/api/rtc_user_info_by_id`, {
+  //       method: 'GET',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         'Authorization': token,
+  //       },
+  //     });
 
-      if (response.status === 200) {
-        const data = await response.json();
-        // setRTCData(data);
-        console.log("datsdafsdaa",data)
-      } else {
-        console.log('Error fetching chat history');
-      }
-    } catch (error) {
-      console.error('An error occurred:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  //     if (response.status === 200) {
+  //       const data = await response.json();
+  //       // setRTCData(data);
+  //       console.log("datsdafsdaa",data)
+  //     } else {
+  //       console.log('Error fetching chat history');
+  //     }
+  //   } catch (error) {
+  //     console.error('An error occurred:', error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   useEffect(async() => {
     fetchData(); // Fetch data initially
@@ -108,7 +108,7 @@ function Chat({auth_data}) {
       fetchData(); // Fetch data every 10 seconds
     }, 10000);
 
-    
+    console.log('intervalId',intervalId)
     // Fetch data from the /api/profiles endpoint
     const JWT_TOKEN = localStorage.getItem('token')
     const token = `Bearer ${JWT_TOKEN}`
@@ -181,22 +181,7 @@ function Chat({auth_data}) {
     <div>
       <ImageCircles users={users} />
       <Grid container>
-        {/* Left Sidebar (PeopleScreen) */}
-        {/* <Hidden smDown>
-        <Grid item md={3}>
-          <PeopleScreen profiles={profiles} SetWithUserId={SetWithUserId} SetWithEmail={SetWithEmail} with_userid={with_userid} />
-        </Grid>
-      </Hidden> */}
-
-        {/* Right Content Area */}
-        {/* <Grid container item xs={12}>
-        <div>1</div>
-        <div>2</div>
-        <div>3</div>
-        <div>3</div>
-        <div>3</div>
-        <div>3</div>
-      </Grid> */}
+      
         <Grid item xs={12} md={3}>
           <TabPanel profiles={profiles} SetWithUserId={SetWithUserId} SetWithEmail={SetWithEmail} with_userid={with_userid} />
         

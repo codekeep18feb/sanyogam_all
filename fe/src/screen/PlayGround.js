@@ -1,6 +1,7 @@
 import React from 'react'
 import HorizontalScrollWithinItemWidthOnly from '../component/reusables/HorizontalScrollWithinItemWidthOnly'
 import { makeStyles } from '@material-ui/core/styles';
+import ProfileBriefTile from './ProfileBriefTile';
 
 const useStyles = makeStyles({
     scrollContainer: {
@@ -26,10 +27,12 @@ export default function PlayGround() {
   const classes = useStyles();
 
   return (
-    <HorizontalScrollWithinItemWidthOnly >
-      <div className={classes.scrollItem}>Content 1</div>
-      <div className={classes.scrollItem}>Content 2</div>
-      <div className={classes.scrollItem}>Content 3</div>
-    </HorizontalScrollWithinItemWidthOnly>
+    // <HorizontalScrollWithinItemWidthOnly >
+    //   <div className={classes.scrollItem}>Content 1</div>
+    //   <div className={classes.scrollItem}>Content 2</div>
+    //   <div className={classes.scrollItem}>Content 3</div>
+    // </HorizontalScrollWithinItemWidthOnly>
+
+    <ProfileBriefTile />
   )
 }

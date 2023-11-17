@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import Tile from "./Tile"
-import Typography from '@mui/material/Typography';
+// import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
-import MatchesProfileBox from './MatchesProfileBox';
-import RecomUsers from './RecomUsers';
-import RecentVisited from './RecentVisited';
+// import MatchesProfileBox from './MatchesProfileBox';
+// import RecomUsers from './RecomUsers';
+// import RecentVisited from './RecentVisited';
 import MeDetailScreen from './MeDetailScreen';
 
 function HomeScreen({ authData }) {
@@ -22,8 +22,8 @@ function HomeScreen({ authData }) {
       {/* First column (70%) */}
       
       <Grid item md={6}>
-        {/* Content for the first column */}
-        <div style={{ backgroundColor: "#f0f0f0", padding: "16px" }}>
+        {/* Content for the first column //#f0f0f0 */}
+        <div style={{ backgroundColor: "red", padding: "10px" }}> 
           {authData ? (
             <Tile>
               <MeDetailScreen
@@ -65,12 +65,12 @@ function HomeScreen({ authData }) {
           Go Premium
         </div> */}
       </Grid>
-      <div>
+      {/* <div>
         <RecomUsers />
       </div>
       <div>
         <RecentVisited />
-      </div>
+      </div> */}
     </Grid>
   );
 
