@@ -2,7 +2,7 @@ import React from 'react'
 import HorizontalScrollWithinItemWidthOnly from '../component/reusables/HorizontalScrollWithinItemWidthOnly'
 import { makeStyles } from '@material-ui/core/styles';
 import ProfileBriefTile from './ProfileBriefTile';
-import ProgressBar from './ProgressBar';
+import ProgressBar from '../component/reusables/ProgressBar';
 
 const useStyles = makeStyles({
     scrollContainer: {
@@ -34,7 +34,6 @@ export default function PlayGround() {
     //   <div className={classes.scrollItem}>Content 3</div>
     // </HorizontalScrollWithinItemWidthOnly>
 
-    // <ProfileBriefTile />
-    <ProgressBar totalWorkDone={[0.5, 0.2, 0.3, 0.8, 1]}/>
+    <ProfileBriefTile />
   )
 }

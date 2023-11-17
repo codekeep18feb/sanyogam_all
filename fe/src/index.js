@@ -143,9 +143,7 @@ ReactDOM.render(
         <ThemeProvider theme={theme}>
           <Router>
 
-            <WrapperMobileShell >
               <App />
-            </WrapperMobileShell>
           </Router>
 
         </ThemeProvider>

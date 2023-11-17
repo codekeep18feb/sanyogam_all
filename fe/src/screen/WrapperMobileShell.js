@@ -3,7 +3,7 @@ import HeaderDesktop from './HeaderDesktop'
 import Footer from './Footer'
 import HeaderMobile from './HeaderMobile';
 import BottomMobile from './BottomMobile';
-
+import bgImg from "../images/sky_bg.jpg"
 const getDeviceType = () => {
   const width = window.innerWidth;
   if (width >= 468) {
@@ -15,7 +15,8 @@ const getDeviceType = () => {
 };
 
 
-export default function WrapperMobileShell({children}) {
+export default function WrapperMobileShell({children,includeWrapper, ...otherProps}) {
+  console.log('includeWrapper:', includeWrapper,otherProps);
 
 
   const [deviceType, setDeviceType] = useState(getDeviceType());
@@ -46,7 +47,14 @@ export default function WrapperMobileShell({children}) {
       </div>
 
       {/* Middle Content (Scrollable) */}
-      <div style={{ flex: '1', overflowY: 'auto', border: '1px solid blue' }}>
+      <div style={{ flex: '1', overflowY: 'auto', border: '1px solid blue'
+      // ,backgroundImage: `url(${bgImg})`,
+      // backgroundSize: 'cover', // or 'contain' based on your preference
+      // backgroundRepeat: 'no-repeat',
+      // backgroundPosition: 'center center'
+       }}>
+        
+        {/* <img src={bgImg} width={"10px"} height={"10px"}/> */}
         {children}
 
       </div>
