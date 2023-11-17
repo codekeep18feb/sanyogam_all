@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
     right: 0,
   },
   profileTile: {
-    padding: "50px",
+    padding: "20px 10px",
     margin: "20px",
     borderRadius: "10px",
     boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
@@ -61,7 +61,10 @@ export default function ProfileBriefTile({ users, profile = { name: "Mona Soni (
             <Typography variant="h6">{profile.name}</Typography>
           </div>
           <div>
-            <Typography variant="subtitle2">Edit Profile</Typography>
+            <a href="your_profile_edit_url">
+              <Typography variant="subtitle2">Edit Profile</Typography>
+            </a>
+            {/* <Typography variant="subtitle2">Edit Profile</Typography> */}
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <Typography variant="subtitle2">Your Profile Score</Typography>
