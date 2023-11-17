@@ -37,6 +37,9 @@ import { useEffect } from 'react'
 import PlayGround from './screen/PlayGround.js'
 import BackTile from './component/reusables/BackTile.js';
 import WrapperMobileShell from './screen/WrapperMobileShell.js';
+import WrapperMobileBackShell from './screen/WrapperMobileBackShell.js';
+import EditFamily from './component/EditFamily.js';
+import PreviewProfile from "./component/PreviewProfile.js"
 // import ProfileBriefTile from './screen/ProfileBriefTile.js';
 
 const MaterialUX = ()=>{
@@ -137,7 +140,32 @@ function App({ authData,login }) {
       />
       <Route
         path="/back_tile"
-        element={<BackTile includeWrapper={false} />}
+        element={
+        
+          <WrapperMobileBackShell>
+          <BackTile />
+        </WrapperMobileBackShell>
+        }
+      />
+
+
+<Route
+        path="/edit_profile"
+        element={
+        
+          <WrapperMobileBackShell title={"Preview Profile"}>
+          <PreviewProfile  />
+        </WrapperMobileBackShell>
+        }
+      />
+<Route
+        path="/edit_family"
+        element={
+        
+          <WrapperMobileBackShell title={"Family Details"}>
+          <EditFamily  />
+        </WrapperMobileBackShell>
+        }
       />
     </Routes>
   );

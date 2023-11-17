@@ -120,7 +120,7 @@ export default function ProfileBriefTile({ users, profile = { name: "Mona Soni (
               <Typography variant="h6">{profile.name}</Typography>
             </div>
             <div style={{ marginTop: "10px", opacity: 0.8 }}>
-              <a href="your_profile_edit_url" style={{ textDecoration: "none" }}>
+              <a href="back_tile" style={{ textDecoration: "none" }}>
                 <Typography variant="subtitle2">Edit Profile</Typography>
               </a>
             </div>
