@@ -35,6 +35,6 @@ export default function PlayGround() {
     // </HorizontalScrollWithinItemWidthOnly>
 
     // <ProfileBriefTile />
-    <ProgressBar />
+    <ProgressBar totalWorkDone={[0.5, 0.2, 0.3, 0.8, 1]}/>
   )
 }
