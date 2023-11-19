@@ -1,6 +1,8 @@
 import { Grid, Typography } from "@mui/material";
 import React from "react";
 import Location from "@mui/icons-material/LocationOnOutlined";
+import Affluence from "@mui/icons-material/Class";
+
 import People from "@mui/icons-material/PeopleAltOutlined";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import EditIcon from "@mui/icons-material/Edit";
@@ -64,6 +66,36 @@ export const FamilyPreview = () => {
         </div>
       </div>
 
+      <div style={{ display: "flex",padding:"10px 0" }}>
+        <Location
+          style={{ fontSize: "24px", color: "magenta", padding: "20px" }}
+        />
+
+        <div>
+          <Typography variant="subtitle2" sx={{ opacity: 0.7, color: "grey" }}>
+            Native
+          </Typography>
+          <Typography variant="subtitle2">
+            Noida
+          </Typography>
+        </div>
+      </div>
+
+      <div style={{ display: "flex",padding:"10px 0" }}>
+        <Affluence
+          style={{ fontSize: "24px", color: "magenta", padding: "20px" }}
+        />
+
+        <div>
+          <Typography variant="subtitle2" sx={{ opacity: 0.7, color: "grey" }}>
+            Affluence
+          </Typography>
+          <Typography variant="subtitle2">
+            Noida
+          </Typography>
+        </div>
+      </div>
+
 
       
 
@@ -72,9 +104,7 @@ export const FamilyPreview = () => {
   );
 };
 
-export const FatherDetails = () => {
-  return <div>FatherDetals</div>;
-};
+
 export default function PreviewProfile() {
   return (
     <>
@@ -87,7 +117,7 @@ export default function PreviewProfile() {
       >
         <FamilyPreview />
       </div>
-      <FatherDetails />
+   
     </>
   );
 }

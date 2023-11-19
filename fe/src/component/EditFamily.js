@@ -1,122 +1,65 @@
-import { Autocomplete, Grid, TextField } from "@mui/material";
 import React from "react";
+import { Autocomplete, TextField, Grid, Typography } from "@mui/material";
 
-export default function EditFamily() {
-  const flatProps = {
-    options: [{ title: "Noida" }, { title: "Delhi" }].map(
-      (option) => option.title
-    ),
-  };
+const NumberField = ({ id, label }) => (
+  <TextField
+    id={id}
+    label={label}
+    type="number"
+    InputLabelProps={{
+      shrink: true,
+    }}
+    variant="standard"
+  />
+);
 
-  const affluence = {
-    options: [{ title: "Affluent" }, { title: "Upper Middle Class" }].map(
-      (option) => option.title
-    ),
-  };
+const AutocompleteField = ({ options, id, label }) => (
+  <Autocomplete
+    options={options.map((option) => option.title)}
+    id={id}
+    renderInput={(params) => (
+      <TextField {...params} label={label} variant="standard" />
+    )}
+  />
+);
+
+const EditFamilyForm = () => {
+  const locations = [{ title: "Noida" }, { title: "Delhi" }];
+  const affluenceOptions = [
+    { title: "Poor" },
+    { title: "Middle Class" },
+    { title: "Upper Middle Class" },
+  ];
 
   return (
-   
-
     <div style={{ padding: "10px" }}>
       <Grid container flexDirection={"column"}>
-        <Grid
-          container
-          spacing={1}
-          justifyContent={"center"}
-          style={{ marginTop: "10px" }}
-        >
+        <Grid container spacing={1} justifyContent={"center"} style={{ marginTop: "10px" }}>
           <Grid item xs={5}>
-            <TextField
-              id="brother-number"
-              label="No Of Brothers"
-              type="number"
-              InputLabelProps={{
-                shrink: true,
-              }}
-              variant="standard"
-            />
+            <NumberField id="brother-number" label="No Of Brothers" />
           </Grid>
           <Grid item xs={5}>
-            <TextField
-              id="married-brother-number"
-              label="Married Brother"
-              type="number"
-              InputLabelProps={{
-                shrink: true,
-              }}
-              variant="standard"
-            />
+            <NumberField id="married-brother-number" label="Married Brother" />
           </Grid>
         </Grid>
 
-        <Grid
-          container
-          spacing={1}
-          justifyContent={"center"}
-          style={{ marginTop: "10px" }}
-        >
+        <Grid container spacing={1} justifyContent={"center"} style={{ marginTop: "10px" }}>
           <Grid item xs={5}>
-            <TextField
-              id="sister-number"
-              label="No Of Sisters"
-              type="number"
-              InputLabelProps={{
-                shrink: true,
-              }}
-              variant="standard"
-            />
+            <NumberField id="sister-number" label="No Of Sisters" />
           </Grid>
           <Grid item xs={5}>
-            <TextField
-              id="married-sister-number"
-              label="Married Sister"
-              type="number"
-              InputLabelProps={{
-                shrink: true,
-              }}
-              variant="standard"
-            />
+            <NumberField id="married-sister-number" label="Married Sister" />
           </Grid>
         </Grid>
 
-        <Grid item style={{ marginBottom: "10px" }}>
-          <Autocomplete
-            {...flatProps}
-            id="flat-demo"
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label="Family Location"
-                variant="standard"
-              />
-            )}
-          />
-        </Grid>
-
-        <Grid item style={{ marginBottom: "10px" }}>
-          <Autocomplete
-            {...flatProps}
-            id="flat-demo"
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label="Current Family Location"
-                variant="standard"
-              />
-            )}
-          />
-        </Grid>
-
-        <Grid item style={{ marginBottom: "10px" }}>
-          <Autocomplete
-            {...affluence}
-            id="flat-demo"
-            renderInput={(params) => (
-              <TextField {...params} label="Affluence" variant="standard" />
-            )}
-          />
-        </Grid>
+        <div style={{ display: "flex", flexDirection: "column", width: "82%", margin: "0 auto" }}>
+          <AutocompleteField options={locations} id="current-location" label="Current Location" />
+          <AutocompleteField options={locations} id="native-location" label="Native Location" />
+          <AutocompleteField options={affluenceOptions} id="affluence" label="Affluence" />
+        </div>
       </Grid>
     </div>
   );
-}
+};
+
+export default EditFamilyForm;
