@@ -126,6 +126,7 @@ export default function PreviewProfile() {
       affluence: "MIDDLE_CLASS",
     },
   };
+  const a = "variable"
   return (
     <>
       <div
@@ -142,7 +143,7 @@ export default function PreviewProfile() {
               style={{ fontSize: "24px", color: "magenta", padding: "20px" }}
             />
           }
-          manupulated_str={"just some"}
+          manupulated_str={`Manupulated string ${a}`}
         />
       </div>
     </>
