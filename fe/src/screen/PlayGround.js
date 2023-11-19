@@ -3,6 +3,7 @@ import HorizontalScrollWithinItemWidthOnly from '../component/reusables/Horizont
 import { makeStyles } from '@material-ui/core/styles';
 import ProfileBriefTile from './ProfileBriefTile';
 import ProgressBar from '../component/reusables/ProgressBar';
+import { TextField } from '@mui/material';
 
 const useStyles = makeStyles({
     scrollContainer: {
@@ -34,6 +35,15 @@ export default function PlayGround() {
     //   <div className={classes.scrollItem}>Content 3</div>
     // </HorizontalScrollWithinItemWidthOnly>
 
-    <ProfileBriefTile />
+    // <ProfileBriefTile />
+    <TextField
+          id="brother-number"
+          label="No Of Brothers"
+          type="number"
+          InputLabelProps={{
+            shrink: true,
+          }}
+          variant="standard"
+        />
   )
 }

@@ -40,6 +40,7 @@ import WrapperMobileShell from './screen/WrapperMobileShell.js';
 import WrapperMobileBackShell from './screen/WrapperMobileBackShell.js';
 import EditFamily from './component/EditFamily.js';
 import PreviewProfile from "./component/PreviewProfile.js"
+import ProfileBriefTile from './screen/ProfileBriefTile';
 // import ProfileBriefTile from './screen/ProfileBriefTile.js';
 
 const MaterialUX = ()=>{
@@ -90,7 +91,7 @@ function App({ authData,login }) {
         path="/"
         element={
           <WrapperMobileShell>
-            <HomeScreen />
+            <ProfileBriefTile />
           </WrapperMobileShell>
         }
       />

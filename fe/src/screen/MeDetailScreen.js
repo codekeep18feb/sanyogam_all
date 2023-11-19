@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 // import PhotoCamera from '@mui/icons-material/PhotoCamera';
-import logo192 from '../images/Vector.jpg'; // Adjust the path based on your project structure
+import logo192 from "../images/Vector.jpg"; // Adjust the path based on your project structure
 
 export default function MeDetailScreen({ authData, editMode, SeteditMode }) {
   // Define state variable for edited data
@@ -16,19 +16,19 @@ export default function MeDetailScreen({ authData, editMode, SeteditMode }) {
     try {
       // Create a FormData object to send the data
       const formData = new FormData();
-      formData.append('fname', editedData.fname);
-      formData.append('lname', editedData.lname);
-      formData.append('image', editedData.image); // Add image to the FormData
+      formData.append("fname", editedData.fname);
+      formData.append("lname", editedData.lname);
+      formData.append("image", editedData.image); // Add image to the FormData
 
       // Make the POST request
-      // const response = await fetch('http://localhost:8000/api/update_profile/1', {
+      // const response = await fetch('http://192.168.1.4:8000/api/update_profile/1', {
       //   method: 'POST',
       //   body: formData,
       // });
 
       // Rest of your code for handling the response and exiting edit mode...
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
     }
   };
 
@@ -40,18 +40,24 @@ export default function MeDetailScreen({ authData, editMode, SeteditMode }) {
         type="text"
         placeholder="First Name"
         value={editedData.fname}
-        onChange={(e) => setEditedData({ ...editedData, fname: e.target.value })}
+        onChange={(e) =>
+          setEditedData({ ...editedData, fname: e.target.value })
+        }
       />
       <input
         type="text"
         placeholder="Last Name"
         value={editedData.lname}
-        onChange={(e) => setEditedData({ ...editedData, lname: e.target.value })}
+        onChange={(e) =>
+          setEditedData({ ...editedData, lname: e.target.value })
+        }
       />
       <input
         type="file"
         accept="image/*"
-        onChange={(e) => setEditedData({ ...editedData, image: e.target.files[0] })}
+        onChange={(e) =>
+          setEditedData({ ...editedData, image: e.target.files[0] })
+        }
       />
       {/* Display the image */}
       {/* <img src={editedData.image} alt="Profile Image" /> */}
@@ -62,7 +68,14 @@ export default function MeDetailScreen({ authData, editMode, SeteditMode }) {
 
   // Define your div JSX here
   const div = (
-    <div style={{border:"1px solid grey",borderRadius:"50%",padding:"20px",background:"white"}}>
+    <div
+      style={{
+        border: "1px solid grey",
+        borderRadius: "50%",
+        padding: "20px",
+        background: "white",
+      }}
+    >
       {/* <p>Welcome, {authData.fname} {authData.lname}</p> */}
       {/* Display the image */}
       {/* <img src={`data:image/jpeg;base64, ${authData.image}`} alt="Profile Image" /> */}
