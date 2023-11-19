@@ -1,5 +1,6 @@
 import React from "react";
 import { Autocomplete, TextField, Grid, Typography } from "@mui/material";
+import { useLocation } from "react-router-dom";
 
 const NumberField = ({ id, label }) => (
   <TextField
@@ -30,6 +31,11 @@ const EditFamilyForm = () => {
     { title: "Middle Class" },
     { title: "Upper Middle Class" },
   ];
+
+  // Use the useLocation hook to access the current location object
+  const { state } = useLocation();
+  const family_details = state && state.family_details;
+  console.log('family_detailsdafd',family_details)
 
   return (
     <div style={{ padding: "10px" }}>

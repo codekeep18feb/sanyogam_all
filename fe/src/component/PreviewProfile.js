@@ -2,12 +2,21 @@ import { Grid, Typography } from "@mui/material";
 import React from "react";
 import Location from "@mui/icons-material/LocationOnOutlined";
 import Affluence from "@mui/icons-material/Class";
+import { useNavigate } from 'react-router-dom';
 
 import People from "@mui/icons-material/PeopleAltOutlined";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import EditIcon from "@mui/icons-material/Edit";
 
-export const FamilyPreview = () => {
+export const FamilyPreview = ({family_details}) => {
+  console.log('family_details',family_details)
+  const navigate = useNavigate();
+
+  const handleEditClick = () => {
+    navigate('/edit_family', { state: { family_details } });
+  };
+
+
   return (
     <Grid container flexDirection={"column"}>
       <Grid
@@ -20,14 +29,13 @@ export const FamilyPreview = () => {
         </Grid>
 
         <div style={{ display: "flex" }}>
-          <div style={{ opacity: 0.8 }}>
-            <a href="edit_family" style={{ textDecoration: "none" }}>
-              <Typography variant="subtitle2">Edit</Typography>
-            </a>
+          <div style={{ opacity: 0.8, cursor: "pointer" }} onClick={handleEditClick}>
+            <Typography variant="subtitle2">Edit</Typography>
           </div>
 
           <EditIcon
-            style={{ fontSize: "17px", color: "blue", marginLeft: "5px" }}
+            style={{ fontSize: "17px", color: "blue", marginLeft: "5px", cursor: "pointer" }}
+            onClick={handleEditClick}
           />
         </div>
 
@@ -42,11 +50,10 @@ export const FamilyPreview = () => {
 
         <div>
           <Typography variant="subtitle2" sx={{ opacity: 0.7, color: "grey" }}>
-            Family Members{" "}
+            Family Members
           </Typography>
           <Typography variant="subtitle2">
-            Father Mother 1 brother who is unmarried 1 sister who is married{" "}
-          </Typography>
+          Father, Mother, {family_details['no_of_married_brothers']-family_details['no_of_brothers']} unmarried brothers, {family_details['no_of_married_sisters']-family_details['no_of_sisters']} unmarried sisters. total {family_details['no_of_married_brothers']+family_details['no_of_sisters']} siblings.</Typography>
         </div>
       </div>
 
@@ -61,7 +68,7 @@ export const FamilyPreview = () => {
             Stay in
           </Typography>
           <Typography variant="subtitle2">
-            Noida
+          {family_details['current_location']}
           </Typography>
         </div>
       </div>
@@ -76,7 +83,7 @@ export const FamilyPreview = () => {
             Native
           </Typography>
           <Typography variant="subtitle2">
-            Noida
+            {family_details['native_location']}
           </Typography>
         </div>
       </div>
@@ -91,7 +98,7 @@ export const FamilyPreview = () => {
             Affluence
           </Typography>
           <Typography variant="subtitle2">
-            Noida
+          {family_details['affluence']}
           </Typography>
         </div>
       </div>
@@ -106,6 +113,19 @@ export const FamilyPreview = () => {
 
 
 export default function PreviewProfile() {
+  const profile_info_obj = {
+
+    "family_details":{
+      "no_of_brothers":2,
+      "no_of_married_brothers":2,
+      "no_of_sisters":2,
+      "no_of_married_sisters":2,
+      "current_location":"delhi",
+      "native_location":"gonda",
+      "affluence":"MIDDLE_CLASS"  
+    }
+
+  }
   return (
     <>
       <div
@@ -115,7 +135,7 @@ export default function PreviewProfile() {
           boxShadow: "0px 1px 10px rgba(0, 0, 0, 0.3)",
         }}
       >
-        <FamilyPreview />
+        <FamilyPreview family_details={profile_info_obj['family_details']}/>
       </div>
    
     </>

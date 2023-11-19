@@ -38,6 +38,9 @@ import PlayGround from './screen/PlayGround.js'
 import BackTile from './component/reusables/BackTile.js';
 import WrapperMobileShell from './screen/WrapperMobileShell.js';
 import WrapperMobileBackShell from './screen/WrapperMobileBackShell.js';
+
+import WrapperMobileBackShellWithSave from './screen/WrapperMobileBackShellWithSave.js';
+
 import EditFamily from './component/EditFamily.js';
 import PreviewProfile from "./component/PreviewProfile.js"
 import ProfileBriefTile from './screen/ProfileBriefTile';
@@ -163,9 +166,9 @@ function App({ authData,login }) {
         path="/edit_family"
         element={
         
-          <WrapperMobileBackShell title={"Family Details"}>
+          <WrapperMobileBackShellWithSave title={"Family Details"}>
           <EditFamily  />
-        </WrapperMobileBackShell>
+        </WrapperMobileBackShellWithSave>
         }
       />
     </Routes>
