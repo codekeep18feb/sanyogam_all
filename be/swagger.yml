@@ -35,7 +35,7 @@ paths:
   
   /users:
     get:
-      operationId: "users.read_all"
+      operationId: "handlers.users.read_all"
       tags:
         - "People"
       summary: "Read the list of users"
@@ -46,7 +46,7 @@ paths:
   
   /signup:
     post:
-      operationId: "users.signup"
+      operationId: "handlers.users.signup"
       tags:
         - People
       summary: "Create a user"

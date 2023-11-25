@@ -1,6 +1,8 @@
 from flask import render_template,abort,jsonify # Remove: import Flask
 import config
 from flask_migrate import Migrate
+# from handlers.users import read_all
+
 from config import app, db  # Assuming your Flask app instance is named 'app'
 migrate = Migrate(app, db)
 
