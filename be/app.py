@@ -13,20 +13,20 @@ from flask_cors import CORS
 
 
 
-app = config.connex_app
-# CORS(app.app)
+connex_app = config.connex_app
+# CORS(connex_app.app)
 
-app.add_api(config.basedir / "swagger.yml")
+connex_app.add_api(config.basedir / "swagger.yml")
 # def before_request():
 #     # Your logic here before handling the request
 #     print("attaching user if login logic here to the request")
 #     pass
 
-# app.before_request(before_request)
+# connex_app.before_request(before_request)
 stripe.api_key = "sk_test_QDOw3l4W4TnKE6Hb3I7TMQO100KfBdpOtg"
 
 
-@app.route("/")
+@connex_app.route("/")
 def home():
     users = User.query.all()
 
@@ -34,7 +34,7 @@ def home():
 
 
 
-@app.route('/create-payment-intent', methods=['POST'])
+@connex_app.route('/create-payment-intent', methods=['POST'])
 def create_payment_intent():
     try:
         amount = 1000  # Amount in cents (adjust as needed)
@@ -52,7 +52,7 @@ def create_payment_intent():
         return jsonify({'error': str(e)}), 500
 
 # This below is working but unable to add similar authentication using only swagger.yml
-# @app.route("/users")
+# @connex_app.route("/users")
 # @jwt_required()
 # def protected_users():
 #     users = User.query.all()
@@ -61,4 +61,4 @@ def create_payment_intent():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8000, debug=True)
+    connex_app.run(host="0.0.0.0", port=8000, debug=True)

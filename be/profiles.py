@@ -4,7 +4,7 @@ from config import db, decode_token
 from users import User
 from models import Profile,ProfileSchema
 from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity
-from models import UserRequests, UserRequestsSchema, OnlineUsersSchema
+from models import UserRequests, UserRequestsSchema, OnlineUsersSchema, ProfileSchema
 from sqlalchemy import or_
 
 from datetime import datetime
@@ -80,7 +80,7 @@ def profile_id_one_query(id):
         abort(404, f"Profile with id {id} not found")
 
 
-def read_all():
+def read_all_profiles_old():
     print("payloadchat")
 
     auth_token = request.headers.get("Authorization")
@@ -136,6 +136,12 @@ def read_all():
     else:
         abort(500, f"internal server error")
 
+
+
+def read_all_profiles_v1():
+    profiles = Profile.query.all()
+    profile_schema = ProfileSchema(many=True)
+    return profile_schema.dump(profiles)
 
 
 # def read_all():

@@ -8,12 +8,33 @@ from sqlalchemy import event  # Add this import statement
 
 class Profile(db.Model):
     __tablename__ = "profile"
+    #user info
     id = db.Column(db.Integer, primary_key=True)
     gender = db.Column(db.String(16))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     user = db.relationship('User', back_populates='profile')
     image = db.Column(db.String(200))
-    # image = db.Column(db.LargeBinary)
+
+
+    #CAN YOU add converted and added to above
+#     const familyDetails = {
+#     no_of_brothers: 1,
+#     married_brother: 0,
+#     no_of_sisters: 1,
+#     married_sister: 0,
+#     family_location: "Noida",
+#     native_place : "Lucknow",
+#     affluence : "Middle Class"
+# };
+    no_of_brothers = db.Column(db.Integer)
+    married_brother = db.Column(db.Integer)
+    no_of_sisters = db.Column(db.Integer)
+    married_sister = db.Column(db.Integer)
+    family_location = db.Column(db.String(50))
+    native_place = db.Column(db.String(50))
+    affluence = db.Column(db.String(50))
+
+    
 
 
 
@@ -62,8 +83,8 @@ users_schema = UserSchema(many=True)
 
 
 
-# Profile_schema = ProfileSchema()
-Profiles_schema = ProfileSchema(many=True)
+profile_schema = ProfileSchema()
+profiles_schema = ProfileSchema(many=True)
 
 
 class UserRequests(db.Model):

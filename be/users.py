@@ -161,18 +161,18 @@ def read_id_one_query(id):
     user = User.query.filter_by(id=id).first()
     
     if user:
-        person_dict = {
-            "id": user.id,
-            "fname": user.fname,
-            "lname": user.lname,
-            "timestamp": user.timestamp,
-        }
+        # person_dict = {
+        #     "id": user.id,
+        #     "fname": user.fname,
+        #     "lname": user.lname,
+        #     "timestamp": user.timestamp,
+        # }
 
-        uploaded_file = request.files.get("image")
-        if uploaded_file:
-            print(f'Uploaded File:: {uploaded_file}')
-            
-        return person_dict
+        # uploaded_file = request.files.get("image")
+        # if uploaded_file:
+        #     print(f'Uploaded File:: {uploaded_file}')
+        # print(type(user),user)
+        return user_schema.dump(user)
     else:
         abort(404, f"User with id {id} not found")
 

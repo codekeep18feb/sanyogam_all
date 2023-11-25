@@ -589,12 +589,12 @@ paths:
   # read_online_circle
   /profiles:
     get:
-      operationId: "profiles.read_all"
+      operationId: "profiles.read_all_profiles_v1"
       security:
         - JWTAuth: [] 
       tags:
         - "People"
-      summary: "Read the list of profiles"
+      summary: "Read the list of all profiles and with filters"
       responses:
         "200":
           description: "Successfully read profiles list"
