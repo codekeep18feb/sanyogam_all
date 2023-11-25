@@ -2,3 +2,5 @@
 ./__pycache__/people.cpython-310.pyc
 __pycache__/people.cpython-310.pyc
 __pycache__/*
+.newvenv
+/.newvenv

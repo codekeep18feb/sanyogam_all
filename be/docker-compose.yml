@@ -1,6 +1,0 @@
-version: '3'
-services:
-  web:
-    image: sanyogm-be  # Replace with the name you used in the Dockerfile
-    ports:
-      - "8000:8000"
