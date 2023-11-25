@@ -8,7 +8,7 @@ from config import db
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
-from models import User, UserSchema
+from models.users import User, UserSchema
 def read_all():
    
     
