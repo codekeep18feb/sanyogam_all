@@ -8,7 +8,7 @@ from config import db, decode_token
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
-from models import User, users_schema, user_schema, UserSchema,Profile, FamilyInformation
+from models import *
 from models import UserRequests,UserRequestsSchema
 def get_timestamp():
     return datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
@@ -371,15 +371,32 @@ def signup(signup_data):
     timestamp_str = signup_data.get("timestamp", get_timestamp())
     timestamp = datetime.strptime(timestamp_str, '%Y-%m-%d %H:%M:%S')
 
+    
     family_info_default = FamilyInformation()
-    new_person = User(email=email, password=password,fname=fname, lname=lname, timestamp=timestamp)
-    print("new_dfsdasfperson",new_person,family_info_default.id)
-    # # Create a profile and link it to the user
+    father_default = Father()
+    mother_default = Mother()
+    brother_default = Brother()
+    sister_default = Sister()
+    contact_details_default = ContactDetails()
+    about_me_default = AboutMe()
+    horoscope_details_default = HoroscopeDetails()
 
-    profile = Profile(gender=gender, user=new_person
-                      , family_information=family_info_default
-                      )
+    new_person = User(email=email, password=password, fname=fname, lname=lname, timestamp=timestamp)
     db.session.add(new_person)
+
+    profile = Profile(
+        gender=gender,
+        user=new_person,
+        family_information=family_info_default,
+        father=father_default,
+        mother=mother_default,
+        brother=brother_default,
+        sister=sister_default,
+        contact_details=contact_details_default,
+        about_me=about_me_default,
+        horoscope_details=horoscope_details_default
+    )
+
     db.session.add(profile)
 
     db.session.commit()

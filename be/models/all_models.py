@@ -18,30 +18,103 @@ class FamilyInformation(db.Model):
     native_place = db.Column(db.String(50))
     affluence = db.Column(db.String(50))
 
+class Father(db.Model):
+    __tablename__ = "father"
+    id = db.Column(db.Integer, primary_key=True)
+    profile_id = db.Column(db.Integer, db.ForeignKey('profile.id'))
+    profile = db.relationship('Profile', back_populates='father')
+    first_name = db.Column(db.String(50))
+    last_name = db.Column(db.String(50))
+    designation = db.Column(db.String(50))
+    company_name = db.Column(db.String(50))
+    job_type = db.Column(db.String(50))
+
+class Mother(db.Model):
+    __tablename__ = "mother"
+    id = db.Column(db.Integer, primary_key=True)
+    profile_id = db.Column(db.Integer, db.ForeignKey('profile.id'))
+    profile = db.relationship('Profile', back_populates='mother')
+    first_name = db.Column(db.String(50))
+    last_name = db.Column(db.String(50))
+    designation = db.Column(db.String(50))
+    job_type = db.Column(db.String(50))
+
+class Brother(db.Model):
+    __tablename__ = "brother"
+    id = db.Column(db.Integer, primary_key=True)
+    profile_id = db.Column(db.Integer, db.ForeignKey('profile.id'))
+    profile = db.relationship('Profile', back_populates='brother')
+    first_name = db.Column(db.String(50))
+    last_name = db.Column(db.String(50))
+    designation = db.Column(db.String(50))
+    company_name = db.Column(db.String(50))
+    marital_status = db.Column(db.String(50))
+
+class Sister(db.Model):
+    __tablename__ = "sister"
+    id = db.Column(db.Integer, primary_key=True)
+    profile_id = db.Column(db.Integer, db.ForeignKey('profile.id'))
+    profile = db.relationship('Profile', back_populates='sister')
+    first_name = db.Column(db.String(50))
+    last_name = db.Column(db.String(50))
+    designation = db.Column(db.String(50))
+    company_name = db.Column(db.String(50))
+    marital_status = db.Column(db.String(50))
+
+class ContactDetails(db.Model):
+    __tablename__ = "contact_details"
+    id = db.Column(db.Integer, primary_key=True)
+    profile_id = db.Column(db.Integer, db.ForeignKey('profile.id'))
+    profile = db.relationship('Profile', back_populates='contact_details')
+    email = db.Column(db.String(50))
+    phone_number = db.Column(db.String(15))
+
+class AboutMe(db.Model):
+    __tablename__ = "about_me"
+    id = db.Column(db.Integer, primary_key=True)
+    profile_id = db.Column(db.Integer, db.ForeignKey('profile.id'))
+    profile = db.relationship('Profile', back_populates='about_me')
+    gothra = db.Column(db.String(50))
+    complexion = db.Column(db.String(50))
+    diet = db.Column(db.String(50))
+    body_type = db.Column(db.String(50))
+    location = db.Column(db.String(50))
+    residency_status = db.Column(db.String(50))
+    designation = db.Column(db.String(50))
+    company_name = db.Column(db.String(50))
+    annual_income = db.Column(db.String(50))
+    education = db.Column(db.String(50))
+    college_name = db.Column(db.String(50))
+
+class HoroscopeDetails(db.Model):
+    __tablename__ = "horoscope_details"
+    id = db.Column(db.Integer, primary_key=True)
+    profile_id = db.Column(db.Integer, db.ForeignKey('profile.id'))
+    profile = db.relationship('Profile', back_populates='horoscope_details')
+    birth_location = db.Column(db.String(50))
+    time_of_birth = db.Column(db.String(50))
+    date_of_birth = db.Column(db.String(50))
+    manglik = db.Column(db.String(3))
+    nakshatra = db.Column(db.String(50))
 
 class Profile(db.Model):
     __tablename__ = "profile"
-    #user info
     id = db.Column(db.Integer, primary_key=True)
     gender = db.Column(db.String(16))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     user = db.relationship('User', back_populates='profile')
     image = db.Column(db.String(200))
-    #CAN YOU PUT THESE BELOW ONES INTO A SEPRATE CLASS?
-    # no_of_brothers = db.Column(db.Integer)
-    # married_brother = db.Column(db.Integer)
-    # no_of_sisters = db.Column(db.Integer)
-    # married_sister = db.Column(db.Integer)
-    # family_location = db.Column(db.String(50))
-    # native_place = db.Column(db.String(50))
-    # affluence = db.Column(db.String(50))
 
-    # relationship with FamilyInformation
     family_information_id = db.Column(db.Integer, db.ForeignKey('family_information.id'))
-    family_information = db.relationship('FamilyInformation', back_populates='profile')    
+    family_information = db.relationship('FamilyInformation', back_populates='profile')
 
-
-
+    father = db.relationship('Father', back_populates='profile', uselist=False)
+    mother = db.relationship('Mother', back_populates='profile', uselist=False)
+    brother = db.relationship('Brother', back_populates='profile', uselist=False)
+    sister = db.relationship('Sister', back_populates='profile', uselist=False)
+    contact_details = db.relationship('ContactDetails', back_populates='profile', uselist=False)
+    about_me = db.relationship('AboutMe', back_populates='profile', uselist=False)
+    horoscope_details = db.relationship('HoroscopeDetails', back_populates='profile', uselist=False)
 
 class User(db.Model):
     __tablename__ = "user"
@@ -59,8 +132,6 @@ class User(db.Model):
 
 
 
-
-
 class UserSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = User
@@ -68,10 +139,58 @@ class UserSchema(ma.SQLAlchemyAutoSchema):
         sqla_session = db.session
         include_relationships = True
 
-
 class FamilyInformationSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = FamilyInformation
+        load_instance = True
+        sqla_session = db.session
+        include_relationships = True
+
+class FatherSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = Father
+        load_instance = True
+        sqla_session = db.session
+        include_relationships = True
+
+class MotherSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = Mother
+        load_instance = True
+        sqla_session = db.session
+        include_relationships = True
+
+class BrotherSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = Brother
+        load_instance = True
+        sqla_session = db.session
+        include_relationships = True
+
+class SisterSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = Sister
+        load_instance = True
+        sqla_session = db.session
+        include_relationships = True
+
+class ContactDetailsSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = ContactDetails
+        load_instance = True
+        sqla_session = db.session
+        include_relationships = True
+
+class AboutMeSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = AboutMe
+        load_instance = True
+        sqla_session = db.session
+        include_relationships = True
+
+class HoroscopeDetailsSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = HoroscopeDetails
         load_instance = True
         sqla_session = db.session
         include_relationships = True
@@ -82,6 +201,13 @@ class ProfileSchema(ma.SQLAlchemyAutoSchema):
     user_lname = fields.String(attribute="user.lname")
 
     family_information = fields.Nested(FamilyInformationSchema)
+    father = fields.Nested(FatherSchema)
+    mother = fields.Nested(MotherSchema)
+    brother = fields.Nested(BrotherSchema)
+    sister = fields.Nested(SisterSchema)
+    contact_details = fields.Nested(ContactDetailsSchema)
+    about_me = fields.Nested(AboutMeSchema)
+    horoscope_details = fields.Nested(HoroscopeDetailsSchema)
 
     class Meta:
         model = Profile
@@ -89,20 +215,35 @@ class ProfileSchema(ma.SQLAlchemyAutoSchema):
         sqla_session = db.session
         include_relationships = True
 
-
-
-
 user_schema = UserSchema()
 users_schema = UserSchema(many=True)
-
 
 family_information_schema = FamilyInformationSchema()
 family_informations_schema = FamilyInformationSchema(many=True)
 
+father_schema = FatherSchema()
+fathers_schema = FatherSchema(many=True)
+
+mother_schema = MotherSchema()
+mothers_schema = MotherSchema(many=True)
+
+brother_schema = BrotherSchema()
+brothers_schema = BrotherSchema(many=True)
+
+sister_schema = SisterSchema()
+sisters_schema = SisterSchema(many=True)
+
+contact_details_schema = ContactDetailsSchema()
+contact_detailss_schema = ContactDetailsSchema(many=True)
+
+about_me_schema = AboutMeSchema()
+about_mes_schema = AboutMeSchema(many=True)
+
+horoscope_details_schema = HoroscopeDetailsSchema()
+horoscope_detailss_schema = HoroscopeDetailsSchema(many=True)
 
 profile_schema = ProfileSchema()
 profiles_schema = ProfileSchema(many=True)
-
 
 class UserRequests(db.Model):
     __tablename__ = "requests"
