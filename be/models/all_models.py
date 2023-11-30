@@ -69,11 +69,19 @@ class UserSchema(ma.SQLAlchemyAutoSchema):
         include_relationships = True
 
 
+class FamilyInformationSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = FamilyInformation
+        load_instance = True
+        sqla_session = db.session
+        include_relationships = True
 
 class ProfileSchema(ma.SQLAlchemyAutoSchema):
     user_email = fields.String(attribute="user.email")
     user_fname = fields.String(attribute="user.fname")
     user_lname = fields.String(attribute="user.lname")
+
+    family_information = fields.Nested(FamilyInformationSchema)
 
     class Meta:
         model = Profile
@@ -82,9 +90,14 @@ class ProfileSchema(ma.SQLAlchemyAutoSchema):
         include_relationships = True
 
 
+
+
 user_schema = UserSchema()
 users_schema = UserSchema(many=True)
 
+
+family_information_schema = FamilyInformationSchema()
+family_informations_schema = FamilyInformationSchema(many=True)
 
 
 profile_schema = ProfileSchema()

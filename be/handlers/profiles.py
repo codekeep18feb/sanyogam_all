@@ -59,23 +59,13 @@ def update_profile(id):
         "success": "Updated successfully!"
     }
 
-def profile_id_one_query(id):
+def profile(id):
     profile = Profile.query.filter_by(id=id).first()
     
     if profile:
-        person_dict = {
-            "id": profile.id,
-            "gender": profile.gender,
-            "fname" : profile.user.fname,
-            "lname" : profile.user.lname,
-            "online" : profile.user.online
-        }
-
-        # uploaded_file = request.files.get("image")
-        # if uploaded_file:
-        #     print(f'Uploaded File:: {uploaded_file}')
-            
-        return person_dict
+        
+        profile_schema = ProfileSchema()
+        return profile_schema.dump(profile)   
     else:
         abort(404, f"Profile with id {id} not found")
 

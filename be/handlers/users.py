@@ -8,7 +8,7 @@ from config import db, decode_token
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
-from models import User, users_schema, user_schema, UserSchema,Profile
+from models import User, users_schema, user_schema, UserSchema,Profile, FamilyInformation
 from models import UserRequests,UserRequestsSchema
 def get_timestamp():
     return datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
@@ -371,10 +371,14 @@ def signup(signup_data):
     timestamp_str = signup_data.get("timestamp", get_timestamp())
     timestamp = datetime.strptime(timestamp_str, '%Y-%m-%d %H:%M:%S')
 
+    family_info_default = FamilyInformation()
     new_person = User(email=email, password=password,fname=fname, lname=lname, timestamp=timestamp)
-    print("new_person",new_person)
+    print("new_dfsdasfperson",new_person,family_info_default.id)
     # # Create a profile and link it to the user
-    profile = Profile(gender=gender, user=new_person)
+
+    profile = Profile(gender=gender, user=new_person
+                      , family_information=family_info_default
+                      )
     db.session.add(new_person)
     db.session.add(profile)
 

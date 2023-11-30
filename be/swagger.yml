@@ -551,7 +551,6 @@ paths:
         - People
       summary: "send_request to user(to_email)"
       parameters:
-        # - $ref: "#/components/parameters/image"
         - $ref: "#/components/parameters/to_email"
       
       responses:
@@ -562,17 +561,17 @@ paths:
 
   /profile/{id}:
     get:
-      operationId: "handlers.profiles.profile_id_one_query"
+      operationId: "handlers.profiles.profile"
       tags:
         - People
-      summary: "Read one Profile using query parameter"
+      summary: "summary Successfully read profile (individual)"
       parameters:
         # - $ref: "#/components/parameters/image"
         - $ref: "#/components/parameters/id"
       
       responses:
         "200":
-          description: "Successfully read user using query parameter"
+          description: " description Successfully read profile (individual)"
   
   /read_online_circle:
     get:
