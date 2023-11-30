@@ -6,14 +6,10 @@ from marshmallow import fields
 
 from sqlalchemy import event  # Add this import statement
 
-class Profile(db.Model):
-    __tablename__ = "profile"
-    #user info
+class FamilyInformation(db.Model):
+    __tablename__ = "family_information"
     id = db.Column(db.Integer, primary_key=True)
-    gender = db.Column(db.String(16))
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    user = db.relationship('User', back_populates='profile')
-    image = db.Column(db.String(200))
+    profile = db.relationship('Profile', uselist=False, back_populates='family_information')
     no_of_brothers = db.Column(db.Integer)
     married_brother = db.Column(db.Integer)
     no_of_sisters = db.Column(db.Integer)
@@ -22,7 +18,27 @@ class Profile(db.Model):
     native_place = db.Column(db.String(50))
     affluence = db.Column(db.String(50))
 
-    
+
+class Profile(db.Model):
+    __tablename__ = "profile"
+    #user info
+    id = db.Column(db.Integer, primary_key=True)
+    gender = db.Column(db.String(16))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user = db.relationship('User', back_populates='profile')
+    image = db.Column(db.String(200))
+    #CAN YOU PUT THESE BELOW ONES INTO A SEPRATE CLASS?
+    # no_of_brothers = db.Column(db.Integer)
+    # married_brother = db.Column(db.Integer)
+    # no_of_sisters = db.Column(db.Integer)
+    # married_sister = db.Column(db.Integer)
+    # family_location = db.Column(db.String(50))
+    # native_place = db.Column(db.String(50))
+    # affluence = db.Column(db.String(50))
+
+    # relationship with FamilyInformation
+    family_information_id = db.Column(db.Integer, db.ForeignKey('family_information.id'))
+    family_information = db.relationship('FamilyInformation', back_populates='profile')    
 
 
 
