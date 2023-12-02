@@ -33,6 +33,26 @@ components:
           type: "string"
           enum: ["Male", "Female", "Other"]
     
+    FamilyInformationSchema:
+      type: "object"
+      properties:
+        no_of_brothers:
+          type: "integer"
+        married_brother:
+          type: "integer"
+        no_of_sisters:
+          type: "integer"
+        married_sister:
+          type: "integer"
+        family_location:
+          type: "string"
+        native_place:
+          type: "string"
+        affluence:
+          type: "string"
+      
+    
+
     ProfileUpdateData:
       type: "object"
       required:
@@ -277,13 +297,14 @@ paths:
       requestBody:
         required: true
         content:
-          multipart/form-data:
+          application/json:
             schema:
+              x-body-name: "profile_update_data"
               type: object
               properties:
-                image:
-                  type: string
-                  format: binary
+                # image:
+                #   type: string
+                #   format: binary
                 gender:
                   type: string
                   enum: ["Male", "Female", "Other"]
@@ -291,6 +312,9 @@ paths:
                   type: string
                 lname:
                   type: string
+                family_info:
+
+                  $ref: "#/components/schemas/FamilyInformationSchema"
 
                 # image:
                 #   type: string
@@ -557,6 +581,22 @@ paths:
         "200":
           description: "Successfully read user using query parameter"
   
+  
+  /my_profile:
+    get:
+      security:
+        - JWTAuth: []
+      operationId: "handlers.profiles.myprofile"
+      tags:
+        - People
+      summary: "GET myprofile"
+      # parameters:
+      #   # - $ref: "#/components/parameters/image"
+      #   - $ref: "#/components/parameters/id"
+      
+      responses:
+        "200":
+          description: "GET myprofile"
   
 
   /profile/{id}:

@@ -19,41 +19,43 @@ object_key = 'profile_images/{id}.jpg'
 content_type = 'image/jpeg'
 
 
-def update_profile(id):
+def update_profile(id,profile_update_data):
     auth_token = request.headers.get("Authorization")
-    image_data = request.files.get('image')
-    gender = request.form.get('gender')
-    fname = request.form.get('fname')
-    lname = request.form.get('lname')
+    # image_data = request.files.get('image')
+    gender =      profile_update_data.get('gender')
+    fname =       profile_update_data.get('fname')
+    lname =       profile_update_data.get('lname')
+    family_info = profile_update_data.get('family_info')
+    print("family_info",family_info,gender,fname)
 
-    profile = Profile.query.filter_by(id=id).first()
+    # profile = Profile.query.filter_by(id=id).first()
 
-    if profile:
-        profile.gender = gender
-        if image_data and hasattr(image_data, 'read'):
-            try:
-                # Set the desired Content-Type (e.g., for JPEG images, use 'image/jpeg')
-                content_type = 'image/jpeg'
+    # if profile:
+    #     profile.gender = gender
+    #     if image_data and hasattr(image_data, 'read'):
+    #         try:
+    #             # Set the desired Content-Type (e.g., for JPEG images, use 'image/jpeg')
+    #             content_type = 'image/jpeg'
 
-                # Upload the image to S3
-                s3.upload_fileobj(
-                    image_data,
-                    bucket_name,
-                    f'profile_images/{id}.jpg',
-                    ExtraArgs={'ContentType': content_type}  # Set the Content-Type
-                )
-                print("Image uploaded to S3",f'https://{bucket_name}.s3.amazonaws.com/profile_images/{id}.jpg')
+    #             # Upload the image to S3
+    #             s3.upload_fileobj(
+    #                 image_data,
+    #                 bucket_name,
+    #                 f'profile_images/{id}.jpg',
+    #                 ExtraArgs={'ContentType': content_type}  # Set the Content-Type
+    #             )
+    #             print("Image uploaded to S3",f'https://{bucket_name}.s3.amazonaws.com/profile_images/{id}.jpg')
 
-                # Update the profile with the S3 URL
-                profile.image = f'https://{bucket_name}.s3.amazonaws.com/profile_images/{id}.jpg'
-            except NoCredentialsError:
-                print("AWS credentials not found. Image upload failed.")
+    #             # Update the profile with the S3 URL
+    #             profile.image = f'https://{bucket_name}.s3.amazonaws.com/profile_images/{id}.jpg'
+    #         except NoCredentialsError:
+    #             print("AWS credentials not found. Image upload failed.")
 
-        profile.user.fname = fname
-        profile.user.lname = lname
+    #     profile.user.fname = fname
+    #     profile.user.lname = lname
 
-        db.session.add(profile)
-        db.session.commit()
+    #     db.session.add(profile)
+    #     db.session.commit()
 
     return {
         "success": "Updated successfully!"
@@ -68,6 +70,30 @@ def profile(id):
         return profile_schema.dump(profile)   
     else:
         abort(404, f"Profile with id {id} not found")
+
+
+def myprofile():
+    auth_token = request.headers.get("Authorization")
+    if not auth_token:
+        
+        return "Unauthorized", 401
+    
+    
+    scheme, token = auth_token.split('Bearer ')    
+    decoded = decode_token(token)
+    decoded_data_str = decoded['sub']
+    json_dec_data = json.loads(decoded_data_str)
+    me = User.query.filter_by(email=json_dec_data['email']).first()
+    print('HEREmyprofile',me.profile)
+    
+    # profile = Profile.query.filter_by(user_id=me.id)
+    
+    if me.profile:
+        
+        profile_schema = ProfileSchema()
+        return profile_schema.dump(me.profile)   
+    else:
+        abort(404, f"Your profile not found, contact Admin")
 
 
 def read_all_profiles_old():

@@ -373,13 +373,13 @@ def signup(signup_data):
 
     
     family_info_default = FamilyInformation()
-    father_default = Father()
-    mother_default = Mother()
-    brother_default = Brother()
-    sister_default = Sister()
-    contact_details_default = ContactDetails()
-    about_me_default = AboutMe()
-    horoscope_details_default = HoroscopeDetails()
+    # father_default = Father()
+    # mother_default = Mother()
+    # brother_default = Brother()
+    # sister_default = Sister()
+    # contact_details_default = ContactDetails()
+    # about_me_default = AboutMe()
+    # horoscope_details_default = HoroscopeDetails()
 
     new_person = User(email=email, password=password, fname=fname, lname=lname, timestamp=timestamp)
     db.session.add(new_person)
@@ -388,13 +388,13 @@ def signup(signup_data):
         gender=gender,
         user=new_person,
         family_information=family_info_default,
-        father=father_default,
-        mother=mother_default,
-        brother=brother_default,
-        sister=sister_default,
-        contact_details=contact_details_default,
-        about_me=about_me_default,
-        horoscope_details=horoscope_details_default
+        # father=father_default,
+        # mother=mother_default,
+        # brother=brother_default,
+        # sister=sister_default,
+        # contact_details=contact_details_default,
+        # about_me=about_me_default,
+        # horoscope_details=horoscope_details_default
     )
 
     db.session.add(profile)
