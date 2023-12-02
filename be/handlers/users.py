@@ -373,7 +373,7 @@ def signup(signup_data):
 
     
     family_info_default = FamilyInformation()
-    # father_default = Father()
+    father_default = Father()
     # mother_default = Mother()
     # brother_default = Brother()
     # sister_default = Sister()
@@ -387,8 +387,8 @@ def signup(signup_data):
     profile = Profile(
         gender=gender,
         user=new_person,
-        family_information=family_info_default,
-        # father=father_default,
+        family_info=family_info_default,
+        father=father_default,
         # mother=mother_default,
         # brother=brother_default,
         # sister=sister_default,

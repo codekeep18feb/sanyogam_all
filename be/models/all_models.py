@@ -6,18 +6,6 @@ from marshmallow import fields
 
 from sqlalchemy import event  # Add this import statement
 
-class FamilyInformation(db.Model):
-    __tablename__ = "family_information"
-    id = db.Column(db.Integer, primary_key=True)
-    profile = db.relationship('Profile', uselist=False, back_populates='family_information')
-    no_of_brothers = db.Column(db.Integer)
-    married_brother = db.Column(db.Integer)
-    no_of_sisters = db.Column(db.Integer)
-    married_sister = db.Column(db.Integer)
-    family_location = db.Column(db.String(50))
-    native_place = db.Column(db.String(50))
-    affluence = db.Column(db.String(50))
-
 class Profile(db.Model):
     __tablename__ = "profile"
     id = db.Column(db.Integer, primary_key=True)
@@ -25,10 +13,34 @@ class Profile(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     user = db.relationship('User', back_populates='profile')
     image = db.Column(db.String(200))
+    family_info = db.relationship('FamilyInformation', uselist=False, back_populates='profile')
+    father = db.relationship('Father', back_populates='profile', uselist=False)
 
-    family_information_id = db.Column(db.Integer, db.ForeignKey('family_information.id'))
-    family_information = db.relationship('FamilyInformation', back_populates='profile')
 
+class FamilyInformation(db.Model):
+    __tablename__ = "family_info"
+    id = db.Column(db.Integer, primary_key=True)
+    no_of_brothers = db.Column(db.Integer)
+    married_brother = db.Column(db.Integer)
+    no_of_sisters = db.Column(db.Integer)
+    married_sister = db.Column(db.Integer)
+    family_location = db.Column(db.String(50))
+    native_place = db.Column(db.String(50))
+    affluence = db.Column(db.String(50))
+    profile_id = db.Column(db.Integer, db.ForeignKey('profile.id'))
+    profile = db.relationship('Profile', back_populates='family_info')
+
+    
+class Father(db.Model):
+    __tablename__ = "father"
+    id = db.Column(db.Integer, primary_key=True)
+    profile_id = db.Column(db.Integer, db.ForeignKey('profile.id'))
+    profile = db.relationship('Profile', back_populates='father')
+    first_name = db.Column(db.String(50))
+    last_name = db.Column(db.String(50))
+    designation = db.Column(db.String(50))
+    company_name = db.Column(db.String(50))
+    job_type = db.Column(db.String(50))
     
 
 class User(db.Model):
@@ -62,12 +74,21 @@ class FamilyInformationSchema(ma.SQLAlchemyAutoSchema):
         include_relationships = True
 
 
+class FatherSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = Father
+        load_instance = True
+        sqla_session = db.session
+        include_relationships = True
+
 class ProfileSchema(ma.SQLAlchemyAutoSchema):
     user_email = fields.String(attribute="user.email")
     user_fname = fields.String(attribute="user.fname")
     user_lname = fields.String(attribute="user.lname")
 
-    family_information = fields.Nested(FamilyInformationSchema)
+    family_info = fields.Nested(FamilyInformationSchema)
+    father = fields.Nested(FatherSchema)
+
     class Meta:
         model = Profile
         load_instance = True
@@ -80,9 +101,13 @@ users_schema = UserSchema(many=True)
 family_information_schema = FamilyInformationSchema()
 family_informations_schema = FamilyInformationSchema(many=True)
 
-
 profile_schema = ProfileSchema()
 profiles_schema = ProfileSchema(many=True)
+
+
+father_schema = FatherSchema()
+fathers_schema = FatherSchema(many=True)
+
 
 class UserRequests(db.Model):
     __tablename__ = "requests"

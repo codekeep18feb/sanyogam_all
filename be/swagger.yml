@@ -32,7 +32,21 @@ components:
         gender:
           type: "string"
           enum: ["Male", "Female", "Other"]
-    
+    FatherSchema:
+      type: "object"
+      properties:
+        first_name:
+          type: "string"
+        last_name:
+          type: "string"
+        designation:
+          type: "string"
+        company_name:
+          type: "string"
+        job_type:
+          type: "string"
+
+
     FamilyInformationSchema:
       type: "object"
       properties:
@@ -285,14 +299,14 @@ paths:
           description: "Successfully created user"
 
   
-  /update_profile/{id}:
+  /update_my_profile:
     post:
-      operationId: "handlers.profiles.update_profile"
+      operationId: "handlers.profiles.update_my_profile"
+      security:
+        - JWTAuth: [] 
       tags:
         - People
       summary: "Profile an image and update data for a user"
-      parameters:
-        - $ref: "#/components/parameters/id"
 
       requestBody:
         required: true
@@ -313,8 +327,10 @@ paths:
                 lname:
                   type: string
                 family_info:
-
                   $ref: "#/components/schemas/FamilyInformationSchema"
+                father:
+                  $ref: "#/components/schemas/FatherSchema"
+
 
                 # image:
                 #   type: string

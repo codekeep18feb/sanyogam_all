@@ -19,43 +19,39 @@ object_key = 'profile_images/{id}.jpg'
 content_type = 'image/jpeg'
 
 
-def update_profile(id,profile_update_data):
-    auth_token = request.headers.get("Authorization")
+def update_my_profile(profile_update_data):
     # image_data = request.files.get('image')
     gender =      profile_update_data.get('gender')
     fname =       profile_update_data.get('fname')
     lname =       profile_update_data.get('lname')
     family_info = profile_update_data.get('family_info')
-    print("family_info",family_info,gender,fname)
+    father = profile_update_data.get('father')
+    auth_token = request.headers.get("Authorization")
+    
+    if not auth_token:
+        return "Unauthorized", 401
+    
+    
+    scheme, token = auth_token.split('Bearer ')    
+    decoded = decode_token(token)
+    decoded_data_str = decoded['sub']
+    json_dec_data = json.loads(decoded_data_str)
+    me = User.query.filter_by(email=json_dec_data['email']).first()
+    print("family_info",family_info,gender,fname,me.profile.family_info)
 
     # profile = Profile.query.filter_by(id=id).first()
-
-    # if profile:
-    #     profile.gender = gender
-    #     if image_data and hasattr(image_data, 'read'):
-    #         try:
-    #             # Set the desired Content-Type (e.g., for JPEG images, use 'image/jpeg')
-    #             content_type = 'image/jpeg'
-
-    #             # Upload the image to S3
-    #             s3.upload_fileobj(
-    #                 image_data,
-    #                 bucket_name,
-    #                 f'profile_images/{id}.jpg',
-    #                 ExtraArgs={'ContentType': content_type}  # Set the Content-Type
-    #             )
-    #             print("Image uploaded to S3",f'https://{bucket_name}.s3.amazonaws.com/profile_images/{id}.jpg')
-
-    #             # Update the profile with the S3 URL
-    #             profile.image = f'https://{bucket_name}.s3.amazonaws.com/profile_images/{id}.jpg'
-    #         except NoCredentialsError:
-    #             print("AWS credentials not found. Image upload failed.")
-
-    #     profile.user.fname = fname
-    #     profile.user.lname = lname
-
-    #     db.session.add(profile)
-    #     db.session.commit()
+    print('hdsafsadfdsa',father)
+    if me.profile:
+        me.profile.gender = gender
+        me.profile.user.fname = fname
+        me.profile.user.lname = lname
+        # me.profile.father.first_name = 'jakiru'
+        for field, value in family_info.items():
+            setattr(me.profile.family_info, field, value)
+        for field, value in father.items():
+            setattr(me.profile.father, field, value)
+        db.session.add(me)
+        db.session.commit()
 
     return {
         "success": "Updated successfully!"
