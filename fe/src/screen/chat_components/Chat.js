@@ -101,7 +101,7 @@ function Chat({auth_data}) {
   };
 
   useEffect(async() => {
-    fetchData(); // Fetch data initially
+    // fetchData(); // Fetch data initially
     // console.log("main useeffect ran")
 
     // const intervalId = setInterval(() => {
