@@ -19,7 +19,7 @@ export default function MeDetailScreen({ authData, editMode, SeteditMode }) {
       formData.append('image', editedData.image); // Add image to the FormData
 
       // Make the POST request
-      const response = await fetch('http://3.90.199.134:8000/api/update_profile/1', {
+      const response = await fetch('http://localhost:8000/api/update_profile/1', {
         method: 'POST',
         body: formData,
       });

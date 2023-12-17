@@ -17,7 +17,7 @@ export function GoogleAuthorize({login}) {
 
   const GOOGLE_CLIENT_ID = '93333716320-7ls324ni108j5b3oqtsnp28gc89b0d6s.apps.googleusercontent.com';
   const GOOGLE_CLIENT_SECRET = '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';
-  const GOOGLE_REDIRECT_URI = 'http://3.90.199.134:3000/google_authorized';
+  const GOOGLE_REDIRECT_URI = 'http://localhost:3000/google_authorized';
   const GOOGLE_TOKEN_URL = 'https://accounts.google.com/o/oauth2/token';
   const GOOGLE_USER_INFO_URL = 'https://www.googleapis.com/oauth2/v1/userinfo';
 
@@ -94,7 +94,7 @@ export function GoogleAuthorize({login}) {
 
     try {
       // Make the API request with the password and user_info
-      const response = await fetch('http://3.90.199.134:8000/api/save_user_detail', {
+      const response = await fetch('http://localhost:8000/api/save_user_detail', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -106,7 +106,7 @@ export function GoogleAuthorize({login}) {
         // const data = await response.json();
         // console.log('API response:', data);
         try {
-          const response = await fetch('http://3.90.199.134:8000/api/login', {
+          const response = await fetch('http://localhost:8000/api/login', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -120,7 +120,7 @@ export function GoogleAuthorize({login}) {
     
     
             if (data){
-              const response = await fetch('http://3.90.199.134:8000/api/me', {
+              const response = await fetch('http://localhost:8000/api/me', {
               method: 'GET',
               headers: {
                 'Content-Type': 'application/json',
@@ -157,7 +157,7 @@ export function GoogleAuthorize({login}) {
     
     
     
-          // const response2 = await fetch('http://3.90.199.134:8000/api/profiles', {
+          // const response2 = await fetch('http://localhost:8000/api/profiles', {
           //   method: 'GET',
           //   headers: {
           //     'Content-Type': 'application/json',

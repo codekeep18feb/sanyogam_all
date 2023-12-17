@@ -16,7 +16,7 @@ export default function ChatWindow({ with_email,with_userid }) {
     const token = `Bearer ${JWT_TOKEN}`;
 
     try {
-      const response = await fetch(`http://3.90.199.134:8000/api/rtc_user_info_by_id/${with_userid}`, {
+      const response = await fetch(`http://localhost:8000/api/rtc_user_info_by_id/${with_userid}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -46,7 +46,7 @@ export default function ChatWindow({ with_email,with_userid }) {
     const token = `Bearer ${JWT_TOKEN}`;
 
     try {
-      const response = await fetch(`http://3.90.199.134:8000/api/add_rtc_user`, {
+      const response = await fetch(`http://localhost:8000/api/add_rtc_user`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -78,7 +78,7 @@ export default function ChatWindow({ with_email,with_userid }) {
     const token = `Bearer ${JWT_TOKEN}`;
 
     try {
-      const response = await fetch(`http://3.90.199.134:8000/api/add_rtc_user`, {
+      const response = await fetch(`http://localhost:8000/api/add_rtc_user`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -110,7 +110,7 @@ export default function ChatWindow({ with_email,with_userid }) {
     const token = `Bearer ${JWT_TOKEN}`;
 
     try {
-      const response = await fetch(`http://3.90.199.134:8000/api/get_my_rtc_offer`, {
+      const response = await fetch(`http://localhost:8000/api/get_my_rtc_offer`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -135,7 +135,7 @@ export default function ChatWindow({ with_email,with_userid }) {
 
     // http://127.0.0.1:8000/api/users/query?q_email=deepaksingh.18feb%40gmail.com
     try {
-      const response = await fetch(`http://3.90.199.134:8000/api/users/query?q_email=${with_email}`, {
+      const response = await fetch(`http://localhost:8000/api/users/query?q_email=${with_email}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -261,7 +261,7 @@ export default function ChatWindow({ with_email,with_userid }) {
       const token = `Bearer ${JWT_TOKEN}`;
 
       try {
-        const response = await fetch(`http://3.90.199.134:8000/api/chathistory/${with_email}`, {
+        const response = await fetch(`http://localhost:8000/api/chathistory/${with_email}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -287,7 +287,7 @@ export default function ChatWindow({ with_email,with_userid }) {
       const token = `Bearer ${JWT_TOKEN}`;
 
       try {
-        const response = await fetch(`http://3.90.199.134:8000/api/request_info/${with_email}`, {
+        const response = await fetch(`http://localhost:8000/api/request_info/${with_email}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
