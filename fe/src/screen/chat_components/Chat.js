@@ -104,9 +104,9 @@ function Chat({auth_data}) {
     fetchData(); // Fetch data initially
     // console.log("main useeffect ran")
 
-    const intervalId = setInterval(() => {
-      fetchData(); // Fetch data every 10 seconds
-    }, 10000);
+    // const intervalId = setInterval(() => {
+    //   fetchData(); // Fetch data every 10 seconds
+    // }, 10000);
 
     
     // Fetch data from the /api/profiles endpoint

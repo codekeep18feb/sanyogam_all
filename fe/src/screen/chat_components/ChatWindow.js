@@ -276,12 +276,6 @@ export default function ChatWindow({ with_email,with_userid }) {
     }
     
   };
-  console.log("chatsdfdsfas",chats)
-  // const respondeWebRTC = () => {
-  //   // Implement your response logic here
-  // }
-  console.log('HERERERSETINTERVALID',intervalId)
-
   useEffect(async() => {
     
    
@@ -310,17 +304,8 @@ export default function ChatWindow({ with_email,with_userid }) {
       }
     };
 
-    // console.log("can we decide whatnow",rtcData,rtcData != null && Object.entries(rtcData).length === 0)
     const JWT_TOKEN = localStorage.getItem('token');
     const token = `Bearer ${JWT_TOKEN}`;
-    // if (rtcData != null && Object.entries(rtcData).length === 0) {
-    //   console.log("don't tell we are giong through this?")
-    //   initializeNRespondWebRTC(token);
-    // } else if (rtcData != null && Object.entries(rtcData).length > 0) {
-    //   console.log(("arewehereyet"))
-    //   respondeWebRTC(token);
-    // }
-
     const req_status = await fetchRequestStatus();
       if(req_status.status=="ACCEPTED"){
         console.log('SHOUDL IT BE ACCEPTED FRO BOTH')

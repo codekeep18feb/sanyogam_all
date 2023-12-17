@@ -27,29 +27,7 @@ export default function ChatScreen({ chats, to_email,sendMsg }) {
     // Update the UI to indicate sending
     setSendingMessage(true);
 
-    try {
-      const response = await fetch(`http://localhost:8000/api/send_msg/${to_email}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': token,
-        },
-        body: JSON.stringify(requestBody),
-      });
-
-      if (response.status === 200) {
-        // Message sent successfully
-        console.log('Message sent successfully');
-        setTextareaValue(''); // Clear the textarea after sending
-      } else {
-        console.error('Error sending message');
-      }
-    } catch (error) {
-      console.error('An error occurred:', error);
-    } finally {
-      // Reset the UI after sending
-      setSendingMessage(false);
-    }
+    
   };
 
   return (
