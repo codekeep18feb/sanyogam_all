@@ -1,0 +1,656 @@
+openapi: 3.0.0
+info:
+  title: "RP Flask REST API"
+  description: "An API about users and profile"
+  version: "1.0.0"
+servers:
+  - url: "/api"
+
+components:
+  securitySchemes:
+    JWTAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      x-bearerInfoFunc: config.decode_token
+  schemas:
+    SignUpData:
+      type: "object"
+      required:
+        - fname
+        - email
+        - gender
+      properties:
+        fname:
+          type: "string"
+        lname:
+          type: "string"
+        email:
+          type: "string"
+        password:
+          type: "string"
+        gender:
+          type: "string"
+          enum: ["Male", "Female", "Other"]
+    FatherSchema:
+      type: "object"
+      properties:
+        first_name:
+          type: "string"
+        last_name:
+          type: "string"
+        designation:
+          type: "string"
+        company_name:
+          type: "string"
+        job_type:
+          type: "string"
+
+
+    FamilyInformationSchema:
+      type: "object"
+      properties:
+        no_of_brothers:
+          type: "integer"
+        married_brother:
+          type: "integer"
+        no_of_sisters:
+          type: "integer"
+        married_sister:
+          type: "integer"
+        family_location:
+          type: "string"
+        native_place:
+          type: "string"
+        affluence:
+          type: "string"
+      
+    
+
+    ProfileUpdateData:
+      type: "object"
+      required:
+        - gender
+      properties:
+        gender:
+          type: "string"
+          enum: ["Male", "Female", "Other"]
+    
+
+    MsgContent:
+      type: "object"
+      required:
+        - content
+      properties:
+        content:
+          type: "string"
+    
+    SaveOauthUserData:
+      type: "object"
+      
+    
+    RTCContent:
+      type: "object"
+      required:
+        - initiator
+        - sdp
+        - to_user
+
+      properties:
+        initiator:
+          type: "boolean"
+        sdp:
+          type: "string"
+        to_user:
+          type: "integer"
+
+    Login:
+      type: "object"
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: "string"
+        password:
+          type: "string"
+
+
+  parameters:
+    lname:
+      name: lname
+      in: query
+      description: "Last name of the user"
+      required: false
+      schema:
+        type: string
+    id:
+      name: id
+      in: path
+      description: "ID of the user"
+      required: true
+      schema:
+        type: integer
+    
+    with_id:
+      name: with_id
+      in: path
+      description: "ID of the user"
+      required: true
+      schema:
+        type: integer
+    
+    q_email:
+      name: q_email
+      in: query
+      description: "q_email"
+      required: true
+      schema:
+        type: string
+
+    to_email:
+      name: to_email
+      in: path
+      description: "to_email of the request"
+      required: true
+      schema:
+        type: string
+
+    with_email:
+      name: with_email
+      in: path
+      description: "chat with_email"
+      required: true
+      schema:
+        type: string
+
+    action:
+      name: action
+      in: query
+      description: "respond_request action in query"
+      required: false
+      schema:
+        type: string
+
+    frm_email:
+      name: frm_email
+      in: path
+      description: "frm_email of the request"
+      required: true
+      schema:
+        type: string
+
+    fname:
+      name: fname
+      in: query
+      description: "First name of the user"
+      required: false
+      schema:
+        type: string
+
+
+
+paths:
+  /login:
+    post:
+      operationId: "handlers.users.login"
+      tags:
+        - People
+      summary: "Login a user"
+      requestBody:
+        description: "return a jwt"
+        required: true
+        content:
+          application/json:
+            schema:
+              x-body-name: "user"
+              # Login:
+              type: "object"
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: "string"
+                password:
+                  type: "string"
+      responses:
+        "201":
+          description: "Successfully logged in user"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token1:  # Update "token1" to "token"
+                    type: string
+
+  # logout
+  /logout:
+    get:
+      operationId: "handlers.users.logout"
+      security:
+        - JWTAuth: [] 
+      tags:
+        - "User"
+      summary: "logout"
+      responses:
+        "200":
+          description: "Successfully logout"
+
+  /users:
+    get:
+      operationId: "handlers.users.read_all"
+      security:
+        - JWTAuth: [] 
+      tags:
+        - "People"
+      summary: "Read the list of users"
+      responses:
+        "200":
+          description: "Successfully read users list"
+      
+  /chathistory/{with_email}:
+    get:
+      operationId: "handlers.chathistory.chathistory"
+      security:
+        - JWTAuth: [] 
+      tags:
+        - "Chat"
+      summary: "all chats with a user"
+      parameters:
+        - $ref: "#/components/parameters/with_email"
+      responses:
+        "200":
+          description: "Successfully all chats with a user list"
+      
+  
+  # request_info
+  /request_info/{with_email}:
+    get:
+      operationId: "handlers.chathistory.request_info"
+      security:
+        - JWTAuth: [] 
+      tags:
+        - "Chat"
+      summary: "all chats with a user"
+      parameters:
+        - $ref: "#/components/parameters/with_email"
+      responses:
+        "200":
+          description: "request_info"
+
+  /signup:
+    post:
+      operationId: "handlers.users.signup"
+      tags:
+        - People
+      summary: "Create a user"
+      requestBody:
+        description: "User to create"
+        required: true
+        content:
+          application/json:
+            schema:
+              x-body-name: "signup_data"
+              $ref: "#/components/schemas/SignUpData"
+      responses:
+        "201":
+          description: "Successfully created user"
+
+  
+  /update_my_profile:
+    post:
+      operationId: "handlers.profiles.update_my_profile"
+      security:
+        - JWTAuth: [] 
+      tags:
+        - People
+      summary: "Profile an image and update data for a user"
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              x-body-name: "profile_update_data"
+              type: object
+              properties:
+                # image:
+                #   type: string
+                #   format: binary
+                gender:
+                  type: string
+                  enum: ["Male", "Female", "Other"]
+                fname:
+                  type: string
+                lname:
+                  type: string
+                family_info:
+                  $ref: "#/components/schemas/FamilyInformationSchema"
+                father:
+                  $ref: "#/components/schemas/FatherSchema"
+
+
+                # image:
+                #   type: string
+                #   format: binary
+                # profileData:
+                #   $ref: "#/components/schemas/ProfileUpdateData"
+
+      responses:
+        "200":
+          description: "Image and data updated successfully"
+     
+
+
+
+  /upload_img/{id}:
+    post:
+      operationId: "handlers.users.upload_image"
+      tags:
+        - People
+      summary: "Upload an image for a user"
+      parameters:
+        - $ref: "#/components/parameters/id"
+   
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: binary
+      responses:
+        "200":
+          description: "Image uploaded successfully"
+     
+  # rtc_user_info_by_id
+  # /rtc_user_info_by_id/{id}:
+  #   get:
+  #     operationId: "handlers.rtcuserinfo.rtc_user_info_by_id"
+  #     security:
+  #       - JWTAuth: [] 
+  #     tags:
+  #       - User
+  #     summary: "rtc_user_info_by_id"
+  #     parameters:
+  #       # - $ref: "#/components/parameters/image"
+  #       - $ref: "#/components/parameters/id"
+      
+  #     responses:
+  #       "200":
+  #         description: "Successfully read rtc_user_info_by_id"
+  
+  # del_rtc_user
+
+  /del_rtc_user:
+    get:
+      operationId: "handlers.rtcuserinfo.del_rtc_user"
+      security:
+        - JWTAuth: [] 
+      tags:
+        - "People"
+      summary: "del_rtc_user"
+      # parameters:
+      #   # - $ref: "#/components/parameters/image"
+      #   - $ref: "#/components/parameters/id"
+      responses:
+        "200":
+          description: "Successfully del_rtc_user"
+      
+
+
+  /rtc_user_info_by_id/{with_id}:
+    get:
+      operationId: "handlers.rtcuserinfo.rtc_user_info_by_id"
+      security:
+        - JWTAuth: [] 
+      tags:
+        - "People"
+      summary: "rtc_user_info_by_id"
+      parameters:
+        - $ref: "#/components/parameters/with_id"
+      responses:
+        "200":
+          description: "Successfully rtc_user_info_by_id"
+
+
+  /get_my_rtc_offer:
+    get:
+      operationId: "handlers.rtcuserinfo.get_my_rtc_offer"
+      security:
+        - JWTAuth: [] 
+      tags:
+        - "People"
+      summary: "get_my_rtc_offer"
+      # parameters:
+      #   # - $ref: "#/components/parameters/image"
+      #   - $ref: "#/components/parameters/id"
+      responses:
+        "200":
+          description: "Successfully get_my_rtc_offer"
+      
+  /add_rtc_user:
+    post:
+      operationId: "handlers.rtcuserinfo.add_rtc_user"
+      security:
+        - JWTAuth: [] 
+      tags:
+        - "People"
+      summary: "add_rtc_user"
+      # parameters:
+      #   # - $ref: "#/components/parameters/image"
+      #   - $ref: "#/components/parameters/id"
+      
+      requestBody:
+        description: "add_rtc_user"
+        required: true
+        content:
+          application/json:
+            schema:
+              x-body-name: "payload"
+              $ref: "#/components/schemas/RTCContent"
+      responses:
+        "200":
+          description: "Successfully add_rtc_user"
+      
+
+  /user/{id}:
+    get:
+      operationId: "handlers.users.read_id_one_query"
+      tags:
+        - People
+      summary: "Read one user using query parameter"
+      parameters:
+        # - $ref: "#/components/parameters/image"
+        - $ref: "#/components/parameters/id"
+      
+      responses:
+        "200":
+          description: "Successfully read user using query parameter"
+  
+  /users/query:
+    get:
+      operationId: "handlers.users.read_one_query"
+      tags:
+        - People
+      summary: "Read one user using query parameter"
+      parameters:
+        - $ref: "#/components/parameters/lname"
+        - $ref: "#/components/parameters/fname"
+        - $ref: "#/components/parameters/q_email"
+      responses:
+        "200":
+          description: "Successfully read user using query parameter"
+  
+  /me:
+    get:
+      operationId: "handlers.users.me"
+      security:
+        - JWTAuth: []
+      tags:
+        - User
+      summary: "my detail"
+      responses:
+        "200":
+          description: "Successfully read my detail"
+  
+
+  /respond_request/{frm_email}/query:
+    get:
+      operationId: "handlers.users.respond_request"
+      security:
+        - JWTAuth: []
+      tags:
+        - People
+      summary: "respond_request to user(frm_email,action)"
+      parameters:
+        # - $ref: "#/components/parameters/image"
+        - $ref: "#/components/parameters/frm_email"
+        - $ref: "#/components/parameters/action"
+      
+      responses:
+        "200":
+          description: "Successfully read user using query parameter"
+  
+
+  /send_msg/{to_email}:
+    post:
+      operationId: "handlers.chathistory.send_msg"
+      security:
+        - JWTAuth: []
+      tags:
+        - People
+      summary: "send_msg to user(to_email)"
+      parameters:
+        # - $ref: "#/components/parameters/image"
+        - $ref: "#/components/parameters/to_email"
+      requestBody:
+        description: "send msg content"
+        required: true
+        content:
+          application/json:
+            schema:
+              x-body-name: "payload"
+              $ref: "#/components/schemas/MsgContent"
+      
+      responses:
+        "200":
+          description: "Successfully read user using query parameter"
+  
+
+  
+
+
+  # /save_user_detail:
+  #   post:
+  #     operationId: "handlers.users.save_oauth"
+  #     tags:
+  #       - People
+  #     summary: "save_oauth"
+  #     requestBody:
+  #       description: "save_oauth"
+  #       required: true
+  #       content:
+  #         application/json:
+  #           schema:
+  #             x-body-name: "payload"
+  #             $ref: "#/components/schemas/SaveOauthUserData"
+      
+  #     responses:
+  #       "200":
+  #         description: "Successfully read user using query parameter"
+  
+  /save_user_detail:
+    post:
+      operationId: "handlers.users.save_oauth"
+      tags:
+        - People
+      summary: "Create a user"
+      requestBody:
+        description: "handlers.users.save_oauth"
+        required: true
+        content:
+          application/json:
+            schema:
+              x-body-name: "data"
+              $ref: "#/components/schemas/SaveOauthUserData"
+      responses:
+        "201":
+          description: "Successfully added oauth data"
+
+  /send_request/{to_email}:
+    get:
+      operationId: "handlers.users.send_request"
+      security:
+        - JWTAuth: []
+      tags:
+        - People
+      summary: "send_request to user(to_email)"
+      parameters:
+        - $ref: "#/components/parameters/to_email"
+      
+      responses:
+        "200":
+          description: "Successfully read user using query parameter"
+  
+  
+  /my_profile:
+    get:
+      security:
+        - JWTAuth: []
+      operationId: "handlers.profiles.myprofile"
+      tags:
+        - People
+      summary: "GET myprofile"
+      # parameters:
+      #   # - $ref: "#/components/parameters/image"
+      #   - $ref: "#/components/parameters/id"
+      
+      responses:
+        "200":
+          description: "GET myprofile"
+  
+
+  /profile/{id}:
+    get:
+      operationId: "handlers.profiles.profile"
+      tags:
+        - People
+      summary: "summary Successfully read profile (individual)"
+      parameters:
+        # - $ref: "#/components/parameters/image"
+        - $ref: "#/components/parameters/id"
+      
+      responses:
+        "200":
+          description: " description Successfully read profile (individual)"
+  
+  /read_online_circle:
+    get:
+      operationId: "handlers.profiles.read_online_circle"
+      security:
+        - JWTAuth: [] 
+      tags:
+        - "People"
+      summary: "Read the list of profiles read_online_circle"
+      responses:
+        "200":
+          description: "Successfully read profiles list read_online_circle"
+      
+  # read_online_circle
+  /profiles:
+    get:
+      operationId: "handlers.profiles.read_all_profiles_old"
+      security:
+        - JWTAuth: [] 
+      tags:
+        - "People"
+      summary: "Read the list of all profiles and with filters"
+      responses:
+        "200":
+          description: "Successfully read profiles list"
+      
