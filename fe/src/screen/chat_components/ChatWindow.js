@@ -11,6 +11,8 @@ export default function ChatWindow({ with_email,with_userid }) {
   const [answer, setAnswer] = useState(false)
   const myRef = useRef(null);
   const [connection_open, setConnectionOpened] = useState(false)
+  const [intervalId, setIntervalId] = useState(null);
+
   const fetchRTCUserInfo = async () => {
     const JWT_TOKEN = localStorage.getItem('token');
     const token = `Bearer ${JWT_TOKEN}`;
@@ -169,7 +171,7 @@ export default function ChatWindow({ with_email,with_userid }) {
       setLoading(false);
     }
   }
-  const initializeWebRTC = async (token,type) => {
+  const initializeNRespondWebRTC = async (token,type) => {
     if (type=="INITIATOR"){
       console.log("Ensure it's not called multiple times...")
       const lc = new RTCPeerConnection();
@@ -278,114 +280,11 @@ export default function ChatWindow({ with_email,with_userid }) {
   // const respondeWebRTC = () => {
   //   // Implement your response logic here
   // }
-  const respondeWebRTC = async (token) => {
-    console.log("let's grab the offer first..")
-    const offer_str = await fetchRTCOffer()
-    const offer = JSON.parse(offer_str)
-    console.log("here is your offer love",offer,typeof(offer))
-    const rc = new RTCPeerConnection()
-
-    rc.onicecandidate = async (e) => {
-      if (e.candidate) {
-        console.log("herei s the ans" + JSON.stringify(rc.localDescription))
-        const to_user_id = await fetchUserId(token,with_email)
-
-        saveRTCUserAns(false,JSON.stringify(rc.localDescription),to_user_id)
-
-      }
-      
-    }
-
-    rc.ondatachannel=e=>{
-
-        rc.dc=e.channel;
-
-        rc.dc.onmessage = e => console.log("new message from client!!"+e.data)
-
-        rc.dc.onopen = e => console.log("connection opened!")
-
-        
-
-    }
-
-    rc.setRemoteDescription(offer).then(a=>console.log("offerset"))
-
-
-
-    rc.createAnswer().then(a => rc.setLocalDescription(a)).then(a=>console.log("answer created"))
-    // const rc = new RTCPeerConnection()
-    // rc.onicecandidate = e => {
-    //   // const to_user_id = await fetchUserId(token,with_email)
-    //   console.log("this is never getting called??" ,JSON.stringify(rc.localDescription))
-    // }
-    // rc.ondatachannel=e=>{
-    //     rc.dc=e.channel;
-    //     rc.dc.onmessage = e => console.log("new message from client!!"+e.data)
-    //     rc.dc.onopen = e => console.log("connection opened!")
-    // rc.setRemoteDescription(offer).then(a=>console.log("offerset"))
-    // rc.createAnswer().then(a => rc.setLocalDescription(a)).then(a=>console.log("answer created"))
-
-
-
-    // }
-      
-    
-    // }
-    // dc.onmessage = (e) => console.log('msg from B' + e.data);
-    // dc.onopen = (e) => console.log("connection opened!");
-
-    // lc.onicecandidate = (e) => {
-    //   if (e.candidate) {
-    //     // Candidate is available, call addRTCUserInfo
-    //     addRTCUserInfo(true, JSON.stringify(lc.localDescription));
-    //     console.log("Notice how many times it's being called...", JSON.stringify(lc.localDescription));
-    //   }
-    // }
-
-    // lc.createOffer()
-    //   .then((o) => lc.setLocalDescription(o))
-    //   .then((a) => console.log('offer set successfully!'));
-  };
-
+  console.log('HERERERSETINTERVALID',intervalId)
 
   useEffect(async() => {
-    fetchRTCUserInfo(); // Fetch data initially
-    // console.log("main useeffect ran")
-
-    const intervalId = setInterval(() => {
-      fetchRTCUserInfo(); // Fetch data every 10 seconds
-    }, 10000);
-
-    // console.log("myRef's current value:", myRef.current);
-    // myRef.current = 'updated Value';
-    // console.log("myRef's updated value:", myRef.current);
-
-    const fetchChatHistory = async () => {
-      const JWT_TOKEN = localStorage.getItem('token');
-      const token = `Bearer ${JWT_TOKEN}`;
-
-      try {
-        const response = await fetch(`http://localhost:8000/api/chathistory/${with_email}`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': token,
-          },
-        });
-
-        if (response.status === 200) {
-          const data = await response.json();
-          setChatHistory(data);
-        } else {
-          console.log('Error fetching chat history');
-        }
-      } catch (error) {
-        console.error('An error occurred:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
+    
+   
     const fetchRequestStatus = async () => {
       const JWT_TOKEN = localStorage.getItem('token');
       const token = `Bearer ${JWT_TOKEN}`;
@@ -411,25 +310,34 @@ export default function ChatWindow({ with_email,with_userid }) {
       }
     };
 
-    fetchChatHistory();
     // console.log("can we decide whatnow",rtcData,rtcData != null && Object.entries(rtcData).length === 0)
     const JWT_TOKEN = localStorage.getItem('token');
     const token = `Bearer ${JWT_TOKEN}`;
     // if (rtcData != null && Object.entries(rtcData).length === 0) {
     //   console.log("don't tell we are giong through this?")
-    //   initializeWebRTC(token);
+    //   initializeNRespondWebRTC(token);
     // } else if (rtcData != null && Object.entries(rtcData).length > 0) {
     //   console.log(("arewehereyet"))
     //   respondeWebRTC(token);
     // }
 
     const req_status = await fetchRequestStatus();
-    if(req_status.status=="ACCEPTED"){
+      if(req_status.status=="ACCEPTED"){
+        console.log('SHOUDL IT BE ACCEPTED FRO BOTH')
+    
+
+     
+
+
       console.log("make call to check if we can get the RTC Entry",req_status)
       const rtc_entry = await fetchRTCUserInfo()
+      const intervalId = setInterval(() => {
+        fetchRTCUserInfo(); // Fetch data every 10 seconds
+      }, 10000);
+      setIntervalId(intervalId)
       console.log("rtc_entry mayn eed more checks",rtc_entry)
       if (rtc_entry==null){
-        const [dc,lc] = await initializeWebRTC(token,"INITIATOR")
+        const [dc,lc] = await initializeNRespondWebRTC(token,"INITIATOR")
         console.log("dowehave dc",dc)
         if (dc){
           console.log("myRef's current value:", myRef.current);
@@ -447,7 +355,7 @@ export default function ChatWindow({ with_email,with_userid }) {
       else if (rtc_entry.answer==null && rtc_entry.sdp!=null){
         console.log("here is rtc_entry",rtc_entry)
 
-        const [rc,lc] = await initializeWebRTC(token,"RESPONDER")
+        const [rc,lc] = await initializeNRespondWebRTC(token,"RESPONDER")
         console.log("dowehave rc",rc)
 
         if (rc){
@@ -458,7 +366,6 @@ export default function ChatWindow({ with_email,with_userid }) {
         }
 
       }
-      console.log("myRef's updated value:", myRef.current);
 
     }
   }, [with_email]);
@@ -485,27 +392,23 @@ export default function ChatWindow({ with_email,with_userid }) {
   }
   useEffect(() => {
     if(answer){
-      console.log("HEREISWHATWEHAVE")
-      console.log("if INITIATOR I THING WE CAN INITIATE THE CONNECTION??,",myRef.current,myRef.current['type']=="INITIATOR")
       if (myRef.current['type']=="INITIATOR"){
-      // let's perform the thrid step
-      console.log("hereAnswer",myRef.current,myRef.current.answer,typeof(myRef.current.answer))//myRef.current.dc.send("douseeme!")
       const answer = JSON.parse(myRef.current.answer)
-      console.log("DOWESEE ANSWER",answer)
-      // myRef.current.channel.send("douseeme!")
-      // answer = answer
       myRef.current.lc.setRemoteDescription(answer)
-      // let i=0
-      // const intervalId = setInterval(() => {
-      //   i+=1
-      //   console.log('douseeme!!!',i)
-      //   myRef.current.channel.send(`msg from A-${i}`)
+      console.log('should clear right after this',intervalId)
 
-      // }, 10000);
+    
       }
 
     }
   }, [answer])
+  
+  useEffect(() => {
+    if (connection_open){
+      clearInterval(intervalId);
+      
+    }
+  }, [connection_open])
   
   return (
     <div style={{ border: "1px solid blue", height: "600px", width: "700px", background: "rgb(221, 237, 240,0.2)" }}>
