@@ -1,11 +1,11 @@
-name: CI/CD counter app
+name: SGM counter app
 
 on:
   push:
     branches: [ working_simplifying_chat ]
 
 jobs:
-#First we will see the application build or not , then we will deploy in EC2
+  # First we will see the application build or not, then we will deploy in EC2
   build:
     runs-on: ubuntu-latest
     
@@ -15,11 +15,11 @@ jobs:
     - name: Build the docker_compose
       run: docker-compose up -d --build
 
-Deploy:
-  needs: build
-  runs-on: ubuntu-latest
-  
-  steps:
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    
+    steps:
     - name: Checkout code
       uses: actions/checkout@v2 
 
