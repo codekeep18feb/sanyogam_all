@@ -67,6 +67,7 @@ function Video({ auth_data }) {
         console.log("Error fetching chat history");
       }
     } catch (error) {
+      
       console.error("An error occurred:", error);
     } finally {
       setLoading(false);
