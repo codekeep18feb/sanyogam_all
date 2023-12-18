@@ -41,7 +41,7 @@ jobs:
           echo "Script is starting"
           cd /home/ubuntu/sanyogam_all &&
           echo "Changed directory"
-          git checkout working_simplifying_chat &&
+          git init && git checkout working_simplifying_chat &&
           echo "Checked out working_simplifying_chat branch"
           git fetch --all &&
           echo "Fetched all branches"
