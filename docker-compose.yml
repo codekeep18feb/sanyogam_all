@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  sanygam-be:
+    build:
+      context: ./sanygam_be_v1
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    restart: always
+
+  sanygam-fe:
+    build:
+      context: ./fe
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    restart: always
