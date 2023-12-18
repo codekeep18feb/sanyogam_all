@@ -1,30 +1,30 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { login, logout } from '../redux/counter/AuthAction';
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { connect } from "react-redux";
+import { login, logout } from "../redux/counter/AuthAction";
 
-import { useLocation } from 'react-router-dom';
+import { useLocation } from "react-router-dom";
 
-export function GoogleAuthorize({login}) {
-
+export function GoogleAuthorize({ login }) {
   const location = useLocation();
   const navigate = useNavigate();
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [userData, setUserData] = useState(null);
-  const [password, setPassword] = useState('');
+  const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedGender, setSelectedGender] = useState('');
+  const [selectedGender, setSelectedGender] = useState("");
 
-  const GOOGLE_CLIENT_ID = '93333716320-7ls324ni108j5b3oqtsnp28gc89b0d6s.apps.googleusercontent.com';
-  const GOOGLE_CLIENT_SECRET = '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';
-  const GOOGLE_REDIRECT_URI = 'http://localhost:3000/google_authorized';
-  const GOOGLE_TOKEN_URL = 'https://accounts.google.com/o/oauth2/token';
-  const GOOGLE_USER_INFO_URL = 'https://www.googleapis.com/oauth2/v1/userinfo';
+  const GOOGLE_CLIENT_ID =
+    "93333716320-7ls324ni108j5b3oqtsnp28gc89b0d6s.apps.googleusercontent.com";
+  const GOOGLE_CLIENT_SECRET = "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";
+  const GOOGLE_REDIRECT_URI = "http://192.168.1.2:3000/google_authorized";
+  const GOOGLE_TOKEN_URL = "https://accounts.google.com/o/oauth2/token";
+  const GOOGLE_USER_INFO_URL = "https://www.googleapis.com/oauth2/v1/userinfo";
 
   useEffect(() => {
     // Parse the query parameters from the location search string
     const searchParams = new URLSearchParams(location.search);
-    const code = searchParams.get('code');
+    const code = searchParams.get("code");
 
     const token_url = GOOGLE_TOKEN_URL;
 
@@ -33,16 +33,16 @@ export function GoogleAuthorize({login}) {
       client_id: GOOGLE_CLIENT_ID,
       client_secret: GOOGLE_CLIENT_SECRET,
       redirect_uri: GOOGLE_REDIRECT_URI,
-      grant_type: 'authorization_code',
+      grant_type: "authorization_code",
     };
 
     // Exchange code for access token
     const exchangeCodeForToken = async () => {
       try {
         const response = await fetch(token_url, {
-          method: 'POST',
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify(token_data),
         });
@@ -52,7 +52,7 @@ export function GoogleAuthorize({login}) {
           const access_token = token_info.access_token;
 
           if (access_token) {
-            console.log("here is access token", access_token)
+            console.log("here is access token", access_token);
 
             // Fetch user data using the access token
             const user_info_response = await fetch(GOOGLE_USER_INFO_URL, {
@@ -67,7 +67,7 @@ export function GoogleAuthorize({login}) {
 
               // If "gender" is not present in userData, show the gender dropdown
               if (!user_info.gender) {
-                setSelectedGender(''); // Reset selectedGender state
+                setSelectedGender(""); // Reset selectedGender state
               }
 
               setUserData(user_info);
@@ -75,13 +75,16 @@ export function GoogleAuthorize({login}) {
             // Prompt user for a password before making the API request
             setIsLoading(false);
           } else {
-            console.error('Access token not found in response.');
+            console.error("Access token not found in response.");
           }
         } else {
-          console.error('Error exchanging code for access token:', response.statusText);
+          console.error(
+            "Error exchanging code for access token:",
+            response.statusText
+          );
         }
       } catch (error) {
-        console.error('Error:', error);
+        console.error("Error:", error);
       }
     };
 
@@ -89,58 +92,65 @@ export function GoogleAuthorize({login}) {
   }, [location.search]);
 
   const handlePasswordSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     setIsLoading(true);
 
     try {
       // Make the API request with the password and user_info
-      const response = await fetch('http://localhost:8000/api/save_user_detail', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ ...userData, "password": password, "gender": selectedGender }),
-      });
+      const response = await fetch(
+        "http://192.168.1.2:8000/api/save_user_detail",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ...userData,
+            password: password,
+            gender: selectedGender,
+          }),
+        }
+      );
 
       if (response.status === 201) {
         // const data = await response.json();
         // console.log('API response:', data);
         try {
-          const response = await fetch('http://localhost:8000/api/login', {
-            method: 'POST',
+          const response = await fetch("http://192.168.1.2:8000/api/login", {
+            method: "POST",
             headers: {
-              'Content-Type': 'application/json',
+              "Content-Type": "application/json",
             },
-            body: JSON.stringify({ "email":userData['email'], "padssword":password }),
+            body: JSON.stringify({
+              email: userData["email"],
+              padssword: password,
+            }),
           });
-    
+
           if (response.status === 201) {
             const data = await response.json();
             // Save the token to local storage
-    
-    
-            if (data){
-              const response = await fetch('http://localhost:8000/api/me', {
-              method: 'GET',
-              headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${data.token}`, // Replace with your JWT token
-    
-              },
+
+            if (data) {
+              const response = await fetch("http://192.168.1.2:8000/api/me", {
+                method: "GET",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${data.token}`, // Replace with your JWT token
+                },
               });
-    
+
               if (response.status === 200) {
-                localStorage.setItem('token', data.token);
+                localStorage.setItem("token", data.token);
                 const meUser = await response.json();
                 // Save the token to local storage
-                localStorage.setItem('meUser',JSON.stringify(meUser))
-                console.log("hereismeUser",meUser)
-                login(meUser)
+                localStorage.setItem("meUser", JSON.stringify(meUser));
+                console.log("hereismeUser", meUser);
+                login(meUser);
                 // // Redirect to /people on successful login
-                navigate('/');
-              } 
-              else {
-                console.log("Unable to fetch data from /ME")
+                navigate("/");
+              } else {
+                console.log("Unable to fetch data from /ME");
                 setError('Unable to fetch data from "/me" api..');
               }
             }
@@ -149,21 +159,18 @@ export function GoogleAuthorize({login}) {
             // // Redirect to /people on successful login
             // navigate('/');
           } else {
-            console.log("Invalid email or password")
-    
-            setError('Invalid email or password');
+            console.log("Invalid email or password");
+
+            setError("Invalid email or password");
           }
-    
-    
-    
-    
-          // const response2 = await fetch('http://localhost:8000/api/profiles', {
+
+          // const response2 = await fetch('http://192.168.1.2:8000/api/profiles', {
           //   method: 'GET',
           //   headers: {
           //     'Content-Type': 'application/json',
           //   },
           // });
-    
+
           // if (response2.status === 200) {
           //   const data = await response.json();
           //   console.log("data",data)
@@ -174,17 +181,16 @@ export function GoogleAuthorize({login}) {
           // } else {
           //   setError('Peopleissu');
           // }
-    
-    
-    
         } catch (error) {
-          setError('An error occurred while logging in'+JSON.stringify(error));
+          setError(
+            "An error occurred while logging in" + JSON.stringify(error)
+          );
         }
       } else {
-        console.error('Error making API request:', response.statusText);
+        console.error("Error making API request:", response.statusText);
       }
     } catch (error) {
-      console.error('An error occurred:', error);
+      console.error("An error occurred:", error);
     }
 
     setIsLoading(false);
@@ -217,7 +223,7 @@ export function GoogleAuthorize({login}) {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <button onClick={(e)=>handlePasswordSubmit(e)}>Submit</button>
+          <button onClick={(e) => handlePasswordSubmit(e)}>Submit</button>
         </>
       )}
     </div>
@@ -225,6 +231,3 @@ export function GoogleAuthorize({login}) {
 }
 // export default GoogleAuthorize
 export default connect(null, { login, logout })(GoogleAuthorize);
-
-
-

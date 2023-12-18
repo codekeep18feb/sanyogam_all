@@ -1,18 +1,16 @@
-import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
-import { useState, useEffect } from 'react';
-
+import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
+import { useState, useEffect } from "react";
 
 function PaymentForm() {
   const stripe = useStripe();
   const elements = useElements();
-  const [clientSecret, setClientSecret] = useState('');
+  const [clientSecret, setClientSecret] = useState("");
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
-
 
   useEffect(() => {
     // Fetch the client secret from your server
-    fetch('http://localhost:8000/create-payment-intent', {
-      method: 'POST',
+    fetch("http://192.168.1.2:8000/create-payment-intent", {
+      method: "POST",
     })
       .then((response) => response.json())
       .then((data) => {
@@ -35,20 +33,23 @@ function PaymentForm() {
     });
 
     if (pmError) {
-      console.error('Error creating PaymentMethod:', pmError);
+      console.error("Error creating PaymentMethod:", pmError);
       return;
     }
 
     // Attach the PaymentMethod to the Payment Intent
-    const { paymentIntent, error } = await stripe.confirmCardPayment(clientSecret, {
-      payment_method: paymentMethod.id,
-      setup_future_usage: 'off_session', // Optional: If you want to save the payment method for future payments
-    });
+    const { paymentIntent, error } = await stripe.confirmCardPayment(
+      clientSecret,
+      {
+        payment_method: paymentMethod.id,
+        setup_future_usage: "off_session", // Optional: If you want to save the payment method for future payments
+      }
+    );
 
     if (error) {
-      console.error('Payment failed:', error);
+      console.error("Payment failed:", error);
     } else {
-      console.log('Payment succeeded:', paymentIntent);
+      console.log("Payment succeeded:", paymentIntent);
     }
   };
 
@@ -65,7 +66,7 @@ function PaymentForm() {
           </select>
         </label>
       </div>
-      {selectedPaymentMethod === 'card' && (
+      {selectedPaymentMethod === "card" && (
         <div>
           <label>
             Card details:
@@ -74,7 +75,9 @@ function PaymentForm() {
         </div>
       )}
       {/* Add sections for other payment methods as needed */}
-      <button type="submit" disabled={!stripe || !selectedPaymentMethod}>Proceed To Pay</button>
+      <button type="submit" disabled={!stripe || !selectedPaymentMethod}>
+        Proceed To Pay
+      </button>
     </form>
   );
 }
