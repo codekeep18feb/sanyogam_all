@@ -1,0 +1,47 @@
+name: CI/CD counter app
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+#First we will see the application build or not , then we will deploy in EC2
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Build the docker_compose
+      run: docker-compose up -d --build
+
+  Deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v2 
+      - name: Deploy in EC2
+        env:
+            PRIVATE_KEY: ${{ secrets.AWS_PRIVATE_KEY  }}
+            HOSTNAME : ${{ secrets.HOSTNAME  }}
+            USER_NAME : ${{ secrets.USER_NAME  }}
+            
+        run: |
+          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+          ssh -o StrictHostKeyChecking=no -i private_key "${USER_NAME}@${HOSTNAME}" '
+            # Debugging: Print some messages to identify where the issue might be.
+            echo "Script is starting"
+            cd /home/ubuntu/sanyogam_all &&
+            echo "Changed directory"
+            git checkout main &&
+            echo "Checked out main branch"
+            git fetch --all &&
+            echo "Fetched all branches"
+            git reset --hard origin/main &&
+            echo "Reset to origin/main"
+            git pull origin main &&
+            echo "Pulled changes from origin/main"
+            docker-compose -f docker-compose.yml up -d --build
+            echo "Docker Compose command executed"
+          '
