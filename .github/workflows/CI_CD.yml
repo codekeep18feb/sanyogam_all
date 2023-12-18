@@ -2,7 +2,7 @@ name: sgm app
 
 on:
   push:
-    branches: [ working_simplifying_chat ]
+    branches: [ main ]
 
 jobs:
   # First we will see the application build or not, then we will deploy in EC2
@@ -41,14 +41,14 @@ jobs:
           echo "Script is starting"
           cd /home/ubuntu/sanyogam_all &&
           echo "Changed directory"
-          git init && git checkout working_simplifying_chat &&
-          echo "Checked out working_simplifying_chat branch"
+          git init && git checkout main &&
+          echo "Checked out main branch"
           git fetch --all &&
           echo "Fetched all branches"
-          git reset --hard origin/working_simplifying_chat &&
-          echo "Reset to origin/working_simplifying_chat"
-          git pull origin working_simplifying_chat &&
-          echo "Pulled changes from origin/working_simplifying_chat"
+          git reset --hard origin/main &&
+          echo "Reset to origin/main"
+          git pull origin main &&
+          echo "Pulled changes from origin/main"
           docker-compose -f docker-compose.yml up -d --build
           echo "Docker Compose command executed"
         '

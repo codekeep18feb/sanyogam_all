@@ -11,10 +11,10 @@
 
 ### `docker-compose up -d --build`
 
-Open [http://192.168.1.2:3001](http://192.168.1.2:3001) to view it in the browser.
+Open [http://13.233.212.156:3001](http://13.233.212.156:3001) to view it in the browser.
 
 ## To run in production environment
 
 ### `docker-compose -f docker-compose.prod.yml up -d --build`
 
-Open [http://192.168.1.2:8899](http://192.168.1.2:8899) to view it in the browser.
+Open [http://13.233.212.156:8899](http://13.233.212.156:8899) to view it in the browser.

@@ -13,7 +13,7 @@ export default function RequestScreen({ with_email }) {
 
       try {
         const response = await fetch(
-          `http://192.168.1.2:8000/api/request_info/${with_email}`,
+          `http://13.233.212.156:8000/api/request_info/${with_email}`,
           {
             method: "GET",
             headers: {

@@ -20,7 +20,7 @@ export default function MeDetailScreen({ authData, editMode, SeteditMode }) {
 
       // Make the POST request
       const response = await fetch(
-        "http://192.168.1.2:8000/api/update_profile/1",
+        "http://13.233.212.156:8000/api/update_profile/1",
         {
           method: "POST",
           body: formData,
