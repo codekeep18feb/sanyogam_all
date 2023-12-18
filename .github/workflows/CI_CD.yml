@@ -41,14 +41,21 @@ jobs:
           echo "Script is starting"
           cd /home/ubuntu/sanyogam_all &&
           echo "Changed directory"
-          git init && git checkout main &&
-          echo "Checked out main branch"
+          
+          # Use the correct default branch name (e.g., 'master' or 'main')
+          git init && git checkout $(git symbolic-ref --short HEAD) &&
+          echo "Checked out the default branch"
+          
           git fetch --all &&
           echo "Fetched all branches"
-          git reset --hard origin/main &&
-          echo "Reset to origin/main"
-          git pull origin main &&
-          echo "Pulled changes from origin/main"
+          
+          # Use the correct default branch name in the reset command
+          git reset --hard origin/$(git symbolic-ref --short HEAD) &&
+          echo "Reset to origin/$(git symbolic-ref --short HEAD)"
+          
+          git pull origin $(git symbolic-ref --short HEAD) &&
+          echo "Pulled changes from origin/$(git symbolic-ref --short HEAD)"
+          
           docker-compose -f docker-compose.yml up -d --build
           echo "Docker Compose command executed"
         '
