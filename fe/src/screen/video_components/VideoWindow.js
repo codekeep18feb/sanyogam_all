@@ -3,6 +3,8 @@ import RequestScreen from "../RequestScreen";
 import VideoScreen from "./VideoScreen";
 
 export default function VideoWindow({ with_email,with_userid }) {
+  const [intervalId, setIntervalId] = useState(null);
+  
   // console.log("here we are", rtcData);
   const [loading, setLoading] = useState(true);
   const [chatHistory, setChatHistory] = useState([]);
@@ -314,12 +316,12 @@ export default function VideoWindow({ with_email,with_userid }) {
  
 
   useEffect(async() => {
-    fetchRTCUserInfo(); // Fetch data initially
+    // fetchRTCUserInfo(); // Fetch data initially
     // console.log("main useeffect ran")
 
-    const intervalId = setInterval(() => {
-      fetchRTCUserInfo(); // Fetch data every 10 seconds
-    }, 10000);
+    // const intervalId = setInterval(() => {
+    //   fetchRTCUserInfo(); // Fetch data every 10 seconds
+    // }, 10000);
 
     // console.log("myRef's current value:", myRef.current);
     // myRef.current = 'updated Value';
@@ -392,57 +394,62 @@ export default function VideoWindow({ with_email,with_userid }) {
     if(req_status.status=="ACCEPTED"){
       console.log("make call to check if we can get the RTC Entry",req_status)
       const rtc_entry = await fetchRTCUserInfo()
-      console.log("rtc_entry mayn eed more checks",rtc_entry)
-      if (rtc_entry==null){
-        
-        const [lc] = await initializeWebRTC(token,"INITIATOR")
-        // console.log("dowehave dc",dc)
-        if (lc){
-          console.log(lc,"myRef's current value:", myRef.current);
-          myRef.current = {
-            "type":"INITIATOR",
-            "channel":lc,
-            // "lc":lc
-          }
+      const intervalId = setInterval(() => {
+      fetchRTCUserInfo(); // Fetch data every 10 seconds
+    }, 10000);
+    setIntervalId(intervalId)
 
-          
-          // myRef.current = 'updated Value';
-          
-        }
-
-
-      }
-      else if (rtc_entry.answer==null && rtc_entry.sdp!=null){
-        console.log("here is rtc_entry",rtc_entry)
-
-        const [rc] = await initializeWebRTC(token,"RESPONDER")
-        console.log("dowehave rc",rc)
-
-        if (rc){
-          myRef.current ={ 
-            "type":"RESPONDER",
-            "channel":rc
-          }
-        }
-
-      }
-      myRef.current.channel.addEventListener('iceconnectionstatechange', () => {
-            console.log('ICE Connection State changed:', myRef.current.channel.iceConnectionState);
-            
-            // if (myRef.current.channel.iceConnectionState === 'connected') {
-            //   // ICE connection is fully established
-            //   setConnectionOpened(true);
-            // }
-          });
-        
-      myRef.current.channel.addEventListener('connectionstatechange', () => {
-        console.log('Connection State changed:', myRef.current.channel.connectionState);
+    console.log("rtc_entry mayn eed more checks",rtc_entry)
+    if (rtc_entry==null){
       
-        // if (myRef.current.channel.connectionState === 'connected') {
-        //   // Connection is fully established
-        //   setConnectionOpened(true);
-        // }
-      });
+      const [lc] = await initializeWebRTC(token,"INITIATOR")
+      // console.log("dowehave dc",dc)
+      if (lc){
+        console.log(lc,"myRef's current value:", myRef.current);
+        myRef.current = {
+          "type":"INITIATOR",
+          "channel":lc,
+          // "lc":lc
+        }
+
+        
+        // myRef.current = 'updated Value';
+        
+      }
+
+
+    }
+    else if (rtc_entry.answer==null && rtc_entry.sdp!=null){
+      console.log("here is rtc_entry",rtc_entry)
+
+      const [rc] = await initializeWebRTC(token,"RESPONDER")
+      console.log("dowehave rc",rc)
+
+      if (rc){
+        myRef.current ={ 
+          "type":"RESPONDER",
+          "channel":rc
+        }
+      }
+
+    }
+    myRef.current.channel.addEventListener('iceconnectionstatechange', () => {
+          console.log('ICE Connection State changed:', myRef.current.channel.iceConnectionState);
+          
+          // if (myRef.current.channel.iceConnectionState === 'connected') {
+          //   // ICE connection is fully established
+          //   setConnectionOpened(true);
+          // }
+        });
+      
+    myRef.current.channel.addEventListener('connectionstatechange', () => {
+      console.log('Connection State changed:', myRef.current.channel.connectionState);
+    
+      // if (myRef.current.channel.connectionState === 'connected') {
+      //   // Connection is fully established
+      //   setConnectionOpened(true);
+      // }
+    });
 
       myRef.current.channel.addEventListener('signalingstatechange', () => {
         console.log('AREWHEREWREVER')
@@ -492,13 +499,18 @@ export default function VideoWindow({ with_email,with_userid }) {
 
  
   console.log("answerishere",answer)
-  useEffect(() => {
-    if(connection_open){
-      console.log("connectionopened",connection_open)
+  // useEffect(() => {
+  //   if(connection_open){
+  //     console.log("connectionopened",connection_open)
 
+  //   }
+  // }, [connection_open])
+  useEffect(() => {
+    if (connection_open){
+      clearInterval(intervalId);
+      
     }
   }, [connection_open])
-  
 
   console.log("hereis",myRef.current)
   return (
