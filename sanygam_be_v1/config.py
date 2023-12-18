@@ -48,9 +48,9 @@ def _current_timestamp() -> int:
 basedir = pathlib.Path(__file__).parent.resolve()
 print("AMICORRECT ? basedir",basedir)
 connex_app = connexion.App(__name__, specification_dir=basedir)
-# Initialize CORS to allow requests from http://localhost:3000
+# Initialize CORS to allow requests from http://192.168.1.2:3000
 # CORS(connex_app.app)
-CORS(connex_app.app, resources={r"/api/*": {"origins": "http://localhost:3000"}})
+CORS(connex_app.app, resources={r"/api/*": {"origins": "http://192.168.1.2:3000"}})
 
 
 
