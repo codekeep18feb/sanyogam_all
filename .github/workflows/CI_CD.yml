@@ -15,20 +15,24 @@ jobs:
     - name: Build the docker_compose
       run: docker-compose up -d --build
 
-  Deploy:
+Deploy:
     needs: build
     runs-on: ubuntu-latest
     
     steps:
-      - uses: actions/checkout@v2 
+      - name: Checkout code
+        uses: actions/checkout@v2 
+
       - name: Deploy in EC2
         env:
-            PRIVATE_KEY: ${{ secrets.AWS_PRIVATE_KEY  }}
-            HOSTNAME : ${{ secrets.HOSTNAME  }}
-            USER_NAME : ${{ secrets.USER_NAME  }}
+            PRIVATE_KEY: ${{ secrets.AWS_PRIVATE_KEY }}
+            HOSTNAME: ${{ secrets.HOSTNAME }}
+            USER_NAME: ${{ secrets.USER_NAME }}
             
         run: |
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+          ssh-keyscan -H $HOSTNAME >> ~/.ssh/known_hosts
+
           ssh -o StrictHostKeyChecking=no -i private_key "${USER_NAME}@${HOSTNAME}" '
             # Debugging: Print some messages to identify where the issue might be.
             echo "Script is starting"
@@ -44,4 +48,3 @@ jobs:
             echo "Pulled changes from origin/working_simplifying_chat"
             docker-compose -f docker-compose.yml up -d --build
             echo "Docker Compose command executed"
-          '
