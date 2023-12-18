@@ -1,4 +1,4 @@
-name: SGM app
+name: SGMapp
 
 on:
   push:
