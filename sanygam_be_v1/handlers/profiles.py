@@ -30,7 +30,7 @@ def update_my_profile(profile_update_data):
     decoded_data_str = decoded['sub']
     json_dec_data = json.loads(decoded_data_str)
     me = User.query.filter_by(email=json_dec_data['email']).first()
-
+    
 
     # image_data = request.files.get('image')
     gender =      profile_update_data.get('gender',me.profile.gender)
