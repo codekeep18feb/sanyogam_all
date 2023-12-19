@@ -20,13 +20,13 @@ class Profile(db.Model):
 class FamilyInformation(db.Model):
     __tablename__ = "family_info"
     id = db.Column(db.Integer, primary_key=True)
-    no_of_brothers = db.Column(db.Integer)
-    married_brother = db.Column(db.Integer)
-    no_of_sisters = db.Column(db.Integer)
-    married_sister = db.Column(db.Integer)
-    family_location = db.Column(db.String(50))
-    native_place = db.Column(db.String(50))
-    affluence = db.Column(db.String(50))
+    no_of_brothers = db.Column(db.Integer, default=0)
+    married_brother = db.Column(db.Integer, default=0)
+    no_of_sisters = db.Column(db.Integer, default=0)
+    married_sister = db.Column(db.Integer, default=0)
+    family_location = db.Column(db.String(50), default=None)
+    native_place = db.Column(db.String(50), default=None)
+    affluence = db.Column(db.String(50), default=None)
     profile_id = db.Column(db.Integer, db.ForeignKey('profile.id'))
     profile = db.relationship('Profile', back_populates='family_info')
 
@@ -36,11 +36,11 @@ class Father(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     profile_id = db.Column(db.Integer, db.ForeignKey('profile.id'))
     profile = db.relationship('Profile', back_populates='father')
-    first_name = db.Column(db.String(50))
-    last_name = db.Column(db.String(50))
-    designation = db.Column(db.String(50))
-    company_name = db.Column(db.String(50))
-    job_type = db.Column(db.String(50))
+    first_name = db.Column(db.String(50), default=None)
+    last_name = db.Column(db.String(50), default=None)
+    designation = db.Column(db.String(50), default=None)
+    company_name = db.Column(db.String(50), default=None)
+    job_type = db.Column(db.String(50), default=None)
     
 
 class User(db.Model):

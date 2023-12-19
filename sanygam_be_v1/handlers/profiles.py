@@ -20,14 +20,7 @@ content_type = 'image/jpeg'
 
 
 def update_my_profile(profile_update_data):
-    # image_data = request.files.get('image')
-    gender =      profile_update_data.get('gender')
-    fname =       profile_update_data.get('fname')
-    lname =       profile_update_data.get('lname')
-    family_info = profile_update_data.get('family_info')
-    father = profile_update_data.get('father')
     auth_token = request.headers.get("Authorization")
-    
     if not auth_token:
         return "Unauthorized", 401
     
@@ -37,8 +30,17 @@ def update_my_profile(profile_update_data):
     decoded_data_str = decoded['sub']
     json_dec_data = json.loads(decoded_data_str)
     me = User.query.filter_by(email=json_dec_data['email']).first()
-    print("family_info",family_info,gender,fname,me.profile.family_info)
 
+
+    # image_data = request.files.get('image')
+    gender =      profile_update_data.get('gender',me.profile.gender)
+    fname =       profile_update_data.get('fname',me.profile.user.fname)
+    lname =       profile_update_data.get('lname',me.profile.user.lname)
+    family_info = profile_update_data.get('family_info',None)
+    father = profile_update_data.get('father',None)
+    print("family_info",family_info,gender,fname,me.profile.family_info)
+    
+    
     # profile = Profile.query.filter_by(id=id).first()
     print('hdsafsadfdsa',father)
     if me.profile:
@@ -46,10 +48,12 @@ def update_my_profile(profile_update_data):
         me.profile.user.fname = fname
         me.profile.user.lname = lname
         # me.profile.father.first_name = 'jakiru'
-        for field, value in family_info.items():
-            setattr(me.profile.family_info, field, value)
-        for field, value in father.items():
-            setattr(me.profile.father, field, value)
+        if family_info:
+            for field, value in family_info.items():
+                setattr(me.profile.family_info, field, value)
+        if father:
+            for field, value in father.items():
+                setattr(me.profile.father, field, value)
         db.session.add(me)
         db.session.commit()
 

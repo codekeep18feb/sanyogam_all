@@ -315,21 +315,18 @@ paths:
             schema:
               x-body-name: "profile_update_data"
               type: object
-              properties:
-                # image:
-                #   type: string
-                #   format: binary
-                gender:
-                  type: string
-                  enum: ["Male", "Female", "Other"]
-                fname:
-                  type: string
-                lname:
-                  type: string
-                family_info:
-                  $ref: "#/components/schemas/FamilyInformationSchema"
-                father:
-                  $ref: "#/components/schemas/FatherSchema"
+              # properties:
+              #   gender:
+              #     type: string
+              #     enum: ["Male", "Female", "Other"]
+              #   fname:
+              #     type: string
+              #   lname:
+              #     type: string
+                # family_info:
+                #   $ref: "#/components/schemas/FamilyInformationSchema"
+                # father:
+                #   $ref: "#/components/schemas/FatherSchema"
 
 
                 # image:
