@@ -90,7 +90,7 @@ export const FamilyPreview = ({
           <Typography variant="subtitle2">
             {manupulated_str}
             {/* {manupulated_str} */}
-            {/* Father, Mother, {family_details÷['no_of_married_brothers']-family_details['no_of_brothers']} unmarried brothers, {family_details['no_of_married_sisters']-family_details['no_of_sisters']} unmarried sisters. total {family_details['no_of_married_brothers']+family_details['no_of_sisters']} siblings. */}
+            {/* Father, Mother, {family_details÷['married_brother']-family_details['no_of_brothers']} unmarried brothers, {family_details['married_sister']-family_details['no_of_sisters']} unmarried sisters. total {family_details['married_brother']+family_details['no_of_sisters']} siblings. */}
           </Typography>
         </div>
       </div>
@@ -107,7 +107,7 @@ export const FamilyPreview = ({
             Stay in
           </Typography>
           <Typography variant="subtitle2">
-            {family_details["current_location"]}
+            {family_details["family_location"]}
           </Typography>
         </div>
       </div>
@@ -122,7 +122,7 @@ export const FamilyPreview = ({
             Native
           </Typography>
           <Typography variant="subtitle2">
-            {family_details["native_location"]}
+            {family_details["native_place"]}
           </Typography>
         </div>
       </div>
@@ -149,11 +149,11 @@ export default function PreviewProfile() {
   const profile_info_obj = {
     family_details: {
       no_of_brothers: 2,
-      no_of_married_brothers: 2,
+      married_brother: 2,
       no_of_sisters: 2,
-      no_of_married_sisters: 2,
-      current_location: "delhi",
-      native_location: "gonda",
+      married_sister: 2,
+      family_location: "delhi",
+      native_place: "gonda",
       affluence: "MIDDLE_CLASS",
     },
   };

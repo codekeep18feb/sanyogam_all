@@ -23,12 +23,12 @@ export default function ParentForWrapperOVG({ family_details }) {
 
   }
   const rules = {
-    current_location: { type: "str", edit_type: "dropdown", display: true, iconName: "location" },
+    family_location: { type: "str", edit_type: "dropdown", display: true, iconName: "location" },
     affluence: { type: "str", edit_type: "dropdown", display: true, iconName: "affluence" },
     no_of_brothers: { type: "num", edit_type: "num_input", display: false, iconName: "affluence" },
-    native_location: { type: "str", edit_type: "dropdown", display: true, iconName: "location", label: "native location" },
-    no_of_married_brothers: { type: "num", edit_type: "num_input", display: false, iconName: "affluence" },
-    no_of_married_sisters: { type: "num", edit_type: "num_input", display: false, iconName: "affluence" },
+    native_place: { type: "str", edit_type: "dropdown", display: true, iconName: "location", label: "native location" },
+    married_brother: { type: "num", edit_type: "num_input", display: false, iconName: "affluence" },
+    married_sister: { type: "num", edit_type: "num_input", display: false, iconName: "affluence" },
     no_of_sisters: { type: "num", edit_type: "num_input", display: false, iconName: "affluence" },
     extra: {
       family_members: {
@@ -36,9 +36,9 @@ export default function ParentForWrapperOVG({ family_details }) {
         display: true,
         iconName: "people",
         label: "Family Members",
-        depends_on: ['no_of_brothers', 'no_of_married_brothers', 'no_of_married_sisters', 'no_of_sisters'],
+        depends_on: ['no_of_brothers', 'married_brother', 'married_sister', 'no_of_sisters'],
         transform: transform_content,
-        exp: "Total Siblings - ${no_of_married_brothers}, ${no_of_married_sisters}, ${no_of_brothers}, ${no_of_sisters}"
+        exp: "Total Siblings - ${married_brother}, ${married_sister}, ${no_of_brothers}, ${no_of_sisters}"
       }
     }
   };

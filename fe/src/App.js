@@ -166,9 +166,9 @@ function App({ authData,login }) {
         path="/edit_family"
         element={
         
-          <WrapperMobileBackShellWithSave title={"Family Details"}>
+          // <WrapperMobileBackShellWithSave title={"Family Details"}>
           <EditFamily  />
-        </WrapperMobileBackShellWithSave>
+        // </WrapperMobileBackShellWithSave>
         }
       />
     </Routes>

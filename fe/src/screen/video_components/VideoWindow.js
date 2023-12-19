@@ -23,7 +23,7 @@ export default function VideoWindow({ with_email, with_userid }) {
 
     try {
       const response = await fetch(
-        `http://192.168.1.13:8000/api/rtc_user_info_by_id/${with_userid}`,
+        `http://localhost:8000/api/rtc_user_info_by_id/${with_userid}`,
         {
           method: "GET",
           headers: {
@@ -64,7 +64,7 @@ export default function VideoWindow({ with_email, with_userid }) {
     const token = `Bearer ${JWT_TOKEN}`;
 
     try {
-      const response = await fetch(`http://192.168.1.13:8000/api/add_rtc_user`, {
+      const response = await fetch(`http://localhost:8000/api/add_rtc_user`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -99,7 +99,7 @@ export default function VideoWindow({ with_email, with_userid }) {
     const token = `Bearer ${JWT_TOKEN}`;
 
     try {
-      const response = await fetch(`http://192.168.1.13:8000/api/add_rtc_user`, {
+      const response = await fetch(`http://localhost:8000/api/add_rtc_user`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -132,7 +132,7 @@ export default function VideoWindow({ with_email, with_userid }) {
 
     try {
       const response = await fetch(
-        `http://192.168.1.13:8000/api/rtc_user_info_by_id/${with_userid}`,
+        `http://localhost:8000/api/rtc_user_info_by_id/${with_userid}`,
         {
           method: "GET",
           headers: {
@@ -156,10 +156,10 @@ export default function VideoWindow({ with_email, with_userid }) {
     }
   };
   const fetchUserId = async (token, with_email) => {
-    // http://192.168.1.13:8000/api/users/query?q_email=deepaksingh.18feb%40gmail.com
+    // http://localhost:8000/api/users/query?q_email=deepaksingh.18feb%40gmail.com
     try {
       const response = await fetch(
-        `http://192.168.1.13:8000/api/users/query?q_email=${with_email}`,
+        `http://localhost:8000/api/users/query?q_email=${with_email}`,
         {
           method: "GET",
           headers: {
@@ -345,7 +345,7 @@ export default function VideoWindow({ with_email, with_userid }) {
 
       try {
         const response = await fetch(
-          `http://192.168.1.13:8000/api/chathistory/${with_email}`,
+          `http://localhost:8000/api/chathistory/${with_email}`,
           {
             method: "GET",
             headers: {
@@ -374,7 +374,7 @@ export default function VideoWindow({ with_email, with_userid }) {
 
       try {
         const response = await fetch(
-          `http://192.168.1.13:8000/api/request_info/${with_email}`,
+          `http://localhost:8000/api/request_info/${with_email}`,
           {
             method: "GET",
             headers: {

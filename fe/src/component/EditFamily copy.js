@@ -48,7 +48,7 @@ const EditFamilyForm = () => {
             <NumberField id="no_of_brothers" label="No Of Brothers" defaultValue={family_details['no_of_brothers']}/>
           </Grid>
           <Grid item xs={5}>
-            <NumberField id="married-brother-number" label="Married Brother" defaultValue={family_details['no_of_married_brothers']}/>
+            <NumberField id="married-brother-number" label="Married Brother" defaultValue={family_details['married_brother']}/>
           </Grid>
         </Grid>
 
@@ -57,19 +57,19 @@ const EditFamilyForm = () => {
             <NumberField id="sister-number" label="No Of Sisters" defaultValue={family_details['no_of_sisters']}/>
           </Grid>
           <Grid item xs={5}>
-            <NumberField id="married-sister-number" label="Married Sister" defaultValue={family_details['no_of_married_sisters']}/>
+            <NumberField id="married-sister-number" label="Married Sister" defaultValue={family_details['married_sister']}/>
           </Grid>
         </Grid>
         <Grid container spacing={1} justifyContent={"center"} style={{ marginTop: "10px" }}>
           <Grid item xs={10}>
-          <AutocompleteField options={locations} id="current-location" label="Current Location" defaultValue={family_details['current_location']}/>
+          <AutocompleteField options={locations} id="current-location" label="Current Location" defaultValue={family_details['family_location']}/>
 
           </Grid>
          
         </Grid>
         <Grid container spacing={1} justifyContent={"center"} style={{ marginTop: "10px" }}>
           <Grid item xs={10}>
-          <AutocompleteField options={locations} id="native-location" label="Native Location" defaultValue={family_details['native_location']}/>
+          <AutocompleteField options={locations} id="native-location" label="Native Location" defaultValue={family_details['native_place']}/>
 
           </Grid>
          

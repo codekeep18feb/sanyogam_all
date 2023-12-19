@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Autocomplete, TextField, Grid, Typography } from "@mui/material";
 import { useLocation } from "react-router-dom";
+import WrapperMobileBackShellWithSave from "../screen/WrapperMobileBackShellWithSave";
 
-const NumberField = ({ id, label,defaultValue=0 }) => (
+const NumberField = ({ id, label,defaultValue=0,onChange ,state_name}) => (
   <TextField
     id={id}
     label={label}
@@ -12,15 +13,17 @@ const NumberField = ({ id, label,defaultValue=0 }) => (
     }}
     variant="standard"
     defaultValue={defaultValue} // Add this line to set the default value
+    onChange={(e)=>onChange(e,state_name,'number_input')}
     // fullWidth={true}
   />
 );
 
-const AutocompleteField = ({ options, id, label,defaultValue }) => (
+const AutocompleteField = ({ options, id, label,defaultValue,onChange,state_name }) => (
   <Autocomplete
     options={options.map((option) => option.title)}
     id={id}
     value={defaultValue}  // Set the default value
+    onChange={(e,new_value)=>onChange(e,state_name,'dropdown',new_value)}
     renderInput={(params) => (
       <TextField {...params} label={label} variant="standard" />
     )}
@@ -36,21 +39,43 @@ const EditFamilyForm = () => {
   ];
 
   const opt_obj ={
-    current_location:locations,
-    native_location:locations,
+    family_location:locations,
+    native_place:locations,
     affluence:affluenceOptions
   }
   // Use the useLocation hook to access the current location object
   const { state } = useLocation();
   const family_details = state && state.family_details;
   const rules = state && state.rules;
-  console.log(rules,'family_deadtailsdafd',state)
+  const [formValues, setFormValues] = useState({});
 
+  // Update form values when family_details changes
+  // useEffect(() => {
+  //   if (family_details) {
+  //     // Set the form values based on family_details
+  //     console.log('HEREISTHESTATE',state)
+  //     setFormValues(family_details);
+  //   }
+  // }, [family_details]);
+
+  console.log(rules,'family_deadtailsdafd',state)
+  const handleOnChange=(e,state_name,type,new_value=false)=>{
+    e.preventDefault()
+    console.log('thisstate_name changed',type)
+    setFormValues((prv)=>{
+      const obj = JSON.parse(JSON.stringify(prv))
+      obj[state_name]=new_value
+      console.log('hereisprv',prv,state_name,e.target.value)
+      return obj
+    })
+
+
+  }
   const all_childs = Object.keys(family_details).map(row=>{
     if (rules[row]['edit_type']=='num_input'){
       return (
         <div>
-          <NumberField id={rules[row]['label'] || row} label={rules[row]['label'] || row} defaultValue={family_details[row]}/>
+          <NumberField state_name={row} onChange={handleOnChange} id={rules[row]['label'] || row} label={rules[row]['label'] || row} defaultValue={family_details[row]}/>
         </div>
       )
   
@@ -59,10 +84,12 @@ const EditFamilyForm = () => {
       return (
         <div>
           {/* {rules[row]['label'] } here itse {row} */}
-          <AutocompleteField 
+          <AutocompleteField
+          onChange={handleOnChange} 
           options={opt_obj[row]} 
           id={row} 
           label={row} 
+          state_name={row}
           defaultValue={family_details[row]}/>
 
           {/* <NumberField id={rules[row]['label'] || row} label={rules[row]['label'] || row} defaultValue={family_details[row]}/> */}
@@ -71,7 +98,14 @@ const EditFamilyForm = () => {
   
     }
   })
+
+  
+  const onSave =()=>{
+    console.log('onsave ran here we can see the ',)
+  }
+
   return (
+    <WrapperMobileBackShellWithSave title={"Family Details"} onSave={onSave}>
     <div style={{ padding: "10px" }}>
       <Grid container flexDirection={"column"}>
         {all_childs}
@@ -79,6 +113,7 @@ const EditFamilyForm = () => {
 
       </Grid>
     </div>
+    </WrapperMobileBackShellWithSave>
   );
 };
 

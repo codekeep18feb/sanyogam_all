@@ -17,7 +17,7 @@ const getDeviceType = () => {
 };
 
 
-export default function WrapperMobileBackShellWithSave({children,title}) {
+export default function WrapperMobileBackShellWithSave({children,title, onSave}) {
   console.log('title',title)
 
   const [deviceType, setDeviceType] = useState(getDeviceType());
@@ -62,8 +62,8 @@ export default function WrapperMobileBackShellWithSave({children,title}) {
       </div>
 
       {/* Bottom Header */}
-      <Button variant="contained" style={{borderRadius:0,backgroundColor:"rgba(255,0,153,1)",color:"white"}}>
-      Save
+      <Button variant="contained" style={{borderRadius:0,backgroundColor:"rgba(255,0,153,1)",color:"white"}} onClick={onSave}>
+      Save1
     </Button>
     </div>
   )

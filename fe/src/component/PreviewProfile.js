@@ -1,5 +1,5 @@
 import { Grid, Typography } from "@mui/material";
-import React from "react";
+import React, { useEffect,useState} from "react";
 import Location from "@mui/icons-material/LocationOnOutlined";
 import LiveHelpIcon from '@mui/icons-material/LiveHelp';
 import Affluence from "@mui/icons-material/Class";
@@ -57,18 +57,53 @@ export const FamilyPreview = ({
   );
 };
 
+
+
 export default function PreviewProfile() {
-  const profile_info_obj = {
-    family_details: {
-      no_of_brothers: 2,
-      no_of_married_brothers: 2,
-      no_of_sisters: 2,
-      no_of_married_sisters: 2,
-      current_location: "delhi",
-      native_location: "gonda",
-      affluence: "MIDDLE_CLASS",
-    },
+  const [loading, setLoading] = useState(true)
+  const [data, setData] = useState(null)
+  const fetchProfileData = async () => {
+    // console.log("am I being called", isInitiator, sdp);
+    const JWT_TOKEN = localStorage.getItem("token");
+    const token = `Bearer ${JWT_TOKEN}`;
+  
+    try {
+      const response = await fetch(
+        `http://localhost:8000/api/my_profile`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
+        }
+      );
+  
+      if (response.status === 200) {
+        const data = await response.json();
+        console.log("successfully got the data, data",data)
+        return data
+      } else {
+        console.log("Error fetching profile data");
+      }
+    } catch (error) {
+      console.error("An error occurred:", error);
+    } finally {
+      setLoading(false);
+    }
   };
+
+  useEffect(async() => {
+    const data = await fetchProfileData()
+    console.log('datadfdf',data)
+    delete data['family_info']['profile']
+    delete data['family_info']['id']
+    setData(data)
+
+  }, [])
+  
+
+  const profile_info_obj = data && data['family_info'] ? data['family_info']:null
   const a = "variable"
   return (
     <>
@@ -79,15 +114,15 @@ export default function PreviewProfile() {
           boxShadow: "0px 1px 10px rgba(0, 0, 0, 0.3)",
         }}
       >
-        <FamilyPreview
-          family_details={profile_info_obj["family_details"]}
+        {profile_info_obj==null || loading ?<div>loader...</div>:<FamilyPreview
+          family_details={profile_info_obj}
           iconComponent={
             <People
               style={{ fontSize: "24px", color: "magenta", padding: "20px" }}
             />
           }
           manupulated_str={`Manupulated string ${a}`}
-        />
+        />}
       </div>
     </>
   );
