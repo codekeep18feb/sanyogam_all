@@ -11,7 +11,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import Icon from '@mui/material/Icon';
 import ParentForWrapperOVG from "./reusables/ParentForWrapperOVG";
 
-const SelectedIcon = ({ iconName = 'missing' }) => {
+export const SelectedIcon = ({ iconName = 'missing',style_obj }) => {
 
   const iconComponents = {
     location: Location,
@@ -21,12 +21,12 @@ const SelectedIcon = ({ iconName = 'missing' }) => {
 
   if (Object.keys(iconComponents).includes(iconName)) {
     const SelectedIcon = iconComponents[iconName];
-    return <SelectedIcon />
+    return <SelectedIcon style={style_obj}/>
 
   }
   else {
     const SelectedIcon = iconComponents['missing'];
-    return <SelectedIcon />
+    return <SelectedIcon style={style_obj}/>
 
   }
 }
