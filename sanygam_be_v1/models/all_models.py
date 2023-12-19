@@ -48,8 +48,8 @@ class User(db.Model):
     profile = db.relationship('Profile', uselist=False, back_populates='user')
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(32), unique=True)
-    lname = db.Column(db.String(32))
-    fname = db.Column(db.String(32))
+    lname = db.Column(db.String(32),default=None)
+    fname = db.Column(db.String(32),default=None)
     password = db.Column(db.String(32))
     timestamp = db.Column(
         db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow
