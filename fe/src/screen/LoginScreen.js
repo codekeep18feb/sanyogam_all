@@ -3,14 +3,14 @@ import { connect } from "react-redux";
 import { login, logout } from "../redux/counter/AuthAction";
 import { useNavigate } from "react-router-dom";
 import FormControl from "@mui/material/FormControl";
-import FormGroup from "@mui/material/FormGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Radio from "@mui/material/Radio";
-import Select from "@mui/material/Select";
+// import FormGroup from '@mui/material/FormGroup';
+// import FormControlLabel from '@mui/material/FormControlLabel';
+// import Checkbox from '@mui/material/Checkbox';
+// import Radio from '@mui/material/Radio';
+// import Select from '@mui/material/Select';
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
-import MenuItem from "@mui/material/MenuItem";
+// import MenuItem from '@mui/material/MenuItem';
 
 function Login({ login, logout }) {
   const navigate = useNavigate();
@@ -21,7 +21,7 @@ function Login({ login, logout }) {
 
   const handleLogin = async () => {
     try {
-      const response = await fetch("http://13.233.212.156:8000/api/login", {
+      const response = await fetch("http://localhost:8000/api/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -34,7 +34,7 @@ function Login({ login, logout }) {
         // Save the token to local storage
 
         if (data) {
-          const response = await fetch("http://13.233.212.156:8000/api/me", {
+          const response = await fetch("http://localhost:8000/api/me", {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
@@ -66,7 +66,7 @@ function Login({ login, logout }) {
         setError("Invalid email or password");
       }
 
-      // const response2 = await fetch('http://13.233.212.156:8000/api/profiles', {
+      // const response2 = await fetch('http://localhost:8000/api/profiles', {
       //   method: 'GET',
       //   headers: {
       //     'Content-Type': 'application/json',

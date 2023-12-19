@@ -1,23 +1,20 @@
-# Use an official Node runtime as a parent image
-FROM node:14
+# pull official base image
+FROM node:13.12.0-alpine
 
-# Set the working directory in the container
+# set working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json to the working directory
-COPY package*.json ./
+# add `/app/node_modules/.bin` to $PATH
+ENV PATH /app/node_modules/.bin:$PATH
 
-# Install app dependencies
-RUN npm install
+# install app dependencies
+COPY package.json ./
+COPY package-lock.json ./
+RUN npm install --silent
+RUN npm install react-scripts@3.4.1 -g --silent
 
-# Bundle app source
-COPY . .
+# add app
+COPY . ./
 
-# Expose port 3000 to the outside world
-EXPOSE 3000
-
-# Define environment variable
-ENV NODE_ENV=production
-
-# Run npm start when the container launches
+# start app
 CMD ["npm", "start"]

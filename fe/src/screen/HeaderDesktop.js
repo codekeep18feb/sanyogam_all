@@ -19,7 +19,7 @@ import Menu from "@mui/material/Menu";
 import Select from "@mui/material/Select";
 import Typography from "@mui/material/Typography";
 
-function Header({ auth_data, logout }) {
+function HeaderDesktop({ auth_data, logout }) {
   const navigate = useNavigate();
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -51,7 +51,7 @@ function Header({ auth_data, logout }) {
       const token = `Bearer ${JWT_TOKEN}`;
       console.log("token", token);
 
-      const response = await fetch("http://13.233.212.156:8000/api/logout", {
+      const response = await fetch("http://localhost:8000/api/logout", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -98,7 +98,7 @@ function Header({ auth_data, logout }) {
           variant="h6"
           style={{ marginRight: "auto", fontFamily: "cursive" }}
         >
-          LoveVivah.com
+          NormVinod.com
         </Typography>
         <div style={headerStyle}>
           <div style={centerOptionsStyle}>
@@ -190,4 +190,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { logout })(Header);
+export default connect(mapStateToProps, { logout })(HeaderDesktop);

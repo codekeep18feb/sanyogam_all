@@ -17,7 +17,7 @@ export default function ChatWindow({ with_email, with_userid }) {
 
     try {
       const response = await fetch(
-        `http://13.233.212.156:8000/api/rtc_user_info_by_id/${with_userid}`,
+        `http://localhost:8000/api/rtc_user_info_by_id/${with_userid}`,
         {
           method: "GET",
           headers: {
@@ -48,7 +48,7 @@ export default function ChatWindow({ with_email, with_userid }) {
     const token = `Bearer ${JWT_TOKEN}`;
 
     try {
-      const response = await fetch(`http://13.233.212.156:8000/api/add_rtc_user`, {
+      const response = await fetch(`http://localhost:8000/api/add_rtc_user`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -80,7 +80,7 @@ export default function ChatWindow({ with_email, with_userid }) {
     const token = `Bearer ${JWT_TOKEN}`;
 
     try {
-      const response = await fetch(`http://13.233.212.156:8000/api/add_rtc_user`, {
+      const response = await fetch(`http://localhost:8000/api/add_rtc_user`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -113,7 +113,7 @@ export default function ChatWindow({ with_email, with_userid }) {
 
     try {
       const response = await fetch(
-        `http://13.233.212.156:8000/api/get_my_rtc_offer`,
+        `http://localhost:8000/api/get_my_rtc_offer`,
         {
           method: "GET",
           headers: {
@@ -140,7 +140,7 @@ export default function ChatWindow({ with_email, with_userid }) {
     // http://127.0.0.1:8000/api/users/query?q_email=deepaksingh.18feb%40gmail.com
     try {
       const response = await fetch(
-        `http://13.233.212.156:8000/api/users/query?q_email=${with_email}`,
+        `http://localhost:8000/api/users/query?q_email=${with_email}`,
         {
           method: "GET",
           headers: {
@@ -195,7 +195,7 @@ export default function ChatWindow({ with_email, with_userid }) {
     console.log("let's grab the offer first..");
     const offer_str = await fetchRTCOffer();
     const offer = JSON.parse(offer_str);
-    console.log("here is your offer love", offer, typeof offer);
+    console.log("here is your offer Norm", offer, typeof offer);
     const rc = new RTCPeerConnection();
 
     rc.onicecandidate = async (e) => {
@@ -259,7 +259,7 @@ export default function ChatWindow({ with_email, with_userid }) {
 
       try {
         const response = await fetch(
-          `http://13.233.212.156:8000/api/chathistory/${with_email}`,
+          `http://localhost:8000/api/chathistory/${with_email}`,
           {
             method: "GET",
             headers: {
@@ -288,7 +288,7 @@ export default function ChatWindow({ with_email, with_userid }) {
 
       try {
         const response = await fetch(
-          `http://13.233.212.156:8000/api/request_info/${with_email}`,
+          `http://localhost:8000/api/request_info/${with_email}`,
           {
             method: "GET",
             headers: {

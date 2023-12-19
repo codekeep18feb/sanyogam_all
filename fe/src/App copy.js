@@ -35,15 +35,6 @@ import { useEffect } from 'react'
 // import HeaderMobile from './screen/HeaderMobile.js'
 // import InboxPractice from './screen/InboxPractice.js'
 import PlayGround from './screen/PlayGround.js'
-import BackTile from './component/reusables/BackTile.js';
-import WrapperMobileShell from './screen/WrapperMobileShell.js';
-import WrapperMobileBackShell from './screen/WrapperMobileBackShell.js';
-
-import WrapperMobileBackShellWithSave from './screen/WrapperMobileBackShellWithSave.js';
-
-import EditFamily from './component/EditFamily.js';
-import PreviewProfile from "./component/PreviewProfile.js"
-import ProfileBriefTile from './screen/ProfileBriefTile';
 // import ProfileBriefTile from './screen/ProfileBriefTile.js';
 
 const MaterialUX = ()=>{
@@ -77,6 +68,44 @@ function useAuth() {
 
 
 function App({ authData,login }) {
+  
+  // useEffect(() => {
+  //   const handleBeforeUnload = () => {
+  //     // Save the Redux state to localStorage before the page is unloaded
+  //     console.log('BEFORE REFRESH',authData)
+  //     // const meUser = /* Get meUser from your Redux state */;
+  //     // localStorage.setItem('meUser', JSON.stringify(meUser));
+  //   };
+
+  //   // Add the event listener
+  //   window.addEventListener('beforeunload', handleBeforeUnload);
+
+  //   // Remove the event listener when the component is unmounted
+  //   return () => {
+  //     window.removeEventListener('beforeunload', handleBeforeUnload);
+  //   };
+  // }, []); // Dependency array is empty, so the effect runs once after the initial render
+
+
+  // useEffect(() => {
+  //   const handleBeforeUnload = () => {
+  //     // Save the Redux state to localStorage before the page is unloaded
+  //     if (authData) {
+  //       console.log('BEFORE REFRESH', authData);
+  //       login(authData)
+
+  //       // Save to localStorage or perform any other action you need
+  //     }
+  //   };
+  
+  //   // Add the event listener
+  //   window.addEventListener('beforeunload', handleBeforeUnload);
+  
+  //   // Remove the event listener when the component is unmounted
+  //   return () => {
+  //     window.removeEventListener('beforeunload', handleBeforeUnload);
+  //   };
+  // }, [authData,login]);
 
   useEffect(() => {
     // Perform actions after the page is loaded
@@ -89,91 +118,69 @@ function App({ authData,login }) {
 
 
   return (
-    <Routes>
-      <Route
-        path="/"
-        element={
-          <WrapperMobileShell>
-            <ProfileBriefTile />
-          </WrapperMobileShell>
-        }
-      />
-      <Route path="/login" element={<LoginScreen />} />
-      <Route path="/material" element={<MaterialUX />} />
-      <Route path="/faq" element={<FAQ />} />
-      <Route path="/signup" element={<SignupScreen />} />
-      <Route path="/pricing" element={<Pricing />} />
-      <Route path="/google_authorized" element={<GoogleAuthorize />} />
-      <Route
-        path="/all_users"
-        element={
-          <PrivateRoute>
-            <WrapperMobileShell>
-              <Users />
-            </WrapperMobileShell>
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/practice"
-        element={
-          <WrapperMobileShell>
-            <PlayGround />
-          </WrapperMobileShell>
-        }
-      />
-      <Route
-        path="/chat"
-        element={
-          <PrivateRoute>
-            <WrapperMobileShell>
+   
+    <>
+      <Routes>
+        {/* <Route exact path="/" element={<HomeScreen />} /> */}
+        <Route exact path="/" element={<HomeScreen />} />
+        <Route path="/login" element={<LoginScreen />} />
+        
+        <Route path="/material" element={<MaterialUX />} />
+        <Route path="/faq" element={<FAQ />} />
+
+        {/* <Route path="/login" element={<Login />} /> */}
+        <Route path="/signup" element={<SignupScreen />} />
+        <Route path="/pricing" element={<Pricing/>} />
+        {/* <Route path="/stripe" element={<PaymentForm />} /> */}
+        
+        <Route path="/google_authorized" element={<GoogleAuthorize />} />
+        
+        <Route
+          path="/all_users"
+          element={
+            <PrivateRoute>
+              <Users /> 
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/practice"
+          element={
+            // <PrivateRoute>
+            <PlayGround/> 
+            // <ProfileBriefTile />
+            // </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/chat"
+          element={
+            <PrivateRoute>
               <Chat />
-            </WrapperMobileShell>
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/video_chat"
-        element={
-          <PrivateRoute>
-            <WrapperMobileShell>
-              <Video />
-            </WrapperMobileShell>
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/back_tile"
-        element={
-        
-          <WrapperMobileBackShell>
-          <BackTile />
-        </WrapperMobileBackShell>
-        }
-      />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+                  path="/video_chat"
+                  element={
+                    <PrivateRoute>
+                      <Video />
+                    </PrivateRoute>
+                  }
+                />
+
+      </Routes>
 
 
-<Route
-        path="/edit_profile"
-        element={
-        
-          <WrapperMobileBackShell title={"Preview Profile"}>
-          <PreviewProfile  />
-        </WrapperMobileBackShell>
-        }
-      />
-<Route
-        path="/edit_family"
-        element={
-        
-          <WrapperMobileBackShellWithSave title={"Family Details"}>
-          <EditFamily  />
-        </WrapperMobileBackShellWithSave>
-        }
-      />
-    </Routes>
+    </>
+
   );
-}
+    // <MaterialScreen />
+    
+  }
 
 
   const mapStateToProps = (state) => {

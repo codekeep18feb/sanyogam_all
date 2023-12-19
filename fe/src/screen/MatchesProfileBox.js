@@ -105,38 +105,38 @@ function MatchesProfileBox({
 
       <div style={bottomRowStyle}>
         <div style={{marginBottom:"10px"}}>
-        <div style={{ ...textContainerStyle }}>
-          Pulkit Soni (Noida)
-        </div>
-        <div style={{ ...textContainerStyle,fontSize:"12px"}}>
-          <p>32 yrs. 5'5" Sonal</p>
-        </div>
-        <div style={{...textContainerStyle,paddingBottom:"10px"}}>
-          Software Developer
-        </div>
+          <div style={{ ...textContainerStyle }}>
+            Pulkit Soni (Noida)
+          </div>
+          <div style={{ ...textContainerStyle,fontSize:"12px"}}>
+            <p>32 yrs. 5'5" Sonal</p>
+          </div>
+          <div style={{...textContainerStyle,paddingBottom:"10px"}}>
+            Software Developer
+          </div>
         </div>
         
         <div style={{...actionRow}}>
-        <div style={{ ...flexContainerStyle, flexDirection:"column", textAlign: "center",border:"1px solid white" }}>
-          <div style={{ borderRadius: "50%", padding: "2px", backgroundColor: "white", color: "red",height:"50px",width:"50px" }} >
-          <StarIcon />
+          <div style={{ ...flexContainerStyle, flexDirection:"column", textAlign: "center",border:"1px solid white" }}>
+            <div style={{ borderRadius: "50%", padding: "2px", backgroundColor: "white", color: "red",height:"50px",width:"50px" }} >
+              <StarIcon />
+            </div>
+            <div style={{...iconText}}>Chat</div>
           </div>
-          <div style={{...iconText}}>Chat</div>
-        </div>
-        <div style={{ ...flexContainerStyle,flexDirection:"column", marginLeft: "30px", marginRight: "30px", textAlign: "center" }}>
-        <div style={{ borderRadius: "50%", padding: "2px", backgroundColor: "white", color: "red",height:"50px",width:"50px" }} > 
-        <FavoriteIcon />
-        </div>
+          <div style={{ ...flexContainerStyle,flexDirection:"column", marginLeft: "30px", marginRight: "30px", textAlign: "center" }}>
+            <div style={{ borderRadius: "50%", padding: "2px", backgroundColor: "white", color: "red",height:"50px",width:"50px" }} > 
+              <FavoriteIcon />
+            </div>
 
-          <div style={{...iconText}}>Call</div>
+            <div style={{...iconText}}>Call</div>
 
-        </div>
-        <div style={{ ...flexContainerStyle, flexDirection: "column",textAlign: "center",paddingBottom:"10px" }}>
-        <div style={{ borderRadius: "50%", padding: "2px", backgroundColor: "white", color: "red",height:"50px",width:"50px" }} > 
-        <WhatsApp style={{ color: "green", borderRadius: "50%", padding: "2px", backgroundColor: "white" }} />
-        </div>
-          <div style={{...iconText}}>WhatsApp</div>
-        </div>
+          </div>
+          <div style={{ ...flexContainerStyle, flexDirection: "column",textAlign: "center",paddingBottom:"10px" }}>
+            <div style={{ borderRadius: "50%", padding: "2px", backgroundColor: "white", color: "red",height:"50px",width:"50px" }} > 
+              <WhatsApp style={{ color: "green", borderRadius: "50%", padding: "2px", backgroundColor: "white" }} />
+            </div>
+            <div style={{...iconText}}>WhatsApp</div>
+          </div>
         </div>
       </div>
     </div>
