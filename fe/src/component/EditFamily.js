@@ -12,7 +12,7 @@ const NumberField = ({ id, label,defaultValue=0 }) => (
     }}
     variant="standard"
     defaultValue={defaultValue} // Add this line to set the default value
-
+    // fullWidth={true}
   />
 );
 
@@ -35,37 +35,48 @@ const EditFamilyForm = () => {
     { title: "UPPER_MIDDLE_CLASS" },
   ];
 
+  const opt_obj ={
+    current_location:locations,
+    native_location:locations,
+    affluence:affluenceOptions
+  }
   // Use the useLocation hook to access the current location object
   const { state } = useLocation();
   const family_details = state && state.family_details;
-  console.log('family_detailsdafd',family_details)
+  const rules = state && state.rules;
+  console.log(rules,'family_deadtailsdafd',state)
 
+  const all_childs = Object.keys(family_details).map(row=>{
+    if (rules[row]['edit_type']=='num_input'){
+      return (
+        <div>
+          <NumberField id={rules[row]['label'] || row} label={rules[row]['label'] || row} defaultValue={family_details[row]}/>
+        </div>
+      )
+  
+    }
+    if (rules[row]['edit_type']=='dropdown'){
+      return (
+        <div>
+          {/* {rules[row]['label'] } here itse {row} */}
+          <AutocompleteField 
+          options={opt_obj[row]} 
+          id={row} 
+          label={row} 
+          defaultValue={family_details[row]}/>
+
+          {/* <NumberField id={rules[row]['label'] || row} label={rules[row]['label'] || row} defaultValue={family_details[row]}/> */}
+        </div>
+      )
+  
+    }
+  })
   return (
     <div style={{ padding: "10px" }}>
       <Grid container flexDirection={"column"}>
-        <Grid container spacing={1} justifyContent={"center"} style={{ marginTop: "10px" }}>
-          <Grid item xs={5}>
-            <NumberField id="no_of_brothers" label="No Of Brothers" defaultValue={family_details['no_of_brothers']}/>
-          </Grid>
-          <Grid item xs={5}>
-            <NumberField id="married-brother-number" label="Married Brother" defaultValue={family_details['no_of_married_brothers']}/>
-          </Grid>
-        </Grid>
+        {all_childs}
 
-        <Grid container spacing={1} justifyContent={"center"} style={{ marginTop: "10px" }}>
-          <Grid item xs={5}>
-            <NumberField id="sister-number" label="No Of Sisters" defaultValue={family_details['no_of_sisters']}/>
-          </Grid>
-          <Grid item xs={5}>
-            <NumberField id="married-sister-number" label="Married Sister" defaultValue={family_details['no_of_married_sisters']}/>
-          </Grid>
-        </Grid>
 
-        <div style={{ display: "flex", flexDirection: "column", width: "82%", margin: "0 auto" }}>
-          <AutocompleteField options={locations} id="current-location" label="Current Location" defaultValue={family_details['current_location']}/>
-          <AutocompleteField options={locations} id="native-location" label="Native Location" defaultValue={family_details['native_location']}/>
-          <AutocompleteField options={affluenceOptions} id="affluence" label="Affluence" defaultValue={family_details['affluence']} />
-        </div>
       </Grid>
     </div>
   );
