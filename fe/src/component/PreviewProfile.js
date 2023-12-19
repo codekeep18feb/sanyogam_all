@@ -16,6 +16,9 @@ export const SelectedIcon = ({ iconName = 'missing',style_obj }) => {
   const iconComponents = {
     location: Location,
     missing: LiveHelpIcon,
+    people: People,
+    camera: PhotoCamera,
+    affluence: Affluence
     // Add more mappings as needed
   };
 

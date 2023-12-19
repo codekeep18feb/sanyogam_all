@@ -102,7 +102,7 @@ export default function ChildForParentOVG({ family_details, rules }) {
           sx={{ padding: "5px 10px 0 10px" }}
         >
           <Grid item>
-            <div>wrapper title</div>
+            <div>Family Info</div>
           </Grid>
 
           <div style={{ display: "flex" }}>
@@ -124,8 +124,8 @@ export default function ChildForParentOVG({ family_details, rules }) {
             />
           </div>
         </Grid>
-        {all_childs}
         {all_childs_extra}
+        {all_childs}
       </Grid>
     </>
   );

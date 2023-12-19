@@ -34,7 +34,7 @@ export default function ParentForWrapperOVG({ family_details }) {
       family_members:{
         type: "str", 
         display: true ,
-        iconName:"location",
+        iconName:"people",
         label:"Family Members",
         depends_on:['no_of_brothers', 'no_of_married_brothers','no_of_married_sisters', 'no_of_sisters'],
         transform:transform_content,
