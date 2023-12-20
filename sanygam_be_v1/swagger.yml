@@ -14,6 +14,13 @@ components:
       bearerFormat: JWT
       x-bearerInfoFunc: config.decode_token
   schemas:
+    ProfileFilterObj:
+      type: "object"
+      properties:
+        family_info:
+          type: "object"
+        
+
     SignUpData:
       type: "object"
       required:
@@ -640,13 +647,21 @@ paths:
       
   # read_online_circle
   /profiles:
-    get:
-      operationId: "handlers.profiles.read_all_profiles_old"
+    post:
+      operationId: "handlers.profiles.all_profiles"
       security:
         - JWTAuth: [] 
       tags:
         - "People"
       summary: "Read the list of all profiles and with filters"
+      requestBody:
+        description: "Profile Filter Obj"
+        required: false
+        content:
+          application/json:
+            schema:
+              x-body-name: "p_filter_obj"
+              $ref: "#/components/schemas/ProfileFilterObj"
       responses:
         "200":
           description: "Successfully read profiles list"
