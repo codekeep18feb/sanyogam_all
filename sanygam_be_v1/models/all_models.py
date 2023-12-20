@@ -112,7 +112,7 @@ fathers_schema = FatherSchema(many=True)
 class UserRequests(db.Model):
     __tablename__ = "requests"
     id = db.Column(db.Integer, primary_key=True)
-    status = db.Column(db.String(16))
+    status = db.Column(db.Enum('pending', 'approved', 'rejected', name='request_status'), default='pending')
     frm_user = db.Column(db.Integer, db.ForeignKey('user.id'))
     act_frm_user = db.relationship('User', foreign_keys=[frm_user])
     to_user = db.Column(db.Integer, db.ForeignKey('user.id'))
