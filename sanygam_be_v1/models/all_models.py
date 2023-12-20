@@ -1,10 +1,12 @@
+import enum
+
 from datetime import datetime
 
 from config import db, ma
 # from marshmallow_sqlalchemy import fields
 from marshmallow import fields
 
-from sqlalchemy import event  # Add this import statement
+from sqlalchemy import event,Enum  # Add this import statement
 
 class Profile(db.Model):
     __tablename__ = "profile"
@@ -108,11 +110,19 @@ profiles_schema = ProfileSchema(many=True)
 father_schema = FatherSchema()
 fathers_schema = FatherSchema(many=True)
 
+class MyEnum(enum.Enum):
+    SENT = 1
+    CANCELED = 2
+    RECEIVED = 3
+    ACCEPTED = 4
+    REJECTED = 5
+
 
 class UserRequests(db.Model):
     __tablename__ = "requests"
     id = db.Column(db.Integer, primary_key=True)
-    status = db.Column(db.Enum('pending', 'approved', 'rejected', name='request_status'), default='pending')
+    status = db.Column(Enum(MyEnum))
+    # status = db.Column(Enum('pending', 'approved', 'rejected', name='request_status'), default='pending')
     frm_user = db.Column(db.Integer, db.ForeignKey('user.id'))
     act_frm_user = db.relationship('User', foreign_keys=[frm_user])
     to_user = db.Column(db.Integer, db.ForeignKey('user.id'))

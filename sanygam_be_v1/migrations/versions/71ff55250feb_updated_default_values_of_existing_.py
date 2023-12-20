@@ -1,8 +1,8 @@
 """updated default values of existing models
 
-Revision ID: 4e7cca27800c
+Revision ID: 71ff55250feb
 Revises: 
-Create Date: 2023-12-20 00:17:26.364764
+Create Date: 2023-12-20 21:15:26.477565
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '4e7cca27800c'
+revision = '71ff55250feb'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -50,7 +50,7 @@ def upgrade():
     )
     op.create_table('requests',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('status', sa.String(length=16), nullable=True),
+    sa.Column('status', sa.Enum('pending', 'approved', 'rejected', name='request_status'), nullable=True),
     sa.Column('frm_user', sa.Integer(), nullable=True),
     sa.Column('to_user', sa.Integer(), nullable=True),
     sa.Column('timestamp', sa.DateTime(), nullable=True),

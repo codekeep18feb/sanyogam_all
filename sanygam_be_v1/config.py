@@ -7,7 +7,15 @@ from flask_marshmallow import Marshmallow
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager, jwt_required
 from flask_cors import CORS
+from flask.json import JSONEncoder
+from enum import Enum
 
+class CustomJSONEncoder(JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, Enum):
+            return obj.value
+        return super().default(obj)
+    
 JWT_ISSUER = "com.zalando.connexion"
 JWT_SECRET = "change_this"
 JWT_LIFETIME_SECONDS = 6000000
@@ -65,6 +73,7 @@ def add_cors_headers(response):
 
 
 app = connex_app.app
+app.json_encoder = CustomJSONEncoder
 app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{basedir / 'sgam.db'}"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
