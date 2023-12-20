@@ -4,11 +4,9 @@ import logo192 from '../images/Vector.jpg';
 import { Button, Typography } from '@mui/material';
 import { makeStyles } from '@material-ui/core/styles';
 import ProgressBar from '../component/reusables/ProgressBar';
-import HorizontalScroll from '../component/reusables/HorizontalScroll';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
-import ChatIcon from "@mui/icons-material/Chat";
-import FavoriteIcon from "@mui/icons-material/Call";
-import WhatsApp from "@mui/icons-material/WhatsApp";
+
+import AllMatchesScrollBarC from './AllMatchesScrollBarC';
 // import CameraIcon from "@mui/icons-material/CameraAltRounded";
 // import ShareRIcon from "@mui/icons-material/Share";
 // import MenuIcon from "@mui/icons-material/MoreHoriz";
@@ -105,7 +103,7 @@ export function ImageCircle({ user }) {
   );
 }
 
-export default function ProfileBriefTile({ users, profile = { name: "Mona Soni (BPSADSFSG151)" } }) {
+export default function Home({ users, profile = { name: "Mona Soni (BPSADSFSG151)" } }) {
   const classes = useStyles();
 
   return (
@@ -171,46 +169,7 @@ export default function ProfileBriefTile({ users, profile = { name: "Mona Soni (
       </div>
 
       <div style={{padding:"40px 0"}}>
-      <HorizontalScroll >
-        <div className={classes.scrollItem}>
-
-          <div style={{ display: 'flex' }}>
-            <div>
-              <img src={"https://images.pexels.com/photos/3206118/pexels-photo-3206118.jpeg?auto=compress&cs=tinysrgb&w=160&h=150&dpr=1"} />
-            </div>
-            <div style={{padding:"0 10px"}}>
-              Pulkit Soni (Noida)
-              <ul style={{ display: 'flex', listStyle: 'none', padding: 0 }}>
-                <li style={{ marginRight: '10px' }}>
-                  32 Yrs
-                </li>
-                <li style={{ marginRight: '10px' }}>
-                  57
-                </li>
-                <li>
-                  Hindu
-                </li>
-              </ul>
-              <div>
-              <Typography variant="h6">Software Developer</Typography>
-              <div style={{ display: 'flex'}}>
-              <ChatIcon style={{ fontSize: '24px', color: 'skyblue' }} />
-              <PhotoCamera style={{ fontSize: '24px', color: 'skyblue' }} />
-              <WhatsApp style={{ fontSize: '24px', color: 'skyblue' }} />
-
-              
-            </div>
-            </div>
-            </div>
-
-          
-          </div>
-
-        </div>
-        <div className={classes.scrollItem}>Content 2</div>
-        <div className={classes.scrollItem}>Content 3</div>
-      </HorizontalScroll>
-
+      <AllMatchesScrollBarC />
         
       </div>
     </div>

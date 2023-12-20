@@ -5,6 +5,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
 import SearchIcon from '@mui/icons-material/Search';
 import HomeProfileBox from "./HomeProfileBox"
+import MatchesFilterScrollBarC from './MatchesFilterScrollBarC';
 
 export default function Users() {
   
@@ -14,31 +15,12 @@ export default function Users() {
   ));
 
   return (
-    <Grid container justifyContent="center" alignItems="center">
-      {/* Top Row with Buttons and Search Bar */}
-      <Grid item md={12} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: "20px"}}>
-        <Button variant="contained" color="primary" startIcon={<SearchIcon />} onClick={handleSearch} sx={{ marginRight: "10px", borderRadius: "5px" }}>
-          Search
-        </Button>
-        <Button variant="contained" color="primary" sx={{ marginRight: "10px", borderRadius: "5px" }}>
-          Button 1
-        </Button>
-        <Button variant="contained" color="primary" sx={{ marginRight: "10px", borderRadius: "5px" }}>
-          Button 2
-        </Button>
-        <Button variant="contained" color="primary" sx={{ marginRight: "10px", borderRadius: "5px" }}>
-          Button 3
-        </Button>
-        <Button variant="contained" color="primary" sx={{ marginRight: "10px", borderRadius: "5px" }}>
-          Button 4
-        </Button>
-        <Button variant="contained" color="primary" sx={{ marginRight: "10px", borderRadius: "5px" }}>
-          Button 5
-        </Button>
-      </Grid>
-
+    <div>
+      <div style={{margin:"10px"}}>
+      <MatchesFilterScrollBarC />
+      </div>
       {data_map}
-    </Grid>
+    </div>
   );
 }
 

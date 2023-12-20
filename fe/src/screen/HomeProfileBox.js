@@ -17,14 +17,13 @@ function HomeProfileBox({
     borderRadius: "5px",
     display: "flex",
     flexDirection: "column",
-    alignItems: "flex-start",
+    alignItems: "center",
     position: "relative",
     height: "450px",
     width: "325px",
     borderRadius: "5px",
     overflow: "hidden", // Hide overflow
-    border:"1px solid red",
-    // margin:"20px"
+    margin: "0 auto"
   };
 
   const backgroundImageStyle = {
@@ -34,22 +33,23 @@ function HomeProfileBox({
     // left: "0",
     width: "90%",
     // margin:"0 auto",
-    height: "60%", // Set the pseudo-element's height to 80%
+    height: "100%", // Set the pseudo-element's height to 80%
     backgroundImage: `url(${imageUrl})`,
     backgroundSize: "cover",
     zIndex: "-1",
   };
   const cameraCover = {
-    display:"flex",background:"rgba(255, 0, 153, 1)", borderRadius: "10px", padding: "0 7px 0 5px",justifyContent:"center"
+    display: "flex", background: "rgba(255, 0, 153, 1)", borderRadius: "10px", padding: "0 7px 0 5px", justifyContent: "center"
   }
   const iconText = {
-    color:"black"
+    // color:"white"
+    paddingTop: "10px"
   }
   const topRowStyle = {
     display: "flex",
     justifyContent: "flex-end",
     width: "100%",
-    marginTop:"10%",
+    marginTop: "10%",
     // marginRight:"10%"
     // color:"black"
     // position: "absolute",
@@ -71,7 +71,9 @@ function HomeProfileBox({
   const actionRow = {
     display: "flex",
     justifyContent: "space-between",
-    width: "50%",
+    // width: "50%",
+    marginLeft: "20px",
+    // border: "1px solid red"
     // position: "absolute",
     // bottom: "5px",
     // left: "5px",
@@ -89,22 +91,22 @@ function HomeProfileBox({
   };
 
   const textContainerStyle = {
-    color: "black",
-    // padding: "5px",
+    paddingLeft: "5px",
   };
 
   const flexContainerStyle = {
     display: "flex",
     alignItems: "center",
   };
+  const circleStyle = { color: "green", borderRadius: "50%", padding: "2px", backgroundColor: "white" }
 
   return (
-    <div style={containerStyle}>
+    <div style={{ ...containerStyle, color: "white" }}>
       <div style={topRowStyle}>
         <div style={iconContainerStyle}>
           <Icon component={ShareRIcon} style={{ color: "blue", backgroundColor: "white", borderRadius: "50%" }} />
         </div>
-  
+
         <div style={iconContainerStyle}>
           <Icon component={MenuIcon} style={{ color: "white", backgroundColor: "rgba(255, 0, 153, 1)", borderRadius: "50%" }} />
         </div>
@@ -113,7 +115,7 @@ function HomeProfileBox({
         <Icon component={CameraIcon} style={{ color: "white" }} />
         <div style={{ color: "white", marginLeft: "3px", marginTop: "1px" }}>3</div>
       </div>
-  
+
       <div style={bottomRowStyle}>
         <div style={{ margin: "10px" }}>
           <div style={{ ...textContainerStyle }}>
@@ -126,24 +128,19 @@ function HomeProfileBox({
             Software Developer
           </div>
         </div>
-  
+
         <div style={actionRow}>
-          <div style={{ ...flexContainerStyle, flexDirection: "column", textAlign: "center", border: "1px solid white" }}>
-            <div style={{ borderRadius: "50%", padding: "2px", backgroundColor: "white", color: "red", height: "50px", width: "50px" }}>
-              <StarIcon />
-            </div>
+          <div style={{ ...flexContainerStyle, flexDirection: "column", textAlign: "center"}}>
+            <StarIcon style={{ ...circleStyle }} />
             <div style={{ ...iconText }}>Chat</div>
           </div>
           <div style={{ ...flexContainerStyle, flexDirection: "column", marginLeft: "30px", marginRight: "30px", textAlign: "center" }}>
-            <div style={{ borderRadius: "50%", padding: "2px", backgroundColor: "white", color: "red", height: "50px", width: "50px" }}>
-              <FavoriteIcon />
-            </div>
+            <FavoriteIcon style={{ ...circleStyle }} />
             <div style={{ ...iconText }}>Call</div>
           </div>
           <div style={{ ...flexContainerStyle, flexDirection: "column", textAlign: "center", paddingBottom: "10px" }}>
-            <div style={{ borderRadius: "50%", padding: "2px", backgroundColor: "white", color: "red", height: "50px", width: "50px" }}>
-              <WhatsApp style={{ color: "green", borderRadius: "50%", padding: "2px", backgroundColor: "white" }} />
-            </div>
+            <WhatsApp style={{ ...circleStyle }} />
+
             <div style={{ ...iconText }}>WhatsApp</div>
           </div>
         </div>
@@ -151,7 +148,7 @@ function HomeProfileBox({
       <div style={backgroundImageStyle}></div>
     </div>
   );
-  
+
 }
 
 export default HomeProfileBox;

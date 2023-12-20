@@ -1,5 +1,5 @@
 import React from 'react'
-import HorizontalScrollWithinItemWidthOnly from '../component/reusables/HorizontalScrollWithinItemWidthOnly'
+import HorizontalScroll from '../component/reusables/HorizontalScroll'
 import { makeStyles } from '@material-ui/core/styles';
 import ProfileBriefTile from './ProfileBriefTile';
 import ProgressBar from '../component/reusables/ProgressBar';
@@ -29,11 +29,11 @@ export default function PlayGround() {
   const classes = useStyles();
 
   return (
-    // <HorizontalScrollWithinItemWidthOnly >
+    // <HorizontalScroll >
     //   <div className={classes.scrollItem}>Content 1</div>
     //   <div className={classes.scrollItem}>Content 2</div>
     //   <div className={classes.scrollItem}>Content 3</div>
-    // </HorizontalScrollWithinItemWidthOnly>
+    // </HorizontalScroll>
 
     // <ProfileBriefTile />
     <TextField

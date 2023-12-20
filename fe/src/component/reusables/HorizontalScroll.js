@@ -22,7 +22,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function HorizontalScrollWithinItemWidthOnly({children}) {
+export default function HorizontalScroll({children}) {
   const classes = useStyles();
   const innerContainerRef = useRef(null);
 

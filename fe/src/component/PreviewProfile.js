@@ -69,7 +69,7 @@ export default function PreviewProfile() {
   
     try {
       const response = await fetch(
-        `http://localhost:8000/api/my_profile`,
+        `http://192.168.1.13:8000/api/my_profile`,
         {
           method: "GET",
           headers: {
