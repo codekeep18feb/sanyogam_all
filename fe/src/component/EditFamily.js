@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Autocomplete, TextField, Grid, Typography } from "@mui/material";
 import { useLocation } from "react-router-dom";
 import WrapperMobileBackShellWithSave from "../screen/WrapperMobileBackShellWithSave";
+import { useNavigate } from 'react-router-dom';
 
 const NumberField = ({ id, label,defaultValue=0,onChange ,state_name}) => (
   <TextField
@@ -30,7 +31,38 @@ const AutocompleteField = ({ options, id, label,defaultValue,onChange,state_name
   />
 );
 
+const submitProfileUpdateData = async (payload) => {
+  console.log("am I being payload", payload);
+  const JWT_TOKEN = localStorage.getItem("token");
+  const token = `Bearer ${JWT_TOKEN}`;
+
+  try {
+    const response = await fetch(`http://localhost:8000/api/update_my_profile`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token,
+      },
+      body: JSON.stringify({"gender":"FeMale","family_info1":{"no_of_sisters":10000}}),
+    });
+
+    if (response.status === 200) {
+      const data = await response.json();
+      console.log("successfully updated profile", data);
+    } else {
+      console.log("Error updating profile");
+    }
+  } catch (error) {
+    console.error("An error occurred:", error);
+  } finally {
+    console.log('we can toggle loading if want')
+    // setLoading(false);
+  }
+};
+
 const EditFamilyForm = () => {
+  const nagivate = useNavigate();
+
   const locations = [{ title: "Noida" }, { title: "Delhi" }];
   const affluenceOptions = [
     { title: "LOWER_MIDDLE_CLASS" },
@@ -64,7 +96,14 @@ const EditFamilyForm = () => {
     console.log('thisstate_name changed',type)
     setFormValues((prv)=>{
       const obj = JSON.parse(JSON.stringify(prv))
-      obj[state_name]=new_value
+      if (type=='dropdown'){
+        obj[state_name]=new_value
+
+      }
+      else{
+        obj[state_name]=e.target.value
+      }
+
       console.log('hereisprv',prv,state_name,e.target.value)
       return obj
     })
@@ -100,8 +139,30 @@ const EditFamilyForm = () => {
   })
 
   
-  const onSave =()=>{
-    console.log('onsave ran here we can see the ',)
+  const onSave =async()=>{
+    console.log('onsave ran here we can see the ',{family_info:formValues})
+    // const data = await submitProfileUpdateData({family_info:formValues})
+  const JWT_TOKEN = localStorage.getItem("token");
+  const token = `Bearer ${JWT_TOKEN}`;
+  const response = await fetch(`http://localhost:8000/api/update_my_profile`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: token,
+    },
+    body: JSON.stringify({family_info:formValues}),
+  });
+
+  if (response.status === 200) {
+    const data = await response.json();
+    nagivate(-1);
+
+    console.log("successfully update profiled", data);
+
+  } else {
+    console.log("Error updating profile");
+  }
+
   }
 
   return (
