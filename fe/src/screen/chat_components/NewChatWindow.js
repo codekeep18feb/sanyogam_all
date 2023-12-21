@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useRef } from "react";
-import RequestScreen from "./RequestScreen";
+import RequestScreen from "../RequestScreen";
 import ChatScreen from "./ChatScreen";
 import { object } from "prop-types";
 
-export default function ChatWindow({ with_email, with_userid }) {
+export default function NewChatWindow({ with_email, with_userid }) {
   // console.log("here we are", rtcData);
   const [loading, setLoading] = useState(true);
   const [chatHistory, setChatHistory] = useState([]);

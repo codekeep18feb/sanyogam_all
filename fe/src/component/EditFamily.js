@@ -37,7 +37,7 @@ const submitProfileUpdateData = async (payload) => {
   const token = `Bearer ${JWT_TOKEN}`;
 
   try {
-    const response = await fetch(`http://localhost:8000/api/update_my_profile`, {
+    const response = await fetch(`http://192.168.1.13:8000/api/update_my_profile`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -144,7 +144,7 @@ const EditFamilyForm = () => {
     // const data = await submitProfileUpdateData({family_info:formValues})
   const JWT_TOKEN = localStorage.getItem("token");
   const token = `Bearer ${JWT_TOKEN}`;
-  const response = await fetch(`http://localhost:8000/api/update_my_profile`, {
+  const response = await fetch(`http://192.168.1.13:8000/api/update_my_profile`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

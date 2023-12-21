@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import PeopleScreen from "../PeopleScreen";
+import UserChatTileInListC from "../UserChatTileInListC";
 import ChatWindow from "./ChatWindow";
 import { connect } from "react-redux";
 import TabPanel from "../TabPanel";
@@ -7,8 +7,21 @@ import Grid from "@mui/material/Grid"; // Import Grid
 import Hidden from "@mui/material/Hidden"; // Import Hidden
 import ImageCircles from "./ImageCircle";
 import BlankChatScreen from "./BlankChatScreen";
+import ChatModal from '../../screen/ChatModal'
+
 
 function Chat({ auth_data }) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+
   const [profiles, setProfiles] = useState([]);
   const [online_profiles, setOnlineProfiles] = useState([]);
 
@@ -148,7 +161,7 @@ function Chat({ auth_data }) {
 
     try {
       const response = await fetch(
-        "http://localhost:8000/api/read_online_circle",
+        "http://192.168.1.13:8000/api/read_online_circle",
         {
           method: "GET",
           headers: {
@@ -179,7 +192,7 @@ function Chat({ auth_data }) {
 
     try {
       const response = await fetch(
-        `http://localhost:8000/api/rtc_user_info_by_id`,
+        `http://192.168.1.13:8000/api/rtc_user_info_by_id`,
         {
           method: "GET",
           headers: {
@@ -215,7 +228,7 @@ function Chat({ auth_data }) {
     const JWT_TOKEN = localStorage.getItem("token");
     const token = `Bearer ${JWT_TOKEN}`;
     console.log("token", token);
-    const response2 = await fetch("http://localhost:8000/api/profiles", {
+    const response2 = await fetch("http://192.168.1.13:8000/api/profiles", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -271,26 +284,11 @@ function Chat({ auth_data }) {
     return <p>Loang...</p>;
   }
 
+  console.log('HERQEWR',isModalOpen)
   return (
     <div>
-      <ImageCircles users={users} />
       <Grid container>
-        {/* Left Sidebar (PeopleScreen) */}
-        {/* <Hidden smDown>
-        <Grid item md={3}>
-          <PeopleScreen profiles={profiles} SetWithUserId={SetWithUserId} SetWithEmail={SetWithEmail} with_userid={with_userid} />
-        </Grid>
-      </Hidden> */}
-
-        {/* Right Content Area */}
-        {/* <Grid container item xs={12}>
-        <div>1</div>
-        <div>2</div>
-        <div>3</div>
-        <div>3</div>
-        <div>3</div>
-        <div>3</div>
-      </Grid> */}
+       
         <Grid item xs={12} md={3}>
           <TabPanel
             profiles={profiles}
@@ -303,7 +301,10 @@ function Chat({ auth_data }) {
         <Grid item xs={12} md={7}>
           <div>
             {with_userid ? (
+                // <ChatModal with_userid={with_userid} SetWithUserId={SetWithUserId} with_email={with_email}/>
+
               <ChatWindow with_email={with_email} with_userid={with_userid} />
+              // <div>Let This Div cover entire visible screen and have a cancel material icon to close this div if pressed</div>
             ) : (
               <BlankChatScreen />
             )}

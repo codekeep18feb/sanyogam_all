@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-
+import AcceptIcon from "@mui/icons-material/DoneAllOutlined";
+import CancelIcon from "@mui/icons-material/Cancel";
 export default function RequestScreen({ with_email }) {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState(null);
@@ -13,7 +14,7 @@ export default function RequestScreen({ with_email }) {
 
       try {
         const response = await fetch(
-          `http://localhost:8000/api/request_info/${with_email}`,
+          `http://192.168.1.13:8000/api/request_info/${with_email}`,
           {
             method: "GET",
             headers: {
@@ -55,11 +56,28 @@ export default function RequestScreen({ with_email }) {
   return (
     <div>
       {data ? (
-        <div>Request Status - {data["status"]}</div>
+        // <div>Request Status - {data["status"]}</div>
+        <div style={{marginTop:"20px"}}>
+        <div>user online | offline</div>
+
+          <div style={{ display: "flex", border: "1px solid grey", padding: "10px 5px" }}>
+            
+        <div style={{ width: "50%", display: "flex", alignItems: "center" }}>
+          <AcceptIcon style={{ fontSize: "35px", color: "#1F4294" }} />
+          <div>Accept</div>
+        </div>
+        <div style={{ width: "50%", display: "flex", alignItems: "center" }}>
+          <CancelIcon style={{ fontSize: "35px", color: "#666666" }} />
+          <div>
+            Decline
+          </div>
+
+        </div>
+      </div>
+        </div>
       ) : (
         <div>Loaing...</div>
       )}
-      <div>user online | offline</div>
     </div>
   );
 }

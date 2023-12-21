@@ -290,7 +290,7 @@ export default function ChatWindow({ with_email, with_userid }) {
         // const we = 'deepaksingh.18feb%40gmail.com'
         console.log('WHERE  IS withemail',with_email)
         const response = await fetch(
-          `http://192.168.1.13:8000/api/handle_request?to_email=${with_email}`,
+          `http://127.0.0.1:8000/api/handle_request?to_email=${with_email}`,
           {
             method: "GET",
             headers: {

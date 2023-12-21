@@ -1,4 +1,4 @@
-import { Typography, Button, Icon } from "@mui/material";
+import { Typography, Button, Icon } from "@mui/material"
 import StarIcon from "@mui/icons-material/Chat";
 import FavoriteIcon from "@mui/icons-material/Call";
 import WhatsApp from "@mui/icons-material/WhatsApp";
@@ -53,12 +53,7 @@ function HomeProfileBox({
     display: "flex",
     justifyContent: "flex-end",
     width: "100%",
-    marginTop: "10%",
-    // marginRight:"10%"
-    // color:"black"
-    // position: "absolute",
-    // top: "5px",
-    // right: "5px",
+    marginTop: "10%"
   };
 
   const bottomRowStyle = {
