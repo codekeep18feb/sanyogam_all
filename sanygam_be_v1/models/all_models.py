@@ -136,9 +136,19 @@ class UserRequests(db.Model):
 # @event.listens_for(UserRequests.frm_user, 'set')
 # def set_act_user(target, value, oldvalue, initiator):
 #     target.act_user = value
+
+class EnumField(fields.Field):
+    def _serialize(self, value, attr, obj, **kwargs):
+        if value is None:
+            return None
+        return value.name #.lower()
+
+
 class UserRequestsSchema(ma.SQLAlchemyAutoSchema):
     frm_user = fields.String(attribute="act_frm_user.email")
     to_user = fields.String(attribute="act_to_user.email")
+    status = EnumField(attribute="status")  # Use custom EnumField for enum values
+
     class Meta:
         model = UserRequests
         load_instance = True
@@ -181,7 +191,7 @@ class ChatHistory(db.Model):
     content = db.Column(db.String(100))
     frm_user = db.Column(db.Integer, db.ForeignKey('user.id'))
     act_frm_user = db.relationship('User', foreign_keys=[frm_user])
-
+    
     to_user = db.Column(db.Integer, db.ForeignKey('user.id'))
     timestamp = db.Column(
         db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow

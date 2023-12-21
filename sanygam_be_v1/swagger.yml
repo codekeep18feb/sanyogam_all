@@ -686,8 +686,8 @@ paths:
       
   # read_online_circle
   /profiles:
-    get:
-      operationId: "handlers.profiles.read_all_profiles_old"
+    post:
+      operationId: "handlers.profiles.all_profiles"
       security:
         - JWTAuth: [] 
       tags:
