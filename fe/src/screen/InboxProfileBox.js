@@ -12,6 +12,7 @@ function InboxProfileBox({
   imageUrl = "https://images.pexels.com/photos/1777479/pexels-photo-1777479.jpeg?auto=compress&cs=tinysrgb&w=120&h=120&dpr=2",
 }) {
   const containerStyle = {
+    display:"flex",
     margin: "5px 5px",
     textAlign: "left",
     backgroundColor: "whitesmoke",
@@ -90,10 +91,10 @@ function InboxProfileBox({
   };
 
   return (
-    <div style={containerStyle}>
+    <div style={{...containerStyle,border:"1px green solid"}}>
       <div style={bottomRowStyle}>
         <div style={{ marginBottom: "10px" }}>
-          <div style={{ ...textContainerStyle }}>Pulkit Soni (Noida)</div>
+          <div style={{ ...textContainerStyle }}>Pulkinboxit Soni (Noida)</div>
           <div style={{ ...textContainerStyle, fontSize: "12px" }}>
             <p>32 yrs. 5'5" Sonal</p>
           </div>
@@ -102,7 +103,7 @@ function InboxProfileBox({
           </div>
         </div>
 
-        <div style={{ ...actionRow,border:"1px solid red",width:"220px" }}>
+        <div style={{ ...actionRow }}>
           {/* <div>cross</div> */}
           {/* <div > */}
           <CloseIcon

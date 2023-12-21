@@ -1,9 +1,12 @@
 import React, { useState,useEffect } from 'react';
 import HomeProfileBox from "./HomeProfileBox"
-import MatchesFilterScrollBarC from './MatchesFilterScrollBarC';
+
+import InboxProfileBox from "./InboxProfileBox"
+
+import InboxFilterScrollBarC from './InboxFilterScrollBarC';
 import { useNavigate } from 'react-router-dom';
 
-export default function Users() {
+export default function Inbox() {
   const [data, setdata] = useState(null)
   const nagivate = useNavigate();
   
@@ -67,23 +70,24 @@ export default function Users() {
   }, [])
   let data_map
   if(data){
-    console.log('HEREIASD',data)
     data_map = data.map(i => (
-      <HomeProfileBox 
-      imageUrl='https://images.pexels.com/photos/12056650/pexels-photo-12056650.jpeg?auto=compress&cs=tinysrgb&w=120&h=120&dpr=2' 
-      fullname={i.fullname}
-      current_location={i.family_info.family_location}
-      email={i.user_email}
-      />
+      // <HomeProfileBox 
+      // imageUrl='https://images.pexels.com/photos/12056650/pexels-photo-12056650.jpeg?auto=compress&cs=tinysrgb&w=120&h=120&dpr=2' 
+      // fullname={i.fullname}
+      // current_location={i.family_info.family_location}
+      // />
+        <InboxProfileBox />
     ));
   }
 
   return (
     <div>
       <div style={{margin:"10px"}}>
-      <MatchesFilterScrollBarC />
+      <InboxFilterScrollBarC />
       </div>
-      {data && data_map}
+      {data && <div style={{display:"flex",flexDirection:"row"}}>
+        {data_map}
+        </div>}
     </div>
   );
 }

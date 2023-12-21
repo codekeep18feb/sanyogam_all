@@ -179,7 +179,7 @@ export default function ProfileBriefTile({ users, profile = { name: "Mona Soni (
               <img src={"https://images.pexels.com/photos/3206118/pexels-photo-3206118.jpeg?auto=compress&cs=tinysrgb&w=160&h=150&dpr=1"} />
             </div>
             <div style={{padding:"0 10px"}}>
-              Pulkit Soni (Noida)
+            Pulkdfasdit Soni (Noida)
               <ul style={{ display: 'flex', listStyle: 'none', padding: 0 }}>
                 <li style={{ marginRight: '10px' }}>
                   32 Yrs

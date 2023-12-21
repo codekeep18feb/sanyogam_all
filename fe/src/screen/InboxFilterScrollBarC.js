@@ -8,7 +8,7 @@ import HorizontalScroll from '../component/reusables/HorizontalScroll';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
 
 import ManageSearchIcon from '@mui/icons-material/ManageSearch';
-export default function MatchesFilterScrollBarC() {
+export default function InboxFilterScrollBarC() {
   const useStyles = makeStyles((theme) => ({
     scrollContainer: {
       overflow: 'hidden',
@@ -75,13 +75,11 @@ export default function MatchesFilterScrollBarC() {
   const classes = useStyles();
   return (
     <HorizontalScroll >
-        <ManageSearchIcon className={classes.scrollItem} />
-        <div className={classes.scrollItem}>In Noida</div>
-        <div className={classes.scrollItem}>In Delhi</div>
-        <div className={classes.scrollItem}>Near Me</div>
-        <div className={classes.scrollItem}>Newly joined</div>
-        <div className={classes.scrollItem}>More Matches</div>
-        <div className={classes.scrollItem}>Viewed Me</div>
+        {/* <ManageSearchIcon className={classes.scrollItem} /> */}
+        <div className={classes.scrollItem}>Intrests Received</div>
+        <div className={classes.scrollItem}>Accepted</div>
+        <div className={classes.scrollItem}>Intrests Send</div>
+        <div className={classes.scrollItem}>Intrests Declined</div>
       </HorizontalScroll>
 
   )

@@ -8,6 +8,9 @@ import Pricing from "./screen/Pricing"
 import TabPanel from "./screen/TabPanel"
 import { Route, Routes, Navigate } from 'react-router-dom';
 import Users from "./screen/Users"
+
+import Inbox from "./screen/Inbox"
+
 import { login, logout } from './redux/counter/AuthAction';
 
 // Import your components
@@ -115,6 +118,17 @@ function App({ authData,login }) {
           </PrivateRoute>
         }
       />
+      <Route
+        path="/inbox"
+        element={
+          <PrivateRoute>
+            <WrapperMobileShell>
+              <Inbox />
+            </WrapperMobileShell>
+          </PrivateRoute>
+        }
+      />
+
       <Route
         path="/practice"
         element={
