@@ -49,7 +49,7 @@ export default function RequestScreen({ with_email }) {
   }, [with_email]);
 
   if (loading) {
-    return <p>Loading...</p>;
+    return <p>Loadin...</p>;
   }
 
   return (
@@ -57,7 +57,7 @@ export default function RequestScreen({ with_email }) {
       {data ? (
         <div>Request Status - {data["status"]}</div>
       ) : (
-        <div>Loading...</div>
+        <div>Loaing...</div>
       )}
       <div>user online | offline</div>
     </div>

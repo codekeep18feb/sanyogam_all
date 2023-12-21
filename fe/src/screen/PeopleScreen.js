@@ -8,7 +8,7 @@ export default function PeopleScreen({profiles,SetWithEmail,SetWithUserId,with_u
       {profiles && profiles.map((profile) => (
         <li key={profile.id} 
           onClick={()=>{
-            SetWithUserId(profile.user_id)
+            SetWithUserId(profile.id)
             SetWithEmail(profile.user_email)
           }}
           >

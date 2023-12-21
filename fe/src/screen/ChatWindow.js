@@ -346,7 +346,7 @@ export default function ChatWindow({ with_email, with_userid }) {
       }}
     >
       {loading ? (
-        <p>Loading...</p>
+        <p>Loadin...</p>
       ) : requestStatus !== "ACCEPTED" ? (
         <RequestScreen with_email={with_email} />
       ) : (

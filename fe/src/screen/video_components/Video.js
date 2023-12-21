@@ -138,7 +138,7 @@ function Video({ auth_data }) {
   }, [online_profiles]);
 
   if (loading) {
-    return <p>Loading...</p>;
+    return <p>oading...</p>;
   }
 
   return (

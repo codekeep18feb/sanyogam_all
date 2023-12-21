@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import RequestScreen from "../RequestScreen";
 import ChatScreen from "./ChatScreen";
+import { withTheme } from "@emotion/react";
 
 export default function ChatWindow({ with_email, with_userid }) {
   // console.log("here we are", rtcData);
@@ -278,13 +279,16 @@ export default function ChatWindow({ with_email, with_userid }) {
     }
   };
   useEffect(async () => {
+    console.log('AREEWREWHERE')
     const fetchRequestStatus = async () => {
       const JWT_TOKEN = localStorage.getItem("token");
       const token = `Bearer ${JWT_TOKEN}`;
 
       try {
+        // const we = 'deepaksingh.18feb%40gmail.com'
+        console.log('WHERE  IS withemail',with_email)
         const response = await fetch(
-          `http://localhost:8000/api/request_info/${with_email}`,
+          `http://127.0.0.1:8000/api/handle_request?to_email=${with_email}`,
           {
             method: "GET",
             headers: {
@@ -309,6 +313,7 @@ export default function ChatWindow({ with_email, with_userid }) {
     const JWT_TOKEN = localStorage.getItem("token");
     const token = `Bearer ${JWT_TOKEN}`;
     const req_status = await fetchRequestStatus();
+    console.log('hererewis req_status',req_status)
     if (req_status.status == "ACCEPTED") {
       console.log("SHOUDL IT BE ACCEPTED FRO BOTH");
 
@@ -387,7 +392,7 @@ export default function ChatWindow({ with_email, with_userid }) {
       }}
     >
       {loading ? (
-        <p>Loading...</p>
+        <p>Loing...</p>
       ) : connection_open ? (
         <ChatScreen with_email={with_email} chats={chats} sendMsg={sendMsg} />
       ) : requestStatus !== "ACCEPTED" ? (

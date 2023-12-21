@@ -16,7 +16,7 @@ function Chat({ auth_data }) {
   const [with_email, SetWithEmail] = useState(null);
   const [loading, setLoading] = useState(true);
   // const [rtcData, setRTCData] = useState(null);
-
+  console.log('DOWE HAVE ANY',with_userid, with_email)
   const users = [
     {
       id: 1,
@@ -268,7 +268,7 @@ function Chat({ auth_data }) {
   }, [online_profiles]);
 
   if (loading) {
-    return <p>Loading...</p>;
+    return <p>Loang...</p>;
   }
 
   return (
