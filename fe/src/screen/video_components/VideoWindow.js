@@ -374,7 +374,7 @@ export default function VideoWindow({ with_email, with_userid }) {
 
       try {
         const response = await fetch(
-          `http://localhost:8000/api/request_info/${with_email}`,
+          `http://localhost:8000/api/handle_request?to_email=${with_email}`,
           {
             method: "GET",
             headers: {

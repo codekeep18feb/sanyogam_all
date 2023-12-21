@@ -87,11 +87,12 @@ function Video({ auth_data }) {
     const token = `Bearer ${JWT_TOKEN}`;
     console.log("token", token);
     const response2 = await fetch("http://localhost:8000/api/profiles", {
-      method: "GET",
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: token, // Replace with your JWT token
       },
+      body:JSON.stringify({})
     });
 
     if (response2.status === 200) {
