@@ -12,6 +12,7 @@ import RequestScreen from "./RequestScreen";
 import NewChatScreen from "./chat_components/NewChatScreen";
 
 const ChatModal = ({ SetWithUserId, with_userid, with_email }) => {
+  console.log('DODFSDF',SetWithUserId)
   return (
     <div
       style={{
@@ -46,7 +47,7 @@ const ChatModal = ({ SetWithUserId, with_userid, with_email }) => {
             </div>
           </Grid>
           <Grid item xs={2}><AudioCallIcon style={{ fontSize: "35px", color: "#1F4294" }} /></Grid>
-          <Grid item xs={2}><VideoCallIcon style={{ fontSize: "35px", color: "#1F4294" }} /></Grid>
+          <Grid item xs={2} ><VideoCallIcon style={{ fontSize: "35px", color: "#1F4294" }} /></Grid>
         </Grid>
       </div>
       <div>

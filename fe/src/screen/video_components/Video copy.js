@@ -1,158 +1,15 @@
 import React, { useEffect, useState } from "react";
 import UserChatTileInListC from "../UserChatTileInListC";
-import ChatWindow from "./ChatWindow";
+import VideoWindow from "./VideoWindow";
 import { connect } from "react-redux";
-import TabPanel from "../TabPanel";
-import Grid from "@mui/material/Grid"; // Import Grid
-import Hidden from "@mui/material/Hidden"; // Import Hidden
-import ImageCircles from "./ImageCircle";
-import BlankChatScreen from "./BlankChatScreen";
-import ChatModal from '../../screen/ChatModal'
 
-
-function Chat({ auth_data }) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
-
-
+function Video({ auth_data }) {
   const [profiles, setProfiles] = useState([]);
   const [online_profiles, setOnlineProfiles] = useState([]);
-
   const [with_userid, SetWithUserId] = useState(null);
   const [with_email, SetWithEmail] = useState(null);
   const [loading, setLoading] = useState(true);
   // const [rtcData, setRTCData] = useState(null);
-  console.log('DOWE HAVE ANY',with_userid, with_email)
-  const users = [
-    {
-      id: 1,
-      imageUrl:
-        "https://dhankosh.s3.ap-south-1.amazonaws.com/profile_images/1.jpg",
-      online: true,
-    },
-    {
-      id: 2,
-      imageUrl:
-        "https://dhankosh.s3.ap-south-1.amazonaws.com/profile_images/1.jpg",
-      online: true,
-    },
-    {
-      id: 3,
-      imageUrl:
-        "https://dhankosh.s3.ap-south-1.amazonaws.com/profile_images/1.jpg",
-      online: true,
-    },
-    {
-      id: 4,
-      imageUrl:
-        "https://dhankosh.s3.ap-south-1.amazonaws.com/profile_images/1.jpg",
-      online: true,
-    },
-    {
-      id: 5,
-      imageUrl:
-        "https://dhankosh.s3.ap-south-1.amazonaws.com/profile_images/1.jpg",
-      online: true,
-    },
-    {
-      id: 6,
-      imageUrl:
-        "https://dhankosh.s3.ap-south-1.amazonaws.com/profile_images/1.jpg",
-      online: true,
-    },
-    {
-      id: 7,
-      imageUrl:
-        "https://dhankosh.s3.ap-south-1.amazonaws.com/profile_images/1.jpg",
-      online: true,
-    },
-    {
-      id: 8,
-      imageUrl:
-        "https://dhankosh.s3.ap-south-1.amazonaws.com/profile_images/1.jpg",
-      online: true,
-    },
-    {
-      id: 9,
-      imageUrl:
-        "https://dhankosh.s3.ap-south-1.amazonaws.com/profile_images/1.jpg",
-      online: true,
-    },
-    {
-      id: 10,
-      imageUrl:
-        "https://dhankosh.s3.ap-south-1.amazonaws.com/profile_images/1.jpg",
-      online: true,
-    },
-    {
-      id: 11,
-      imageUrl:
-        "https://dhankosh.s3.ap-south-1.amazonaws.com/profile_images/1.jpg",
-      online: true,
-    },
-    {
-      id: 12,
-      imageUrl:
-        "https://dhankosh.s3.ap-south-1.amazonaws.com/profile_images/1.jpg",
-      online: true,
-    },
-    {
-      id: 13,
-      imageUrl:
-        "https://dhankosh.s3.ap-south-1.amazonaws.com/profile_images/1.jpg",
-      online: true,
-    },
-    {
-      id: 14,
-      imageUrl:
-        "https://dhankosh.s3.ap-south-1.amazonaws.com/profile_images/1.jpg",
-      online: true,
-    },
-    {
-      id: 15,
-      imageUrl:
-        "https://dhankosh.s3.ap-south-1.amazonaws.com/profile_images/1.jpg",
-      online: true,
-    },
-    {
-      id: 16,
-      imageUrl:
-        "https://dhankosh.s3.ap-south-1.amazonaws.com/profile_images/1.jpg",
-      online: true,
-    },
-    {
-      id: 17,
-      imageUrl:
-        "https://dhankosh.s3.ap-south-1.amazonaws.com/profile_images/1.jpg",
-      online: true,
-    },
-    {
-      id: 18,
-      imageUrl:
-        "https://dhankosh.s3.ap-south-1.amazonaws.com/profile_images/1.jpg",
-      online: true,
-    },
-    {
-      id: 19,
-      imageUrl:
-        "https://dhankosh.s3.ap-south-1.amazonaws.com/profile_images/1.jpg",
-      online: true,
-    },
-    {
-      id: 20,
-      imageUrl:
-        "https://dhankosh.s3.ap-south-1.amazonaws.com/assets/Frame+967.svg",
-      online: false,
-    },
-    // Add more user objects as needed
-  ];
 
   // console.log("is it rerendering.?? mutiple times",rtcData)
   const fetchData = async () => {
@@ -210,6 +67,7 @@ function Chat({ auth_data }) {
         console.log("Error fetching chat history");
       }
     } catch (error) {
+
       console.error("An error occurred:", error);
     } finally {
       setLoading(false);
@@ -281,36 +139,26 @@ function Chat({ auth_data }) {
   }, [online_profiles]);
 
   if (loading) {
-    return <p>Loang...</p>;
+    return <p>oading...</p>;
   }
 
-  console.log('HERQEWR',isModalOpen)
   return (
-    <div>
-      <Grid container>
-       
-        <Grid item xs={12} md={3}>
-          <TabPanel
-            profiles={profiles}
-            SetWithUserId={SetWithUserId}
-            SetWithEmail={SetWithEmail}
-            with_userid={with_userid}
-          />
-        </Grid>
-
-        <Grid item xs={12} md={7}>
-          <div>
-            {with_userid ? (
-                // <ChatModal with_userid={with_userid} SetWithUserId={SetWithUserId} with_email={with_email}/>
-
-              <ChatWindow SetWithUserId={SetWithUserId} SetWithEmail={SetWithEmail} with_email={with_email} with_userid={with_userid} />
-              // <div>Let This Div cover entire visible screen and have a cancel material icon to close this div if pressed</div>
-            ) : (
-              <BlankChatScreen />
-            )}
-          </div>
-        </Grid>
-      </Grid>
+    <div style={{ display: "flex" }}>
+      <div>
+        <UserChatTileInListC
+          profiles={profiles}
+          SetWithUserId={SetWithUserId}
+          SetWithEmail={SetWithEmail}
+          with_userid={with_userid}
+        />
+      </div>
+      <div>
+        {with_userid ? (
+          <VideoWindow with_email={with_email} with_userid={with_userid} />
+        ) : (
+          "loading..."
+        )}
+      </div>
     </div>
   );
 }
@@ -322,5 +170,5 @@ const mapStateToProps = (state) => {
   };
 };
 
-// export default Chat;
-export default connect(mapStateToProps, null)(Chat);
+// export default Video;
+export default connect(mapStateToProps, null)(Video);

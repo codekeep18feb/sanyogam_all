@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Grid, Typography } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import VideoCallIcon from '@mui/icons-material/VideoCall';
@@ -7,8 +7,9 @@ import ChatScreen from './ChatScreen';
 import RequestScreen from '../RequestScreen';
 import { ImageCircle } from '../chat_components/ImageCircle';
 import NewChatScreen from './NewChatScreen';
+import DetachVideoWindow from "../../screen/video_components/DetachVideoWindow";
 
-function ChatScreenHeader({ onBackClick, user }) {
+function ChatScreenHeader({ setvideoView, with_userid, with_email, SetWithUserId,SetWithEmail,onBackClick, user }) {
   return (
     <Grid container alignItems="center" justifyContent="space-between">
       <Grid item xs={1}>
@@ -29,13 +30,24 @@ function ChatScreenHeader({ onBackClick, user }) {
         <AudioCallIcon style={{ fontSize: '35px', color: '#1F4294' }} />
       </Grid>
       <Grid item xs={2}>
-        <VideoCallIcon style={{ fontSize: '35px', color: '#1F4294' }} />
+        <VideoCallIcon onClick={(e)=>{
+            e.preventDefault()
+            console.log('make video call',with_userid,with_email)
+            setvideoView(true)
+            // <DetachVideoWindow with_email={with_email} with_userid={with_userid} />
+            // SetWithUserId
+
+          }} style={{ fontSize: '35px', color: '#1F4294' }} />
       </Grid>
     </Grid>
   );
 }
 
-export default function ChatScreenWithInfo({ requestStatus, connection_open, with_email, chats, sendMsg }) {
+export default function ChatScreenWithInfo({ with_userid, SetWithUserId, SetWithEmail,requestStatus, connection_open, with_email, chats, sendMsg }) {
+  const [videoView, setvideoView] = useState(false)
+  console.log('ABCDEF1',videoView)
+
+
   const user = {
     id: 1,
     name: 'Pulkit Ssdasdfasdfsdafsadf',
@@ -45,15 +57,28 @@ export default function ChatScreenWithInfo({ requestStatus, connection_open, wit
 
   const handleBackClick = () => {
     console.log('onclose clicked');
-    // SetWithUserId(null)
+    SetWithUserId(null)
   };
 
   const renderContent = () => {
+    console.log('ABCDEF2')
     if (requestStatus === 'ACCEPTED' && connection_open) {
-      return (
-      // <ChatScreen with_email={with_email} chats={chats} sendMsg={sendMsg} />
-      <NewChatScreen with_email={with_email} chats={chats} sendMsg={sendMsg} />
-      );
+      if (videoView){
+        console.log('wasconnected!',connection_open)
+        return (
+          // <ChatScreen with_email={with_email} chats={chats} sendMsg={sendMsg} />
+          <DetachVideoWindow connection_open={connection_open} with_email={with_email} with_userid={with_userid} />
+          // <div>VIdeoVIewhere</div>
+          );
+    
+      }
+      else{
+        return (
+          // <ChatScreen with_email={with_email} chats={chats} sendMsg={sendMsg} />
+          <NewChatScreen with_email={with_email} chats={chats} sendMsg={sendMsg} />
+          );
+    
+      }
     } else if (requestStatus && requestStatus !== 'ACCEPTED') {
       return <RequestScreen with_email={with_email} />;
     } else if (!connection_open) {
@@ -65,7 +90,7 @@ export default function ChatScreenWithInfo({ requestStatus, connection_open, wit
 
   return (
     <>
-      <ChatScreenHeader onBackClick={handleBackClick} user={user} />
+      <ChatScreenHeader setvideoView={setvideoView} with_userid={with_userid} with_email={with_email} SetWithUserId={SetWithUserId} SetWithEmail={SetWithEmail} onBackClick={handleBackClick} user={user} />
 
       <div>
         <div>29yrs, Lucknow</div>

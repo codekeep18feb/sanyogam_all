@@ -14,7 +14,7 @@ export default function VideoWindow({ with_email, with_userid }) {
   const myRef = useRef(null);
 
   const yourVideoRef = useRef(null);
-  const [videoStream, setVideoStream] = useState(null);
+  // const [videoStream, setVideoStream] = useState(null);
 
   const [connection_open, setConnectionOpened] = useState(false);
   const fetchRTCUserInfo = async () => {
@@ -90,9 +90,9 @@ export default function VideoWindow({ with_email, with_userid }) {
     }
   };
 
-  const setStream = (es) => {
-    setVideoStream(es);
-  };
+  // const setStream = (es) => {
+  //   setVideoStream(es);
+  // };
   const saveRTCUserAns = async (isInitiator, sdp, to_user) => {
     console.log("save answer", isInitiator, sdp, to_user);
     const JWT_TOKEN = localStorage.getItem("token");
@@ -195,7 +195,7 @@ export default function VideoWindow({ with_email, with_userid }) {
       console.log("doweseestream", stream);
       yourVideoRef.current.srcObject = stream;
       // myRef.current = {"srcObject":stream};
-      setStream(stream);
+      // setStream(stream);
       lc.addStream(stream);
       lc.onaddstream = (event) => {
         console.log("ON LOCAL @ TRACK", event, event.stream, myRef.current);
@@ -253,7 +253,7 @@ export default function VideoWindow({ with_email, with_userid }) {
       console.log("doweseestream", stream);
       yourVideoRef.current.srcObject = stream;
       // myRef.current = {"srcObject":stream};
-      setStream(stream);
+      // setStream(stream);
       rc.addStream(stream);
       // const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
       console.log("doweseestream", stream);

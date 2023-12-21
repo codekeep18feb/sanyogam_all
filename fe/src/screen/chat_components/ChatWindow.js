@@ -5,7 +5,7 @@ import { withTheme } from "@emotion/react";
 
 import ChatScreenWithInfo from "./ChatScreenWithInfo";
 
-export default function ChatWindow({ with_email, with_userid }) {
+export default function ChatWindow({ SetWithUserId, SetWithEmail, with_email, with_userid }) {
   // console.log("here we are", rtcData);
   const [loading, setLoading] = useState(true);
   const [chatHistory, setChatHistory] = useState([]);
@@ -13,6 +13,8 @@ export default function ChatWindow({ with_email, with_userid }) {
   const [requestStatus, setRequestStatus] = useState(null);
   const [answer, setAnswer] = useState(false);
   const myRef = useRef(null);
+  const yourVideoRef = useRef(null);
+
   const [connection_open, setConnectionOpened] = useState(false);
   const [intervalId, setIntervalId] = useState(null);
 
@@ -401,7 +403,7 @@ export default function ChatWindow({ with_email, with_userid }) {
       }}
     >
       {(requestStatus) ? (
-        <ChatScreenWithInfo requestStatus={requestStatus} connection_open={connection_open} with_email={with_email} chats={chats} sendMsg={sendMsg}/>
+        <ChatScreenWithInfo with_userid={with_userid} SetWithUserId={SetWithUserId} SetWithEmail={SetWithEmail} requestStatus={requestStatus} connection_open={connection_open} with_email={with_email} chats={chats} sendMsg={sendMsg}/>
       ) : (
         <div>loadding...</div>
       )}
