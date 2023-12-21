@@ -1,6 +1,6 @@
 
 import json
-from flask import Flask, request, abort  
+from flask import Flask, request, abort, jsonify 
 from config import db, decode_token
 from . import User
 from models import Profile,ProfileSchema, profiles_schema
@@ -97,6 +97,27 @@ def myprofile():
         abort(404, f"Your profile not found, contact Admin")
 
 
+def handle_filtering(all_profiles_query, p_filter_obj):
+    if 'family_info' in p_filter_obj and p_filter_obj['family_info']:
+        family_info_filter = p_filter_obj['family_info']
+
+        if 'affluence' in family_info_filter and family_info_filter['affluence']:
+            affluence_value = family_info_filter['affluence']
+            all_profiles_query = all_profiles_query.filter(Profile.family_info.has(FamilyInformation.affluence == affluence_value))
+        if 'location' in family_info_filter and family_info_filter['location']:
+            location_value = family_info_filter['location']
+            family_info_condition = or_(
+                FamilyInformation.family_location == location_value,
+                FamilyInformation.native_place == location_value
+            )
+            all_profiles_query = all_profiles_query.filter(Profile.family_info.has(family_info_condition))
+
+        # Add more filters as needed based on your requirements
+
+    all_profiles = all_profiles_query.all()
+    return all_profiles
+
+
 def all_profiles(p_filter_obj):
     # print("payloadchat",filters)
     print('p_filter_obdsfj',p_filter_obj)
@@ -117,28 +138,24 @@ def all_profiles(p_filter_obj):
     print('ME.PROFILE',me.profile)
     
     all_profiles_query = Profile.query
+    # if isinstance(p_filter_obj, dict):
+        # print('sadhfasdf')
+    # if p_filter_obj:
+    # all_profiles_query = handle_filtering(all_profiles_query, p_filter_obj)
+    # res = []
+    # for i in [1,2]:
+    #     all_profiles = handle_filtering(all_profiles_query,p_filter_obj)
+    #     res.append(all_profiles)
+    # print('whatisres',res)
+    # fres = profiles_schema.dump(res)
+    # # return fres
+    # return jsonify(fres)
 
-    if p_filter_obj:
-        if 'family_info' in p_filter_obj and p_filter_obj['family_info']:
-            family_info_filter = p_filter_obj['family_info']
 
-            if 'affluence' in family_info_filter and family_info_filter['affluence']:
-                affluence_value = family_info_filter['affluence']
-                all_profiles_query = all_profiles_query.filter(Profile.family_info.has(FamilyInformation.affluence == affluence_value))
+    all_profiles_data = handle_filtering(all_profiles_query,p_filter_obj)
+    fres = profiles_schema.dump(all_profiles_data)
+    return fres
 
-            if 'location' in family_info_filter and family_info_filter['location']:
-                location_value = family_info_filter['location']
-                family_info_condition = or_(
-                    FamilyInformation.family_location == location_value,
-                    FamilyInformation.native_place == location_value
-                )
-                all_profiles_query = all_profiles_query.filter(Profile.family_info.has(family_info_condition))
-
-        # Add more filters as needed based on your requirements
-
-    all_profiles = all_profiles_query.all()
-
-    return profiles_schema.dump(all_profiles)
    
 
 

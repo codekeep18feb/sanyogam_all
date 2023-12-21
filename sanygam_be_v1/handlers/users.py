@@ -19,8 +19,11 @@ def get_timestamp():
 
 # @my_decorator("Hello, world!")
 # @jwt_required()  # Protect this route with JWT authentication
-def handle_request(to_email):
+def handle_request():
     auth_token = request.headers.get("Authorization")
+    to_email = request.args.get("to_email",None)
+
+    print('fdrthjrtf')
     if not auth_token:
         return "Unauthorized", 401
 
@@ -29,76 +32,83 @@ def handle_request(to_email):
     decoded_data_str = decoded['sub']
     json_dec_data = json.loads(decoded_data_str)
     me_user = User.query.filter_by(email=json_dec_data['email']).first()
-    to_user =  User.query.filter_by(email=to_email).first()
+    print('to_emaiadsfl',to_email)
+    if to_email:
+        to_user =  User.query.filter_by(email=to_email).first()
 
-    print("frm_usdsfsdafer", me_user, "to_user", to_user)
+        print("frm_usdsfsdafer", me_user, "to_user", to_user)
 
-    # Check if action query parameter is present
-    action = request.args.get("action",None)
+        # Check if action query parameter is present
+        action = request.args.get("action",None)
 
-    if action is None:
-        # GET request status when GET whithout query(action)
-        # all_requests_query = UserRequests.query
-        all_requests_query = UserRequests.query.filter(
-        or_(
-            (UserRequests.frm_user == me_user.id) & (UserRequests.to_user == to_user.id),
-            (UserRequests.frm_user == to_user.id) & (UserRequests.to_user == me_user.id)
-            )
-        ).first()
-            
-        res = user_request_schema.dump(all_requests_query)
-        print('any request between users',type(res),res)
-        return jsonify(res)  
-
-    else:
-        # If action is provided, it's a respond_request
-        print("action", action)
-        all_requests_query = UserRequests.query.filter(
-        or_(
-            (UserRequests.frm_user == me_user.id) & (UserRequests.to_user == to_user.id),
-            (UserRequests.frm_user == to_user.id) & (UserRequests.to_user == me_user.id)
-            )
-        ).first()
-        
-        
-        #sender case
-        if not all_requests_query and action=='SENT':
-            to_user_request = UserRequests(to_user=to_user.id, frm_user=me_user.id, status='SENT')
-            print('to_user_request', to_user_request)
-            db.session.add(to_user_request)
-            db.session.commit()
-            return f"Successfully sent"
-        
-        elif all_requests_query and action=='CANCELED':
-            db.session.delete(all_requests_query)
-            db.session.commit()
-            return "Request deleted successfully"
-        
-        elif all_requests_query and action=='SENT':
+        if action is None:
+            # GET request status when GET whithout query(action)
+            # all_requests_query = UserRequests.query
+            all_requests_query = UserRequests.query.filter(
+            or_(
+                (UserRequests.frm_user == me_user.id) & (UserRequests.to_user == to_user.id),
+                (UserRequests.frm_user == to_user.id) & (UserRequests.to_user == me_user.id)
+                )
+            ).first()
+                
             res = user_request_schema.dump(all_requests_query)
-            abort(400, f"already there is one request - {res}")
-        
-        #reciever case
-        print('all_requests_query.status',all_requests_query.status)
-        if all_requests_query and all_requests_query.status==MyEnum.SENT and (action == 'ACCEPTED' or action == 'REJECTED'):
-            # if all_requests_query.to_user==me_user.id:
-            #     abort(400, f"It's sent by you only so you can't `Accept` it")
+            print('any request between users',type(res),res)
+            return jsonify(res)  
 
-            all_requests_query.status = action
-            # db.session.update(all_requests_query)
-            db.session.commit()
-            return f"Successfully Accepted"
-        
+        else:
+            # If action is provided, it's a respond_request
+            print("actioDFn", action)
+            all_requests_query = UserRequests.query.filter(
+            or_(
+                (UserRequests.frm_user == me_user.id) & (UserRequests.to_user == to_user.id),
+                (UserRequests.frm_user == to_user.id) & (UserRequests.to_user == me_user.id)
+                )
+            ).first()
+            
+            
+            #sender case
+            if not all_requests_query and action=='SENT':
+                to_user_request = UserRequests(to_user=to_user.id, frm_user=me_user.id, status='SENT')
+                print('to_user_DSFrequest', to_user_request)
+                db.session.add(to_user_request)
+                db.session.commit()
+                return f"Successfully sent"
+            
+            elif all_requests_query and action=='CANCELED':
+                db.session.delete(all_requests_query)
+                db.session.commit()
+                return "Request deleted successfully"
+            
+            elif all_requests_query and action=='SENT':
+                res = user_request_schema.dump(all_requests_query)
+                abort(400, f"already there is one request - {res}")
+            
+            #reciever case
+            print('all_requests_query.status',all_requests_query.status)
+            if all_requests_query and all_requests_query.status==MyEnum.SENT and (action == 'ACCEPTED' or action == 'REJECTED'):
+                # if all_requests_query.to_user==me_user.id:
+                #     abort(400, f"It's sent by you only so you can't `Accept` it")
 
-        # if to_user_request and to_user_request.status == MyEnum.SENT:
-        #     prv_user_request_s = to_user_request.status.name
-        #     to_user_request.status = action
-        #     db.session.add(to_user_request)
-        #     db.session.commit()
-        #     return f"Successfully changed from {prv_user_request_s} to {action}"
-        # else:
-        #     abort(400, f"Current request status is {to_user_request.status.name}" if to_user_request else "Request not found")
+                all_requests_query.status = action
+                # db.session.update(all_requests_query)
+                db.session.commit()
+                return f"Successfully Accepted"
+            
 
+            # if to_user_request and to_user_request.status == MyEnum.SENT:
+            #     prv_user_request_s = to_user_request.status.name
+            #     to_user_request.status = action
+            #     db.session.add(to_user_request)
+            #     db.session.commit()
+            #     return f"Successfully changed from {prv_user_request_s} to {action}"
+            # else:
+            #     abort(400, f"Current request status is {to_user_request.status.name}" if to_user_request else "Request not found")
+    else:
+        all_requests_query = UserRequests.query.filter(
+        UserRequests.to_user == me_user.id
+        ).all()
+        print('all_requests_quedsfasdry',all_requests_query)
+        return user_requests_schema.dump(all_requests_query)
 # Add your route definition for /handle_request/{to_email}/query here
 
 

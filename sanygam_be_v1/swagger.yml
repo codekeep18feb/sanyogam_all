@@ -163,6 +163,14 @@ components:
       schema:
         type: string
 
+    to_email_nr:
+      name: to_email
+      in: query
+      description: "to_email of the request"
+      required: false  # 
+      schema:
+        type: string
+
     with_email:
       name: with_email
       in: path
@@ -571,7 +579,7 @@ paths:
         "201":
           description: "Successfully added oauth data"
 
-  /handle_request/{to_email}/query:
+  /handle_request:
     get:
       operationId: "handlers.users.handle_request"
       security:
@@ -581,7 +589,7 @@ paths:
       summary: "handle_request to user(to_email,action)"
       parameters:
         # - $ref: "#/components/parameters/image"
-        - $ref: "#/components/parameters/to_email"
+        - $ref: "#/components/parameters/to_email_nr"
         - name: action
           in: query
           description: "handle_request action in query"
