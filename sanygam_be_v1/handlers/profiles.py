@@ -97,7 +97,9 @@ def myprofile():
         abort(404, f"Your profile not found, contact Admin")
 
 
-def handle_filtering(all_profiles_query, p_filter_obj):
+def handle_filtering(all_profiles_query, p_filter_obj,user_profile_id):
+    all_profiles_query = all_profiles_query.filter(Profile.id != user_profile_id)
+
     if 'family_info' in p_filter_obj and p_filter_obj['family_info']:
         family_info_filter = p_filter_obj['family_info']
 
@@ -138,21 +140,7 @@ def all_profiles(p_filter_obj):
     print('ME.PROFILE',me.profile)
     
     all_profiles_query = Profile.query
-    # if isinstance(p_filter_obj, dict):
-        # print('sadhfasdf')
-    # if p_filter_obj:
-    # all_profiles_query = handle_filtering(all_profiles_query, p_filter_obj)
-    # res = []
-    # for i in [1,2]:
-    #     all_profiles = handle_filtering(all_profiles_query,p_filter_obj)
-    #     res.append(all_profiles)
-    # print('whatisres',res)
-    # fres = profiles_schema.dump(res)
-    # # return fres
-    # return jsonify(fres)
-
-
-    all_profiles_data = handle_filtering(all_profiles_query,p_filter_obj)
+    all_profiles_data = handle_filtering(all_profiles_query,p_filter_obj,me.profile.id)
     fres = profiles_schema.dump(all_profiles_data)
     return fres
 
@@ -163,61 +151,61 @@ def all_profiles(p_filter_obj):
     # else:
     #     abort(500, f"internal server error")
 
-# def read_all_profiles_old():
-#     print("payloadchat")
+def read_all_profiles_old():
+    print("payloadchat")
 
-#     auth_token = request.headers.get("Authorization")
-#     print("auth_token",auth_token)
-#     if not auth_token:
+    auth_token = request.headers.get("Authorization")
+    print("auth_token",auth_token)
+    if not auth_token:
         
-#         return "Unauthorized", 401
+        return "Unauthorized", 401
     
     
-#     scheme, token = auth_token.split('Bearer ')    
-#     decoded = decode_token(token)
-#     decoded_data_str = decoded['sub']
-#     json_dec_data = json.loads(decoded_data_str)
-#     me = User.query.filter_by(email=json_dec_data['email']).first()
-#     combined_query = UserRequests.query.filter(
-#     or_(UserRequests.frm_user == me.id, UserRequests.to_user == me.id),
-#     UserRequests.status == "ACCEPTED"
-#     )
+    scheme, token = auth_token.split('Bearer ')    
+    decoded = decode_token(token)
+    decoded_data_str = decoded['sub']
+    json_dec_data = json.loads(decoded_data_str)
+    me = User.query.filter_by(email=json_dec_data['email']).first()
+    combined_query = UserRequests.query.filter(
+    or_(UserRequests.frm_user == me.id, UserRequests.to_user == me.id),
+    UserRequests.status == "ACCEPTED"
+    )
 
-#     # Execute the query to get the results
-#     results = combined_query.all()
-#     # send_by_me = UserRequests.query.filter_by(frm_user=me.id, status="ACCEPTED")
-#     # sent_to_me = UserRequests.query.filter_by(to_user=me.id, status="ACCEPTED")
-#     print("sent_to_me",results)
-#     if not results:
-#         abort(400, f"no request exist {results}")
+    # Execute the query to get the results
+    results = combined_query.all()
+    # send_by_me = UserRequests.query.filter_by(frm_user=me.id, status="ACCEPTED")
+    # sent_to_me = UserRequests.query.filter_by(to_user=me.id, status="ACCEPTED")
+    print("sent_to_me",results)
+    if not results:
+        abort(400, f"no request exist {results}")
 
 
-#     # print("to_user_request",existing_req.status)
-#     elif results:
-#         accepted_profiles = []
-#         for result in results:
-#             frm_user = result.act_frm_user
-#             to_user = result.act_to_user
+    # print("to_user_request",existing_req.status)
+    elif results:
+        accepted_profiles = []
+        for result in results:
+            frm_user = result.act_frm_user
+            to_user = result.act_to_user
 
-#             # Check if frm_user's email is not me.email and online is true
-#             if frm_user.email != me.email:
-#                 accepted_profiles.append({"user_id":frm_user.id,"user_email":frm_user.email,"online":frm_user.online})
+            # Check if frm_user's email is not me.email and online is true
+            if frm_user.email != me.email:
+                accepted_profiles.append({"user_id":frm_user.id,"user_email":frm_user.email,"online":frm_user.online})
 
-#             # Check if to_user's email is not me.email and online is true
-#             if to_user.email != me.email:
-#                 accepted_profiles.append({"user_id":to_user.id,"user_email":to_user.email,"online":to_user.online})
+            # Check if to_user's email is not me.email and online is true
+            if to_user.email != me.email:
+                accepted_profiles.append({"user_id":to_user.id,"user_email":to_user.email,"online":to_user.online})
 
-#         # Remove duplicates if any
-#         # accepted_profiles = list(set(accepted_profiles))
+        # Remove duplicates if any
+        # accepted_profiles = list(set(accepted_profiles))
 
-#         # Return the list of online emails
-#         print("online_emails",accepted_profiles)
-#         return accepted_profiles
+        # Return the list of online emails
+        print("online_emails",accepted_profiles)
+        return accepted_profiles
     
-#         # user_req_schema = UserRequestsSchema(many=True)
-#         # return user_req_schema.dump(results)
-#     else:
-#         abort(500, f"internal server error")
+        # user_req_schema = UserRequestsSchema(many=True)
+        # return user_req_schema.dump(results)
+    else:
+        abort(500, f"internal server error")
 
 
 

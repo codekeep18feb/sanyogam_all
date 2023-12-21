@@ -107,12 +107,12 @@ function HomeProfileBox({
   const sendRequest=async ()=>{
     console.log('we should send request to the user',email)
     setBstate('sending')
-    const res = await sendApiReq(email,"SENT")
+    const res = await sendConnectReq(email,"SENT")
     setBstate('sent')
     console.log('herewqrewr',res)
   }
 
-  const sendApiReq =async(to_email_nr=null,action=null)=>{
+  const sendConnectReq =async(to_email_nr=null,action=null)=>{
     console.log('whasdsdtsdfer',action,to_email_nr)
     // console.log('onsave ran here we can see the ',{family_info:formValues})
     // const data = await submitProfileUpdateData({family_info:formValues})
