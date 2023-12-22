@@ -5,10 +5,13 @@ import time
 import connexion
 from flask_marshmallow import Marshmallow
 from flask_sqlalchemy import SQLAlchemy
-from flask_jwt_extended import JWTManager, jwt_required
+from flask_jwt_extended import JWTManager
 from flask_cors import CORS
+from flask_socketio import SocketIO
+
 from flask.json import JSONEncoder
 from enum import Enum
+
 
 class CustomJSONEncoder(JSONEncoder):
     def default(self, obj):
@@ -54,33 +57,21 @@ def _current_timestamp() -> int:
 
 
 basedir = pathlib.Path(__file__).parent.resolve()
-print("AMICORRECT ? basedir",basedir)
+print("AMICORRECT ? basedir", basedir)
 connex_app = connexion.App(__name__, specification_dir=basedir)
-# Initialize CORS to allow requests from http://192.168.1.13:3000
-# CORS(connex_app.app)
-CORS(connex_app.app, resources={r"/api/*": {"origins": "http://192.168.1.13:3000"}})
+# CORS(connex_app.app, resources={r"/api/*": {"origins": "http://192.168.1.13:3000"}})
+CORS(connex_app.app, resources={r"/api/*": {"origins": ["http://192.168.1.13:3000", "http://localhost:8000"]}})
 
+# Attach SocketIO to the Flask app
+socketio = SocketIO(cors_allowed_origins="*")
+socketio.init_app(connex_app.app)
 
-
-
-@connex_app.app.after_request
-def add_cors_headers(response):
-    response.headers['Access-Control-Allow-Origin'] = '*'
-    response.headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS'
-    response.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
-    return response
-
-
+# ... (other configurations)
 
 app = connex_app.app
 app.json_encoder = CustomJSONEncoder
 app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{basedir / 'sgam.db'}"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-
-# Add JWT configuration
-# app.config["JWT_SECRET_KEY"] = "your_secret_key"  # Replace with your secret key
-# jwt = JWTManager(app)
-
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
-
+# jwt = JWTManager(app)
