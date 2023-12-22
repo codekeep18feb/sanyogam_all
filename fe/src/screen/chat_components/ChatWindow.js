@@ -415,19 +415,9 @@ export default function ChatWindow({ SetWithUserId, SetWithEmail, with_email, wi
       {(requestStatus) ? (
         <div>
 
-          <Button
-            onClick={(e)=>{
-              e.preventDefault()
-                // force close the connection
-                // let's catch the ref
-                console.log('myCurrerref',myRef.current)
-                myRef.current.channel.close()
+         
 
-            }}
-          >
-forcecloseconnection          </Button>
-
-          <ChatScreenWithInfo with_userid={with_userid} SetWithUserId={SetWithUserId} SetWithEmail={SetWithEmail} requestStatus={requestStatus} connection_open={connection_open} with_email={with_email} chats={chats} sendMsg={sendMsg}/>
+          <ChatScreenWithInfo ref={myRef} with_userid={with_userid} SetWithUserId={SetWithUserId} SetWithEmail={SetWithEmail} requestStatus={requestStatus} connection_open={connection_open} with_email={with_email} chats={chats} sendMsg={sendMsg}/>
         </div>
         
       ) : (

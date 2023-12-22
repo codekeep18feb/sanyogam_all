@@ -1,4 +1,4 @@
-import React, { forwardRef, useState } from 'react';
+import React, { useState } from 'react';
 import { Button, Grid, Typography } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import VideoCallIcon from '@mui/icons-material/VideoCall';
@@ -9,20 +9,8 @@ import { ImageCircle } from '../chat_components/ImageCircle';
 import NewChatScreen from './NewChatScreen';
 import DetachVideoWindow from "../../screen/video_components/DetachVideoWindow";
 
-const ChatScreenHeader=forwardRef(({ setvideoView, with_userid, with_email, SetWithUserId,SetWithEmail,onBackClick, user },myRef)=>{
+function ChatScreenHeader({ setvideoView, with_userid, with_email, SetWithUserId,SetWithEmail,onBackClick, user }) {
   return (
-   <>
-   <Button
-        onClick={(e) => {
-          e.preventDefault()
-          // force close the connection
-          // let's catch the ref
-          console.log('myCurrerref', myRef.current)
-          myRef.current.channel.close()
-
-        }}
-      >
-        forcecloseconnection          </Button>
     <Grid container alignItems="center" justifyContent="space-between">
       <Grid item xs={1}>
         <ArrowBackIcon onClick={onBackClick} style={{ cursor: 'pointer' }} />
@@ -42,31 +30,33 @@ const ChatScreenHeader=forwardRef(({ setvideoView, with_userid, with_email, SetW
         <AudioCallIcon style={{ fontSize: '35px', color: '#1F4294' }} />
       </Grid>
       <Grid item xs={2}>
-        <VideoCallIcon onClick={(e) => {
-          e.preventDefault()
-          console.log('make video call', with_userid, with_email)
-          setvideoView(true)
-          // <DetachVideoWindow with_email={with_email} with_userid={with_userid} />
-          // SetWithUserId
+        <VideoCallIcon onClick={(e)=>{
+            e.preventDefault()
+            console.log('make video call',with_userid,with_email)
+            setvideoView(true)
+            // <DetachVideoWindow with_email={with_email} with_userid={with_userid} />
+            // SetWithUserId
 
-        }} style={{ fontSize: '35px', color: '#1F4294' }} />
+          }} style={{ fontSize: '35px', color: '#1F4294' }} />
       </Grid>
     </Grid>
-   </>
   );
-})
+}
 
-const ChatScreenWithInfo = forwardRef(({ with_userid, SetWithUserId, SetWithEmail, requestStatus, connection_open, with_email, chats, sendMsg }, myRef) => {
+
+
+
+export default function ChatScreenWithInfo({ with_userid, SetWithUserId, SetWithEmail,requestStatus, connection_open, with_email, chats, sendMsg }) {
   const [videoView, setvideoView] = useState(false)
-
-  console.log('ABCDEF1', videoView)
+  
+  console.log('ABCDEF1',videoView)
 
   // useEffect(() => {
   //   if (!connection_open){
 
   //   }
   // }, [videoView])
-
+  
   const user = {
     id: 1,
     name: 'Pulkit Ssdasdfasdfsdafsadf',
@@ -81,23 +71,23 @@ const ChatScreenWithInfo = forwardRef(({ with_userid, SetWithUserId, SetWithEmai
 
   const renderContent = () => {
     console.log('ABCDEF2')
-
+    
     if (requestStatus === 'ACCEPTED' && connection_open) {
-      if (videoView) {
-        console.log('wasconnected!', connection_open)
+      if (videoView){
+        console.log('wasconnected!',connection_open)
         return (
           // <ChatScreen with_email={with_email} chats={chats} sendMsg={sendMsg} />
           // <DetachVideoWindow connection_open={connection_open} with_email={with_email} with_userid={with_userid} />
           <div>VIdeoVIewhere</div>
-        );
-
+          );
+    
       }
-      else {
+      else{
         return (
           // <ChatScreen with_email={with_email} chats={chats} sendMsg={sendMsg} />
           <NewChatScreen with_email={with_email} chats={chats} sendMsg={sendMsg} />
-        );
-
+          );
+    
       }
     } else if (requestStatus && requestStatus !== 'ACCEPTED') {
       return <RequestScreen with_email={with_email} />;
@@ -110,8 +100,18 @@ const ChatScreenWithInfo = forwardRef(({ with_userid, SetWithUserId, SetWithEmai
 
   return (
     <>
-      
-      <ChatScreenHeader ref={myRef} setvideoView={setvideoView} with_userid={with_userid} with_email={with_email} SetWithUserId={SetWithUserId} SetWithEmail={SetWithEmail} onBackClick={handleBackClick} user={user} />
+     <Button
+            onClick={(e)=>{
+              e.preventDefault()
+                // force close the connection
+                // let's catch the ref
+                console.log('myCurrerref',myRef.current)
+                myRef.current.channel.close()
+
+            }}
+          >
+forcecloseconnection          </Button>
+      <ChatScreenHeader setvideoView={setvideoView} with_userid={with_userid} with_email={with_email} SetWithUserId={SetWithUserId} SetWithEmail={SetWithEmail} onBackClick={handleBackClick} user={user} />
 
       <div>
         <div>29yrs, Lucknow</div>
@@ -120,6 +120,4 @@ const ChatScreenWithInfo = forwardRef(({ with_userid, SetWithUserId, SetWithEmai
       {renderContent()}
     </>
   );
-})
-
-export default ChatScreenWithInfo;
+}
