@@ -6,8 +6,11 @@ import { withTheme } from "@emotion/react";
 import ChatScreenWithInfo from "./ChatScreenWithInfo";
 import { Button } from "@mui/material";
 
+
+
 export default function ChatWindow({ SetWithUserId, SetWithEmail, with_email, with_userid }) {
   // console.log("here we are", rtcData);
+  const [videoView, setvideoView] = useState(false)
   const [loading, setLoading] = useState(true);
   const [chatHistory, setChatHistory] = useState([]);
   const [chats, setChats] = useState([]);
@@ -16,8 +19,54 @@ export default function ChatWindow({ SetWithUserId, SetWithEmail, with_email, wi
   const myRef = useRef(null);
   const yourVideoRef = useRef(null);
 
-  const [connection_open, setConnectionOpened] = useState(false);
+  const [connection_open, setConnectionOpened] = useState(null);
   const [intervalId, setIntervalId] = useState(null);
+
+  const delRTCUserEntry = async (id) => {
+    console.log('did it delRTCUserEntry')
+    const JWT_TOKEN = localStorage.getItem("token");
+    const token = `Bearer ${JWT_TOKEN}`;
+  
+    try {
+      const response = await fetch(
+        `http://192.168.1.13:8000/api/del_rtc_entry/${id}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+            // body:JSON.stringify(id)
+          },
+        }
+      );
+  
+      if (response.status === 200) {
+        const data = await response.json();
+        setvideoView(true)
+        setConnectionOpened(false)
+        // setRTCData(data);
+        // console.log("doesithaveboth?", data.answer, data.sdp);
+        // if (data && data.answer && data.sdp) {
+        //   console.log("bothexist");
+        //   if (!answer) {
+        //     myRef.current = {
+        //       ...myRef.current,
+        //       answer: data.answer,
+        //     };
+        //     setAnswer(true);
+        //   }
+        // }
+        // return Object.entries(data).length == 0 ? null : data;
+      } else {
+        console.log("Error delRTCUserEntry");
+      }
+    } catch (error) {
+      console.error("An error occurred:", error);
+    } finally {
+      // setLoading(false);
+    }
+  };
+
 
   const fetchRTCUserInfo = async () => {
     const JWT_TOKEN = localStorage.getItem("token");
@@ -203,6 +252,7 @@ export default function ChatWindow({ SetWithUserId, SetWithEmail, with_email, wi
 
       dc.onclose = (e) => {
         console.log("connection CLosed! initiator");
+        setvideoView(true)
         setConnectionOpened(false);
       };
 
@@ -278,10 +328,21 @@ export default function ChatWindow({ SetWithUserId, SetWithEmail, with_email, wi
           setConnectionOpened(true);
           console.log("connection opened!");
         };
-        rc.dc.onclose = (e) => {
-          setConnectionOpened(false);
-          console.log("connection CLosed! reponder");
-        };
+        rc.dc.onclose = async (e) => {
+          // setConnectionOpened(false);
+          
+          //session_id
+
+          //session_id
+          console.log("connection CLosed! reponder",myRef.current.session_id);
+          delRTCUserEntry(Number(myRef.current.session_id))
+          //make the api call
+            //if success 
+              //let's close the connection
+
+            //else
+              //show the error to try again
+          };
       };
 
       rc.setRemoteDescription(offer).then((a) => console.log("offerset"));
@@ -348,6 +409,7 @@ export default function ChatWindow({ SetWithUserId, SetWithEmail, with_email, wi
             type: "INITIATOR",
             channel: dc,
             lc: lc,
+            // session_id:
           };
           // myRef.current = 'updated Value';
         }
@@ -361,6 +423,7 @@ export default function ChatWindow({ SetWithUserId, SetWithEmail, with_email, wi
           myRef.current = {
             type: "RESPONDER",
             channel: rc,
+            session_id: rtc_entry['id']
           };
         }
       }
@@ -417,7 +480,7 @@ export default function ChatWindow({ SetWithUserId, SetWithEmail, with_email, wi
 
          
 
-          <ChatScreenWithInfo ref={myRef} with_userid={with_userid} SetWithUserId={SetWithUserId} SetWithEmail={SetWithEmail} requestStatus={requestStatus} connection_open={connection_open} with_email={with_email} chats={chats} sendMsg={sendMsg}/>
+          <ChatScreenWithInfo ref={myRef} setvideoView={setvideoView} videoView={videoView} with_userid={with_userid} SetWithUserId={SetWithUserId} SetWithEmail={SetWithEmail} requestStatus={requestStatus} connection_open={connection_open} with_email={with_email} chats={chats} sendMsg={sendMsg}/>
         </div>
         
       ) : (

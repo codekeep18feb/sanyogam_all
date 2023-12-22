@@ -19,7 +19,6 @@ components:
       properties:
         family_info:
           type: "object"
-        
 
     SignUpData:
       type: "object"
@@ -398,22 +397,21 @@ paths:
   #       "200":
   #         description: "Successfully read rtc_user_info_by_id"
   
-  # del_rtc_user
+  # del_rtc_entry
 
-  /del_rtc_user:
+  /del_rtc_entry/{id}:
     get:
-      operationId: "handlers.rtcuserinfo.del_rtc_user"
+      operationId: "handlers.rtcuserinfo.del_rtc_entry"
       security:
         - JWTAuth: [] 
       tags:
         - "People"
-      summary: "del_rtc_user"
-      # parameters:
-      #   # - $ref: "#/components/parameters/image"
-      #   - $ref: "#/components/parameters/id"
+      summary: "del_rtc_entry"
+      parameters:
+        - $ref: "#/components/parameters/id"
       responses:
         "200":
-          description: "Successfully del_rtc_user"
+          description: "Successfully del_rtc_entry"
       
 
 

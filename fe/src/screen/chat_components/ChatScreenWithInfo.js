@@ -8,11 +8,12 @@ import RequestScreen from '../RequestScreen';
 import { ImageCircle } from '../chat_components/ImageCircle';
 import NewChatScreen from './NewChatScreen';
 import DetachVideoWindow from "../../screen/video_components/DetachVideoWindow";
+import VideoWindow from '../video_components/VideoWindow';
 
-const ChatScreenHeader=forwardRef(({ setvideoView, with_userid, with_email, SetWithUserId,SetWithEmail,onBackClick, user },myRef)=>{
+const ChatScreenHeader=forwardRef(({ setvideoView, videoView, with_userid, with_email, SetWithUserId,SetWithEmail,onBackClick, user },myRef)=>{
   return (
    <>
-   <Button
+   {/* <Button
         onClick={(e) => {
           e.preventDefault()
           // force close the connection
@@ -22,7 +23,7 @@ const ChatScreenHeader=forwardRef(({ setvideoView, with_userid, with_email, SetW
 
         }}
       >
-        forcecloseconnection          </Button>
+        forcecloseconnection          </Button> */}
     <Grid container alignItems="center" justifyContent="space-between">
       <Grid item xs={1}>
         <ArrowBackIcon onClick={onBackClick} style={{ cursor: 'pointer' }} />
@@ -44,22 +45,24 @@ const ChatScreenHeader=forwardRef(({ setvideoView, with_userid, with_email, SetW
       <Grid item xs={2}>
         <VideoCallIcon onClick={(e) => {
           e.preventDefault()
-          console.log('make video call', with_userid, with_email)
-          setvideoView(true)
+          // force close the connection
+          // let's catch the ref
+          console.log('myCurrerref', myRef.current)
+          myRef.current.channel.close()
           // <DetachVideoWindow with_email={with_email} with_userid={with_userid} />
           // SetWithUserId
 
-        }} style={{ fontSize: '35px', color: '#1F4294' }} />
+        }} style={!videoView?{ fontSize: '35px', color: '#1F4294' }:{ fontSize: '35px', color: 'black' }} />
       </Grid>
     </Grid>
    </>
   );
 })
 
-const ChatScreenWithInfo = forwardRef(({ with_userid, SetWithUserId, SetWithEmail, requestStatus, connection_open, with_email, chats, sendMsg }, myRef) => {
-  const [videoView, setvideoView] = useState(false)
+const ChatScreenWithInfo = forwardRef(({ videoView, setvideoView, with_userid, SetWithUserId, SetWithEmail, requestStatus, connection_open, with_email, chats, sendMsg }, myRef) => {
+  // const [videoView, setvideoView] = useState(false)
 
-  console.log('ABCDEF1', videoView)
+  console.log('WHAT ISIT in ChatScreenWithInfo', connection_open)
 
   // useEffect(() => {
   //   if (!connection_open){
@@ -101,9 +104,19 @@ const ChatScreenWithInfo = forwardRef(({ with_userid, SetWithUserId, SetWithEmai
       }
     } else if (requestStatus && requestStatus !== 'ACCEPTED') {
       return <RequestScreen with_email={with_email} />;
-    } else if (!connection_open) {
-      return <div>Opening the connection...</div>;
-    } else {
+    } else if (connection_open==null) {
+      return <div>Opening the connection...- Mode - {JSON.stringify(videoView)}</div>;
+    }else if (videoView) {
+      return <div>
+        <div>we will now render the VideoWindow which should appranetly do everything make sure this is write and for opponent -{with_userid}</div>
+        <VideoWindow with_email={with_email} with_userid={with_userid} />
+      
+      </div>;
+    }     
+    else if (connection_open===false) {
+      return <div>It seems connection was closed from either side - {JSON.stringify(videoView)}</div>;
+    }    
+    else {
       return <div>Unhandled Case</div>;
     }
   };
@@ -111,7 +124,7 @@ const ChatScreenWithInfo = forwardRef(({ with_userid, SetWithUserId, SetWithEmai
   return (
     <>
       
-      <ChatScreenHeader ref={myRef} setvideoView={setvideoView} with_userid={with_userid} with_email={with_email} SetWithUserId={SetWithUserId} SetWithEmail={SetWithEmail} onBackClick={handleBackClick} user={user} />
+      <ChatScreenHeader ref={myRef} videoView={videoView} setvideoView={setvideoView} with_userid={with_userid} with_email={with_email} SetWithUserId={SetWithUserId} SetWithEmail={SetWithEmail} onBackClick={handleBackClick} user={user} />
 
       <div>
         <div>29yrs, Lucknow</div>

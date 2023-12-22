@@ -11,78 +11,10 @@ function Video({ auth_data }) {
   const [loading, setLoading] = useState(true);
   // const [rtcData, setRTCData] = useState(null);
 
-  // console.log("is it rerendering.?? mutiple times",rtcData)
-  const fetchData = async () => {
-    const JWT_TOKEN = localStorage.getItem("token");
-    const token = `Bearer ${JWT_TOKEN}`;
 
-    try {
-      const response = await fetch(
-        "http://192.168.1.13:8000/api/read_online_circle",
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: token,
-          },
-        }
-      );
-
-      if (response.status === 200) {
-        const data = await response.json();
-
-        setOnlineProfiles(data);
-        // setLoading(false);
-      } else {
-        console.log("Error occurred while fetching profiles.");
-        // setLoading(false);
-      }
-    } catch (error) {
-      console.error("An error occurred:", error);
-      // setLoading(false);
-    }
-  };
-
-  const fetchRTCUserInfo = async () => {
-    const JWT_TOKEN = localStorage.getItem("token");
-    const token = `Bearer ${JWT_TOKEN}`;
-
-    try {
-      const response = await fetch(
-        `http://192.168.1.13:8000/api/rtc_user_info_by_id`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: token,
-          },
-        }
-      );
-
-      if (response.status === 200) {
-        const data = await response.json();
-        // setRTCData(data);
-        console.log("datsdafsdaa", data);
-      } else {
-        console.log("Error fetching chat history");
-      }
-    } catch (error) {
-
-      console.error("An error occurred:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+ 
 
   useEffect(async () => {
-    // fetchData(); // Fetch data initially
-    // console.log("main useeffect ran")
-
-    // const intervalId = setInterval(() => {
-    //   fetchData(); // Fetch data every 10 seconds
-    // }, 10000);
-
-    // Fetch data from the /api/profiles endpoint
     const JWT_TOKEN = localStorage.getItem("token");
     const token = `Bearer ${JWT_TOKEN}`;
     console.log("token", token);
@@ -109,15 +41,7 @@ function Video({ auth_data }) {
   }, [with_userid]);
 
   useEffect(() => {
-    // console.log("new online profiles arrived",online_profiles)
-    // here will make the changes to profiles's online state
-    // if online_profiles has items and not just empty
-    // in that case let's create two arrays
-    // offline_profiles -> items of profiles where email is not in online_profiles
-    // online_profiles -> items of profiles where email is in online_profiles
-    //now let's loop through these two arrays offline_profiles and online_profiles and update the online status in profiles using setProfiles
-
-    console.log("new online profiles arrived", online_profiles, profiles);
+     console.log("new online profiles arrived", online_profiles, profiles);
 
     // Check if online_profiles has items and is not empty
     if (online_profiles.length > 0) {

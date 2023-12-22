@@ -29,6 +29,7 @@ def rtc_user_info_by_id(with_id):
     return rtc_usr_schema.dump(rtc_info)
 
 
+
 def get_my_rtc_offer():
     # print("here is id",id)
 
@@ -48,28 +49,28 @@ def get_my_rtc_offer():
     return rtc_usr_schema.dump(rtc_info)
 
 
-def del_rtc_user():
+def del_rtc_entry(id):
     # print("here is id",id)
 
     auth_token = request.headers.get("Authorization")
     if not auth_token:
         return "Unauthorized", 401
 
-    scheme, token = auth_token.split('Bearer ')    
-    decoded = decode_token(token)
-    decoded_data_str = decoded['sub']
-    json_dec_data = json.loads(decoded_data_str)
-    me = User.query.filter_by(email=json_dec_data['email']).first()
-    rtc_info = RTCUserInfo.query.filter_by(frm_user=me.id).first()
+    # scheme, token = auth_token.split('Bearer ')    
+    # decoded = decode_token(token)
+    # decoded_data_str = decoded['sub']
+    # json_dec_data = json.loads(decoded_data_str)
+    # me = User.query.filter_by(email=json_dec_data['email']).first()
+    rtc_info = RTCUserInfo.query.filter_by(id=id).first()
     # rtc_usr_schema = RTCUserInfoSchema()
     # return rtc_usr_schema.dump(rtc_info)
     if rtc_info:
         # Delete the RTCUserInfo from the database
         db.session.delete(rtc_info)
         db.session.commit()
-        return "User deleted successfully", 200
+        return "RTC Entry deleted successfully", 200
     else:
-        return "User not found or unauthorized to delete", 404
+        return "RTC Entry could not be deleted", 404
 
 def add_rtc_user(payload):
     print("here is id", payload)
