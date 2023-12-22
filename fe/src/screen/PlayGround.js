@@ -6,7 +6,9 @@ import ProgressBar from '../component/reusables/ProgressBar';
 import { Button, Grid, TextField } from '@mui/material';
 import { ImageCircle } from './chat_components/ImageCircle';
 import MatchesFilterScrollBarOnChatC from './MatchesFilterScrollBarOnChatC';
-
+import MyWSComponent from "../../src/screen/chat_components/MyWSComponent"
+import MonitorWSStatus from '../component/MonitorWSStatus';
+import SendMsgWS from '../component/SendMsgWS';
 const useStyles = makeStyles({
   scrollContainer: {
     overflow: 'hidden',
@@ -53,7 +55,12 @@ export default function PlayGround() {
   const classes = useStyles();
 
   return (
-    <ChatTestLayout />
+    <div>
+    {/* <MonitorWSStatus /> */}
+    <SendMsgWS />
+
+
+    </div>
     // <ImageCircle user={{id:1,online:true}} />
 
     // <HorizontalScroll >

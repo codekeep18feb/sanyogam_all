@@ -48,6 +48,7 @@ import EditFamily from './component/EditFamily.js';
 import PreviewProfile from "./component/PreviewProfile.js"
 import ProfileBriefTile from './screen/ProfileBriefTile';
 import Home from './screen/Home.js';
+import SendMsgWS from './component/SendMsgWS.js';
 // import ProfileBriefTile from './screen/ProfileBriefTile.js';
 
 const MaterialUX = ()=>{
@@ -99,6 +100,14 @@ function App({ authData,login }) {
         element={
           <WrapperMobileShell>
             <Home />
+          </WrapperMobileShell>
+        }
+      />
+      <Route
+        path="/sendmsgws"
+        element={
+          <WrapperMobileShell>
+            <SendMsgWS />
           </WrapperMobileShell>
         }
       />

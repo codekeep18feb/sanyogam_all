@@ -1,5 +1,8 @@
 from flask import render_template,abort,jsonify # Remove: import Flask
 # import config
+from datetime import datetime
+
+import json
 from flask_migrate import Migrate
 # from handlers.users import read_all
 from flask_socketio import SocketIO, emit  # Import SocketIO
@@ -17,11 +20,25 @@ def index():
 # def handle_message(message):
 #     print('Received message:', message)
 #     socketio.emit('message', message)  # Echo the message b
+rtc_pool = {}
 
 @socketio.on('message')
 def handle_message(message):
     print('Received message:', message)
-    emit('message', message)  # Echo the message back to all clients
+    
+    now = datetime.now()
+    timestamp_str = now.strftime("%Y-%m-%d %H:%M:%S")
+    print("Current timestamp:", timestamp_str)
+
+    if not rtc_pool:
+        print("Initiator case")
+        entry = {"initiator": 1, "id": 1, "sdp": message, "timestamp": timestamp_str, "answer": None}
+        rtc_pool.update(entry)
+    elif rtc_pool and rtc_pool['answer'] is None:
+        print("Responder case - updating answer")
+        rtc_pool['answer'] = message
+
+    emit('message', json.dumps(rtc_pool))  # Echo the message back to all clients
 
 # ...
 

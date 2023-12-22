@@ -9,7 +9,6 @@
 <body>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.js"></script>
     <script type="text/javascript">
-        // Update the port in the following line to match your Flask server port
         var socket = io.connect('http://' + document.domain + ':8000');
 
         socket.on('message', function(data) {
@@ -21,14 +20,31 @@
 
         function sendMessage() {
             var messageInput = document.getElementById('messageInput');
-            var message = messageInput.value;
+            var messagePrefix = getSelectedPrefix(); // Get selected prefix based on the radio checkbox
+            var message = messagePrefix + messageInput.value;
+            console.log('waesrewr',message)
             socket.emit('message', message);
             messageInput.value = '';
+        }
+
+        function getSelectedPrefix() {
+            var acCheckbox = document.getElementById('acCheckbox');
+            if (acCheckbox.checked) {
+                return "AC";
+            } else {
+                return "DC";
+            }
         }
     </script>
 
     <h1>WebSocket Echo</h1>
     <ul id="messages"></ul>
+    
+    <div>
+        <label><input type="radio" name="prefix" id="acCheckbox" checked> AC</label>
+        <label><input type="radio" name="prefix" id="dcCheckbox"> DC</label>
+    </div>
+    
     <input type="text" id="messageInput" placeholder="Type your message">
     <button onclick="sendMessage()">Send</button>
 </body>
