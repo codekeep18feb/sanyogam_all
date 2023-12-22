@@ -47,7 +47,12 @@ export default function ChatScreenWithInfo({ with_userid, SetWithUserId, SetWith
   const [videoView, setvideoView] = useState(false)
   console.log('ABCDEF1',videoView)
 
+  // useEffect(() => {
+  //   if (!connection_open){
 
+  //   }
+  // }, [videoView])
+  
   const user = {
     id: 1,
     name: 'Pulkit Ssdasdfasdfsdafsadf',
@@ -62,13 +67,14 @@ export default function ChatScreenWithInfo({ with_userid, SetWithUserId, SetWith
 
   const renderContent = () => {
     console.log('ABCDEF2')
+    
     if (requestStatus === 'ACCEPTED' && connection_open) {
       if (videoView){
         console.log('wasconnected!',connection_open)
         return (
           // <ChatScreen with_email={with_email} chats={chats} sendMsg={sendMsg} />
-          <DetachVideoWindow connection_open={connection_open} with_email={with_email} with_userid={with_userid} />
-          // <div>VIdeoVIewhere</div>
+          // <DetachVideoWindow connection_open={connection_open} with_email={with_email} with_userid={with_userid} />
+          <div>VIdeoVIewhere</div>
           );
     
       }

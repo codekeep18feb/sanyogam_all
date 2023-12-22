@@ -4,6 +4,7 @@ import ChatScreen from "./ChatScreen";
 import { withTheme } from "@emotion/react";
 
 import ChatScreenWithInfo from "./ChatScreenWithInfo";
+import { Button } from "@mui/material";
 
 export default function ChatWindow({ SetWithUserId, SetWithEmail, with_email, with_userid }) {
   // console.log("here we are", rtcData);
@@ -200,6 +201,11 @@ export default function ChatWindow({ SetWithUserId, SetWithEmail, with_email, wi
         setConnectionOpened(true);
       };
 
+      dc.onclose = (e) => {
+        console.log("connection CLosed! initiator");
+        setConnectionOpened(false);
+      };
+
       lc.onicecandidate = async (e) => {
         // if (e.candidate) {
         //   // Candidate is available, call addRTCUserInfo
@@ -271,6 +277,10 @@ export default function ChatWindow({ SetWithUserId, SetWithEmail, with_email, wi
         rc.dc.onopen = (e) => {
           setConnectionOpened(true);
           console.log("connection opened!");
+        };
+        rc.dc.onclose = (e) => {
+          setConnectionOpened(false);
+          console.log("connection CLosed! reponder");
         };
       };
 
@@ -403,7 +413,23 @@ export default function ChatWindow({ SetWithUserId, SetWithEmail, with_email, wi
       }}
     >
       {(requestStatus) ? (
-        <ChatScreenWithInfo with_userid={with_userid} SetWithUserId={SetWithUserId} SetWithEmail={SetWithEmail} requestStatus={requestStatus} connection_open={connection_open} with_email={with_email} chats={chats} sendMsg={sendMsg}/>
+        <div>
+
+          <Button
+            onClick={(e)=>{
+              e.preventDefault()
+                // force close the connection
+                // let's catch the ref
+                console.log('myCurrerref',myRef.current)
+                myRef.current.channel.close()
+
+            }}
+          >
+forcecloseconnection          </Button>
+
+          <ChatScreenWithInfo with_userid={with_userid} SetWithUserId={SetWithUserId} SetWithEmail={SetWithEmail} requestStatus={requestStatus} connection_open={connection_open} with_email={with_email} chats={chats} sendMsg={sendMsg}/>
+        </div>
+        
       ) : (
         <div>loadding...</div>
       )}

@@ -11,7 +11,7 @@ export default function DetachVideoWindow({ connection_open, with_email, with_us
         playsInline
         muted // You may want to remove this if it's not the local video
         // Add other attributes such as width, height, etc.
-      ></video> */}
+      ></video><D */}
       
     <div>      DetachVideoWindow connection_open - {JSON.stringify(connection_open)} - {with_email}- {with_userid}</div>
 
