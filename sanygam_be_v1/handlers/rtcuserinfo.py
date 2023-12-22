@@ -84,20 +84,21 @@ def add_rtc_user(payload):
     decoded_data_str = decoded['sub']
     json_dec_data = json.loads(decoded_data_str)
     me = User.query.filter_by(email=json_dec_data['email']).first()
-    print("me",me)
+    print("mesdaf",me)
     # Check if an RTCUserInfo entry already exists for the given frm_user
-    if payload['initiator']:
-        existing_request = RTCUserInfo.query.filter_by(frm_user=me.id,to_user=payload["to_user"]).first()
-        if existing_request:
-            # Update the existing entry's sdp
-            existing_request.sdp = payload["sdp"]
-            db.session.add(existing_request)
-            db.session.commit()
-        else:
+    # if payload['initiator']:
+    existing_request = RTCUserInfo.query.filter_by(frm_user=me.id,to_user=payload["to_user"]).first()
+    print('whatexisting_request',existing_request)
+    if not existing_request:
+        # Update the existing entry's sdp
+        # db.session.add(existing_request)
+        # db.session.commit()
+        # else:
             # Create a new RTCUserInfo entry
-            new_request = RTCUserInfo(frm_user=me.id, sdp=payload["sdp"], initiator=payload["initiator"],to_user=payload["to_user"])
-            db.session.add(new_request)
-            db.session.commit()
+        new_request = RTCUserInfo(frm_user=me.id, sdp=payload["sdp"], to_user=payload["to_user"])
+        new_request.sdp = payload["sdp"]
+        db.session.add(new_request)
+        db.session.commit()
 
         return {
             "message": "RTCUserInfo updated or created successfully"
@@ -112,7 +113,7 @@ def add_rtc_user(payload):
             # db.session.commit()
         else:
             # Create a new RTCUserInfo entry
-            new_request = RTCUserInfo(frm_user=me.id, answer=payload["sdp"], initiator=payload["initiator"],to_user=payload["to_user"])
+            new_request = RTCUserInfo(frm_user=me.id, answer=payload["sdp"],to_user=payload["to_user"])
             db.session.add(new_request)
         db.session.commit()
 

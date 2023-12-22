@@ -98,13 +98,13 @@ components:
     RTCContent:
       type: "object"
       required:
-        - initiator
+        # - initiator
         - sdp
         - to_user
 
       properties:
-        initiator:
-          type: "boolean"
+        # initiator:
+        #   type: "boolean"
         sdp:
           type: "string"
         to_user:

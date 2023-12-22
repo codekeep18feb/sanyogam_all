@@ -25,10 +25,10 @@ const SendMsgWS = () => {
     });
 
     return () => {
-      socket.disconnect();
-    console.log('will it only run if unmounting is happening')
+    //   socket.disconnect();
+    console.log('will it only run if unmounting is')
     };
-  }, []);
+  }, [messages, socket]);
 
   return (
     <div>

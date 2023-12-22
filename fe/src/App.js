@@ -49,6 +49,7 @@ import PreviewProfile from "./component/PreviewProfile.js"
 import ProfileBriefTile from './screen/ProfileBriefTile';
 import Home from './screen/Home.js';
 import SendMsgWS from './component/SendMsgWS.js';
+import ChatWS from './screen/chat_components/ChatWS.js';
 // import ProfileBriefTile from './screen/ProfileBriefTile.js';
 
 const MaterialUX = ()=>{
@@ -152,6 +153,16 @@ function App({ authData,login }) {
           <PrivateRoute>
             <WrapperMobileShell>
               <Chat />
+            </WrapperMobileShell>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/chat_ws"
+        element={
+          <PrivateRoute>
+            <WrapperMobileShell>
+              <ChatWS />
             </WrapperMobileShell>
           </PrivateRoute>
         }
