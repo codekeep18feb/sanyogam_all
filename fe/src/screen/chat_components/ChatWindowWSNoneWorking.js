@@ -48,11 +48,11 @@ export default function ChatWindowWS({ SetWithUserId, SetWithEmail, with_email, 
           if (p_data.answer.length>0){
             console.log('wisadf now case')
             sdpExchange("responded_wfc");
-            myRef.current = {
-              ...myRef.current,
-              answer: p_data.answer,
-            };
-            setAnswer(true);
+            // myRef.current = {
+            //   ...myRef.current,
+            //   answer: p_data.answer,
+            // };
+            // setAnswer(true);
 
           }
         }
@@ -116,7 +116,7 @@ export default function ChatWindowWS({ SetWithUserId, SetWithEmail, with_email, 
         //     setAnswer(true);
         //   }
         // }
-        return Object.entries(data).length == 0 ? null : data;
+        // return Object.entries(data).length == 0 ? null : data;
       } else {
         console.log("Error delRTCUserEntry");
       }
