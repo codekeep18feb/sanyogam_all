@@ -50,6 +50,7 @@ import ProfileBriefTile from './screen/ProfileBriefTile';
 import Home from './screen/Home.js';
 import SendMsgWS from './component/SendMsgWS.js';
 import ChatWS from './screen/chat_components/ChatWS.js';
+import PlayGround2 from './screen/PlayGround2.js';
 // import ProfileBriefTile from './screen/ProfileBriefTile.js';
 
 const MaterialUX = ()=>{
@@ -144,6 +145,14 @@ function App({ authData,login }) {
         element={
           <WrapperMobileShell>
             <PlayGround />
+          </WrapperMobileShell>
+        }
+      />
+       <Route
+        path="/practice2"
+        element={
+          <WrapperMobileShell>
+            <PlayGround2 />
           </WrapperMobileShell>
         }
       />

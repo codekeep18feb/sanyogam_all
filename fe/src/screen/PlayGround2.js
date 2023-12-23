@@ -8,7 +8,7 @@ import { ImageCircle } from './chat_components/ImageCircle';
 import MatchesFilterScrollBarOnChatC from './MatchesFilterScrollBarOnChatC';
 import MyWSComponent from "../../src/screen/chat_components/MyWSComponent"
 import MonitorWSStatus from '../component/MonitorWSStatus';
-import ListnerWS1 from '../component/ListnerWS1';
+import ListnerWS2 from '../component/ListnerWS2';
 
 import SendMsgWS from '../component/SendMsgWS';
 
@@ -54,14 +54,15 @@ function ChatTestLayout() {
   )
 }
 
-export default function PlayGround() {
+export default function PlayGround2() {
   const classes = useStyles();
 
   return (
     <div>
     {/* <MonitorWSStatus /> */}
+    <ListnerWS2 />
     <SendMsgWS />
-    <ListnerWS1 />
+
 
 
     </div>

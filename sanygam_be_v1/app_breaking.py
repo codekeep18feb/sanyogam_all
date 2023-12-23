@@ -16,44 +16,45 @@ migrate = Migrate(app, db)
 def index():
     return render_template('index.html')
 
-@socketio.on('custom_event')
-def handle_message(message):
-    print('Received message:', message)
-    socketio.emit('custom_event', message)  # Echo the message b
-
-rtc_pool = {}
 @socketio.on('message')
 def handle_message(message):
     print('Received message:', message)
-    # let's just send them a msg
+    socketio.emit('message', message)  # Echo the message b
+# rtc_pool = {}
 
-    now = datetime.now()
-    timestamp_str = now.strftime("%Y-%m-%d %H:%M:%S")
-    print("Current timestamp:", timestamp_str)
-    entry = json.loads(message)
-    print('here is entry',entry)
-    if not rtc_pool:
-        print("Initiator case")
-        sdp_s = entry['sdp']
-        sdp = json.loads(sdp_s)
-        if sdp['type']=='offer':
-            rtc_pool['sdp'] = sdp['sdp']
-            rtc_pool['answer'] = None
-            # rtc_pool.update(entry)
-            rtc_pool.update({"id":1})
-    else:
-        print("Responder case - updating answer",entry)
-        sdp_s = entry['sdp']
-        print("Mark1")
-        sdp = json.loads(sdp_s)
-        print("Mark2")
+
+# @socketio.on('write_rtc_pool')
+# def handle_message(message):
+#     print('Received message:', message)
+#     # let's just send them a msg
+
+#     now = datetime.now()
+#     timestamp_str = now.strftime("%Y-%m-%d %H:%M:%S")
+#     print("Current timestamp:", timestamp_str)
+#     entry = json.loads(message)
+#     print('here is entry',entry)
+#     if not rtc_pool:
+#         print("Initiator case")
+#         sdp_s = entry['sdp']
+#         sdp = json.loads(sdp_s)
+#         if sdp['type']=='offer':
+#             rtc_pool['sdp'] = sdp['sdp']
+#             rtc_pool['answer'] = None
+#             # rtc_pool.update(entry)
+#             rtc_pool.update({"id":1})
+#     else:
+#         print("Responder case - updating answer",entry)
+#         sdp_s = entry['sdp']
+#         print("Mark1")
+#         sdp = json.loads(sdp_s)
+#         print("Mark2")
         
-        if sdp['type']=='answer':
-            print("Responder dffds herer")
+#         if sdp['type']=='answer':
+#             print("Responder dffds herer")
 
-            rtc_pool['answer'] = sdp['sdp']
-    print('RTCPOOLNOw',rtc_pool)
-    emit('write_rtc_pool', json.dumps(rtc_pool))
+#             rtc_pool['answer'] = sdp['sdp']
+#     print('RTCPOOLNOw',rtc_pool)
+#     emit('message', json.dumps(rtc_pool))
 
 
 
