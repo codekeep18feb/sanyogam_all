@@ -1,13 +1,17 @@
 from flask import render_template,abort,jsonify # Remove: import Flask
 # import config
 from datetime import datetime
+from models import User, Profile,ProfileSchema, profiles_schema
 
 import json
 from flask_migrate import Migrate
 # from handlers.users import read_all
-from flask_socketio import SocketIO, emit  # Import SocketIO
+# from flask_socketio import SocketIO, emit  # Import SocketIO
+from flask_socketio import SocketIO, join_room, disconnect
+from flask import request
 
-from config import app, db, socketio, connex_app,basedir  # Assuming your Flask app instance is named 'app'
+
+from config import app, db,decode_token, socketio, connex_app,basedir  # Assuming your Flask app instance is named 'app'
 migrate = Migrate(app, db)
 # socketio = SocketIO(app)  # Initialize SocketIO
 
@@ -18,6 +22,12 @@ def index():
 
 @socketio.on('custom_event')
 def handle_message(message):
+    # token = request.args.get('token')
+    # print('tokendsfds',token)
+    # if not token:
+    #     disconnect()
+    #     return
+    # print('Client connected:', request.sid)
     print('Received message custom_event:', message)
     socketio.emit('custom_event', message)  # Echo the message b
 
@@ -25,10 +35,25 @@ def handle_message(message):
 rtc_pool ={}
 @socketio.on('message')
 def handle_message(message):
-    # print('Received message message:', message)
+    print('Received message message token:', message)
+    token = request.args.get('token')
+    print('tokendsfds',token)
     # socketio.emit('message', message+"hd")  # Echo the message b
 
-    print('Received medadsfssa ge:', message)
+    print('Here lets mdsfsake THE DB CALLS', message)
+    scheme, token = token.split('Bearer ')    
+    decoded = decode_token(token)
+    print('makr 2')
+    decoded_data_str = decoded['sub']
+    json_dec_data = json.loads(decoded_data_str)
+    me = User.query.filter_by(email=json_dec_data['email']).first()
+    print('HEREmydsfprofile',me.profile)
+    
+    # profile = Profile.query.filter_by(user_id=me.id)
+    if me.profile:
+        print('makr 3')
+        profile_schema = ProfileSchema()
+        return profile_schema.dump(me.profile)   
     # # let's just send them a msg
 
     # now = datetime.now()
