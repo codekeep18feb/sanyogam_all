@@ -3,7 +3,13 @@ import React, { useEffect, useState } from 'react';
 import io from 'socket.io-client';
 
 const ListnerWS2 = () => {
-  const [socket, setSocket] = useState(io.connect('http://192.168.1.13:8000'));
+  const [socket, setSocket] = useState(
+    io.connect('http://192.168.1.13:8000', {
+      query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    })
+  );
+  
+  // const [socket, setSocket] = useState(io.connect('http://192.168.1.13:8000'));
   const [messages, setMessages] = useState([]);
   const [messageInput, setMessageInput] = useState('');
   const [selectedPrefix, setSelectedPrefix] = useState(null);
@@ -16,7 +22,7 @@ const ListnerWS2 = () => {
 
   React.useEffect(() => {
     console.log('fjasdf')
-    socket.on('message', (data) => {
+    socket.on('fetch_online_profiles', (data) => {
       console.log('asrere we getting the mess here',data)
       // console.log('arerwehere??',data)
       // setMessages([...messages, data]);
