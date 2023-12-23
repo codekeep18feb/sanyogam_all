@@ -87,6 +87,7 @@ class ProfileSchema(ma.SQLAlchemyAutoSchema):
     user_email = fields.String(attribute="user.email")
     user_fname = fields.String(attribute="user.fname")
     user_lname = fields.String(attribute="user.lname")
+    online = fields.String(attribute="user.online")
 
     family_info = fields.Nested(FamilyInformationSchema)
     father = fields.Nested(FatherSchema)
