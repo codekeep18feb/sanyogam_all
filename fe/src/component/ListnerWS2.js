@@ -3,64 +3,29 @@ import React, { useEffect, useState } from 'react';
 import io from 'socket.io-client';
 
 const ListnerWS2 = () => {
-  const [socket, setSocket] = useState(io.connect('http://localhost:8000'));
+  const [socket, setSocket] = useState(io.connect('http://192.168.1.13:8000'));
   const [messages, setMessages] = useState([]);
   const [messageInput, setMessageInput] = useState('');
   const [selectedPrefix, setSelectedPrefix] = useState(null);
   const userAgent = navigator.userAgent;
   const [browserName, setBrowserName] = useState('');
 
-  const handlePrefixChange = (event) => {
-    setSelectedPrefix(event.target.value);
-  };
 
-  // const sendMessage = (message) => {
-  //   socket.emit('message', message);
-  // };
 
-  useEffect(() => {
-    const userAgent = navigator.userAgent;
 
-    if (userAgent.indexOf('Chrome') !== -1) {
-      setBrowserName('Google Chrome');
-    } else if (userAgent.indexOf('Firefox') !== -1) {
-      setBrowserName('Mozilla Firefox');
-    } else if (userAgent.indexOf('Safari') !== -1) {
-      setBrowserName('Apple Safari');
-    } else if (userAgent.indexOf('Edge') !== -1) {
-      setBrowserName('Microsoft Edge');
-    } else if (userAgent.indexOf('Opera') !== -1 || userAgent.indexOf('OPR') !== -1) {
-      setBrowserName('Opera');
-    } else if (userAgent.indexOf('Trident') !== -1) {
-      setBrowserName('Internet Explorer');
-    } else {
-      setBrowserName('Unknown Browser');
-    }
-  }, []);
-
-  // useEffect(() => {
-  //   socket.on('message', (data) => {
-  //     console.log('this should be same for all theclients :)',data)
-  //   socket.emit('message', message);
-      
-  //   });
-
-  //   return () => {
-  //     // socket.disconnect();
-  //   console.log('will it only run if unmounting is happening')
-  //   };
-  // }, [socket]);
 
   React.useEffect(() => {
-    socket.on('custom_event', (data) => {
-      console.log('arerwehere??',data)
-      setMessages([...messages, data]);
+    console.log('fjasdf')
+    socket.on('message', (data) => {
+      console.log('asrere we getting the mess here',data)
+      // console.log('arerwehere??',data)
+      // setMessages([...messages, data]);
     });
 
-    return () => {
-      socket.disconnect();
-    console.log('will it only run if unmounting is happening')
-    };
+    // return () => {
+    //   socket.disconnect();
+    // console.log('will it only run if unmounting is happening')
+    // };
   }, []);
 
   return (

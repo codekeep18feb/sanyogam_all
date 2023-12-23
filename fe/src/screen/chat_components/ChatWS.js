@@ -8,9 +8,12 @@ import Hidden from "@mui/material/Hidden"; // Import Hidden
 import ImageCircles from "./ImageCircle";
 import BlankChatScreen from "./BlankChatScreen";
 import ChatModal from '../../screen/ChatModal'
+import io from 'socket.io-client';
 
 
 function ChatWS({ auth_data }) {
+  const [socket, setSocket] = useState(io.connect('http://192.168.1.13:8000'));
+  const [soc_conn, setsoc_conn] = useState(null)
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => {
@@ -21,7 +24,8 @@ function ChatWS({ auth_data }) {
     setIsModalOpen(false);
   };
 
-
+  
+  
   const [profiles, setProfiles] = useState([]);
   const [online_profiles, setOnlineProfiles] = useState([]);
 
@@ -153,6 +157,19 @@ function ChatWS({ auth_data }) {
     },
     // Add more user objects as needed
   ];
+
+  useEffect(() => {
+    
+    socket.on('message', (data) => {
+      console.log('isther any data arrival',data,typeof(data))
+      // setsoc_conn('stage1')
+    });
+
+    return () => {
+      // socket.disconnect();
+    console.log('will it only run if unmounting is happening')
+    };
+  }, []);
 
   // console.log("is it rerendering.?? mutiple times",rtcData)
   const fetchData = async () => {
@@ -303,7 +320,8 @@ function ChatWS({ auth_data }) {
             {with_userid ? (
                 // <ChatModal with_userid={with_userid} SetWithUserId={SetWithUserId} with_email={with_email}/>
 
-              <ChatWindowWS SetWithUserId={SetWithUserId} SetWithEmail={SetWithEmail} with_email={with_email} with_userid={with_userid} />
+              <ChatWindowWS soc_conn={soc_conn} 
+              SetWithUserId={SetWithUserId} SetWithEmail={SetWithEmail} with_email={with_email} with_userid={with_userid} />
               // <div>Let This Div cover entire visible screen and have a cancel material icon to close this div if pressed</div>
             ) : (
               <BlankChatScreen />

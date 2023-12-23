@@ -59,16 +59,10 @@ const ChatScreenHeader=forwardRef(({ setvideoView, videoView, with_userid, with_
   );
 })
 
-const ChatScreenWithInfo = forwardRef(({ videoView, setvideoView, with_userid, SetWithUserId, SetWithEmail, requestStatus, connection_open, with_email, chats, sendMsg }, myRef) => {
+const ChatScreenWithInfo = forwardRef(({ soc_conn, videoView, setvideoView, with_userid, SetWithUserId, SetWithEmail, requestStatus, connection_open, with_email, chats, sendMsg }, myRef) => {
   // const [videoView, setvideoView] = useState(false)
 
-  console.log('WHAT ISIT in ChatScreenWithInfo', connection_open)
-
-  // useEffect(() => {
-  //   if (!connection_open){
-
-  //   }
-  // }, [videoView])
+  console.log('WHAT IS the soc_conn', soc_conn)
 
   const user = {
     id: 1,
@@ -83,7 +77,7 @@ const ChatScreenWithInfo = forwardRef(({ videoView, setvideoView, with_userid, S
   };
 
   const renderContent = () => {
-    console.log('ABCDEF2')
+    console.log('soc_conn status in renderCOntent')
 
     if (requestStatus === 'ACCEPTED' && connection_open) {
       if (videoView) {
@@ -129,6 +123,9 @@ const ChatScreenWithInfo = forwardRef(({ videoView, setvideoView, with_userid, S
       <div>
         <div>29yrs, Lucknow</div>
         <div>Teacher</div>
+      </div>
+      <div>
+      soc_conn here - {soc_conn}
       </div>
       {renderContent()}
     </>
