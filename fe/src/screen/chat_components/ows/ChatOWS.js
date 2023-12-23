@@ -9,7 +9,7 @@ export default function ChatOWS() {
 
   useEffect(() => {
     
-    socket.on('custom_event', (data) => {
+    socket.on('fetch_online_profiles', (data) => {
       console.log('isther any data arrivalsdf',data,typeof(data))
       // setsoc_conn('stage1')
     });

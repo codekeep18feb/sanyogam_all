@@ -73,7 +73,9 @@ def handle_message(message):
     fres = profiles_schema.dump(all_profiles_data)
     
     print('RESUSLT: ',fres)
-    return fres
+    # return fres
+    socketio.emit('fetch_online_profiles', json.dumps(fres))
+
 
 
     
@@ -95,7 +97,7 @@ def handle_message(message):
     #     print('makr 3')
     #     profile_schema = ProfileSchema()
     #     return profile_schema.dump(me.profile)   
-    socketio.emit('fetch_online_profiles', message)
+    # socketio.emit('fetch_online_profiles', message)
 
 
 @socketio.on('message')
