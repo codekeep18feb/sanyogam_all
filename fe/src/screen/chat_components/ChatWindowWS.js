@@ -53,6 +53,7 @@ export default function ChatWindowWS({ SetWithUserId, SetWithEmail, with_email, 
           }
         }
         else if (p_data.sdp && p_data.answer!=null){
+          console.log('WE ARE NEVER COMING HERE')
           if (p_data.answer.length>0){
             console.log('wisadf now case')
             sdpExchange("responded_wfc");
@@ -173,6 +174,11 @@ export default function ChatWindowWS({ SetWithUserId, SetWithEmail, with_email, 
     console.log("hereisto_user", isInitiator, sdp, to_user);
     const JWT_TOKEN = localStorage.getItem("token");
     const token = `Bearer ${JWT_TOKEN}`;
+    const payload = {
+      initiator: isInitiator,
+      sdp: sdp,
+      to_user: to_user,
+    }
 
     try {
       const response = await fetch(`http://192.168.1.13:8000/api/add_rtc_user`, {
@@ -181,12 +187,10 @@ export default function ChatWindowWS({ SetWithUserId, SetWithEmail, with_email, 
           "Content-Type": "application/json",
           Authorization: token,
         },
-        body: JSON.stringify({
-          initiator: isInitiator,
-          sdp: sdp,
-          to_user: to_user,
-        }),
+        body: JSON.stringify(payload),
       });
+
+      sendMessage(JSON.stringify(payload))
 
       if (response.status === 200) {
         const data = await response.json();
