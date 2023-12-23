@@ -59,10 +59,10 @@ const ChatScreenHeader=forwardRef(({ setvideoView, videoView, with_userid, with_
   );
 })
 
-const ChatScreenWithInfoWS = forwardRef(({ videoView, setvideoView, with_userid, SetWithUserId, SetWithEmail, requestStatus, connection_open, with_email, chats, sendMsg }, myRef) => {
+const ChatScreenWithInfo = forwardRef(({ videoView, setvideoView, with_userid, SetWithUserId, SetWithEmail, requestStatus, connection_open, with_email, chats, sendMsg }, myRef) => {
   // const [videoView, setvideoView] = useState(false)
 
-  console.log('WHAT ISIT in ChatScreenWithInfoWS', connection_open)
+  console.log('WHAT ISIT in ChatScreenWithInfo', connection_open)
 
   // useEffect(() => {
   //   if (!connection_open){
@@ -135,4 +135,4 @@ const ChatScreenWithInfoWS = forwardRef(({ videoView, setvideoView, with_userid,
   );
 })
 
-export default ChatScreenWithInfoWS;
+export default ChatScreenWithInfo;

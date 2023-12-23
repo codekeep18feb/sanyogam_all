@@ -22,25 +22,56 @@ def index():
 #     socketio.emit('message', message)  # Echo the message b
 rtc_pool = {}
 
-@socketio.on('message')
+# @socketio.on('message')
+# def handle_message(message):
+#     print('Received message:', message)
+    
+#     now = datetime.now()
+#     timestamp_str = now.strftime("%Y-%m-%d %H:%M:%S")
+#     print("Current timestamp:", timestamp_str)
+
+#     if not rtc_pool:
+#         print("Initiator case")
+#         entry = {"initiator": 1, "id": 1, "sdp": message, "timestamp": timestamp_str, "answer": None}
+#         rtc_pool.update(entry)
+#     elif rtc_pool and rtc_pool['answer'] is None:
+#         print("Responder case - updating answer")
+#         rtc_pool['answer'] = message
+
+#     emit('message', json.dumps(rtc_pool))  # Echo the message back to all clients
+
+# ...
+
+@socketio.on('write_rtc_pool')
 def handle_message(message):
     print('Received message:', message)
-    
+    # let's just send them a msg
+
     now = datetime.now()
     timestamp_str = now.strftime("%Y-%m-%d %H:%M:%S")
     print("Current timestamp:", timestamp_str)
-
+    entry = json.loads(message)
+    print('here is entry',entry)
     if not rtc_pool:
         print("Initiator case")
-        entry = {"initiator": 1, "id": 1, "sdp": message, "timestamp": timestamp_str, "answer": None}
-        rtc_pool.update(entry)
-    elif rtc_pool and rtc_pool['answer'] is None:
-        print("Responder case - updating answer")
-        rtc_pool['answer'] = message
+        sdp_s = entry['sdp']
+        sdp = json.loads(sdp_s)
+        if sdp['type']=='offer':
+            rtc_pool['sdp'] = sdp['sdp']
+            rtc_pool['answer'] = None
+            # rtc_pool.update(entry)
+            rtc_pool.update({"id":1})
+    else:
+        print("Responder case - updating answer",entry)
+        sdp_s = entry['sdp']
+        sdp = json.loads(sdp_s)
+        if sdp['type']=='answer':
+            print("Responder dffds herer")
 
-    emit('message', json.dumps(rtc_pool))  # Echo the message back to all clients
+            rtc_pool['answer'] = sdp['sdp']
+    print('RTCPOOLNOw',rtc_pool)
+    emit('message', json.dumps(rtc_pool))
 
-# ...
 
 # connex_app = connex_app
 connex_app.add_api(basedir / "swagger.yml")
