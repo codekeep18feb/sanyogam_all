@@ -1,36 +1,68 @@
 import React, { useEffect, useState } from 'react';
 import io from 'socket.io-client';
-import { Grid, Paper, Typography, CircularProgress } from '@mui/material'; // Import Material-UI components
-import UserChatTileInListCOWs from "./UserChatTileInListCOWS"
+import { Grid, Paper, Typography, CircularProgress } from '@mui/material';
+import UserChatTileInListCOWs from "./UserChatTileInListCOWS";
+
 export default function ChatOWS() {
   // State for storing online profiles
   const [onlineProfiles, setOnlineProfiles] = useState(null);
 
   // State for managing the socket connection
-  const [socket, setSocket] = useState(io.connect('http://192.168.1.13:8000'));
-
+  // const [socket, setSocket] = useState(() => io.connect('http://192.168.1.13:8000'));
+  const [socket, setSocket] = useState(
+    io.connect('http://192.168.1.13:8000', {
+      query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    }))
   // State to manage loading state
+  
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    // Event listener for fetching online profiles
-    socket.on('fetch_online_profiles', (data) => {
-      console.log('Is there any data arriving?', data, typeof (data));
-      // Update online profiles state if data is available
-      if (data) {
-        setOnlineProfiles(JSON.parse(data));
-        // Set loading to false once data is received
-        setLoading(false);
-      }
-    });
+  // ...
 
-    // Cleanup function for disconnecting socket when component unmounts
-    return () => {
-      // Uncomment the line below if you want to disconnect the socket on unmount
-      // socket.disconnect();
-      console.log('Will this only run if unmounting is happening?');
-    };
-  }, []); // Empty dependency array ensures useEffect runs only once on mount
+useEffect(() => {
+  const fetchOnlineProfiles = () => {
+    // Emit 'fetch_online_profiles' event to fetch data
+    console.log('fetching again');
+    socket.emit('fetch_online_profiles');
+  };
+
+  // Fetch online profiles initially
+  fetchOnlineProfiles();
+
+  // Setup interval to fetch online profiles every 10 seconds
+  const intervalId = setInterval(() => {
+    console.log('Interval triggered');
+    fetchOnlineProfiles();
+  }, 10000);
+
+  // Event listener for fetching online profiles
+  socket.on('fetch_online_profiles', (data) => {
+    if (data) {
+      console.log('Data received:', data);
+      setOnlineProfiles(JSON.parse(data));
+      setLoading(false);
+    }
+  });
+
+  // Check socket connection events
+  socket.on('connect', () => {
+    console.log('Socket connected');
+  });
+
+  socket.on('disconnect', () => {
+    console.log('Socket disconnected');
+  });
+
+  return () => {
+    // Clear the interval on component unmount
+    clearInterval(intervalId);
+
+    // Uncomment the line below if you want to disconnect the socket on unmount
+    // socket.disconnect();
+  };
+}, [socket]);  // Include socket in the dependency array
+
+// ...
 
   return (
     <Grid container spacing={3}>
@@ -44,14 +76,14 @@ export default function ChatOWS() {
           {/* Show onlineProfiles if not null */}
           {!loading && (
             <Grid container spacing={2}>
-              {onlineProfiles &&
+              {onlineProfiles && (
                 <UserChatTileInListCOWs
-                profiles={onlineProfiles}
-                // SetWithUserId={SetWithUserId}
-                // SetWithEmail={SetWithEmail}
-                // with_userid={with_userid}
-              />
-                }
+                  profiles={onlineProfiles}
+                  // SetWithUserId={SetWithUserId}
+                  // SetWithEmail={SetWithEmail}
+                  // with_userid={with_userid}
+                />
+              )}
             </Grid>
           )}
         </Paper>

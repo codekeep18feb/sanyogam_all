@@ -34,8 +34,9 @@ def handle_message(message):
 
 
 @socketio.on('fetch_online_profiles')
-def handle_message(message):
-    print('Received payload for fetch_online_profiles:', message)
+def handle_message(*args):
+    message = 'merersg'
+    print('Received payload for fetch_online_profiles:', message,args,request.sid)
     
     
     #********************IDEA IS SIMPLE*************
