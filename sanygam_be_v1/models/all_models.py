@@ -183,6 +183,47 @@ class EnumField(fields.Field):
         return value.name #.lower()
 
 
+
+class ChatEnum(enum.Enum):
+    SENDING = "SENDING"
+    SENT = "SENT"
+    FAILED = "FAILED"
+    DELIVERED = "DELIVERED"
+    READ = "READ"
+
+
+class ChatHistory(db.Model):
+    __tablename__ = "chathistory"
+    id = db.Column(db.Integer, primary_key=True)
+    msg = db.Column(db.String(100))
+    frm_user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    frm_user = db.relationship('User', foreign_keys=[frm_user_id])
+    status = db.Column(Enum(ChatEnum))    
+    to_user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    to_user = db.relationship('User', foreign_keys=[to_user_id])
+
+    timestamp = db.Column(
+        db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow
+    )
+
+
+class ChatHistorySchema(ma.SQLAlchemyAutoSchema):
+    status = fields.String(attribute='status.value')  # Use the 'value' attribute of the Enum
+    class Meta:
+        model = ChatHistory
+        load_instance = True
+        sqla_session = db.session
+        include_relationships = True
+
+
+chat_history_schema = ChatHistorySchema()
+chat_histories_schema = ChatHistorySchema(many=True)
+
+
+
+
+
+
 class UserRequestsSchema(ma.SQLAlchemyAutoSchema):
     frm_user = fields.String(attribute="act_frm_user.email")
     to_user = fields.String(attribute="act_to_user.email")
@@ -223,35 +264,6 @@ class OnlineUsersSchema(ma.SQLAlchemyAutoSchema):
 
 user_request_schema = UserRequestsSchema()
 user_requests_schema = UserRequestsSchema(many=True)
-
-class ChatHistory(db.Model):
-    __tablename__ = "chathistory"
-    id = db.Column(db.Integer, primary_key=True)
-    msg = db.Column(db.String(100))
-    frm_user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    frm_user = db.relationship('User', foreign_keys=[frm_user_id])
-    
-    to_user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    to_user = db.relationship('User', foreign_keys=[to_user_id])
-
-    timestamp = db.Column(
-        db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow
-    )
-
-
-
-
-class ChatHistorySchema(ma.SQLAlchemyAutoSchema):
-    class Meta:
-        model = ChatHistory
-        load_instance = True
-        sqla_session = db.session
-        include_relationships = True
-
-
-chat_history_schema = ChatHistorySchema()
-chat_histories_schema = ChatHistorySchema(many=True)
-
 
 
 

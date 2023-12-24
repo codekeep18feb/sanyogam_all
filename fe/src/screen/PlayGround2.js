@@ -11,6 +11,7 @@ import MonitorWSStatus from '../component/MonitorWSStatus';
 import ListnerWS2 from '../component/ListnerWS2';
 
 import SendMsgWS from '../component/SendMsgWS';
+import ChatsEditor from './chat_components/ows/ChatsEditor';
 
 const useStyles = makeStyles({
   scrollContainer: {
@@ -60,8 +61,9 @@ export default function PlayGround2() {
   return (
     <div>
     {/* <MonitorWSStatus /> */}
-    <ListnerWS2 />
-    <SendMsgWS />
+    {/* <ListnerWS2 />
+    <SendMsgWS /> */}
+    <ChatsEditor />
 
 
 

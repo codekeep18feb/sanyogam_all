@@ -85,7 +85,7 @@ export default function ChatScreenWithInfo({ with_userid, SetWithUserId, SetWith
       else{
         return (
           // <ChatScreen with_email={with_email} chats={chats} sendMsg={sendMsg} />
-          <NewChatScreen with_email={with_email} chats={chats} sendMsg={sendMsg} />
+          <NewChatScreen chats={chats} sendMsg={sendMsg} />
           );
     
       }

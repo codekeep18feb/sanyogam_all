@@ -6,7 +6,7 @@ from config import db, generate_token
 from config import db, decode_token
 
 from models import User, users_schema, user_schema, UserSchema,Profile,ChatHistory
-from models import UserRequests,UserRequestsSchema,ChatHistorySchema
+from models import chat_histories_schema, UserRequests,UserRequestsSchema,ChatHistorySchema
 def get_timestamp():
     return datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
 
@@ -25,27 +25,31 @@ def chathistory(with_email):
     me = User.query.filter_by(email=json_dec_data['email']).first()
     
     chats = ChatHistory.query.all()
-    # chat_history_schema = ChatHistorySchema(many=True)
-    # return chat_history_schema.dump(chats)
-        # Create a list to store the chat history with the "who" field
-    chat_history_with_who = []
+    # # chat_history_schema = ChatHistorySchema(many=True)
+    # # return chat_history_schema.dump(chats)
+    #     # Create a list to store the chat history with the "who" field
+    # chat_history_with_who = []
 
-    for chat in chats:
-        chat_dict = {
-            "content": chat.content,
-            "id": chat.id,
-            "timestamp": chat.timestamp
-        }
+    # for chat in chats:
+    #     chat_dict = {
+    #         "content": chat.content,
+    #         "id": chat.id,
+    #         "timestamp": chat.timestamp
+    #     }
 
-        # Add the "who" field based on the comparison
-        if me.email == chat.act_frm_user.email:
-            chat_dict["who"] = "ME"
-        else:
-            chat_dict["who"] = "OTHER"
+    #     # Add the "who" field based on the comparison
+    #     if me.email == chat.act_frm_user.email:
+    #         chat_dict["who"] = "ME"
+    #     else:
+    #         chat_dict["who"] = "OTHER"
 
-        chat_history_with_who.append(chat_dict)
+    #     chat_history_with_who.append(chat_dict)
 
-    return jsonify(chat_history_with_who) 
+    # return jsonify(chat_history_with_who) 
+    return chat_histories_schema.dump(chats)
+
+
+
 
 
 # @my_decorator("Hello, world!")

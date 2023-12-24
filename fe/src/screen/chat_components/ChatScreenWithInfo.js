@@ -98,7 +98,7 @@ const ChatScreenWithInfoWS = forwardRef(({ videoView, setvideoView, with_userid,
       else {
         return (
           // <ChatScreen with_email={with_email} chats={chats} sendMsg={sendMsg} />
-          <NewChatScreen with_email={with_email} chats={chats} sendMsg={sendMsg} />
+          <NewChatScreen chats={chats} sendMsg={sendMsg} />
         );
 
       }

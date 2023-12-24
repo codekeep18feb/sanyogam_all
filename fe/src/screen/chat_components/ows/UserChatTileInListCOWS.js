@@ -15,10 +15,10 @@ export default function UserChatTileInListCOWS({ profiles, SetWithEmail, SetWith
         const onlines = profile.online==='True'
         return (
           <div key={profile.id}
-          // onClick={() => {
-          //   SetWithUserId(profile.id)
-          //   SetWithEmail(profile.user_email)
-          // }}
+          onClick={() => {
+            SetWithUserId(profile.id)
+            SetWithEmail(profile.user_email)
+          }}
         >
           <Grid container alignItems='center' justifyContent='center'>
             <Grid item xs={2}>

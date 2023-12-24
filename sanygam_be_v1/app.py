@@ -1,7 +1,7 @@
 from flask import render_template,abort,jsonify # Remove: import Flask
 # import config
 from datetime import datetime
-from models import User, Profile,ProfileSchema, profiles_schema
+from models import User, Profile,ProfileSchema, chat_histories_schema, profiles_schema, ChatHistory
 
 import json
 from flask_migrate import Migrate
@@ -99,6 +99,57 @@ def handle_message(*args):
     #     profile_schema = ProfileSchema()
     #     return profile_schema.dump(me.profile)   
     # socketio.emit('fetch_online_profiles', message)
+
+
+
+@socketio.on('fetch_profile_chats')
+def handle_message(*args):
+    message = 'merersg'
+    print('Received payload for fetch_profile_chats:', message,args,request.sid)
+    
+    
+    #********************IDEA IS SIMPLE*************
+    #Let's return the same we used to respective apis
+    #handlers.profiles.all_profiles
+    #infact use the same code if possible
+    # auth_token = request.headers.get("Authorization")
+    auth_token = request.args.get('Authorization')
+    if not auth_token:
+        print('MARKDSFSDF1')
+        return "Unauthorized", 401
+    
+    print("auth_token",auth_token)
+    
+    scheme, token = auth_token.split('Bearer ')    
+    decoded = decode_token(token)
+    decoded_data_str = decoded['sub']
+    print('MARK2')
+    
+    json_dec_data = json.loads(decoded_data_str)
+    print('MARK3')
+    me = User.query.filter_by(email=json_dec_data['email']).first()
+
+    print('ME.PROFILE',me.profile)
+    
+    all_chats = ChatHistory.query.all()
+    print('MARK4')
+    # all_profiles_data = handle_filtering(all_profiles_query,
+    #     {
+    #     "family_info": {}
+    #     },
+    #     me.profile.id)
+    # print('MARK5')
+    
+    chats = chat_histories_schema.dump(all_chats)
+    
+    print('RESUSLdT: ',chats)
+    # return fres
+    socketio.emit('fetch_profile_chats', json.dumps(chats))
+    # socketio.emit('fetch_profile_chats', chat_histories_schema.dump(all_chats))
+
+
+
+ 
 
 
 @socketio.on('message')

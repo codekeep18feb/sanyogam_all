@@ -2,10 +2,14 @@ import React, { useEffect, useState } from 'react';
 import io from 'socket.io-client';
 import { Grid, Paper, Typography, CircularProgress } from '@mui/material';
 import UserChatTileInListCOWs from "./UserChatTileInListCOWS";
+import ChatsOWSTile from './ChatsOWSTile';
+import ChatsEditor from './ChatsEditor';
 
-export default function ChatOWS() {
+export default function ChatOWS({chats}) {
   // State for storing online profiles
   const [onlineProfiles, setOnlineProfiles] = useState(null);
+  const [with_userid, SetWithUserId] = useState(null);
+  const [with_email, SetWithEmail] = useState(null);
 
   // State for managing the socket connection
   // const [socket, setSocket] = useState(() => io.connect('http://192.168.1.13:8000'));
@@ -14,56 +18,73 @@ export default function ChatOWS() {
       query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     }))
   // State to manage loading state
-  
+
   const [loading, setLoading] = useState(true);
 
   // ...
 
-useEffect(() => {
-  const fetchOnlineProfiles = () => {
-    // Emit 'fetch_online_profiles' event to fetch data
-    console.log('fetching again');
-    socket.emit('fetch_online_profiles');
-  };
+  useEffect(() => {
+    const fetchOnlineProfiles = () => {
+      // Emit 'fetch_online_profiles' event to fetch data
+      console.log('fetching again');
+      socket.emit('fetch_online_profiles');
+    };
 
-  // Fetch online profiles initially
-  fetchOnlineProfiles();
-
-  // Setup interval to fetch online profiles every 10 seconds
-  const intervalId = setInterval(() => {
-    console.log('Interval triggered');
+    // Fetch online profiles initially
     fetchOnlineProfiles();
-  }, 10000);
 
-  // Event listener for fetching online profiles
-  socket.on('fetch_online_profiles', (data) => {
-    if (data) {
-      console.log('Data received:', data);
-      setOnlineProfiles(JSON.parse(data));
-      setLoading(false);
-    }
-  });
+    // Setup interval to fetch online profiles every 10 seconds
+    const intervalId = setInterval(() => {
+      console.log('Interval triggered');
+      fetchOnlineProfiles();
+    }, 10000);
 
-  // Check socket connection events
-  socket.on('connect', () => {
-    console.log('Socket connected');
-  });
+    // Event listener for fetching online profiles
+    socket.on('fetch_online_profiles', (data) => {
+      if (data) {
+        console.log('Data received:', data);
+        setOnlineProfiles(JSON.parse(data));
+        setLoading(false);
+      }
+    });
 
-  socket.on('disconnect', () => {
-    console.log('Socket disconnected');
-  });
+    // Check socket connection events
+    socket.on('connect', () => {
+      console.log('Socket connected');
+    });
 
-  return () => {
-    // Clear the interval on component unmount
-    clearInterval(intervalId);
+    socket.on('disconnect', () => {
+      console.log('Socket disconnected');
+    });
 
-    // Uncomment the line below if you want to disconnect the socket on unmount
-    // socket.disconnect();
-  };
-}, [socket]);  // Include socket in the dependency array
+    return () => {
+      // Clear the interval on component unmount
+      clearInterval(intervalId);
 
-// ...
+      // Uncomment the line below if you want to disconnect the socket on unmount
+      // socket.disconnect();
+    };
+  }, [socket]);  // Include socket in the dependency array
 
+  // ...
+  const all_online_profiles = onlineProfiles && (
+    <UserChatTileInListCOWs
+      profiles={onlineProfiles}
+      SetWithUserId={SetWithUserId}
+      SetWithEmail={SetWithEmail}
+    // with_userid={with_userid}
+    />
+  )
+
+  const chats_window = (<Paper style={{ padding: 20 }}>
+    <>
+    <Typography variant="h5" gutterBottom>
+    with_userid - {with_userid}
+    </Typography>
+    {with_userid && <ChatsEditor />}
+    </>
+  </Paper>)
+  console.log('ithingchatsmissing',chats)
   return (
     <Grid container spacing={3}>
       <Grid item xs={6}>
@@ -76,27 +97,14 @@ useEffect(() => {
           {/* Show onlineProfiles if not null */}
           {!loading && (
             <Grid container spacing={2}>
-              {onlineProfiles && (
-                <UserChatTileInListCOWs
-                  profiles={onlineProfiles}
-                  // SetWithUserId={SetWithUserId}
-                  // SetWithEmail={SetWithEmail}
-                  // with_userid={with_userid}
-                />
-              )}
+              {all_online_profiles}
             </Grid>
           )}
         </Paper>
       </Grid>
 
       <Grid item xs={6}>
-        <Paper style={{ padding: 20 }}>
-          <Typography variant="h5" gutterBottom>
-            ChatBox
-          </Typography>
-          {/* Right - ChatBox (Can be done after listing online profiles) */}
-          {/* Add your ChatBox component here */}
-        </Paper>
+        {chats_window}
       </Grid>
     </Grid>
   );

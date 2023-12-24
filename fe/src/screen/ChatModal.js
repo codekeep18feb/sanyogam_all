@@ -63,7 +63,7 @@ const ChatModal = ({ SetWithUserId, with_userid, with_email }) => {
 
 
       {/* <div>{with_userid} - {with_email}</div> */}
-      <NewChatScreen with_email={with_email} chats={null} sendMsg={(text)=>{
+      <NewChatScreen chats={null} sendMsg={(text)=>{
         console.log('sendmsg was called',text)
       }} />
 
