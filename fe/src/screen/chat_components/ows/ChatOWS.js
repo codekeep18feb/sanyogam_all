@@ -25,7 +25,7 @@ export default function ChatOWS({ chats }) {
 
     const intervalId = setInterval(() => {
       fetchOnlineProfiles();
-    }, 100000);
+    }, 100000000);
 
     const handleFetchOnlineProfiles = (data) => {
       if (data) {

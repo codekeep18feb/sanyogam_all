@@ -20,7 +20,7 @@ const SocketWrapperFetchProfiles = ({ with_userid, handleFetchedData, children }
 
     const intervalId = setInterval(() => {
       fetchOnlineProfiles();
-    }, 90000);
+    }, 100000000);
 
     const handleFetchProfileChats = (data) => {
       if (data) {

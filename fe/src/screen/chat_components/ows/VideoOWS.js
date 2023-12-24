@@ -1,8 +1,7 @@
-import { Button } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import io from 'socket.io-client';
 
-const VideoOWS = ({with_userid}) => {
+const VideoOWS = React.memo(({with_userid}) => {
   const [s_pool, sets_pool] = useState(null)
   const [socket, setSocket] = useState(
     io.connect('http://192.168.1.13:8000', {
@@ -36,6 +35,6 @@ const VideoOWS = ({with_userid}) => {
       <div>{s_pool && s_pool.offer && s_pool.answer && "responded"}</div>
     </div>
   );
-};
+});
 
 export default VideoOWS;
