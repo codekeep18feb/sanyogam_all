@@ -20,8 +20,23 @@ class Profile(db.Model):
     user = db.relationship('User', back_populates='profile')
     image = db.Column(db.String(200))
     family_info = db.relationship('FamilyInformation', uselist=False, back_populates='profile')
+    chat_brief_rec = db.relationship('ChatBriefRec', uselist=False, back_populates='profile')
     father = db.relationship('Father', back_populates='profile', uselist=False)
 
+
+class ChatBriefRec(db.Model):
+    __tablename__ = "chat_brief_rec"
+    id = db.Column(db.Integer, primary_key=True)
+    lmsgtime = db.Column(
+        db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow
+    )
+    lmsg_is_delivered = db.Column(db.Boolean, default=0)
+    lmsg_is_read = db.Column(db.Boolean, default=0)
+    total = db.Column(db.Integer, default=0)
+    profile_id = db.Column(db.Integer, db.ForeignKey('profile.id'))
+    profile = db.relationship('Profile', back_populates='chat_brief_rec')
+
+    
 
 class FamilyInformation(db.Model):
     __tablename__ = "family_info"
@@ -86,6 +101,14 @@ class FamilyInformationSchema(ma.SQLAlchemyAutoSchema):
         include_relationships = True
 
 
+
+class ChatBriefRecSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = ChatBriefRec
+        load_instance = True
+        sqla_session = db.session
+        include_relationships = True
+
 class FatherSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Father
@@ -113,6 +136,11 @@ users_schema = UserSchema(many=True)
 
 family_information_schema = FamilyInformationSchema()
 family_informations_schema = FamilyInformationSchema(many=True)
+
+
+chat_brief_schema = ChatBriefRecSchema()
+chats_brief_schema = ChatBriefRecSchema(many=True)
+
 
 profile_schema = ProfileSchema()
 profiles_schema = ProfileSchema(many=True)
@@ -172,25 +200,25 @@ class UserRequestsSchema(ma.SQLAlchemyAutoSchema):
 
 class OnlineUsersSchema(ma.SQLAlchemyAutoSchema):
     # frm_user = fields.String(attribute="act_frm_user.email")
-    frm_user = fields.Method('get_frm_user')
+    frm_user = fields.Method('frm_user')
 
     def get_frm_user(self, obj):
         return {
-            'email': obj.act_frm_user.email,
-            'online': obj.act_frm_user.online,
+            'email': obj.frm_user.email,
+            'online': obj.frm_user.online,
         }
-    to_user =  fields.Method('get_to_user')
+    to_user =  fields.Method('to_user')
     def get_to_user(self, obj):
         return {
-            'email': obj.act_to_user.email,
-            'online': obj.act_to_user.online,
+            'email': obj.to_user.email,
+            'online': obj.to_user.online,
         }
     class Meta:
         model = UserRequests
         load_instance = True
         sqla_session = db.session
         include_relationships = True
-        exclude = ('timestamp','status','act_frm_user','act_to_user')  # Exclude the 'timestamp' field
+        exclude = ('timestamp','status','frm_user','to_user')  # Exclude the 'timestamp' field
 
 
 user_request_schema = UserRequestsSchema()
@@ -199,11 +227,13 @@ user_requests_schema = UserRequestsSchema(many=True)
 class ChatHistory(db.Model):
     __tablename__ = "chathistory"
     id = db.Column(db.Integer, primary_key=True)
-    content = db.Column(db.String(100))
-    frm_user = db.Column(db.Integer, db.ForeignKey('user.id'))
-    act_frm_user = db.relationship('User', foreign_keys=[frm_user])
+    msg = db.Column(db.String(100))
+    frm_user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    frm_user = db.relationship('User', foreign_keys=[frm_user_id])
     
-    to_user = db.Column(db.Integer, db.ForeignKey('user.id'))
+    to_user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    to_user = db.relationship('User', foreign_keys=[to_user_id])
+
     timestamp = db.Column(
         db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow
     )
