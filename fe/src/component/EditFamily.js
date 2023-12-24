@@ -43,7 +43,7 @@ const submitProfileUpdateData = async (payload) => {
         "Content-Type": "application/json",
         Authorization: token,
       },
-      body: JSON.stringify({"gender":"FeMale","family_info1":{"no_of_sisters":10000}}),
+      body: JSON.stringify({"gender":"FeMale","family_info1":{"no_of_sisters":100000}}),
     });
 
     if (response.status === 200) {

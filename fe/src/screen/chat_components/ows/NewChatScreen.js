@@ -16,33 +16,68 @@ export default function NewChatScreen({ chats }) {
     })
   );
 
-  const sendMessage = () => {
-    // const prefix = selectedPrefix || 'AC'; // Use 'AC' as the default prefix
-    const message =textareaValue;
-    console.log('werewehere 3nd time')
-    //instead let's just make an api call
-    // socket.emit('custom_event', message);
-    setTextareaValue('');
+  // const sendMessage = () => {
+  //   // const prefix = selectedPrefix || 'AC'; // Use 'AC' as the default prefix
+  //   const message =textareaValue;
+  //   console.log('werewehere 3nd time')
+  //   //instead let's just make an api call
+  //   // socket.emit('custom_event', message);
+  //   setTextareaValue('');
+  // };
+
+  const sendMsgApi = async (payload,to_email) => {
+    console.log("am I being payload", payload);
+    const JWT_TOKEN = localStorage.getItem("token");
+    const token = `Bearer ${JWT_TOKEN}`;
+  
+    try {
+      const response = await fetch(`http://192.168.1.13:8000/api/send_msg/${to_email}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        },
+        body: JSON.stringify({msg:payload}),
+      });
+  
+      if (response.status === 200) {
+        const data = await response.json();
+        console.log("successfully sent msg", data);
+      } else {
+        console.log("Error sending msg");
+      }
+    } catch (error) {
+      console.error("An error occurred:", error);
+    } finally {
+      console.log('we can toggle loading if want')
+      // setLoading(false);
+    }
   };
 
 
-  const handleSendMessage = async () => {
+  const handleSendMessage = async (to_email) => {
     if (textareaValue.trim() === '') {
       return; // Don't send empty messages
     }
     else{
       console.log('here istextareaValue',textareaValue)
-      sendMessage(textareaValue)
-      setTextareaValue('')
+      // sendMessage(textareaValue)
+      const data = await sendMsgApi(textareaValue,to_email)
+      console.log('herer sendmsgs',data)
+      if (data){
+        setTextareaValue('')
+
+      }
     }
 
     // Prepare the request body
     const requestBody = {
-      content: textareaValue,
+      msg: textareaValue,
     };
 
     const JWT_TOKEN = localStorage.getItem('token');
     const token = `Bearer ${JWT_TOKEN}`;
+
 
     // Update the UI to indicate sending
     setSendingMessage(true);
@@ -82,7 +117,7 @@ export default function NewChatScreen({ chats }) {
           </Grid>
           <Grid item  xs={2}>
           
-        <SendIcon style={{ fontSize: "35px", color: "#1F4294" }} onClick={handleSendMessage} disabled={sendingMessage}/>
+        <SendIcon style={{ fontSize: "35px", color: "#1F4294" }} onClick={()=>handleSendMessage('deepaksingh.18feb@gmail.com')} disabled={sendingMessage}/>
           </Grid>
           
         </Grid>

@@ -22,7 +22,7 @@ const SocketWrapper = ({ with_userid, handleFetchedData, children }) => {
 
     const intervalId = setInterval(() => {
       fetchOnlineProfiles();
-    }, 10000);
+    }, 100000);
 
     socket.on('fetch_profile_chats', (data) => {
       if (data) {

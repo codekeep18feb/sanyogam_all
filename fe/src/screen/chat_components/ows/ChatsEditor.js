@@ -25,7 +25,7 @@ const SocketWrapperFetchProfiles = ({ with_userid, handleFetchedData, children }
     const handleFetchProfileChats = (data) => {
       if (data) {
         const pdata = JSON.parse(data);
-        const f_data = pdata.filter((i) => i.frm_user === with_userid);
+        const f_data = pdata.filter((i) => i.frm_user === with_userid || i.to_user === with_userid);
         handleFetchedData(f_data);
         setLoading(false);
       }

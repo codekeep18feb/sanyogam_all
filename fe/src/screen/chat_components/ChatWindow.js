@@ -397,7 +397,7 @@ export default function ChatWindow({ SetWithUserId, SetWithEmail, with_email, wi
       const rtc_entry = await fetchRTCUserInfo();
       const intervalId = setInterval(() => {
         fetchRTCUserInfo(); // Fetch data every 10 seconds
-      }, 10000);
+      }, 100000);
       setIntervalId(intervalId);
       console.log("rtc_entry mayn eed more checks", rtc_entry);
       if (rtc_entry == null) {

@@ -80,7 +80,7 @@ function Video({ auth_data }) {
 
     // const intervalId = setInterval(() => {
     //   fetchData(); // Fetch data every 10 seconds
-    // }, 10000);
+    // }, 100000);
 
     // Fetch data from the /api/profiles endpoint
     const JWT_TOKEN = localStorage.getItem("token");
