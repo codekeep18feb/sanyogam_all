@@ -21,9 +21,11 @@ def index():
     return render_template('index.html')
 
 @socketio.on('custom_event')
-def handle_message(message):
+def handle_message(*args):
     # token = request.args.get('token')
-    # print('tokendsfds',token)
+    print(dir(args),'sadfsda')
+    message = args.message
+    print('tokendsfds',message)
     # if not token:
     #     disconnect()
     #     return
@@ -105,7 +107,7 @@ def handle_message(*args):
 @socketio.on('fetch_profile_chats')
 def handle_message(*args):
     message = 'merersg'
-    print('Received payload for fetch_profile_chats:', message,args,request.sid)
+    print('Received chat msg:', message,args,request.sid,dir(args))
     
     
     #********************IDEA IS SIMPLE*************

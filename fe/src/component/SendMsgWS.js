@@ -24,12 +24,12 @@ const SendMsgWS = () => {
     const prefix = selectedPrefix || 'AC'; // Use 'AC' as the default prefix
     const message = prefix + messageInput;
     console.log('werewehere 2nd time')
-    socket.emit('fetch_online_profiles', message);
+    socket.emit('custom_event', message);
     setMessageInput('');
   };
 
   React.useEffect(() => {
-    socket.on('fetch_online_profiles', (data) => {
+    socket.on('custom_event', (data) => {
       setMessages([...messages, data]);
     });
 

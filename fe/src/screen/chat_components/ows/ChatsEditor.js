@@ -5,7 +5,7 @@ import UserChatTileInListCOWs from "./UserChatTileInListCOWS";
 import ChatsOWSTile from './ChatsOWSTile';
 import NewChatScreen from './NewChatScreen';
 
-export default function ChatsEditor() {
+export default function ChatsEditor({with_userid}) {
   // State for storing online profiles
   const [allChats, setAllChats] = useState(null);
 
@@ -40,8 +40,12 @@ useEffect(() => {
   // Event listener for fetching online profiles
   socket.on('fetch_profile_chats', (data) => {
     if (data) {
-      console.log('Data rdfeceived:', data);
-      setAllChats(JSON.parse(data));
+      // filtering logic
+      const pdata = JSON.parse(data)
+      console.log('dsfasdfpdata',pdata,with_userid)
+      const f_data = pdata.filter((i)=>i.frm_user==with_userid)
+  
+      setAllChats(f_data);
       setLoading(false);
     }
   });

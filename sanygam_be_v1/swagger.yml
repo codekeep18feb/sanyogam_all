@@ -86,9 +86,9 @@ components:
     MsgContent:
       type: "object"
       required:
-        - content
+        - msg
       properties:
-        content:
+        msg:
           type: "string"
     
     SaveOauthUserData:

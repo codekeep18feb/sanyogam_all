@@ -1,20 +1,38 @@
 import { Grid } from '@mui/material';
 import React, { useState } from 'react';
 import SendIcon from "@mui/icons-material/Send";
+import io from 'socket.io-client';
 
-export default function NewChatScreen({ chats, sendMsg }) {
+export default function NewChatScreen({ chats }) {
   const [textareaValue, setTextareaValue] = useState('');
   const [sendingMessage, setSendingMessage] = useState(false);
   const handleTextareaChange = (e) => {
     setTextareaValue(e.target.value);
   };
 
+  const [socket, setSocket] = useState(
+    io.connect('http://192.168.1.13:8000', {
+      query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    })
+  );
+
+  const sendMessage = () => {
+    // const prefix = selectedPrefix || 'AC'; // Use 'AC' as the default prefix
+    const message =textareaValue;
+    console.log('werewehere 3nd time')
+    //instead let's just make an api call
+    // socket.emit('custom_event', message);
+    setTextareaValue('');
+  };
+
+
   const handleSendMessage = async () => {
     if (textareaValue.trim() === '') {
       return; // Don't send empty messages
     }
     else{
-      sendMsg(textareaValue)
+      console.log('here istextareaValue',textareaValue)
+      sendMessage(textareaValue)
       setTextareaValue('')
     }
 

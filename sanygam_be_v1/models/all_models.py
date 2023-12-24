@@ -185,7 +185,6 @@ class EnumField(fields.Field):
 
 
 class ChatEnum(enum.Enum):
-    SENDING = "SENDING"
     SENT = "SENT"
     FAILED = "FAILED"
     DELIVERED = "DELIVERED"
@@ -198,7 +197,8 @@ class ChatHistory(db.Model):
     msg = db.Column(db.String(100))
     frm_user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     frm_user = db.relationship('User', foreign_keys=[frm_user_id])
-    status = db.Column(Enum(ChatEnum))    
+    status = db.Column(Enum(ChatEnum),default=ChatEnum.SENT)  
+      
     to_user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     to_user = db.relationship('User', foreign_keys=[to_user_id])
 

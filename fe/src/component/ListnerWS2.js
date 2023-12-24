@@ -22,7 +22,7 @@ const ListnerWS2 = () => {
 
   React.useEffect(() => {
     console.log('fjasdf')
-    socket.on('fetch_online_profiles', (data) => {
+    socket.on('custom_event', (data) => {
       console.log('asrere we getting the mess here',data)
       // console.log('arerwehere??',data)
       // setMessages([...messages, data]);
