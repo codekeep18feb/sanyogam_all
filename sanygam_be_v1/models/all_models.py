@@ -8,6 +8,10 @@ from marshmallow import fields
 
 from sqlalchemy import event,Enum  # Add this import statement
 
+# from sqlalchemy import event
+
+
+
 class Profile(db.Model):
     __tablename__ = "profile"
     id = db.Column(db.Integer, primary_key=True)
@@ -60,6 +64,12 @@ class User(db.Model):
     online = db.Column(db.Boolean, default=False)
 
 
+# Add an event listener to the UserRequests table for inserts
+@event.listens_for(User, 'after_insert')
+def after_user_insert(mapper, connection, target):
+    print('targetdfgfd',target,mapper,connection)
+    # Your custom code here
+    print(f"User created: {target.id}")
 
 class UserSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
