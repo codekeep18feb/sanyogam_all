@@ -22,14 +22,14 @@ const SendMsgWS = () => {
 
   const sendMessage = () => {
     const prefix = selectedPrefix || 'AC'; // Use 'AC' as the default prefix
-    const message = prefix + messageInput;
+    const message = messageInput;
     console.log('werewehere 2nd time')
-    socket.emit('custom_event', message);
+    socket.emit('signal_pool', message);
     setMessageInput('');
   };
 
   React.useEffect(() => {
-    socket.on('custom_event', (data) => {
+    socket.on('signal_pool', (data) => {
       setMessages([...messages, data]);
     });
 

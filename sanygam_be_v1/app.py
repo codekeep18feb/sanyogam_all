@@ -33,6 +33,69 @@ def handle_message(*args):
     print('Received message custom_event:', message)
     socketio.emit('custom_event', message)  # Echo the message b
 
+s_pool=[]
+@socketio.on('signal_pool')
+def handle_message(message):
+    print('check if msg is string only',message,type(message))
+    auth_token = request.args.get('Authorization')
+    if not auth_token:
+        print('MARK1')
+        return "Unauthorized", 401
+    
+    scheme, token = auth_token.split('Bearer ')    
+    decoded = decode_token(token)
+    decoded_data_str = decoded['sub']
+    json_dec_data = json.loads(decoded_data_str)
+    me = User.query.filter_by(email=json_dec_data['email']).first()
+    p_payload = json.loads(message)
+    print('prepared p_payload', p_payload,type(p_payload))
+    if "action" in p_payload:
+    # Save the value of the key
+        # action = del p_payload["action"]
+        
+        action = p_payload.pop("action",'ADD')
+        if action=='ADD':
+            payload = {
+                'offer':p_payload['offer'],
+                'answer':None,
+                'initator':me.id,
+                'responder':p_payload['responder'],
+                'id':len(s_pool)+1
+            }
+            print('prepared payload', payload)
+            s_pool.append(payload)
+
+        elif action=='UPDATE':
+            payload = {
+                'answer':p_payload['answer'],
+                'responder':p_payload['responder'],
+                'id':p_payload['id']
+            }
+            # s_pool.append(payload)
+            # desired_dict = next((d for d in s_pool if d.get('id') == p_payload['id']), None)
+            for obj in s_pool:
+                if obj['id']==p_payload['id']:
+                    print('adfasdf we here')
+                    obj['answer']=p_payload['answer']
+                    obj['responder']=p_payload['responder']
+                    break
+            # print('prepared payload', desired_dict)
+
+        elif action=='DELETE':
+            payload = {
+                'id':p_payload['id']
+            }
+            for ind, obj in enumerate(s_pool):
+                if obj['id']==p_payload['id']:
+                    deleted_element = s_pool.pop(ind)
+                    print('rip',deleted_element)
+                    break
+
+            print('payload id to delete', payload)
+            # s_pool.append(payload)
+
+    socketio.emit('signal_pool', json.dumps(s_pool))  # Echo the message bv
+
 
 
 @socketio.on('fetch_online_profiles')

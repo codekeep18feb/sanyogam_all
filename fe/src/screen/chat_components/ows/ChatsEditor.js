@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import io from 'socket.io-client';
-import { Grid, CircularProgress } from '@mui/material';
+import { Grid, CircularProgress, Button } from '@mui/material';
 import NewChatScreen from './NewChatScreen';
 
 const SocketWrapperFetchProfiles = ({ with_userid, handleFetchedData, children }) => {
@@ -52,6 +52,7 @@ const SocketWrapperFetchProfiles = ({ with_userid, handleFetchedData, children }
 
 const ChatsEditor = ({ with_userid }) => {
   const [allChats, setAllChats] = useState(null);
+  const [videoChat, setvideoChat] = useState(false)
 
   const handleFetchedData = (data) => {
     setAllChats(data);
@@ -61,14 +62,25 @@ const ChatsEditor = ({ with_userid }) => {
     <SocketWrapperFetchProfiles with_userid={with_userid} handleFetchedData={handleFetchedData}>
       <div>
         <div>all chats</div>
+        <Button onClick={(e)=>{
+          e.preventDefault()
+          setvideoChat(true)
+        }}>Video Chat</Button>
         {!with_userid && <CircularProgress />}
-        {with_userid && (
+        {with_userid && !videoChat && (
           <Grid container spacing={2}>
             {allChats && (
               <div style={{ marginTop: "10px" }}>
                 <NewChatScreen chats={allChats} sendMsg={() => {}} />
               </div>
             )}
+          </Grid>
+        )}
+        {with_userid && videoChat && (
+          <Grid container spacing={2}>
+            <div style={{border:"2px solid green",height:"300px",width:"300px"}}>
+              <div>WRTC CONN STATUS - </div>
+            </div>
           </Grid>
         )}
       </div>
