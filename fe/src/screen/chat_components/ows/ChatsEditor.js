@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import io from 'socket.io-client';
 import { Grid, CircularProgress, Button } from '@mui/material';
 import NewChatScreen from './NewChatScreen';
-
+import VideoOWS from './VideoOWS'
 const SocketWrapperFetchProfiles = ({ with_userid, handleFetchedData, children }) => {
   const [socket, setSocket] = useState(
     io.connect('http://192.168.1.13:8000', {
@@ -77,11 +77,7 @@ const ChatsEditor = ({ with_userid }) => {
           </Grid>
         )}
         {with_userid && videoChat && (
-          <Grid container spacing={2}>
-            <div style={{border:"2px solid green",height:"300px",width:"300px"}}>
-              <div>WRTC CONN STATUS - </div>
-            </div>
-          </Grid>
+          <VideoOWS with_userid={with_userid}/>
         )}
       </div>
     </SocketWrapperFetchProfiles>
