@@ -67,7 +67,7 @@ export default function ChatOWS({ chats }) {
         <Typography variant="h5" gutterBottom>
           with_userid - {with_userid}
         </Typography>
-        {with_userid && <ChatsEditor with_userid={with_userid} />}
+        {with_userid && <ChatsEditor with_email={with_email} with_userid={with_userid} />}
       </>
     </Paper>
   );

@@ -59,7 +59,7 @@ def handle_message(message):
                 'offer':p_payload['offer'],
                 'answer':None,
                 'initator':me.id,
-                'responder':p_payload['responder'],
+                'responder':None,
                 'id':len(s_pool)+1
             }
             print('prepared payload', payload)

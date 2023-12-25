@@ -50,7 +50,7 @@ const SocketWrapperFetchProfiles = ({ with_userid, handleFetchedData, children }
   return <>{children}</>;
 };
 
-const ChatsEditor = ({ with_userid }) => {
+const ChatsEditor = ({ with_email, with_userid }) => {
   const [allChats, setAllChats] = useState(null);
   const [videoChat, setvideoChat] = useState(false)
 
@@ -76,8 +76,8 @@ const ChatsEditor = ({ with_userid }) => {
             )}
           </Grid>
         )}
-        {with_userid && videoChat && (
-          <VideoOWS with_userid={with_userid}/>
+        {with_userid && with_email && videoChat && (
+          <VideoOWS with_userid={with_userid} with_email={with_email} />
         )}
       </div>
     </SocketWrapperFetchProfiles>
