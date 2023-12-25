@@ -16,14 +16,14 @@ export default function VideoWindowOWS({ with_email, with_userid }) {
   // const [videoStream, setVideoStream] = useState(null);
 
   const [connection_open, setConnectionOpened] = useState(false);
-  
+
   const fetchRTCUserInfo = async () => {
     const JWT_TOKEN = localStorage.getItem("token");
     const token = `Bearer ${JWT_TOKEN}`;
 
     try {
       const response = await fetch(
-        `http://192.168.1.13:8000/api/rtc_user_info_by_id/${with_userid}`,
+        `http://192.168.1.8:8000/api/rtc_user_info_by_id/${with_userid}`,
         {
           method: "GET",
           headers: {
@@ -64,7 +64,7 @@ export default function VideoWindowOWS({ with_email, with_userid }) {
     const token = `Bearer ${JWT_TOKEN}`;
 
     try {
-      const response = await fetch(`http://192.168.1.13:8000/api/add_rtc_user`, {
+      const response = await fetch(`http://192.168.1.8:8000/api/add_rtc_user`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -99,7 +99,7 @@ export default function VideoWindowOWS({ with_email, with_userid }) {
     const token = `Bearer ${JWT_TOKEN}`;
 
     try {
-      const response = await fetch(`http://192.168.1.13:8000/api/add_rtc_user`, {
+      const response = await fetch(`http://192.168.1.8:8000/api/add_rtc_user`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -132,7 +132,7 @@ export default function VideoWindowOWS({ with_email, with_userid }) {
 
     try {
       const response = await fetch(
-        `http://192.168.1.13:8000/api/rtc_user_info_by_id/${with_userid}`,
+        `http://192.168.1.8:8000/api/rtc_user_info_by_id/${with_userid}`,
         {
           method: "GET",
           headers: {
@@ -156,10 +156,10 @@ export default function VideoWindowOWS({ with_email, with_userid }) {
     }
   };
   const fetchUserId = async (token, with_email) => {
-    // http://192.168.1.13:8000/api/users/query?q_email=deepaksingh.18feb%40gmail.com
+    // http://192.168.1.8:8000/api/users/query?q_email=deepaksingh.18feb%40gmail.com
     try {
       const response = await fetch(
-        `http://192.168.1.13:8000/api/users/query?q_email=${with_email}`,
+        `http://192.168.1.8:8000/api/users/query?q_email=${with_email}`,
         {
           method: "GET",
           headers: {
@@ -322,7 +322,7 @@ export default function VideoWindowOWS({ with_email, with_userid }) {
       return [rc];
     }
   };
-  
+
   useEffect(async () => {
     // fetchRTCUserInfo(); // Fetch data initially
     // console.log("main useeffect ran")
@@ -341,7 +341,7 @@ export default function VideoWindowOWS({ with_email, with_userid }) {
 
       try {
         const response = await fetch(
-          `http://192.168.1.13:8000/api/chathistory/${with_email}`,
+          `http://192.168.1.8:8000/api/chathistory/${with_email}`,
           {
             method: "GET",
             headers: {
@@ -370,7 +370,7 @@ export default function VideoWindowOWS({ with_email, with_userid }) {
 
       try {
         const response = await fetch(
-          `http://192.168.1.13:8000/api/handle_request?to_email=${with_email}`,
+          `http://192.168.1.8:8000/api/handle_request?to_email=${with_email}`,
           {
             method: "GET",
             headers: {
@@ -525,7 +525,7 @@ export default function VideoWindowOWS({ with_email, with_userid }) {
   // }, [answer]);
 
   console.log("answerishere", answer);
-  
+
   useEffect(() => {
     if (connection_open) {
       clearInterval(intervalId);

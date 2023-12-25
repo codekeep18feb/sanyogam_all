@@ -1,19 +1,19 @@
-import React, { useState } from 'react';
-import io from 'socket.io-client';
+import React, { useState } from "react";
+import io from "socket.io-client";
 
 const SendMsgWS = () => {
   // const [socket, setSocket] = useState(
-  //   io.connect('http://192.168.1.13:8000')
+  //   io.connect('http://192.168.1.8:8000')
   // );
   const [socket, setSocket] = useState(
-    io.connect('http://192.168.1.13:8000', {
+    io.connect("http://192.168.1.8:8000", {
       query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     })
   );
-  
-  // const [socket, setSocket] = useState(io.connect('http://192.168.1.13:8000'));
+
+  // const [socket, setSocket] = useState(io.connect('http://192.168.1.8:8000'));
   const [messages, setMessages] = useState([]);
-  const [messageInput, setMessageInput] = useState('');
+  const [messageInput, setMessageInput] = useState("");
   const [selectedPrefix, setSelectedPrefix] = useState(null);
 
   const handlePrefixChange = (event) => {
@@ -21,15 +21,15 @@ const SendMsgWS = () => {
   };
 
   const sendMessage = () => {
-    const prefix = selectedPrefix || 'AC'; // Use 'AC' as the default prefix
+    const prefix = selectedPrefix || "AC"; // Use 'AC' as the default prefix
     const message = messageInput;
-    console.log('werewehere 2nd time')
-    socket.emit('signal_pool', message);
-    setMessageInput('');
+    console.log("werewehere 2nd time");
+    socket.emit("signal_pool", message);
+    setMessageInput("");
   };
 
   React.useEffect(() => {
-    socket.on('signal_pool', (data) => {
+    socket.on("signal_pool", (data) => {
       setMessages([...messages, data]);
     });
 
@@ -54,9 +54,9 @@ const SendMsgWS = () => {
             type="radio"
             name="prefix"
             value="AC"
-            defaultChecked={selectedPrefix === null || selectedPrefix === 'AC'}
+            defaultChecked={selectedPrefix === null || selectedPrefix === "AC"}
             onChange={handlePrefixChange}
-          />{' '}
+          />{" "}
           AC
         </label>
         <label>
@@ -64,9 +64,9 @@ const SendMsgWS = () => {
             type="radio"
             name="prefix"
             value="DC"
-            checked={selectedPrefix === 'DC'}
+            checked={selectedPrefix === "DC"}
             onChange={handlePrefixChange}
-          />{' '}
+          />{" "}
           DC
         </label>
       </div>
@@ -77,10 +77,14 @@ const SendMsgWS = () => {
         onChange={(e) => setMessageInput(e.target.value)}
         placeholder="Type your message"
       />
-      <button onClick={(e)=>{
-        e.preventDefault()
-        sendMessage()
-      }}>Send</button>
+      <button
+        onClick={(e) => {
+          e.preventDefault();
+          sendMessage();
+        }}
+      >
+        Send
+      </button>
     </div>
   );
 };
