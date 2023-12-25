@@ -51,7 +51,7 @@ import Home from './screen/Home.js';
 import SendMsgWS from './component/SendMsgWS.js';
 import ChatWS from './screen/chat_components/ChatWS.js';
 import PlayGround2 from './screen/PlayGround2.js';
-import ChatOWS from './screen/chat_components/ows/ChatOWS.js';
+import ChatPARENTOWS from './screen/chat_components/ows/ChatPARENTOWS.js';
 // import ProfileBriefTile from './screen/ProfileBriefTile.js';
 
 const MaterialUX = ()=>{
@@ -172,7 +172,7 @@ function App({ authData,login }) {
         element={
           <PrivateRoute>
             <WrapperMobileShell>
-              <ChatOWS />
+              <ChatPARENTOWS />
             </WrapperMobileShell>
           </PrivateRoute>
         }
