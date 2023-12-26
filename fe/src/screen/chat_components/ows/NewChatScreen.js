@@ -87,57 +87,55 @@ export default function NewChatScreen({ chats, to_email }) {
 
   return (
     // <div  style={{border:"1px solid green",width:"100%",marginTop:"10px"}}>
-    <Grid container style={{"height":"100vh"}} flexDirection={"column"} alignItems={"center"}>
+    <Grid container style={{ "height": "100vh" }} alignItems={"center"}>
 
-      <Grid item xs={10} style={{"width":"100%"}}>
-      <div style={{ display: "flex", "flex-direction": "column",overflowY: 'scroll' }}>
-        <div style={{ "flex-grow": 1, "background-color": "lightblue" }}>
+      <Grid item xs={10} style={{ "width": "100%" }}>
+        <div style={{ display: "flex", "flex-direction": "column", overflowY: 'scroll' }}>
           {chats && chats.map((chat, index) => (
-            <div key={index}
+                <div key={index}
 
-              style={{ padding: "10px", color: Object.keys("who") && chat.who !== "ME" ? "green" : "grey", textAlign: Object.keys("who") && chat.who === "ME" ? "left" : "right", fontStyle: "italic", fontSize: "19px" }}
+                  style={{ padding: "10px", color: Object.keys("who") && chat.who !== "ME" ? "green" : "grey", textAlign: Object.keys("who") && chat.who === "ME" ? "left" : "right", fontStyle: "italic", fontSize: "19px" }}
 
-            >
-              {chat.msg}
-            </div>
-          ))}
+                >
+                  {chat.msg}
+                </div>
+              ))}
         </div>
-      </div>
 
       </Grid>
       <Grid xs={10} container flexDirection={"row"} spacing={2} justifyContent={"center"}>
-             <Grid item xs={8}>
-             <textarea
-                style={{
-                  width: "100%",
-                  borderRadius: "20px",
-                  textAlign: "center", // Center-align the placeholder text
-                }}
-                placeholder="Type something..."
-                value={textareaValue}
-                onChange={handleTextareaChange}
-                disabled={sendingMessage} // Disable textarea while sending
-              />
-             </Grid>
-          <Grid item xs={2}>
+        <Grid item xs={8}>
+          <textarea
+            style={{
+              width: "100%",
+              borderRadius: "20px",
+              textAlign: "center", // Center-align the placeholder text
+            }}
+            placeholder="Type something..."
+            value={textareaValue}
+            onChange={handleTextareaChange}
+            disabled={sendingMessage} // Disable textarea while sending
+          />
+        </Grid>
+        <Grid item xs={2}>
           <SendIcon
-                tabIndex={0}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    handleSendMessage(to_email);
-                  }
-                }}
-                
-                onClick={() => {
-                  handleSendMessage(to_email)
-                }
-                }
-                disabled={sendingMessage} 
-                style={{ fontSize: "35px", color: "#1F4294" }}
-                />
-          </Grid>
-            </Grid>
-          
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                handleSendMessage(to_email);
+              }
+            }}
+
+            onClick={() => {
+              handleSendMessage(to_email)
+            }
+            }
+            disabled={sendingMessage}
+            style={{ fontSize: "35px", color: "#1F4294" }}
+          />
+        </Grid>
+      </Grid>
+
 
     </Grid>
   );

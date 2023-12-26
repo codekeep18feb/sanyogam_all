@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import io from 'socket.io-client';
-import { Grid, Paper, Typography, CircularProgress } from '@mui/material';
+import { Grid, Paper, Typography, CircularProgress, Button } from '@mui/material';
 import UserChatTileInListCOWs from "./UserChatTileInListCOWS";
 import ChatsOWSTile from './ChatsOWSTile';
 import ChatsEditor from './ChatsEditor';
+import SendIcon from "@mui/icons-material/ArrowBack";
 
 export default function ChatPARENTOWS() {
   // State for storing online profiles
@@ -112,10 +113,31 @@ export default function ChatPARENTOWS() {
     />
   )
 
-  const chats_window = (<Paper style={{ padding: 20 }}>
+  const chats_window = (<Paper>
     <>
-    <Typography variant="h5" gutterBottom>
+    <Typography variant="h5" gutterBottom >
+      {/* <Button onClick={()=>{
+        SetWithUserId(null)
+        SetWithEmail(null)
+      }}>ROute back</Button> */}
+      <SendIcon
+            tabIndex={0}
+            // onKeyDown={(e) => {
+            //   if (e.key === 'Enter') {
+            //     handleSendMessage(to_email);
+            //   }
+            // }}
+
+            onClick={() => {
+              // handleSendMessage(to_email)
+              SetWithUserId(null)
+              SetWithEmail(null)
+            }
+            }
+            style={{ fontSize: "35px", color: "#1F4294" }}
+          />
     with_userid - {with_userid} - {with_email}
+
     </Typography>
     {with_userid && <ChatsEditor with_userid={with_userid} with_email={with_email}/>}
     </>
@@ -140,7 +162,7 @@ export default function ChatPARENTOWS() {
         </Paper>
       </Grid>}
 
-      {with_userid && <Grid item xs={12} md={8}>
+      {with_userid && <Grid container item xs={12} md={8}>
         {chats_window}
       </Grid>}
     </Grid>
