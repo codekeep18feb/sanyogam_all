@@ -106,8 +106,8 @@ def handle_message(*args):
 
 @socketio.on('fetch_profile_chats')
 def handle_message(*args):
+    with_user_id = args[0]
     message = 'merersg'
-    print('Received chat msg:', message,args,request.sid,dir(args))
     
     
     #********************IDEA IS SIMPLE*************
@@ -132,9 +132,18 @@ def handle_message(*args):
     me = User.query.filter_by(email=json_dec_data['email']).first()
 
     print('ME.PROFILE',me.profile)
+    print('Received chat msgsfdssdf:', with_user_id,me.id)
+
+    # query = ChatHistory.query
+    # all_chats = query.filter(
+    #     (ChatHistory.frm_user_id == me.id)
+    # )
+
+    all_chats = ChatHistory.query.filter(
+        (ChatHistory.frm_user_id == me.id)
+    )
     
-    all_chats = ChatHistory.query.all()
-    print('MARK4')
+    print('MARK4afasdf',all_chats)
     # all_profiles_data = handle_filtering(all_profiles_query,
     #     {
     #     "family_info": {}

@@ -4,6 +4,9 @@ import NewChatScreen from './NewChatScreen';
 import { CircularProgress, Grid } from '@mui/material';
 
 const withSocket = (Component) => {
+  // const JWT_TOKEN = localStorage.getItem("token");
+  // const token = `Bearer ${JWT_TOKEN}`;
+
   return function WithSocketComponent({ with_userid, ...props }) {
     const [socket, setSocket] = useState(
       io.connect('http://192.168.1.13:8000', {
@@ -16,7 +19,7 @@ const withSocket = (Component) => {
 
     useEffect(() => {
       const fetchOnlineProfiles = () => {
-        socket.emit('fetch_profile_chats');
+        socket.emit('fetch_profile_chats', with_userid);
       };
 
       fetchOnlineProfiles();
