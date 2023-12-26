@@ -19,6 +19,7 @@ const withSocket = (Component) => {
 
     useEffect(() => {
       const fetchOnlineProfiles = () => {
+        const room = "hardcode"
         socket.emit('fetch_profile_chats', with_userid);
       };
 

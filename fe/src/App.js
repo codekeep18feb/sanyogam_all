@@ -177,6 +177,8 @@ function App({ authData,login }) {
           </PrivateRoute>
         }
       />
+
+      
       <Route
         path="/chat_ws"
         element={

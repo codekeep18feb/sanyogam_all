@@ -11,6 +11,7 @@ import MonitorWSStatus from '../component/MonitorWSStatus';
 import ListnerWS1 from '../component/ListnerWS1';
 
 import SendMsgWS from '../component/SendMsgWS';
+import RoomFeature from './RoomFeature';
 
 const useStyles = makeStyles({
   scrollContainer: {
@@ -60,9 +61,9 @@ export default function PlayGround() {
   return (
     <div>
     {/* <MonitorWSStatus /> */}
-    <SendMsgWS />
-    <ListnerWS1 />
-
+    {/* <SendMsgWS />
+    <ListnerWS1 /> */}
+  <RoomFeature />
 
     </div>
     // <ImageCircle user={{id:1,online:true}} />
