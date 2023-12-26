@@ -2,6 +2,7 @@ from flask import render_template,abort,jsonify # Remove: import Flask
 # import config
 from datetime import datetime
 from models import User, Profile,ProfileSchema, chat_histories_schema, profiles_schema, ChatHistory
+from sqlalchemy import or_, and_
 
 import json
 from flask_migrate import Migrate
@@ -20,6 +21,9 @@ migrate = Migrate(app, db)
 def index():
     return render_template('index.html')
 
+
+
+
 @socketio.on('custom_event')
 def handle_message(*args):
     # token = request.args.get('token')
@@ -33,6 +37,18 @@ def handle_message(*args):
     print('Received message custom_event:', message)
     socketio.emit('custom_event', message)  # Echo the message b
 
+
+@socketio.on('send_message')
+def handle_send_message(data):
+    # Extract the peer ID from the data
+    peer_id = data.get('to')
+
+    # Join a room based on the peer ID
+    room = f'{peer_id}' #"hardcoded"#f"{request.sid}-{peer_id}"
+    join_room(room)
+    print('AREWEREWR')
+    # Emit the message to the specific room (between two peers)
+    socketio.emit('receive_message', {'message': data['message']}, room=room)
 
 
 @socketio.on('fetch_online_profiles')
@@ -104,6 +120,9 @@ def handle_message(*args):
 
 
 
+# Set to store existing rooms
+existing_rooms = set()
+
 @socketio.on('fetch_profile_chats')
 def handle_message(*args):
     with_user_id = args[0]
@@ -133,16 +152,24 @@ def handle_message(*args):
 
     print('ME.PROFILE',me.profile)
     print('Received chat msgsfdssdf:', with_user_id,me.id)
-
     # query = ChatHistory.query
     # all_chats = query.filter(
     #     (ChatHistory.frm_user_id == me.id)
     # )
 
-    all_chats = ChatHistory.query.filter(
-        (ChatHistory.frm_user_id == me.id)
-    )
+    # all_chats = ChatHistory.query.filter(
+    #     (ChatHistory.frm_user_id == me.id)
+    # )
     
+    all_chats = ChatHistory.query.filter(
+        and_(
+            or_(ChatHistory.frm_user_id == me.id, ChatHistory.to_user_id == me.id),
+            or_(ChatHistory.frm_user_id == with_user_id, ChatHistory.to_user_id == with_user_id),
+        )
+        )
+
+    all_chats = all_chats.all()
+
     print('MARK4afasdf',all_chats)
     # all_profiles_data = handle_filtering(all_profiles_query,
     #     {
@@ -155,7 +182,16 @@ def handle_message(*args):
     
     print('RESUSLdT: ',chats)
     # return fres
-    socketio.emit('fetch_profile_chats', json.dumps(chats))
+    # room = "hardcoded"#f"{request.sid}-{peer_id}"
+    room_str = f"{me.id}_{with_user_id}"
+    first, second = room_str.split('_')
+    new_roo_str = f"{second}_{first}"
+    if room_str not in existing_rooms and new_roo_str not in existing_rooms:
+        existing_rooms.add(room_str)
+
+    # existing_rooms.add(room_str)
+    join_room(room_str)
+    socketio.emit('fetch_profile_chats', json.dumps(chats), room=room_str)
     # socketio.emit('fetch_profile_chats', chat_histories_schema.dump(all_chats))
 
 
