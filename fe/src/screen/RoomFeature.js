@@ -54,6 +54,7 @@ const App = () => {
   useEffect(() => {
     // Event listener for the 'receive_message' event
     socket.on('receive_message', (data) => {
+      console.log('here there was a message')
       setMessages((prevMessages) => [...prevMessages, data.message]);
     });
 

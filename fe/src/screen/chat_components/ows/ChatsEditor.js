@@ -31,6 +31,7 @@ const withSocket = (Component) => {
 
       socket.on('fetch_profile_chats', (data) => {
         if (data) {
+          console.log('dafsfasd',data.room)
           const pdata = JSON.parse(data);
           console.log('sdfasdf',pdata)
           const f_data = pdata//.filter((i) => (i.frm_user === with_userid));
@@ -65,10 +66,13 @@ const withSocket = (Component) => {
     return <Component allChats={allChats} loading={loading} {...props} />;
   };
 };
+
+
+
 function ChatsEditor({ allChats, loading, with_email }) {
   const [webrtc_conn, setWebrtc_conn] = useState(null)
 
-  console.log('isreierewr')
+  console.log('this shoudl not rerender if other twos are toaking')
 
   return (
     <div      

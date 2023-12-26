@@ -14,6 +14,7 @@ const SendMsgWS = () => {
   // const [socket, setSocket] = useState(io.connect('http://192.168.1.13:8000'));
   const [messages, setMessages] = useState([]);
   const [messageInput, setMessageInput] = useState('');
+  const [room_id, setRoomId] = useState('');
   const [selectedPrefix, setSelectedPrefix] = useState(null);
 
   const handlePrefixChange = (event) => {
@@ -21,15 +22,17 @@ const SendMsgWS = () => {
   };
 
   const sendMessage = () => {
-    const prefix = selectedPrefix || 'AC'; // Use 'AC' as the default prefix
-    const message = prefix + messageInput;
+    // const prefix = selectedPrefix || 'AC'; // Use 'AC' as the default prefix
+    const message = messageInput;
     console.log('werewehere 2nd time')
-    socket.emit('custom_event', message);
+    socket.emit('signal_pool', message,room_id);
     setMessageInput('');
+    setRoomId('');
   };
 
   React.useEffect(() => {
-    socket.on('custom_event', (data) => {
+    socket.on('signal_pool', (data,a) => {
+      console.log('dafsdgfhfdghf',data.room,data.to,a,data)
       setMessages([...messages, data]);
     });
 
@@ -76,6 +79,12 @@ const SendMsgWS = () => {
         value={messageInput}
         onChange={(e) => setMessageInput(e.target.value)}
         placeholder="Type your message"
+      />
+      <input
+        type="text"
+        value={room_id}
+        onChange={(e) => setRoomId(e.target.value)}
+        placeholder="Type room_id"
       />
       <button onClick={(e)=>{
         e.preventDefault()
