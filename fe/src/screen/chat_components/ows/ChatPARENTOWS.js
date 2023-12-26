@@ -10,6 +10,7 @@ export default function ChatPARENTOWS() {
   const [onlineProfiles, setOnlineProfiles] = useState(null);
   const [with_userid, SetWithUserId] = useState(null);
   const [with_email, SetWithEmail] = useState(null);
+
   console.log('ChatPARENTOWS parent of profiles and chats')
 
   // State for managing the socket connection
@@ -123,7 +124,7 @@ export default function ChatPARENTOWS() {
   console.log('this should only be running once as of now as we are setting the state only once',onlineProfiles)
   return (
     <Grid container spacing={3}>
-      <Grid item xs={6}>
+      {!with_userid && <Grid item xs={12} md={4}>
         <Paper style={{ padding: 20, maxHeight: '80vh', overflow: 'auto' }}>
           <Typography variant="h5" gutterBottom>
             Online Profiles
@@ -131,17 +132,17 @@ export default function ChatPARENTOWS() {
           {/* Show loader if onlineProfiles is null */}
           {loading && <CircularProgress />}
           {/* Show onlineProfiles if not null */}
-          {!loading && (
+          {!loading && all_online_profiles && (
             <Grid container spacing={2}>
               {all_online_profiles}
             </Grid>
           )}
         </Paper>
-      </Grid>
+      </Grid>}
 
-      <Grid item xs={6}>
+      {with_userid && <Grid item xs={12} md={8}>
         {chats_window}
-      </Grid>
+      </Grid>}
     </Grid>
   );
 }

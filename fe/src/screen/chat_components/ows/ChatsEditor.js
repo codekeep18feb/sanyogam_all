@@ -62,18 +62,30 @@ const withSocket = (Component) => {
   };
 };
 function ChatsEditor({ allChats, loading, with_email }) {
+  const [webrtc_conn, setWebrtc_conn] = useState(null)
+
   console.log('isreierewr')
 
   return (
-    <div>
-      <div>all chats</div>
+    <div      
+    // style={{
+    //   // border: "1px solid blue",
+    //   // height: "600px",
+    //   // // width: "700px",
+    //   // background: "rgb(221, 237, 240,0.2)",
+    //   position: "fixed",
+    //   top: 0,
+    //   left: 0,
+    //   width: "100%",
+    //   height: "100%",
+    //   background: "white",
+    // }}
+    >
       {loading && <CircularProgress />}
       {!loading && (
         <Grid container spacing={2}>
           {allChats && (
-            <div style={{ marginTop: "10px" }}>
               <NewChatScreen chats={allChats} to_email={with_email} />
-            </div>
           )}
         </Grid>
       )}

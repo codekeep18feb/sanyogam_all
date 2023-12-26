@@ -59,7 +59,7 @@ const ChatScreenHeader=forwardRef(({ setvideoView, videoView, with_userid, with_
   );
 })
 
-const ChatScreenWithInfo = forwardRef(({ soc_conn, videoView, setvideoView, with_userid, SetWithUserId, SetWithEmail, requestStatus, connection_open, with_email, chats, sendMsg }, myRef) => {
+const ChatScreenWithInfOWS = forwardRef(({ soc_conn, videoView, setvideoView, with_userid, SetWithUserId, SetWithEmail, requestStatus, connection_open, with_email, chats, sendMsg }, myRef) => {
   // const [videoView, setvideoView] = useState(false)
 
   console.log('WHAT IS the soc_conn', soc_conn)
@@ -132,4 +132,4 @@ const ChatScreenWithInfo = forwardRef(({ soc_conn, videoView, setvideoView, with
   );
 })
 
-export default ChatScreenWithInfo;
+export default ChatScreenWithInfOWS;
