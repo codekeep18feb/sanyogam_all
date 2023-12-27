@@ -9,6 +9,7 @@ import VideoCallIcon from '@mui/icons-material/VideoCall';
 import { ImageCircle } from '../../chat_components/ImageCircle';
 import AudioCallIcon from '@mui/icons-material/Call';
 import { Typography } from '@material-ui/core';
+import PhoneCallUI from '../../PhoneCallUI';
 
 const withSocket = (Component) => {
   // const JWT_TOKEN = localStorage.getItem("token");
@@ -125,14 +126,14 @@ function VideoComp({with_userid}) {
   // const [signal_pool, setsignal_pool] = useState(true)
   const yourVideoRef = useRef(null);
   const myRef = useRef(null);
-
+  const [callStatus, setCallStatus] = useState(null)
   const [socket, setSocket] = useState(
     io.connect('http://192.168.1.13:8000', {
       query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     })
   );
 
-  const [signal_pool, setSignalPool] = useState([]);
+  const [signal_pool, setSignalPool] = useState({});
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -240,7 +241,7 @@ function VideoComp({with_userid}) {
   };
 
   useEffect(async() => {
-    if (signal_pool.length==0){
+    if (Object.keys(signal_pool).length==0){
       console.log('wevewrqwe here')
       const JWT_TOKEN = localStorage.getItem("token");
       const token = `Bearer ${JWT_TOKEN}`;
@@ -248,7 +249,8 @@ function VideoComp({with_userid}) {
       // console.log("dowehave dc",dc)
       
       if (lc) {
-        console.log(lc, "sdfsdf lc");
+        console.log(lc, "what is this lc");
+        setCallStatus('RINGING')
         // myRef.current = {
         //   type: "INITIATOR",
         //   channel: lc,
@@ -264,14 +266,19 @@ function VideoComp({with_userid}) {
   
   return (
     <div>
+      <div>
+      {callStatus=='RINGING' && <PhoneCallUI callStatus={callStatus}/>}
+      </div>
+      <div style={{display:"none"}}>
+          <video
+                  ref={yourVideoRef} // Add a ref to the video element
+                  autoPlay
+                  playsInline
+                  muted // You may want to remove this if it's not the local video
+                  // Add other attributes such as width, height, etc.
+                ></video>
 
-      <video
-        ref={yourVideoRef} // Add a ref to the video element
-        autoPlay
-        playsInline
-        muted // You may want to remove this if it's not the local video
-        // Add other attributes such as width, height, etc.
-      ></video>
+        </div>
     </div>
   )
 }
