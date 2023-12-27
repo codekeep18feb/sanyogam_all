@@ -22,7 +22,7 @@ const ListnerWS2 = () => {
 
   React.useEffect(() => {
     console.log('fjasdf')
-    socket.on('receive_message', (data) => {
+    socket.on('signal_pool', (data) => {
       console.log('asrere we getting the mess here',data)
       // console.log('arerwehere??',data)
       // setMessages([...messages, data]);

@@ -63,8 +63,8 @@ def handle_send_message(data):
 
 s_pool=[]
 @socketio.on('signal_pool')
-def handle_message(message,room_id):
-    print('check if msg is string only',message,type(message),room_id)
+def handle_message(message,with_userid):
+    print('check if msg is string only',message,type(message),with_userid)
     auth_token = request.args.get('Authorization')
     if not auth_token:
         print('MARK1')
@@ -123,7 +123,7 @@ def handle_message(message,room_id):
             print('payload id to delete', payload)
             # s_pool.append(payload)
     print('WERERER1')
-    room_str = f"HARDOCDED1" #f"{me.id}_{with_user_id}"
+    room_str = f"{with_userid}"
     # first, second = room_str.split('_')
     # new_roo_str = f"{second}_{first}"
     # if room_str not in existing_rooms and new_roo_str not in existing_rooms:
@@ -134,7 +134,7 @@ def handle_message(message,room_id):
     join_room(room_str)
     print('WERERER3')
 
-    socketio.emit('signal_pool', json.dumps(s_pool),to=room_str)  # Echo the message bv
+    socketio.emit('signal_pool', json.dumps(s_pool),room=room_str)  # Echo the message bv
 
 
 @socketio.on('fetch_online_profiles')

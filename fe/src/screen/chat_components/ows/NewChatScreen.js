@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import SendIcon from "@mui/icons-material/Send";
 import io from 'socket.io-client';
 
-export default function NewChatScreen({ chats, to_email }) {
+export default function NewChatScreen({ chats, to_email,setVideoMode }) {
   const [textareaValue, setTextareaValue] = useState('');
   const [sendingMessage, setSendingMessage] = useState(false);
   const handleTextareaChange = (e) => {

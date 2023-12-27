@@ -2,52 +2,10 @@ import React, { useEffect, useState } from 'react';
 import io from 'socket.io-client';
 import { Grid, Paper, Typography, CircularProgress, Button } from '@mui/material';
 import UserChatTileInListCOWs from "./UserChatTileInListCOWS";
-import ChatsOWSTile from './ChatsOWSTile';
+
 import ChatsEditor from './ChatsEditor';
-import SendIcon from "@mui/icons-material/ArrowBack";
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import VideoCallIcon from '@mui/icons-material/VideoCall';
-import { ImageCircle } from '../../chat_components/ImageCircle';
-import AudioCallIcon from '@mui/icons-material/Call';
 
-const ChatScreenHeader=({ setvideoView, videoView, with_userid, with_email, SetWithUserId,SetWithEmail,onBackClick, user })=>{
-  return (
-   <>
- 
-    <Grid container alignItems="center" justifyContent="space-between">
-      <Grid item xs={1}>
-        <ArrowBackIcon onClick={onBackClick} style={{ cursor: 'pointer' }} />
-      </Grid>
-      <Grid item xs={2}>
-        <ImageCircle dimention={50} user={user} />
-      </Grid>
-      <Grid item xs={3}>
-        <Typography variant="h6" color="textPrimary" align="center" noWrap>
-        {user.name}
-        </Typography>
-        <div style={{ color: user.online ? '#00E676' : 'inherit', align: 'left', fontSize: 12 }}>
-          {user.online ? 'Online' : ''}
-        </div>
-      </Grid>
-      <Grid item xs={2}>
-        <AudioCallIcon style={{ fontSize: '35px', color: '#1F4294' }} />
-      </Grid>
-      <Grid item xs={2}>
-        <VideoCallIcon onClick={(e) => {
-          e.preventDefault()
-          // force close the connection
-          // let's catch the ref
-          // console.log('myCurrerref', myRef.current)
-          // myRef.current.channel.close()
-          // <DetachVideoWindow with_email={with_email} with_userid={with_userid} />
-          // SetWithUserId
 
-        }} style={!videoView?{ fontSize: '35px', color: '#1F4294' }:{ fontSize: '35px', color: 'black' }} />
-      </Grid>
-    </Grid>
-   </>
-  );
-}
 
 
 export default function ChatPARENTOWS() {
@@ -181,7 +139,7 @@ export default function ChatPARENTOWS() {
             }
             style={{ fontSize: "35px", color: "#1F4294" }}
           /> */}
-    <ChatScreenHeader 
+    {/* <ChatScreenHeader 
     // ref={myRef} 
     videoView={false} 
     // setvideoView={setvideoView} 
@@ -196,7 +154,7 @@ export default function ChatPARENTOWS() {
     user={{"online":true,imageUrl: "https://images.pexels.com/photos/3206118/pexels-photo-3206118.jpeg?auto=compress&cs=tinysrgb&w=160&h=150&dpr=1"
     // ,"name":'deepak si'
   }} 
-    />
+    /> */}
 
       
     with_userid - {with_userid} - {with_email}
