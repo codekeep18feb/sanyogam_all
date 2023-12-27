@@ -64,7 +64,7 @@ def handle_send_message(data):
 s_pool=[]
 @socketio.on('signal_pool')
 def handle_message(message,with_userid):
-    print('check if msg is string only',message,type(message),with_userid)
+    print('check if msg is string only',message,type(message))
     auth_token = request.args.get('Authorization')
     if not auth_token:
         print('MARK1')
@@ -75,26 +75,35 @@ def handle_message(message,with_userid):
     decoded_data_str = decoded['sub']
     json_dec_data = json.loads(decoded_data_str)
     me = User.query.filter_by(email=json_dec_data['email']).first()
-    print("COPY MESSAGE",message)
+    print("COPY MESSAGE",message,type(message))
     p_payload = json.loads(message)
-    print('prepared p_payload', p_payload,type(p_payload))
+    # p_payload['with_userid'] = with_userid
+    print('prepared p_payload', p_payload,type(p_payload),with_userid)
     if "action" in p_payload:
     # Save the value of the key
         # action = del p_payload["action"]
         
         action = p_payload.pop("action",'ADD')
+        # room_str = with_userid
+        # first, second = room_str.split('_')
+        initator_room_str = f"{with_userid}_{me.id}"
+        p_payload['id']=initator_room_str
         if action=='ADD':
+            # delete ids already in the pool
             payload = {
                 'offer':p_payload['offer'],
                 'answer':None,
-                'initator':me.id,
+                'initiator':me.id,
                 'responder':None,
-                'id':len(s_pool)+1
+                'id':p_payload['id']
             }
             print('prepared payload', payload)
             s_pool.append(payload)
 
         elif action=='UPDATE':
+            resp_room_str = f"{me.id}_{with_userid}"
+            p_payload['id']=resp_room_str
+            
             payload = {
                 'answer':p_payload['answer'],
                 'responder':p_payload['responder'],
@@ -123,7 +132,7 @@ def handle_message(message,with_userid):
             print('payload id to delete', payload)
             # s_pool.append(payload)
     print('WERERER1')
-    room_str = f"{with_userid}"
+    # room_str = f"{with_userid}"
     # first, second = room_str.split('_')
     # new_roo_str = f"{second}_{first}"
     # if room_str not in existing_rooms and new_roo_str not in existing_rooms:
@@ -131,10 +140,11 @@ def handle_message(message,with_userid):
     print('WERERER2')
 
     # existing_rooms.add(room_str)
-    join_room(room_str)
-    print('WERERER3')
+    # join_room(room_str)
+    print('now are we heresdafsdf',s_pool)
 
-    socketio.emit('signal_pool', json.dumps(s_pool),room=room_str)  # Echo the message bv
+    # socketio.emit('signal_pool', json.dumps(s_pool),room=room_str)  # Echo the message bv
+    socketio.emit('signal_pool', json.dumps(s_pool))  # Echo the message bv
 
 
 @socketio.on('fetch_online_profiles')
