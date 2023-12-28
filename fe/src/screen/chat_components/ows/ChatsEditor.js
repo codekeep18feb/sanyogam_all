@@ -279,6 +279,8 @@ const ChatScreenHeader = ({ setVideoMode, videoMode, with_userid, with_email, Se
 // }
 
 function ChatsEditor({ auth_data, allChats, loading, with_email, with_userid, SetWithUserId, SetWithEmail }) {
+  const [connection_open, setConnectionOpened] = useState(false)
+  console.log("is it opened?",connection_open)
   const [videoMode, setVideoMode] = useState(false)
   const [signal_pool, setSignalPool] = useState({});
 
@@ -342,7 +344,7 @@ function ChatsEditor({ auth_data, allChats, loading, with_email, with_userid, Se
 
     intervalId = setInterval(() => {
       fetchRtcInfo();
-    }, 1000);
+    }, 50000);
 
     socket.on('signal_pool', (data) => {
       if (data) {
@@ -534,10 +536,14 @@ function ChatsEditor({ auth_data, allChats, loading, with_email, with_userid, Se
 
       rc.onicecandidate = async (e) => {
         if (e.candidate) {
-          console.log("herei s the ans" + JSON.stringify(rc.localDescription));
+          console.log("whatisthestatus?" + JSON.stringify(rc.localDescription), `${auth_data.id}_${with_userid}`);
           //THIS IS WHERE WILL MAKE
           // const to_user_id = await fetchUserId(token, with_email);
-
+          const answer = JSON.stringify(rc.localDescription)
+          const offer_obj = { "answer": answer, "action": "UPDATE" }
+          const offer_str = JSON.stringify(offer_obj)
+          console.log('AREWEHERE')
+          socket.emit('signal_pool', offer_str, with_userid);
           // saveRTCUserAns(
           //   false,
           //   JSON.stringify(rc.localDescription),
@@ -548,9 +554,9 @@ function ChatsEditor({ auth_data, allChats, loading, with_email, with_userid, Se
       const p_offer = JSON.parse(signal_pool.sdp)
       // const p_sdp = JSON.parse(p_offer.sdp)
       const offer_str = await fetchRTCOffer();
-      console.log(p_offer,'what is the diff',offer_str)
+      console.log(p_offer, 'what is the diff', offer_str)
       // console.log('signal_pool.offer.sdp',p_sdp,typeof(p_sdp))
-      
+
       // const offer = JSON.stringify(signal_pool.offer.sdp)
       // console.log('here is foffer to generate the answer',offer)
       rc.setRemoteDescription(p_offer).then((a) => {
@@ -594,9 +600,57 @@ function ChatsEditor({ auth_data, allChats, loading, with_email, with_userid, Se
         const [lc] = await initializeWebRTC(token, "INITIATOR");
         // console.log("dowehave dc",dc)
 
+
         if (lc) {
           console.log(lc, "what is this lc");
           console.log(lc, "myRef's current value:", myRef.current);
+          myRef.current = {
+            type: "INITIATOR",
+            channel: lc,
+          };
+          myRef.current.channel.addEventListener("iceconnectionstatechange", () => {
+            console.log(
+              "ICE Connection State changed:",
+              myRef.current.channel.iceConnectionState
+            );
+    
+            // if (myRef.current.channel.iceConnectionState === 'connected') {
+            //   // ICE connection is fully established
+            //   setConnectionOpened(true);
+            // }
+          });
+    
+          myRef.current.channel.addEventListener("connectionstatechange", () => {
+            console.log(
+              "Connection State changed:",
+              myRef.current.channel.connectionState
+            );
+    
+            // if (myRef.current.channel.connectionState === 'connected') {
+            //   // Connection is fully established
+            //   setConnectionOpened(true);
+            // }
+          });
+    
+          myRef.current.channel.addEventListener("signalingstatechange", () => {
+            console.log("AREWHEREWREVER");
+            console.log(
+              typeof myRef.current.channel,
+              myRef.current.channel,
+              "Signaling State changed:",
+              myRef.current.channel.signalingState,
+              myRef.current.channel.iceConnectionState,
+              myRef.current.channel.connectionState
+            );
+            if (myRef.current.channel.signalingState === "stable") {
+              // console.log('so this is INITIATOR CASE')
+              console.log('in INITIATOR connection stateus')
+
+              setConnectionOpened(true);
+            }
+          });
+
+
           cs = 'OUTGOINGCALL'
         }
       }
@@ -614,6 +668,46 @@ function ChatsEditor({ auth_data, allChats, loading, with_email, with_userid, Se
         cs = "INCOMINGCALL"
         // AND THEN YOU MIGHT WANNA GENERATE RESP SDP FOR IT
       }
+      if (signal_pool.sdp && signal_pool.answer && signal_pool.initiator == auth_data.id) {
+        //responder case and if it is towards mefdsg
+        //then we should say ringing (WTR)
+        //setCallstatus to WTR
+        cs = "ANSWEREDWATINGFORCONNECTION"
+        const answer = JSON.parse(signal_pool.answer);
+
+        myRef.current.channel
+          .setRemoteDescription(answer)
+          .then((a) => {
+            console.log("dowseseethantythere");
+            console.log(
+              "Signaling State after setting answer on setRemoteDescription: RESPONDER",
+              myRef.current.channel.signalingState
+            );
+          })
+          .catch((error) => {
+            console.error("Error setting remote description:", error);
+          });
+        // AND THEN YOU MIGHT WANNA GENERATE RESP SDP FOR IT
+      }
+      // if(signal_pool.sdp && signal_pool.answer && signal_pool.initiator == auth_data.id){
+      //   const answer = JSON.parse(signal_pool.answer);
+      //   myRef.current.channel
+      //     .setRemoteDescription(answer)
+      //     .then((a) => {
+      //       console.log("dowseseethantythere");
+      //       console.log(
+      //         "Signaling State after setting answer on setRemoteDescription: RESPONDER",
+      //         myRef.current.channel.signalingState
+      //       );
+      //     })
+      //     .catch((error) => {
+      //       console.error("Error setting remote description:", error);
+      //     });
+      // }
+
+
+
+
     }
 
 
@@ -636,47 +730,142 @@ function ChatsEditor({ auth_data, allChats, loading, with_email, with_userid, Se
 
   }, [signal_pool, videoMode])
 
-  console.log("is it same without opening the video", callStatus, Object.keys(signal_pool).length);
+  console.log("is it same without opening the video", myRef);
 
   const setVideoModeWithCallS = () => {
     console.log('nowheretogo')
     setVideoMode(true)
     setCallStatus('INITIALIZING')
   }
-  const pickUpTheCall=async()=>{
+
+  const startTheConnection = () => {
+    // console.log("HEREISWHATWEHAVE");
+    //   console.log(
+    //     "if INITIATOR I THING WE CAN INITIATE THE CONNECTION??,",
+    //     myRef.current,
+    //     myRef.current["type"] == "INITIATOR"
+    //   );
+    if (myRef.current["type"] == "INITIATOR") {
+      // let's perform the thrid step
+      // console.log(
+      //   "hereAnswer",
+      //   myRef.current,
+      //   myRef.current.answer,
+      //   typeof myRef.current.answer
+      // ); //myRef.current.send("douseeme!")
+      const answer = JSON.parse(signal_pool.answer);
+      // const answer = JSON.parse(myRef.current.answer);
+      // console.log("DOWESEE ANSWER", answer);
+      // myRef.current.channel.send("douseeme!")
+      // answer = answer
+      // console.log(
+      //   "Signaling State before setting remote description:",
+      //   myRef.current.channel.signalingState
+      // );
+
+     
+  
+
+    
+      }
+
+
+  }
+
+
+  const pickUpTheCall = async () => {
     console.log('pickUpTheCall')
     const JWT_TOKEN = localStorage.getItem("token");
     const token = `Bearer ${JWT_TOKEN}`;
     const [rc] = await initializeWebRTC(token, "RESPONDER");
-    console.log('here is your rc save it myRef if you need',rc)
+    console.log('here is your rc save it myRef if you need', rc)
+    // const answer = JSON.parse(signal_pool.answer);
+    myRef.current = {
+      type: "RESPONDER",
+      channel: rc,
+    };
+    // myRef.current.channel
+    // .setRemoteDescription(answer)
+    // .then((a) => {
+    //   console.log("dowseseethantythere");
+    //   console.log(
+    //     "Signaling State after setting answer on setRemoteDescription: RESPONDER",
+    //     myRef.current.channel.signalingState
+    //   );
+    // })
+    // .catch((error) => {
+    //   console.error("Error setting remote description:", error);
+    // });
+    // const answer = JSON.parse(signal_pool.answer);
+    myRef.current.channel.addEventListener("iceconnectionstatechange", () => {
+      console.log(
+        "ICE Connection State changed:RESPONDER",
+        myRef.current.channel.iceConnectionState
+      );
+
+      // if (myRef.current.channel.iceConnectionState === 'connected') {
+      //   // ICE connection is fully established
+      //   setConnectionOpened(true);
+      // }
+    });
+
+    myRef.current.channel.addEventListener("connectionstatechange", () => {
+      console.log(
+        "Connection State changed:RESPONDER",
+        myRef.current.channel.connectionState
+      );
+
+      // if (myRef.current.channel.connectionState === 'connected') {
+      //   // Connection is fully established
+      //   setConnectionOpened(true);
+      // }
+    });
+
+    myRef.current.channel.addEventListener("signalingstatechange", () => {
+      console.log("AREWHEREWREVERRESPONDER");
+      console.log(
+        typeof myRef.current.channel,
+        myRef.current.channel,
+        "Signaling State changed:",
+        myRef.current.channel.signalingState,
+        myRef.current.channel.iceConnectionState,
+        myRef.current.channel.connectionState
+      );
+      if (myRef.current.channel.signalingState === "stable") {
+        console.log('in RESPONDER connection stateus')
+        setConnectionOpened(true);
+      }
+    });
+
+  startTheConnection()
 
     //this time we should generate the answer
     //and add it to the pool
-      //set up the status to 'RESPONDED&CONNECTING'
-      //and we probablly can connect now
+    //set up the status to 'RESPONDED&CONNECTING'
+    //and we probablly can connect now
 
   }
   const chatScreenBody = (
     <div>
 
       {loading && <CircularProgress />}
-      {!loading && !videoMode && callStatus=='INCOMINGCALL' && (
-          // <VideoComp with_userid={with_userid} callStatus={callStatus} setCallStatus={setCallStatus}/>
+      {!loading && !videoMode && callStatus == 'INCOMINGCALL' && (
+        // <VideoComp with_userid={with_userid} callStatus={callStatus} setCallStatus={setCallStatus}/>
+        <div>
           <div>
-            <div>
-            <PhoneCallUI callStatus={callStatus} pickUpTheCall={pickUpTheCall}/>
-            </div>
-             <div style={{ display: "none" }}>
+            <PhoneCallUI callStatus={callStatus} pickUpTheCall={pickUpTheCall} />
+          </div>
+          <div style={{ display: connection_open?"block":"none" }}>
             <video
               ref={yourVideoRef} // Add a ref to the video element
               autoPlay
               playsInline
               muted // You may want to remove this if it's not the local video
             ></video>
-            </div>
-            
           </div>
-        )}
+
+        </div>
+      )}
 
       {!loading && videoMode && (
         // <VideoComp with_userid={with_userid} callStatus={callStatus} setCallStatus={setCallStatus}/>
@@ -684,7 +873,7 @@ function ChatsEditor({ auth_data, allChats, loading, with_email, with_userid, Se
           <div>
             {['INITIALIZING', 'OUTGOINGCALL', null].includes(callStatus) && <PhoneCallUI callStatus={callStatus} />}
           </div>
-          <div style={{ display: "none" }}>
+          <div style={{ display: connection_open?"block":"none" }}>
             <video
               ref={yourVideoRef} // Add a ref to the video element
               autoPlay

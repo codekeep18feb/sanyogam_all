@@ -95,19 +95,20 @@ def handle_message(message,with_userid):
                     'sdp':p_payload['sdp'],
                     'answer':None,
                     'initiator':me.id,
-                    'responder':None,
+                    'responder':with_userid,
                     'id':p_payload['id']
                 }
                 print('prepared payload', payload)
                 s_pool.append(payload)
 
             elif action=='UPDATE':
+                print('mark1noww')
                 resp_room_str = f"{me.id}_{with_userid}"
                 p_payload['id']=resp_room_str
                 
                 payload = {
                     'answer':p_payload['answer'],
-                    'responder':p_payload['responder'],
+                    # 'responder':p_payload['responder'],
                     'id':p_payload['id']
                 }
                 # s_pool.append(payload)
@@ -116,7 +117,7 @@ def handle_message(message,with_userid):
                     if obj['id']==p_payload['id']:
                         print('adfasdf we here')
                         obj['answer']=p_payload['answer']
-                        obj['responder']=p_payload['responder']
+                        # obj['responder']=p_payload['responder']
                         break
                 # print('prepared payload', desired_dict)
 
