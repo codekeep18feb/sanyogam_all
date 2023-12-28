@@ -283,7 +283,7 @@ function ChatsEditor({ auth_data, allChats, loading, with_email, with_userid, Se
 
   console.log('logged in user', auth_data)
   const [callStatus, setCallStatus] = useState(null)
-  console.log('if it renders without a click')
+  console.log('if it renders without a click',signal_pool)
 
 
   console.log('this shoudl not rerender if other twos are toaking', videoMode)
@@ -562,6 +562,12 @@ function ChatsEditor({ auth_data, allChats, loading, with_email, with_userid, Se
    
 
     }
+    
+    //if OFFER is there -  Object.keys(signal_pool).length == 1 && signal_pool.offer && !signal_pool.answer
+
+    //if ANS is there Object.keys(signal_pool).length == 1 && signal_pool.offer && signal_pool.answer
+
+
   }, [signal_pool,videoMode])
   
   console.log("myRef's next value:", myRef.current);
