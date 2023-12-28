@@ -75,69 +75,70 @@ def handle_message(message,with_userid):
     decoded_data_str = decoded['sub']
     json_dec_data = json.loads(decoded_data_str)
     me = User.query.filter_by(email=json_dec_data['email']).first()
-    print("COPY MESSAGE",message,type(message))
-    p_payload = json.loads(message)
-    # p_payload['with_userid'] = with_userid
-    print('prepared p_payload', p_payload,type(p_payload),with_userid)
-    if "action" in p_payload:
-    # Save the value of the key
-        # action = del p_payload["action"]
-        
-        action = p_payload.pop("action",'ADD')
-        # room_str = with_userid
-        # first, second = room_str.split('_')
-        initator_room_str = f"{with_userid}_{me.id}"
-        p_payload['id']=initator_room_str
-        if action=='ADD':
-            # delete ids already in the pool
-            payload = {
-                'offer':p_payload['offer'],
-                'answer':None,
-                'initiator':me.id,
-                'responder':None,
-                'id':p_payload['id']
-            }
-            print('prepared payload', payload)
-            s_pool.append(payload)
-
-        elif action=='UPDATE':
-            resp_room_str = f"{me.id}_{with_userid}"
-            p_payload['id']=resp_room_str
+    if message:
+        print("COPY MESSAGE",message,type(message))
+        p_payload = json.loads(message)
+        # p_payload['with_userid'] = with_userid
+        print('prepared p_payload', p_payload,type(p_payload),with_userid)
+        if "action" in p_payload:
+        # Save the value of the key
+            # action = del p_payload["action"]
             
-            payload = {
-                'answer':p_payload['answer'],
-                'responder':p_payload['responder'],
-                'id':p_payload['id']
-            }
-            # s_pool.append(payload)
-            # desired_dict = next((d for d in s_pool if d.get('id') == p_payload['id']), None)
-            for obj in s_pool:
-                if obj['id']==p_payload['id']:
-                    print('adfasdf we here')
-                    obj['answer']=p_payload['answer']
-                    obj['responder']=p_payload['responder']
-                    break
-            # print('prepared payload', desired_dict)
+            action = p_payload.pop("action",'ADD')
+            # room_str = with_userid
+            # first, second = room_str.split('_')
+            initator_room_str = f"{with_userid}_{me.id}"
+            p_payload['id']=initator_room_str
+            if action=='ADD':
+                # delete ids already in the pool
+                payload = {
+                    'sdp':p_payload['sdp'],
+                    'answer':None,
+                    'initiator':me.id,
+                    'responder':None,
+                    'id':p_payload['id']
+                }
+                print('prepared payload', payload)
+                s_pool.append(payload)
 
-        elif action=='DELETE':
-            payload = {
-                'id':p_payload['id']
-            }
-            for ind, obj in enumerate(s_pool):
-                if obj['id']==p_payload['id']:
-                    deleted_element = s_pool.pop(ind)
-                    print('rip',deleted_element)
-                    break
+            elif action=='UPDATE':
+                resp_room_str = f"{me.id}_{with_userid}"
+                p_payload['id']=resp_room_str
+                
+                payload = {
+                    'answer':p_payload['answer'],
+                    'responder':p_payload['responder'],
+                    'id':p_payload['id']
+                }
+                # s_pool.append(payload)
+                # desired_dict = next((d for d in s_pool if d.get('id') == p_payload['id']), None)
+                for obj in s_pool:
+                    if obj['id']==p_payload['id']:
+                        print('adfasdf we here')
+                        obj['answer']=p_payload['answer']
+                        obj['responder']=p_payload['responder']
+                        break
+                # print('prepared payload', desired_dict)
 
-            print('payload id to delete', payload)
-            # s_pool.append(payload)
-    print('WERERER1')
-    # room_str = f"{with_userid}"
-    # first, second = room_str.split('_')
-    # new_roo_str = f"{second}_{first}"
-    # if room_str not in existing_rooms and new_roo_str not in existing_rooms:
-    #     existing_rooms.add(room_str)
-    print('WERERER2')
+            elif action=='DELETE':
+                payload = {
+                    'id':p_payload['id']
+                }
+                for ind, obj in enumerate(s_pool):
+                    if obj['id']==p_payload['id']:
+                        deleted_element = s_pool.pop(ind)
+                        print('rip',deleted_element)
+                        break
+
+                print('payload id to delete', payload)
+                # s_pool.append(payload)
+        print('WERERER1')
+        # room_str = f"{with_userid}"
+        # first, second = room_str.split('_')
+        # new_roo_str = f"{second}_{first}"
+        # if room_str not in existing_rooms and new_roo_str not in existing_rooms:
+        #     existing_rooms.add(room_str)
+        print('WERERER2')
 
     # existing_rooms.add(room_str)
     # join_room(room_str)

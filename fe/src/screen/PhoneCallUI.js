@@ -1,9 +1,9 @@
 import React, { useEffect, useRef } from 'react';
 import CallEnd from '@mui/icons-material/CallEnd';
-import VideoCallIcon from '@mui/icons-material/VideoCall';
+import PickUPIcon from '@mui/icons-material/CallEnd';
 import VolumeMute from '@mui/icons-material/VolumeMute';
 
-export default function PhoneCallUI({callStatus}) {
+export default function PhoneCallUI({callStatus, pickUpTheCall}) {
   // const audioRef = useRef(null);
   // console.log('what is it',callStatus)
   // const playAudio = () => {
@@ -78,8 +78,11 @@ export default function PhoneCallUI({callStatus}) {
       </button> */}
       <div>callStatus - {callStatus}</div>
       <div style={controlsStyle}>
-      <VideoCallIcon 
+      <PickUPIcon 
       style={buttonStyle}
+      onClick={()=>{
+        pickUpTheCall()
+      }}
         />
 
         {/* <button style={buttonStyle}>Mute</button> */}

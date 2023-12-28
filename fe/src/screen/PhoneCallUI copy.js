@@ -18,10 +18,12 @@ const PhoneCallUI = ({ callStatus }) => {
   // }, []); // Empty dependency array ensures this effect runs only once on mount
 
   useEffect(() => {
-    if (callStatus === 'RINGING') {
-      console.log("is ringing..");
-      // You can still perform other actions related to the ringing status here
-    }
+    // if (callStatus === 'RINGING') {
+    //   // You can still perform other actions related to the ringing status here
+    // }
+      console.log("callStatus changed now is - ",callStatus);
+
+
   }, [callStatus]);
 
   return (
