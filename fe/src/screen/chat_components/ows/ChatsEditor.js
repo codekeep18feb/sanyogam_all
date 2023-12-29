@@ -13,7 +13,7 @@ import PhoneCallUI from '../../PhoneCallUI';
 import { connect } from 'react-redux';
 
 
-const withSocket = (Component) => {
+const withChatSocket = (Component) => {
   // const JWT_TOKEN = localStorage.getItem("token");
   // const token = `Bearer ${JWT_TOKEN}`;
 
@@ -126,22 +126,325 @@ function ChatsEditor({ auth_data, allChats, loading, with_email, with_userid, Se
   console.log("is it opened?", connection_open)
   const [videoMode, setVideoMode] = useState(false)
   const [signal_pool, setSignalPool] = useState({});
+  const [callStatus, setCallStatus] = useState(null)
+
+  const myVideoRef = useRef(null);
+  const myRef = useRef(null);
 
   console.log('logged in user', auth_data, videoMode)
-  const [callStatus, setCallStatus] = useState(null)
   console.log('if it renders without a click', signal_pool)
-
-
   console.log('this shoudl not rerender if other twos are toaking', videoMode)
 
-  const yourVideoRef = useRef(null);
-  const myRef = useRef(null);
 
   const [socket, setSocket] = useState(
     io.connect('http://192.168.1.13:8000', {
       query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     })
   );
+
+  
+  const initializeWebRTC = async (token, type) => {
+    if (type == "INITIATOR") {
+      console.log("Ensure it's not called multiple times...");
+
+      const lc = new RTCPeerConnection();
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: true,
+        audio: true,
+      });
+      console.log("doweseestream", stream);
+      myVideoRef.current.srcObject = stream;
+      lc.addStream(stream);
+      lc.onaddstream = (event) => {
+        console.log("ON LOCAL @ TRACK", event, event.stream);
+        myVideoRef.current.srcObject = event.stream;
+
+        // setRemoteStream(event.stream);
+      };
+
+      lc.onicecandidate = async (e) => {
+        if (e.candidate) {
+          // Candidate is available, but don't save it yet
+          console.log("ICE candidate available");
+        } else if (lc.iceGatheringState === "complete") {
+          // ICE gathering is complete, save the final ICE candidate to the database
+          console.log("ICE gathering is complete");
+          // const to_user_id = await fetchUserId(token, with_email);
+          // console.log(
+          //   "Final ICE candidate:",
+          //   JSON.stringify(lc.localDescription)
+          // );
+          const offer = JSON.stringify(lc.localDescription)
+          const offer_obj = { "sdp": offer, "action": "ADD" }
+          const offer_str = JSON.stringify(offer_obj)
+          console.log('this is offer str', offer_str)
+          socket.emit('signal_pool', offer_str, with_userid);
+
+          // addRTCUserInfo(true, JSON.stringify(lc.localDescription), to_user_id);
+        }
+      };
+
+      lc.createOffer()
+        .then((o) => lc.setLocalDescription(o))
+        .then((a) => {
+          console.log("offer set successfully!");
+          console.log(
+            "Signaling State after setting local description:",
+            lc.signalingState
+          );
+        });
+      return [lc];
+    }
+    else if (type == "RESPONDER") {
+      console.log("Ensure it's not called multiple times...");
+      const rc = new RTCPeerConnection();
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: true,
+        audio: true,
+      });
+      console.log("doweseestream", stream);
+      myVideoRef.current.srcObject = stream;
+      rc.addStream(stream);
+      console.log("doweseestream", stream);
+      rc.onaddstream = (event) => {
+        console.log("ON REMOTE @ TRACK", event, event.stream, myRef.current);
+        myVideoRef.current.srcObject = event.stream;
+
+      };
+
+      rc.ondatachannel = (event) => {
+        // Handle the data channel when it is created
+        const dataChannel = event.channel;
+
+        dataChannel.onopen = () => {
+          console.log("Data channel opened!");
+          // You can add any specific actions you want to perform when the data channel is open.
+        };
+
+        // Handle other data channel events if needed
+      };
+
+      rc.onicecandidate = async (e) => {
+        if (e.candidate) {
+          console.log("whatisthestatus?" + JSON.stringify(rc.localDescription), `${auth_data.id}_${with_userid}`);
+          //THIS IS WHERE WILL MAKE
+          // const to_user_id = await fetchUserId(token, with_email);
+          const answer = JSON.stringify(rc.localDescription)
+          const offer_obj = { "answer": answer, "action": "UPDATE" }
+          const offer_str = JSON.stringify(offer_obj)
+          console.log('AREWEHERE')
+          socket.emit('signal_pool', offer_str, with_userid);
+          // saveRTCUserAns(
+          //   false,
+          //   JSON.stringify(rc.localDescription),
+          //   to_user_id
+          // );
+        }
+      };
+      const p_offer = JSON.parse(signal_pool.sdp)
+      // const offer_str = await fetchRTCOffer();
+      // console.log(p_offer, 'what is the diff', offer_str)
+      rc.setRemoteDescription(p_offer).then((a) => {
+        console.log("set remoteDescription with local offer");
+        console.log(
+          "Signaling State after setting remoteDescription",
+          rc.signalingState
+        );
+      });
+
+      rc.createAnswer()
+        .then((a) => {
+          rc.setLocalDescription(a);
+          console.log(
+            "Signaling State after setting Local description set as a provisional answer.:",
+            rc.signalingState
+          );
+        })
+        .then((a) => {
+          console.log("answer created");
+          console.log(
+            "Signaling State after setting Local description set as a provisional answer.:",
+            rc.signalingState
+          );
+        });
+      return [rc];
+    }
+  };
+
+  const attachRightListnersToRef = ()=>{
+    myRef.current.channel.addEventListener("iceconnectionstatechange", () => {
+      console.log(
+        "ICE Connection State changed:",
+        myRef.current.channel.iceConnectionState
+      );
+
+      // if (myRef.current.channel.iceConnectionState === 'connected') {
+      //   // ICE connection is fully established
+      //   setConnectionOpened(true);
+      // }
+    });
+
+    myRef.current.channel.addEventListener("connectionstatechange", () => {
+      console.log(
+        "Connection State changed:",
+        myRef.current.channel.connectionState
+      );
+
+      // if (myRef.current.channel.connectionState === 'connected') {
+      //   // Connection is fully established
+      //   setConnectionOpened(true);
+      // }
+    });
+
+    myRef.current.channel.addEventListener("signalingstatechange", () => {
+      console.log("AREWHEREWREVER");
+      console.log(
+        typeof myRef.current.channel,
+        myRef.current.channel,
+        "Signaling State changed:",
+        myRef.current.channel.signalingState,
+        myRef.current.channel.iceConnectionState,
+        myRef.current.channel.connectionState
+      );
+      if (myRef.current.channel.signalingState === "stable") {
+        // console.log('so this is INITIATOR CASE')
+        console.log('in INITIATOR connection stateus')
+
+        setConnectionOpened(true);
+      }
+    });
+  }
+
+  const startTheConnection = () => {
+    // console.log("HEREISWHATWEHAVE");
+    //   console.log(
+    //     "if INITIATOR I THING WE CAN INITIATE THE CONNECTION??,",
+    //     myRef.current,
+    //     myRef.current["type"] == "INITIATOR"
+    //   );
+    if (myRef.current["type"] == "INITIATOR") {
+      // let's perform the thrid step
+      // console.log(
+      //   "hereAnswer",
+      //   myRef.current,
+      //   myRef.current.answer,
+      //   typeof myRef.current.answer
+      // ); //myRef.current.send("douseeme!")
+      const answer = JSON.parse(signal_pool.answer);
+      // const answer = JSON.parse(myRef.current.answer);
+      // console.log("DOWESEE ANSWER", answer);
+      // myRef.current.channel.send("douseeme!")
+      // answer = answer
+      // console.log(
+      //   "Signaling State before setting remote description:",
+      //   myRef.current.channel.signalingState
+      // );
+
+
+
+
+
+    }
+
+
+  }
+
+
+  const pickUpTheCall = async () => {
+    console.log('pickUpTheCall')
+    const JWT_TOKEN = localStorage.getItem("token");
+    const token = `Bearer ${JWT_TOKEN}`;
+    const [rc] = await initializeWebRTC(token, "RESPONDER");
+    console.log('here is your rc save it myRef if you need', rc)
+    myRef.current = {
+      type: "RESPONDER",
+      channel: rc,
+    };
+    attachRightListnersToRef()
+    startTheConnection()
+
+  }
+
+
+  useEffect(async () => {
+    console.log('nowwht', signal_pool, typeof (signal_pool))
+    const ifPoolEmpty = () => Object.keys(signal_pool).length == 0
+
+    let cs
+    if (ifPoolEmpty()) {
+      console.log('wevewrqwe here', videoMode)
+      const JWT_TOKEN = localStorage.getItem("token");
+      const token = `Bearer ${JWT_TOKEN}`;
+      if (videoMode) {
+        console.log('areweinvideomode')
+        const [lc] = await initializeWebRTC(token, "INITIATOR");
+        // console.log("dowehave dc",dc)
+
+
+        if (lc) {
+          console.log(lc, "what is this lc");
+          console.log(lc, "myRef's current value:", myRef.current);
+          myRef.current = {
+            type: "INITIATOR",
+            channel: lc,
+          };
+          attachRightListnersToRef()
+          cs = 'OUTGOINGCALL'
+        }
+      }
+
+
+    }
+
+    else {
+      //if pool is filled already let's chceck first if there are no offers
+      console.log('were we there')
+      if (signal_pool.sdp && signal_pool.initiator != auth_data.id) {
+        cs = "INCOMINGCALL"
+      }
+      if (signal_pool.sdp && signal_pool.answer && signal_pool.initiator == auth_data.id) {
+        cs = "ANSWEREDWATINGFORCONNECTION"
+        const answer = JSON.parse(signal_pool.answer);
+
+        myRef.current.channel
+          .setRemoteDescription(answer)
+          .then((a) => {
+            console.log("dowseseethantythere");
+            console.log(
+              "Signaling State after setting answer on setRemoteDescription: RESPONDER",
+              myRef.current.channel.signalingState
+            );
+          })
+          .catch((error) => {
+            console.error("Error setting remote description:", error);
+          });
+      }
+
+
+
+
+    }
+
+
+    //if OFFER is there -  Object.keys(signal_pool).length == 1 && signal_pool.offer && !signal_pool.answer
+
+    //if ANS is there Object.keys(signal_pool).length == 1 && signal_pool.offer && signal_pool.answer
+
+    // setting correct callStatus
+    if (cs) {
+      setCallStatus((prv) => {
+        if (prv !== cs) {
+          return cs
+
+        }
+        return prv
+      })
+    }
+
+
+
+  }, [signal_pool, videoMode])
+
 
   useEffect(() => {
     const fetchRtcInfo = () => {
@@ -223,344 +526,7 @@ function ChatsEditor({ auth_data, allChats, loading, with_email, with_userid, Se
     };
   }, [socket]);
 
-  const fetchRTCOffer = async () => {
-    const JWT_TOKEN = localStorage.getItem("token");
-    const token = `Bearer ${JWT_TOKEN}`;
 
-    try {
-      const response = await fetch(
-        `http://192.168.1.13:8000/api/rtc_user_info_by_id/${with_userid}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: token,
-          },
-        }
-      );
-
-      if (response.status === 200) {
-        const data = await response.json();
-        console.log("successfully saved sdp", data);
-        return data;
-      } else {
-        console.log("Error fetching chat history");
-      }
-    } catch (error) {
-      console.error("An error occurred:", error);
-    } finally {
-      // setLoading(false);
-    }
-  };
-
-  const initializeWebRTC = async (token, type) => {
-    if (type == "INITIATOR") {
-      console.log("Ensure it's not called multiple times...");
-
-      const lc = new RTCPeerConnection();
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: true,
-        audio: true,
-      });
-      console.log("doweseestream", stream);
-      yourVideoRef.current.srcObject = stream;
-      lc.addStream(stream);
-      lc.onaddstream = (event) => {
-        console.log("ON LOCAL @ TRACK", event, event.stream);
-        yourVideoRef.current.srcObject = event.stream;
-
-        // setRemoteStream(event.stream);
-      };
-
-      lc.onicecandidate = async (e) => {
-        if (e.candidate) {
-          // Candidate is available, but don't save it yet
-          console.log("ICE candidate available");
-        } else if (lc.iceGatheringState === "complete") {
-          // ICE gathering is complete, save the final ICE candidate to the database
-          console.log("ICE gathering is complete");
-          // const to_user_id = await fetchUserId(token, with_email);
-          // console.log(
-          //   "Final ICE candidate:",
-          //   JSON.stringify(lc.localDescription)
-          // );
-          const offer = JSON.stringify(lc.localDescription)
-          const offer_obj = { "sdp": offer, "action": "ADD" }
-          const offer_str = JSON.stringify(offer_obj)
-          console.log('this is offer str', offer_str)
-          socket.emit('signal_pool', offer_str, with_userid);
-
-          // addRTCUserInfo(true, JSON.stringify(lc.localDescription), to_user_id);
-        }
-      };
-
-      lc.createOffer()
-        .then((o) => lc.setLocalDescription(o))
-        .then((a) => {
-          console.log("offer set successfully!");
-          console.log(
-            "Signaling State after setting local description:",
-            lc.signalingState
-          );
-        });
-      return [lc];
-    }
-    else if (type == "RESPONDER") {
-      console.log("Ensure it's not called multiple times...");
-      const rc = new RTCPeerConnection();
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: true,
-        audio: true,
-      });
-      console.log("doweseestream", stream);
-      yourVideoRef.current.srcObject = stream;
-      rc.addStream(stream);
-      console.log("doweseestream", stream);
-      rc.onaddstream = (event) => {
-        console.log("ON REMOTE @ TRACK", event, event.stream, myRef.current);
-        yourVideoRef.current.srcObject = event.stream;
-
-      };
-
-      rc.ondatachannel = (event) => {
-        // Handle the data channel when it is created
-        const dataChannel = event.channel;
-
-        dataChannel.onopen = () => {
-          console.log("Data channel opened!");
-          // You can add any specific actions you want to perform when the data channel is open.
-        };
-
-        // Handle other data channel events if needed
-      };
-
-      rc.onicecandidate = async (e) => {
-        if (e.candidate) {
-          console.log("whatisthestatus?" + JSON.stringify(rc.localDescription), `${auth_data.id}_${with_userid}`);
-          //THIS IS WHERE WILL MAKE
-          // const to_user_id = await fetchUserId(token, with_email);
-          const answer = JSON.stringify(rc.localDescription)
-          const offer_obj = { "answer": answer, "action": "UPDATE" }
-          const offer_str = JSON.stringify(offer_obj)
-          console.log('AREWEHERE')
-          socket.emit('signal_pool', offer_str, with_userid);
-          // saveRTCUserAns(
-          //   false,
-          //   JSON.stringify(rc.localDescription),
-          //   to_user_id
-          // );
-        }
-      };
-      const p_offer = JSON.parse(signal_pool.sdp)
-      const offer_str = await fetchRTCOffer();
-      console.log(p_offer, 'what is the diff', offer_str)
-      rc.setRemoteDescription(p_offer).then((a) => {
-        console.log("set remoteDescription with local offer");
-        console.log(
-          "Signaling State after setting remoteDescription",
-          rc.signalingState
-        );
-      });
-
-      rc.createAnswer()
-        .then((a) => {
-          rc.setLocalDescription(a);
-          console.log(
-            "Signaling State after setting Local description set as a provisional answer.:",
-            rc.signalingState
-          );
-        })
-        .then((a) => {
-          console.log("answer created");
-          console.log(
-            "Signaling State after setting Local description set as a provisional answer.:",
-            rc.signalingState
-          );
-        });
-      return [rc];
-    }
-  };
-
-  const attachRightListnersToRef = ()=>{
-    myRef.current.channel.addEventListener("iceconnectionstatechange", () => {
-      console.log(
-        "ICE Connection State changed:",
-        myRef.current.channel.iceConnectionState
-      );
-
-      // if (myRef.current.channel.iceConnectionState === 'connected') {
-      //   // ICE connection is fully established
-      //   setConnectionOpened(true);
-      // }
-    });
-
-    myRef.current.channel.addEventListener("connectionstatechange", () => {
-      console.log(
-        "Connection State changed:",
-        myRef.current.channel.connectionState
-      );
-
-      // if (myRef.current.channel.connectionState === 'connected') {
-      //   // Connection is fully established
-      //   setConnectionOpened(true);
-      // }
-    });
-
-    myRef.current.channel.addEventListener("signalingstatechange", () => {
-      console.log("AREWHEREWREVER");
-      console.log(
-        typeof myRef.current.channel,
-        myRef.current.channel,
-        "Signaling State changed:",
-        myRef.current.channel.signalingState,
-        myRef.current.channel.iceConnectionState,
-        myRef.current.channel.connectionState
-      );
-      if (myRef.current.channel.signalingState === "stable") {
-        // console.log('so this is INITIATOR CASE')
-        console.log('in INITIATOR connection stateus')
-
-        setConnectionOpened(true);
-      }
-    });
-  }
-
-  useEffect(async () => {
-    console.log('nowwht', signal_pool, typeof (signal_pool))
-    const ifPoolEmpty = () => Object.keys(signal_pool).length == 0
-
-    let cs
-    if (ifPoolEmpty()) {
-      console.log('wevewrqwe here', videoMode)
-      const JWT_TOKEN = localStorage.getItem("token");
-      const token = `Bearer ${JWT_TOKEN}`;
-      if (videoMode) {
-        console.log('areweinvideomode')
-        const [lc] = await initializeWebRTC(token, "INITIATOR");
-        // console.log("dowehave dc",dc)
-
-
-        if (lc) {
-          console.log(lc, "what is this lc");
-          console.log(lc, "myRef's current value:", myRef.current);
-          myRef.current = {
-            type: "INITIATOR",
-            channel: lc,
-          };
-          attachRightListnersToRef()
-          cs = 'OUTGOINGCALL'
-        }
-      }
-
-
-    }
-
-    else {
-      //if pool is filled already let's chceck first if there are no offers
-      console.log('were we there')
-      if (signal_pool.sdp && signal_pool.initiator != auth_data.id) {
-        cs = "INCOMINGCALL"
-      }
-      if (signal_pool.sdp && signal_pool.answer && signal_pool.initiator == auth_data.id) {
-        cs = "ANSWEREDWATINGFORCONNECTION"
-        const answer = JSON.parse(signal_pool.answer);
-
-        myRef.current.channel
-          .setRemoteDescription(answer)
-          .then((a) => {
-            console.log("dowseseethantythere");
-            console.log(
-              "Signaling State after setting answer on setRemoteDescription: RESPONDER",
-              myRef.current.channel.signalingState
-            );
-          })
-          .catch((error) => {
-            console.error("Error setting remote description:", error);
-          });
-      }
-
-
-
-
-    }
-
-
-    //if OFFER is there -  Object.keys(signal_pool).length == 1 && signal_pool.offer && !signal_pool.answer
-
-    //if ANS is there Object.keys(signal_pool).length == 1 && signal_pool.offer && signal_pool.answer
-
-    // setting correct callStatus
-    if (cs) {
-      setCallStatus((prv) => {
-        if (prv !== cs) {
-          return cs
-
-        }
-        return prv
-      })
-    }
-
-
-
-  }, [signal_pool, videoMode])
-
-  console.log("is it same without opening the video", myRef);
-
-  const setVideoModeWithCallS = () => {
-    console.log('nowheretogo')
-    setVideoMode(true)
-    setCallStatus('INITIALIZING')
-  }
-
-  const startTheConnection = () => {
-    // console.log("HEREISWHATWEHAVE");
-    //   console.log(
-    //     "if INITIATOR I THING WE CAN INITIATE THE CONNECTION??,",
-    //     myRef.current,
-    //     myRef.current["type"] == "INITIATOR"
-    //   );
-    if (myRef.current["type"] == "INITIATOR") {
-      // let's perform the thrid step
-      // console.log(
-      //   "hereAnswer",
-      //   myRef.current,
-      //   myRef.current.answer,
-      //   typeof myRef.current.answer
-      // ); //myRef.current.send("douseeme!")
-      const answer = JSON.parse(signal_pool.answer);
-      // const answer = JSON.parse(myRef.current.answer);
-      // console.log("DOWESEE ANSWER", answer);
-      // myRef.current.channel.send("douseeme!")
-      // answer = answer
-      // console.log(
-      //   "Signaling State before setting remote description:",
-      //   myRef.current.channel.signalingState
-      // );
-
-
-
-
-
-    }
-
-
-  }
-
-
-  const pickUpTheCall = async () => {
-    console.log('pickUpTheCall')
-    const JWT_TOKEN = localStorage.getItem("token");
-    const token = `Bearer ${JWT_TOKEN}`;
-    const [rc] = await initializeWebRTC(token, "RESPONDER");
-    console.log('here is your rc save it myRef if you need', rc)
-    myRef.current = {
-      type: "RESPONDER",
-      channel: rc,
-    };
-    attachRightListnersToRef()
-    startTheConnection()
-
-  }
   const chatScreenBody = (
     <div>
 
@@ -572,7 +538,7 @@ function ChatsEditor({ auth_data, allChats, loading, with_email, with_userid, Se
           </div>
           <div style={{ display: connection_open ? "block" : "none" }}>
             <video
-              ref={yourVideoRef} // Add a ref to the video element
+              ref={myVideoRef} // Add a ref to the video element
               autoPlay
               playsInline
               muted // You may want to remove this if it's not the local video
@@ -590,7 +556,7 @@ function ChatsEditor({ auth_data, allChats, loading, with_email, with_userid, Se
           </div>
           <div style={{ display: connection_open ? "block" : "none" }}>
             <video
-              ref={yourVideoRef} // Add a ref to the video element
+              ref={myVideoRef} // Add a ref to the video element
               autoPlay
               playsInline
               muted // You may want to remove this if it's not the local video
@@ -604,6 +570,7 @@ function ChatsEditor({ auth_data, allChats, loading, with_email, with_userid, Se
       )}
     </div>
   )
+
   return (
     <div
     >
@@ -637,8 +604,6 @@ const mapStateToProps = (state) => {
   };
 };
 
-// export default withSocket(ChatsEditor);
-// export default withSocket;
-export default connect(mapStateToProps)(withSocket(ChatsEditor));
+export default connect(mapStateToProps)(withChatSocket(ChatsEditor));
 
 
