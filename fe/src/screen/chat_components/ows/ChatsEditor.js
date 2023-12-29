@@ -381,6 +381,50 @@ function ChatsEditor({ auth_data, allChats, loading, with_email, with_userid, Se
     }
   };
 
+  const attachRightListnersToRef = ()=>{
+    myRef.current.channel.addEventListener("iceconnectionstatechange", () => {
+      console.log(
+        "ICE Connection State changed:",
+        myRef.current.channel.iceConnectionState
+      );
+
+      // if (myRef.current.channel.iceConnectionState === 'connected') {
+      //   // ICE connection is fully established
+      //   setConnectionOpened(true);
+      // }
+    });
+
+    myRef.current.channel.addEventListener("connectionstatechange", () => {
+      console.log(
+        "Connection State changed:",
+        myRef.current.channel.connectionState
+      );
+
+      // if (myRef.current.channel.connectionState === 'connected') {
+      //   // Connection is fully established
+      //   setConnectionOpened(true);
+      // }
+    });
+
+    myRef.current.channel.addEventListener("signalingstatechange", () => {
+      console.log("AREWHEREWREVER");
+      console.log(
+        typeof myRef.current.channel,
+        myRef.current.channel,
+        "Signaling State changed:",
+        myRef.current.channel.signalingState,
+        myRef.current.channel.iceConnectionState,
+        myRef.current.channel.connectionState
+      );
+      if (myRef.current.channel.signalingState === "stable") {
+        // console.log('so this is INITIATOR CASE')
+        console.log('in INITIATOR connection stateus')
+
+        setConnectionOpened(true);
+      }
+    });
+  }
+
   useEffect(async () => {
     console.log('nowwht', signal_pool, typeof (signal_pool))
     const ifPoolEmpty = () => Object.keys(signal_pool).length == 0
@@ -403,49 +447,7 @@ function ChatsEditor({ auth_data, allChats, loading, with_email, with_userid, Se
             type: "INITIATOR",
             channel: lc,
           };
-          myRef.current.channel.addEventListener("iceconnectionstatechange", () => {
-            console.log(
-              "ICE Connection State changed:",
-              myRef.current.channel.iceConnectionState
-            );
-
-            // if (myRef.current.channel.iceConnectionState === 'connected') {
-            //   // ICE connection is fully established
-            //   setConnectionOpened(true);
-            // }
-          });
-
-          myRef.current.channel.addEventListener("connectionstatechange", () => {
-            console.log(
-              "Connection State changed:",
-              myRef.current.channel.connectionState
-            );
-
-            // if (myRef.current.channel.connectionState === 'connected') {
-            //   // Connection is fully established
-            //   setConnectionOpened(true);
-            // }
-          });
-
-          myRef.current.channel.addEventListener("signalingstatechange", () => {
-            console.log("AREWHEREWREVER");
-            console.log(
-              typeof myRef.current.channel,
-              myRef.current.channel,
-              "Signaling State changed:",
-              myRef.current.channel.signalingState,
-              myRef.current.channel.iceConnectionState,
-              myRef.current.channel.connectionState
-            );
-            if (myRef.current.channel.signalingState === "stable") {
-              // console.log('so this is INITIATOR CASE')
-              console.log('in INITIATOR connection stateus')
-
-              setConnectionOpened(true);
-            }
-          });
-
-
+          attachRightListnersToRef()
           cs = 'OUTGOINGCALL'
         }
       }
@@ -555,38 +557,7 @@ function ChatsEditor({ auth_data, allChats, loading, with_email, with_userid, Se
       type: "RESPONDER",
       channel: rc,
     };
-
-    myRef.current.channel.addEventListener("iceconnectionstatechange", () => {
-      console.log(
-        "ICE Connection State changed:RESPONDER",
-        myRef.current.channel.iceConnectionState
-      );
-
-    });
-
-    myRef.current.channel.addEventListener("connectionstatechange", () => {
-      console.log(
-        "Connection State changed:RESPONDER",
-        myRef.current.channel.connectionState
-      );
-    });
-
-    myRef.current.channel.addEventListener("signalingstatechange", () => {
-      console.log("AREWHEREWREVERRESPONDER");
-      console.log(
-        typeof myRef.current.channel,
-        myRef.current.channel,
-        "Signaling State changed:",
-        myRef.current.channel.signalingState,
-        myRef.current.channel.iceConnectionState,
-        myRef.current.channel.connectionState
-      );
-      if (myRef.current.channel.signalingState === "stable") {
-        console.log('in RESPONDER connection stateus')
-        setConnectionOpened(true);
-      }
-    });
-
+    attachRightListnersToRef()
     startTheConnection()
 
   }
