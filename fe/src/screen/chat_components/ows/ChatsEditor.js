@@ -109,12 +109,7 @@ const ChatScreenHeader = ({ setVideoMode, videoMode, with_userid, with_email, Se
               e.preventDefault()
               setVideoMode(true)
 
-              // force close the connection
-              // let's catch the ref
-              // console.log('myCurrerref', myRef.current)
-              // myRef.current.channel.close()
-              // <DetachVideoWindow with_email={with_email} with_userid={with_userid} />
-              // SetWithUserId
+
 
 
             }} style={!videoMode ? { fontSize: '35px', color: '#1F4294' } : { fontSize: '35px', color: 'black' }} />
@@ -125,162 +120,10 @@ const ChatScreenHeader = ({ setVideoMode, videoMode, with_userid, with_email, Se
 }
 
 
-// function VideoComp({ with_userid, callStatus, setCallStatus }) {
-//   // const [signal_pool, setsignal_pool] = useState(true)
-//   // const yourVideoRef = useRef(null);
-//   const myRef = useRef(null);
-
-//   // const [socket, setSocket] = useState(
-//   //   io.connect('http://192.168.1.13:8000', {
-//   //     query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-//   //   })
-//   // );
-
-//   // const [signal_pool, setSignalPool] = useState({});
-//   // const [loading, setLoading] = useState(true);
-//   // useEffect(() => {
-//   //   const fetchRtcInfo = () => {
-//   //     // socket.emit('signal_pool', '{"offer":"myoffer","action":"ADD"}',with_userid);
-//   //   };
-
-//   //   fetchRtcInfo();
-
-//   //   const intervalId = setInterval(() => {
-//   //     fetchRtcInfo();
-//   //   }, 1000);
-
-//   //   socket.on('signal_pool', (data) => {
-//   //     if (data) {
-//   //       console.log('dafsuyiiuytfasd',data)
-//   //       // const pdata = JSON.parse(data);
-//   //       // console.log('sdfasdf',pdata)
-//   //       // const f_data = pdata //.filter((i) => (i.frm_user === with_userid));
-
-//   //       // setAllChats((prevChats) => {
-//   //       //   if (!prevChats) {
-//   //       //     setAllChats(f_data);
-//   //       //     setLoading(false);
-//   //       //   } else if (prevChats && f_data.length !== prevChats.length) {
-//   //       //     setAllChats(f_data);
-//   //       //     setLoading(false);
-//   //       //   }
-//   //       //   return prevChats;
-//   //       // });
-//   //     }
-//   //   });
-
-//   //   socket.on('connect', () => {
-//   //     console.log('Socket_pool connected');
-//   //   });
-
-//   //   socket.on('disconnect', () => {
-//   //     console.log('Socket_pool disconnected');
-//   //   });
-
-//   //   return () => {
-//   //     clearInterval(intervalId);
-//   //     socket.disconnect();
-//   //   };
-//   // }, [socket, with_userid]);
-
-//   // const initializeWebRTC = async (token, type) => {
-//   //   if (type == "INITIATOR") {
-//   //     console.log("Ensure it's not called multiple times...");
-
-//   //     const lc = new RTCPeerConnection();
-//   //     const stream = await navigator.mediaDevices.getUserMedia({
-//   //       video: true,
-//   //       audio: true,
-//   //     });
-//   //     console.log("doweseestream", stream);
-//   //     yourVideoRef.current.srcObject = stream;
-//   //     // myRef.current = {"srcObject":stream};
-//   //     // setStream(stream);
-//   //     lc.addStream(stream);
-//   //     lc.onaddstream = (event) => {
-//   //       console.log("ON LOCAL @ TRACK", event, event.stream);
-//   //       // myRef.current = {"srcObject":event.stream};
-//   //       // remoteVideoRef.current.srcObject = event.stream;
-//   //       yourVideoRef.current.srcObject = event.stream;
-
-//   //       // setStream(event.stream)
-//   //       // setRemoteStream(event.stream);
-//   //     };
-//   //     // lc.onaddstream = (event) => {
-//   //     //   myRef.current = {"srcObject":event.stream};
-//   //     //   // remoteVideoRef.current.srcObject = event.stream;
-//   //     //   setStream(event.stream)
-//   //     //   // setRemoteStream(event.stream);
-//   //     // };
-
-//   //     lc.onicecandidate = async (e) => {
-//   //       if (e.candidate) {
-//   //         // Candidate is available, but don't save it yet
-//   //         console.log("ICE candidate available");
-//   //       } else if (lc.iceGatheringState === "complete") {
-//   //         // ICE gathering is complete, save the final ICE candidate to the database
-//   //         console.log("ICE gathering is complete");
-//   //         // const to_user_id = await fetchUserId(token, with_email);
-//   //         // console.log(
-//   //         //   "Final ICE candidate:",
-//   //         //   JSON.stringify(lc.localDescription)
-//   //         // );
-//   //         // addRTCUserInfo(true, JSON.stringify(lc.localDescription), to_user_id);
-//   //       }
-//   //     };
-
-//   //     lc.createOffer()
-//   //       .then((o) => lc.setLocalDescription(o))
-//   //       .then((a) => {
-//   //         console.log("offer set successfully!");
-//   //         console.log(
-//   //           "Signaling State after setting local description:",
-//   //           lc.signalingState
-//   //         );
-//   //       });
-//   //     return [lc];
-//   //   } 
-//   // };
-
-//   // useEffect(async() => {
-//   //   if (Object.keys(signal_pool).length==0){
-//   //     console.log('wevewrqwe here')
-//   //     const JWT_TOKEN = localStorage.getItem("token");
-//   //     const token = `Bearer ${JWT_TOKEN}`;
-//   //     const [lc] = await initializeWebRTC(token, "INITIATOR");
-//   //     // console.log("dowehave dc",dc)
-
-//   //     if (lc) {
-//   //       console.log(lc, "what is this lc");
-//   //       setCallStatus('RINGING')
-
-//   //     }
-
-//   //   }
-//   // }, [signal_pool])
-
-
-//   return (
-//     <div>
-//       {/* <div>
-//         {callStatus == 'RINGING' && <PhoneCallUI callStatus={callStatus} />}
-//       </div>
-//       <div style={{ display: "none" }}>
-//         <video
-//           ref={yourVideoRef} // Add a ref to the video element
-//           autoPlay
-//           playsInline
-//           muted // You may want to remove this if it's not the local video
-//         ></video>
-
-//       </div> */}
-//     </div>
-//   )
-// }
 
 function ChatsEditor({ auth_data, allChats, loading, with_email, with_userid, SetWithUserId, SetWithEmail }) {
   const [connection_open, setConnectionOpened] = useState(false)
-  console.log("is it opened?",connection_open)
+  console.log("is it opened?", connection_open)
   const [videoMode, setVideoMode] = useState(false)
   const [signal_pool, setSignalPool] = useState({});
 
@@ -300,7 +143,6 @@ function ChatsEditor({ auth_data, allChats, loading, with_email, with_userid, Se
     })
   );
 
-  // const [loading, setLoading] = useState(true);
   useEffect(() => {
     const fetchRtcInfo = () => {
       socket.emit('signal_pool', null, with_userid);
@@ -362,22 +204,7 @@ function ChatsEditor({ auth_data, allChats, loading, with_email, with_userid, Se
         }
         const pdata = JSON.parse(data);
         console.log('abcdef', pdata, myRef, with_userid)
-        // if (myRef.current.type=='RESPONDER'){
-        //PICK UP THE GIVEN OFFER
-        //START RESPONDING PROCESS
-        // }
-        // const f_data = pdata //.filter((i) => (i.frm_user === with_userid));
 
-        // setAllChats((prevChats) => {
-        //   if (!prevChats) {
-        //     setAllChats(f_data);
-        //     setLoading(false);
-        //   } else if (prevChats && f_data.length !== prevChats.length) {
-        //     setAllChats(f_data);
-        //     setLoading(false);
-        //   }
-        //   return prevChats;
-        // });
       }
     });
 
@@ -397,7 +224,6 @@ function ChatsEditor({ auth_data, allChats, loading, with_email, with_userid, Se
   }, [socket]);
 
   const fetchRTCOffer = async () => {
-    // console.log("am I being called", isInitiator, sdp);
     const JWT_TOKEN = localStorage.getItem("token");
     const token = `Bearer ${JWT_TOKEN}`;
 
@@ -438,24 +264,13 @@ function ChatsEditor({ auth_data, allChats, loading, with_email, with_userid, Se
       });
       console.log("doweseestream", stream);
       yourVideoRef.current.srcObject = stream;
-      // myRef.current = {"srcObject":stream};
-      // setStream(stream);
       lc.addStream(stream);
       lc.onaddstream = (event) => {
         console.log("ON LOCAL @ TRACK", event, event.stream);
-        // myRef.current = {"srcObject":event.stream};
-        // remoteVideoRef.current.srcObject = event.stream;
         yourVideoRef.current.srcObject = event.stream;
 
-        // setStream(event.stream)
         // setRemoteStream(event.stream);
       };
-      // lc.onaddstream = (event) => {
-      //   myRef.current = {"srcObject":event.stream};
-      //   // remoteVideoRef.current.srcObject = event.stream;
-      //   setStream(event.stream)
-      //   // setRemoteStream(event.stream);
-      // };
 
       lc.onicecandidate = async (e) => {
         if (e.candidate) {
@@ -492,10 +307,6 @@ function ChatsEditor({ auth_data, allChats, loading, with_email, with_userid, Se
     }
     else if (type == "RESPONDER") {
       console.log("Ensure it's not called multiple times...");
-      // const offer_str = await fetchRTCOffer();
-      // console.log("offer_str", offer_str, typeof offer_str);
-      // const offer = JSON.parse(offer_str["sdp"]);
-      // console.log("here is your offer love",offer,typeof(offer))
       const rc = new RTCPeerConnection();
       const stream = await navigator.mediaDevices.getUserMedia({
         video: true,
@@ -503,23 +314,12 @@ function ChatsEditor({ auth_data, allChats, loading, with_email, with_userid, Se
       });
       console.log("doweseestream", stream);
       yourVideoRef.current.srcObject = stream;
-      // myRef.current = {"srcObject":stream};
-      // setStream(stream);
       rc.addStream(stream);
-      // const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
       console.log("doweseestream", stream);
-      // yourVideoRef.current.srcObject = stream
-      // myRef.current = {"srcObject":stream};
-      // setStream(stream);
-      // rc.addStream(stream);
       rc.onaddstream = (event) => {
         console.log("ON REMOTE @ TRACK", event, event.stream, myRef.current);
-        // myRef.current = {"srcObject":event.stream};
-        // remoteVideoRef.current.srcObject = event.stream;
         yourVideoRef.current.srcObject = event.stream;
 
-        // setStream(event.stream)
-        // setRemoteStream(event.stream);
       };
 
       rc.ondatachannel = (event) => {
@@ -552,13 +352,8 @@ function ChatsEditor({ auth_data, allChats, loading, with_email, with_userid, Se
         }
       };
       const p_offer = JSON.parse(signal_pool.sdp)
-      // const p_sdp = JSON.parse(p_offer.sdp)
       const offer_str = await fetchRTCOffer();
       console.log(p_offer, 'what is the diff', offer_str)
-      // console.log('signal_pool.offer.sdp',p_sdp,typeof(p_sdp))
-
-      // const offer = JSON.stringify(signal_pool.offer.sdp)
-      // console.log('here is foffer to generate the answer',offer)
       rc.setRemoteDescription(p_offer).then((a) => {
         console.log("set remoteDescription with local offer");
         console.log(
@@ -613,25 +408,25 @@ function ChatsEditor({ auth_data, allChats, loading, with_email, with_userid, Se
               "ICE Connection State changed:",
               myRef.current.channel.iceConnectionState
             );
-    
+
             // if (myRef.current.channel.iceConnectionState === 'connected') {
             //   // ICE connection is fully established
             //   setConnectionOpened(true);
             // }
           });
-    
+
           myRef.current.channel.addEventListener("connectionstatechange", () => {
             console.log(
               "Connection State changed:",
               myRef.current.channel.connectionState
             );
-    
+
             // if (myRef.current.channel.connectionState === 'connected') {
             //   // Connection is fully established
             //   setConnectionOpened(true);
             // }
           });
-    
+
           myRef.current.channel.addEventListener("signalingstatechange", () => {
             console.log("AREWHEREWREVER");
             console.log(
@@ -662,16 +457,9 @@ function ChatsEditor({ auth_data, allChats, loading, with_email, with_userid, Se
       //if pool is filled already let's chceck first if there are no offers
       console.log('were we there')
       if (signal_pool.sdp && signal_pool.initiator != auth_data.id) {
-        //responder case and if it is towards mefdsg
-        //then we should say ringing (WTR)
-        //setCallstatus to WTR
         cs = "INCOMINGCALL"
-        // AND THEN YOU MIGHT WANNA GENERATE RESP SDP FOR IT
       }
       if (signal_pool.sdp && signal_pool.answer && signal_pool.initiator == auth_data.id) {
-        //responder case and if it is towards mefdsg
-        //then we should say ringing (WTR)
-        //setCallstatus to WTR
         cs = "ANSWEREDWATINGFORCONNECTION"
         const answer = JSON.parse(signal_pool.answer);
 
@@ -687,23 +475,7 @@ function ChatsEditor({ auth_data, allChats, loading, with_email, with_userid, Se
           .catch((error) => {
             console.error("Error setting remote description:", error);
           });
-        // AND THEN YOU MIGHT WANNA GENERATE RESP SDP FOR IT
       }
-      // if(signal_pool.sdp && signal_pool.answer && signal_pool.initiator == auth_data.id){
-      //   const answer = JSON.parse(signal_pool.answer);
-      //   myRef.current.channel
-      //     .setRemoteDescription(answer)
-      //     .then((a) => {
-      //       console.log("dowseseethantythere");
-      //       console.log(
-      //         "Signaling State after setting answer on setRemoteDescription: RESPONDER",
-      //         myRef.current.channel.signalingState
-      //       );
-      //     })
-      //     .catch((error) => {
-      //       console.error("Error setting remote description:", error);
-      //     });
-      // }
 
 
 
@@ -763,11 +535,11 @@ function ChatsEditor({ auth_data, allChats, loading, with_email, with_userid, Se
       //   myRef.current.channel.signalingState
       // );
 
-     
-  
 
-    
-      }
+
+
+
+    }
 
 
   }
@@ -779,34 +551,17 @@ function ChatsEditor({ auth_data, allChats, loading, with_email, with_userid, Se
     const token = `Bearer ${JWT_TOKEN}`;
     const [rc] = await initializeWebRTC(token, "RESPONDER");
     console.log('here is your rc save it myRef if you need', rc)
-    // const answer = JSON.parse(signal_pool.answer);
     myRef.current = {
       type: "RESPONDER",
       channel: rc,
     };
-    // myRef.current.channel
-    // .setRemoteDescription(answer)
-    // .then((a) => {
-    //   console.log("dowseseethantythere");
-    //   console.log(
-    //     "Signaling State after setting answer on setRemoteDescription: RESPONDER",
-    //     myRef.current.channel.signalingState
-    //   );
-    // })
-    // .catch((error) => {
-    //   console.error("Error setting remote description:", error);
-    // });
-    // const answer = JSON.parse(signal_pool.answer);
+
     myRef.current.channel.addEventListener("iceconnectionstatechange", () => {
       console.log(
         "ICE Connection State changed:RESPONDER",
         myRef.current.channel.iceConnectionState
       );
 
-      // if (myRef.current.channel.iceConnectionState === 'connected') {
-      //   // ICE connection is fully established
-      //   setConnectionOpened(true);
-      // }
     });
 
     myRef.current.channel.addEventListener("connectionstatechange", () => {
@@ -814,11 +569,6 @@ function ChatsEditor({ auth_data, allChats, loading, with_email, with_userid, Se
         "Connection State changed:RESPONDER",
         myRef.current.channel.connectionState
       );
-
-      // if (myRef.current.channel.connectionState === 'connected') {
-      //   // Connection is fully established
-      //   setConnectionOpened(true);
-      // }
     });
 
     myRef.current.channel.addEventListener("signalingstatechange", () => {
@@ -837,12 +587,7 @@ function ChatsEditor({ auth_data, allChats, loading, with_email, with_userid, Se
       }
     });
 
-  startTheConnection()
-
-    //this time we should generate the answer
-    //and add it to the pool
-    //set up the status to 'RESPONDED&CONNECTING'
-    //and we probablly can connect now
+    startTheConnection()
 
   }
   const chatScreenBody = (
@@ -850,12 +595,11 @@ function ChatsEditor({ auth_data, allChats, loading, with_email, with_userid, Se
 
       {loading && <CircularProgress />}
       {!loading && !videoMode && callStatus == 'INCOMINGCALL' && (
-        // <VideoComp with_userid={with_userid} callStatus={callStatus} setCallStatus={setCallStatus}/>
         <div>
           <div>
             <PhoneCallUI callStatus={callStatus} pickUpTheCall={pickUpTheCall} />
           </div>
-          <div style={{ display: connection_open?"block":"none" }}>
+          <div style={{ display: connection_open ? "block" : "none" }}>
             <video
               ref={yourVideoRef} // Add a ref to the video element
               autoPlay
@@ -873,7 +617,7 @@ function ChatsEditor({ auth_data, allChats, loading, with_email, with_userid, Se
           <div>
             {['INITIALIZING', 'OUTGOINGCALL', null].includes(callStatus) && <PhoneCallUI callStatus={callStatus} />}
           </div>
-          <div style={{ display: connection_open?"block":"none" }}>
+          <div style={{ display: connection_open ? "block" : "none" }}>
             <video
               ref={yourVideoRef} // Add a ref to the video element
               autoPlay
