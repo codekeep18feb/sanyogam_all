@@ -542,6 +542,8 @@ function ChatsEditor({
             />
           </div>
           <div style={{ display: connection_open ? "block" : "none" }}>
+          <div>here is video RESPONDER</div>
+            
             <video
               ref={myVideoRef} // Add a ref to the video element
               autoPlay
@@ -561,6 +563,7 @@ function ChatsEditor({
             )}
           </div>
           <div style={{ display: connection_open ? "block" : "none" }}>
+            <div>here is video INITIATOR</div>
             <video
               ref={myVideoRef} // Add a ref to the video element
               autoPlay
