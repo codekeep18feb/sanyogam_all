@@ -341,46 +341,6 @@ function ChatsEditor({
     });
   };
 
-  const startTheConnection = () => {
-    // console.log("HEREISWHATWEHAVE");
-    //   console.log(
-    //     "if INITIATOR I THING WE CAN INITIATE THE CONNECTION??,",
-    //     myRef.current,
-    //     myRef.current["type"] == "INITIATOR"
-    //   );
-    if (myRef.current["type"] == "INITIATOR") {
-      // let's perform the thrid step
-      // console.log(
-      //   "hereAnswer",
-      //   myRef.current,
-      //   myRef.current.answer,
-      //   typeof myRef.current.answer
-      // ); //myRef.current.send("douseeme!")
-      const answer = JSON.parse(signal_pool.answer);
-      // const answer = JSON.parse(myRef.current.answer);
-      // console.log("DOWESEE ANSWER", answer);
-      // myRef.current.channel.send("douseeme!")
-      // answer = answer
-      // console.log(
-      //   "Signaling State before setting remote description:",
-      //   myRef.current.channel.signalingState
-      // );
-    }
-  };
-
-  const pickUpTheCall = async () => {
-    console.log("pickUpTheCall");
-    const JWT_TOKEN = localStorage.getItem("token");
-    const token = `Bearer ${JWT_TOKEN}`;
-    const [rc] = await initializeWebRTC(token, "RESPONDER");
-    console.log("here is your rc save it myRef if you need", rc);
-    myRef.current = {
-      type: "RESPONDER",
-      channel: rc,
-    };
-    attachRightListnersToRef();
-    startTheConnection();
-  };
 
   useEffect(async () => {
     console.log("nowwht", signal_pool, typeof signal_pool);
@@ -409,10 +369,7 @@ function ChatsEditor({
       }
     } else {
       //if pool is filled already let's chceck first if there are no offers
-      console.log("were we there");
-      if (signal_pool.sdp && signal_pool.initiator != auth_data.id) {
-        cs.status = "INCOMINGCALL";
-      }
+      
       if (
         signal_pool.sdp &&
         signal_pool.answer &&
@@ -532,29 +489,8 @@ function ChatsEditor({
 
   const chatScreenBody = (
     <div>
-      {(loading && callStatus.status != "INCOMINGCALL") && <CircularProgress />}
-      {callStatus.status == "INCOMINGCALL" && (
-        <div>
-          <div>
-            <PhoneCallUI
-              callStatus={callStatus}
-              pickUpTheCall={pickUpTheCall}
-              with_userid={with_userid}
-            />
-          </div>
-          <div style={{ display: connection_open ? "block" : "none" }}>
-          <div>here is video RESPONDER</div>
-            
-            <video
-              ref={myVideoRef} // Add a ref to the video element
-              autoPlay
-              playsInline
-              muted // You may want to remove this if it's not the local video
-            ></video>
-          </div>
-        </div>
-      )}
-
+      {loading &&  <CircularProgress />}
+      
       {!loading && videoMode && (
         // <VideoComp with_userid={with_userid} callStatus={callStatus} setCallStatus={setCallStatus}/>
         <di>
