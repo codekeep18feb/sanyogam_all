@@ -18,7 +18,7 @@ function Video({ auth_data }) {
 
     try {
       const response = await fetch(
-        "http://192.168.1.13:8000/api/read_online_circle",
+        "http://192.168.1.2:8000/api/read_online_circle",
         {
           method: "GET",
           headers: {
@@ -49,7 +49,7 @@ function Video({ auth_data }) {
 
     try {
       const response = await fetch(
-        `http://192.168.1.13:8000/api/rtc_user_info_by_id`,
+        `http://192.168.1.2:8000/api/rtc_user_info_by_id`,
         {
           method: "GET",
           headers: {
@@ -67,7 +67,6 @@ function Video({ auth_data }) {
         console.log("Error fetching chat history");
       }
     } catch (error) {
-
       console.error("An error occurred:", error);
     } finally {
       setLoading(false);
@@ -86,13 +85,13 @@ function Video({ auth_data }) {
     const JWT_TOKEN = localStorage.getItem("token");
     const token = `Bearer ${JWT_TOKEN}`;
     console.log("token", token);
-    const response2 = await fetch("http://192.168.1.13:8000/api/profiles", {
+    const response2 = await fetch("http://192.168.1.2:8000/api/profiles", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: token, // Replace with your JWT token
       },
-      body:JSON.stringify({})
+      body: JSON.stringify({}),
     });
 
     if (response2.status === 200) {

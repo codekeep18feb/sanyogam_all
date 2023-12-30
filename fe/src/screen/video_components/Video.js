@@ -11,20 +11,17 @@ function Video({ auth_data }) {
   const [loading, setLoading] = useState(true);
   // const [rtcData, setRTCData] = useState(null);
 
-
- 
-
   useEffect(async () => {
     const JWT_TOKEN = localStorage.getItem("token");
     const token = `Bearer ${JWT_TOKEN}`;
     console.log("token", token);
-    const response2 = await fetch("http://192.168.1.13:8000/api/profiles", {
+    const response2 = await fetch("http://192.168.1.2:8000/api/profiles", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: token, // Replace with your JWT token
       },
-      body:JSON.stringify({})
+      body: JSON.stringify({}),
     });
 
     if (response2.status === 200) {
@@ -41,7 +38,7 @@ function Video({ auth_data }) {
   }, [with_userid]);
 
   useEffect(() => {
-     console.log("new online profiles arrived", online_profiles, profiles);
+    console.log("new online profiles arrived", online_profiles, profiles);
 
     // Check if online_profiles has items and is not empty
     if (online_profiles.length > 0) {

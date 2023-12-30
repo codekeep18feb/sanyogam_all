@@ -7,18 +7,17 @@ import Grid from "@mui/material/Grid"; // Import Grid
 import Hidden from "@mui/material/Hidden"; // Import Hidden
 import ImageCircles from "./ImageCircle";
 import BlankChatScreen from "./BlankChatScreen";
-import ChatModal from '../../screen/ChatModal'
-import io from 'socket.io-client';
-
+import ChatModal from "../../screen/ChatModal";
+import io from "socket.io-client";
 
 function ChatWS({ auth_data }) {
   const [socket, setSocket] = useState(
-    io.connect('http://192.168.1.13:8000', {
+    io.connect("http://192.168.1.2:8000", {
       query: { token: `Bearer ${localStorage.getItem("token")}` },
     })
   );
-  // const [socket, setSocket] = useState(io.connect('http://192.168.1.13:8000'));
-  const [soc_conn, setsoc_conn] = useState(null)
+  // const [socket, setSocket] = useState(io.connect('http://192.168.1.2:8000'));
+  const [soc_conn, setsoc_conn] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => {
@@ -29,8 +28,6 @@ function ChatWS({ auth_data }) {
     setIsModalOpen(false);
   };
 
-  
-  
   const [profiles, setProfiles] = useState([]);
   const [online_profiles, setOnlineProfiles] = useState([]);
 
@@ -38,7 +35,7 @@ function ChatWS({ auth_data }) {
   const [with_email, SetWithEmail] = useState(null);
   const [loading, setLoading] = useState(true);
   // const [rtcData, setRTCData] = useState(null);
-  console.log('DOWE HAVE ANY',with_userid, with_email)
+  console.log("DOWE HAVE ANY", with_userid, with_email);
   const users = [
     {
       id: 1,
@@ -164,15 +161,14 @@ function ChatWS({ auth_data }) {
   ];
 
   useEffect(() => {
-    
-    socket.on('message', (data) => {
-      console.log('isther any data arrival',data,typeof(data))
+    socket.on("message", (data) => {
+      console.log("isther any data arrival", data, typeof data);
       // setsoc_conn('stage1')
     });
 
     return () => {
       // socket.disconnect();
-    console.log('will it only run if unmounting is happening')
+      console.log("will it only run if unmounting is happening");
     };
   }, []);
 
@@ -183,7 +179,7 @@ function ChatWS({ auth_data }) {
 
     try {
       const response = await fetch(
-        "http://192.168.1.13:8000/api/read_online_circle",
+        "http://192.168.1.2:8000/api/read_online_circle",
         {
           method: "GET",
           headers: {
@@ -214,7 +210,7 @@ function ChatWS({ auth_data }) {
 
     try {
       const response = await fetch(
-        `http://192.168.1.13:8000/api/rtc_user_info_by_id`,
+        `http://192.168.1.2:8000/api/rtc_user_info_by_id`,
         {
           method: "GET",
           headers: {
@@ -250,13 +246,13 @@ function ChatWS({ auth_data }) {
     const JWT_TOKEN = localStorage.getItem("token");
     const token = `Bearer ${JWT_TOKEN}`;
     console.log("token", token);
-    const response2 = await fetch("http://192.168.1.13:8000/api/profiles", {
+    const response2 = await fetch("http://192.168.1.2:8000/api/profiles", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: token, // Replace with your JWT token
       },
-      body:JSON.stringify({})
+      body: JSON.stringify({}),
     });
 
     if (response2.status === 200) {
@@ -306,11 +302,10 @@ function ChatWS({ auth_data }) {
     return <p>Loang...</p>;
   }
 
-  console.log('HERQEWR',isModalOpen)
+  console.log("HERQEWR", isModalOpen);
   return (
     <div>
       <Grid container>
-       
         <Grid item xs={12} md={3}>
           <TabPanel
             profiles={profiles}
@@ -323,12 +318,17 @@ function ChatWS({ auth_data }) {
         <Grid item xs={12} md={7}>
           <div>
             {with_userid ? (
-                // <ChatModal with_userid={with_userid} SetWithUserId={SetWithUserId} with_email={with_email}/>
+              // <ChatModal with_userid={with_userid} SetWithUserId={SetWithUserId} with_email={with_email}/>
 
-              <ChatWindowWS soc_conn={soc_conn} 
-              SetWithUserId={SetWithUserId} SetWithEmail={SetWithEmail} with_email={with_email} with_userid={with_userid} />
-              // <div>Let This Div cover entire visible screen and have a cancel material icon to close this div if pressed</div>
+              <ChatWindowWS
+                soc_conn={soc_conn}
+                SetWithUserId={SetWithUserId}
+                SetWithEmail={SetWithEmail}
+                with_email={with_email}
+                with_userid={with_userid}
+              />
             ) : (
+              // <div>Let This Div cover entire visible screen and have a cancel material icon to close this div if pressed</div>
               <BlankChatScreen />
             )}
           </div>

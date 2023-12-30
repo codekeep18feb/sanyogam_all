@@ -76,7 +76,7 @@ export default function PhoneCallUI({callStatus, pickUpTheCall}) {
         
 
       </button> */}
-      <div>callStatus - {callStatus}</div>
+      <div>callStatus - {callStatus.status}</div>
       <div style={controlsStyle}>
       <PickUPIcon 
       style={buttonStyle}

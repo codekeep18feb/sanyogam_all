@@ -7,8 +7,7 @@ import Grid from "@mui/material/Grid"; // Import Grid
 import Hidden from "@mui/material/Hidden"; // Import Hidden
 import ImageCircles from "./ImageCircle";
 import BlankChatScreen from "./BlankChatScreen";
-import ChatModal from '../../screen/ChatModal'
-
+import ChatModal from "../../screen/ChatModal";
 
 function Chat({ auth_data }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -21,7 +20,6 @@ function Chat({ auth_data }) {
     setIsModalOpen(false);
   };
 
-
   const [profiles, setProfiles] = useState([]);
   const [online_profiles, setOnlineProfiles] = useState([]);
 
@@ -29,7 +27,7 @@ function Chat({ auth_data }) {
   const [with_email, SetWithEmail] = useState(null);
   const [loading, setLoading] = useState(true);
   // const [rtcData, setRTCData] = useState(null);
-  console.log('DOWE HAVE ANY',with_userid, with_email)
+  console.log("DOWE HAVE ANY", with_userid, with_email);
   const users = [
     {
       id: 1,
@@ -161,7 +159,7 @@ function Chat({ auth_data }) {
 
     try {
       const response = await fetch(
-        "http://192.168.1.13:8000/api/read_online_circle",
+        "http://192.168.1.2:8000/api/read_online_circle",
         {
           method: "GET",
           headers: {
@@ -192,7 +190,7 @@ function Chat({ auth_data }) {
 
     try {
       const response = await fetch(
-        `http://192.168.1.13:8000/api/rtc_user_info_by_id`,
+        `http://192.168.1.2:8000/api/rtc_user_info_by_id`,
         {
           method: "GET",
           headers: {
@@ -228,13 +226,13 @@ function Chat({ auth_data }) {
     const JWT_TOKEN = localStorage.getItem("token");
     const token = `Bearer ${JWT_TOKEN}`;
     console.log("token", token);
-    const response2 = await fetch("http://192.168.1.13:8000/api/profiles", {
+    const response2 = await fetch("http://192.168.1.2:8000/api/profiles", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: token, // Replace with your JWT token
       },
-      body:JSON.stringify({})
+      body: JSON.stringify({}),
     });
 
     if (response2.status === 200) {
@@ -284,11 +282,10 @@ function Chat({ auth_data }) {
     return <p>Loang...</p>;
   }
 
-  console.log('HERQEWR',isModalOpen)
+  console.log("HERQEWR", isModalOpen);
   return (
     <div>
       <Grid container>
-       
         <Grid item xs={12} md={3}>
           <TabPanel
             profiles={profiles}
@@ -301,11 +298,16 @@ function Chat({ auth_data }) {
         <Grid item xs={12} md={7}>
           <div>
             {with_userid ? (
-                // <ChatModal with_userid={with_userid} SetWithUserId={SetWithUserId} with_email={with_email}/>
+              // <ChatModal with_userid={with_userid} SetWithUserId={SetWithUserId} with_email={with_email}/>
 
-              <ChatWindow SetWithUserId={SetWithUserId} SetWithEmail={SetWithEmail} with_email={with_email} with_userid={with_userid} />
-              // <div>Let This Div cover entire visible screen and have a cancel material icon to close this div if pressed</div>
+              <ChatWindow
+                SetWithUserId={SetWithUserId}
+                SetWithEmail={SetWithEmail}
+                with_email={with_email}
+                with_userid={with_userid}
+              />
             ) : (
+              // <div>Let This Div cover entire visible screen and have a cancel material icon to close this div if pressed</div>
               <BlankChatScreen />
             )}
           </div>

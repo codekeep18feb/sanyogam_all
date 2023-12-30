@@ -22,7 +22,7 @@ export default function ChatWindow({ with_email, with_userid }) {
 
     try {
       const response = await fetch(
-        `http://192.168.1.13:8000/api/rtc_user_info_by_id/${with_userid}`,
+        `http://192.168.1.2:8000/api/rtc_user_info_by_id/${with_userid}`,
         {
           method: "GET",
           headers: {
@@ -63,7 +63,7 @@ export default function ChatWindow({ with_email, with_userid }) {
     const token = `Bearer ${JWT_TOKEN}`;
 
     try {
-      const response = await fetch(`http://192.168.1.13:8000/api/add_rtc_user`, {
+      const response = await fetch(`http://192.168.1.2:8000/api/add_rtc_user`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -95,7 +95,7 @@ export default function ChatWindow({ with_email, with_userid }) {
     const token = `Bearer ${JWT_TOKEN}`;
 
     try {
-      const response = await fetch(`http://192.168.1.13:8000/api/add_rtc_user`, {
+      const response = await fetch(`http://192.168.1.2:8000/api/add_rtc_user`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -128,7 +128,7 @@ export default function ChatWindow({ with_email, with_userid }) {
 
     try {
       const response = await fetch(
-        `http://192.168.1.13:8000/api/rtc_user_info_by_id/${with_userid}`,
+        `http://192.168.1.2:8000/api/rtc_user_info_by_id/${with_userid}`,
         {
           method: "GET",
           headers: {
@@ -152,10 +152,10 @@ export default function ChatWindow({ with_email, with_userid }) {
     }
   };
   const fetchUserId = async (token, with_email) => {
-    // http://192.168.1.13:8000/api/users/query?q_email=deepaksingh.18feb%40gmail.com
+    // http://192.168.1.2:8000/api/users/query?q_email=deepaksingh.18feb%40gmail.com
     try {
       const response = await fetch(
-        `http://192.168.1.13:8000/api/users/query?q_email=${with_email}`,
+        `http://192.168.1.2:8000/api/users/query?q_email=${with_email}`,
         {
           method: "GET",
           headers: {
@@ -281,14 +281,14 @@ export default function ChatWindow({ with_email, with_userid }) {
     }
   };
   useEffect(async () => {
-    console.log('AREEWREWHERE')
+    console.log("AREEWREWHERE");
     const fetchRequestStatus = async () => {
       const JWT_TOKEN = localStorage.getItem("token");
       const token = `Bearer ${JWT_TOKEN}`;
 
       try {
         // const we = 'deepaksingh.18feb%40gmail.com'
-        console.log('WHERE  IS withemail',with_email)
+        console.log("WHERE  IS withemail", with_email);
         const response = await fetch(
           `http://127.0.0.1:8000/api/handle_request?to_email=${with_email}`,
           {
@@ -315,8 +315,8 @@ export default function ChatWindow({ with_email, with_userid }) {
     const JWT_TOKEN = localStorage.getItem("token");
     const token = `Bearer ${JWT_TOKEN}`;
     const req_status = await fetchRequestStatus();
-    console.log('hererewis req_status',req_status.status)
-    setRequestStatus(req_status.status)
+    console.log("hererewis req_status", req_status.status);
+    setRequestStatus(req_status.status);
     if (req_status.status == "ACCEPTED") {
       console.log("SHOUDL IT BE ACCEPTED FRO BOTH");
 
@@ -392,7 +392,7 @@ export default function ChatWindow({ with_email, with_userid }) {
         // height: "600px",
         // // width: "700px",
         // background: "rgb(221, 237, 240,0.2)",
-         position: "fixed",
+        position: "fixed",
         top: 0,
         left: 0,
         width: "100%",
@@ -400,8 +400,14 @@ export default function ChatWindow({ with_email, with_userid }) {
         background: "white",
       }}
     >
-      {(requestStatus) ? (
-        <ChatScreenWithInfo requestStatus={requestStatus} connection_open={connection_open} with_email={with_email} chats={chats} sendMsg={sendMsg}/>
+      {requestStatus ? (
+        <ChatScreenWithInfo
+          requestStatus={requestStatus}
+          connection_open={connection_open}
+          with_email={with_email}
+          chats={chats}
+          sendMsg={sendMsg}
+        />
       ) : (
         <div>loadding...</div>
       )}

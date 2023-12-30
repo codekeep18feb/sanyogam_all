@@ -1,17 +1,17 @@
-import { Grid } from '@mui/material';
-import React, { useState } from 'react';
+import { Grid } from "@mui/material";
+import React, { useState } from "react";
 import SendIcon from "@mui/icons-material/Send";
-import io from 'socket.io-client';
+import io from "socket.io-client";
 
-export default function NewChatScreen({ chats, to_email,setVideoMode }) {
-  const [textareaValue, setTextareaValue] = useState('');
+export default function NewChatScreen({ chats, to_email, setVideoMode }) {
+  const [textareaValue, setTextareaValue] = useState("");
   const [sendingMessage, setSendingMessage] = useState(false);
   const handleTextareaChange = (e) => {
     setTextareaValue(e.target.value);
   };
 
   const [socket, setSocket] = useState(
-    io.connect('http://192.168.1.13:8000', {
+    io.connect("http://192.168.1.2:8000", {
       query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     })
   );
@@ -31,14 +31,17 @@ export default function NewChatScreen({ chats, to_email,setVideoMode }) {
     const token = `Bearer ${JWT_TOKEN}`;
 
     try {
-      const response = await fetch(`http://192.168.1.13:8000/api/send_msg/${to_email}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: token,
-        },
-        body: JSON.stringify({ msg: payload }),
-      });
+      const response = await fetch(
+        `http://192.168.1.2:8000/api/send_msg/${to_email}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
+          body: JSON.stringify({ msg: payload }),
+        }
+      );
 
       if (response.status === 200) {
         const data = await response.json();
@@ -49,24 +52,21 @@ export default function NewChatScreen({ chats, to_email,setVideoMode }) {
     } catch (error) {
       console.error("An error occurred:", error);
     } finally {
-      console.log('we can toggle loading if want')
+      console.log("we can toggle loading if want");
       // setLoading(false);
     }
   };
 
-
   const handleSendMessage = async (to_email) => {
-    if (textareaValue.trim() === '') {
+    if (textareaValue.trim() === "") {
       return; // Don't send empty messages
-    }
-    else {
-      console.log('here istextareaValue', textareaValue)
+    } else {
+      console.log("here istextareaValue", textareaValue);
       // sendMessage(textareaValue)
-      const data = await sendMsgApi(textareaValue, to_email)
-      console.log('herer sendmsgs', data)
+      const data = await sendMsgApi(textareaValue, to_email);
+      console.log("herer sendmsgs", data);
       if (data) {
-        setTextareaValue('')
-
+        setTextareaValue("");
       }
     }
 
@@ -75,35 +75,50 @@ export default function NewChatScreen({ chats, to_email,setVideoMode }) {
       msg: textareaValue,
     };
 
-    const JWT_TOKEN = localStorage.getItem('token');
+    const JWT_TOKEN = localStorage.getItem("token");
     const token = `Bearer ${JWT_TOKEN}`;
-
 
     // Update the UI to indicate sending
     setSendingMessage(true);
-
-
   };
 
   return (
     // <div  style={{border:"1px solid green",width:"100%",marginTop:"10px"}}>
-    <Grid container style={{ "height": "100vh" }} alignItems={"center"}>
-
-      <Grid item xs={10} style={{ "width": "100%" }}>
-        <div style={{ display: "flex", "flex-direction": "column", overflowY: 'scroll' }}>
-          {chats && chats.map((chat, index) => (
-                <div key={index}
-
-                  style={{ padding: "10px", color: Object.keys("who") && chat.who !== "ME" ? "green" : "grey", textAlign: Object.keys("who") && chat.who === "ME" ? "left" : "right", fontStyle: "italic", fontSize: "19px" }}
-
-                >
-                  {chat.msg}
-                </div>
-              ))}
+    <Grid container style={{ height: "100vh" }} alignItems={"center"}>
+      <Grid item xs={10} style={{ width: "100%" }}>
+        <div
+          style={{
+            display: "flex",
+            "flex-direction": "column",
+            overflowY: "scroll",
+          }}
+        >
+          {chats &&
+            chats.map((chat, index) => (
+              <div
+                key={index}
+                style={{
+                  padding: "10px",
+                  color:
+                    Object.keys("who") && chat.who !== "ME" ? "green" : "grey",
+                  textAlign:
+                    Object.keys("who") && chat.who === "ME" ? "left" : "right",
+                  fontStyle: "italic",
+                  fontSize: "19px",
+                }}
+              >
+                {chat.msg}
+              </div>
+            ))}
         </div>
-
       </Grid>
-      <Grid xs={10} container flexDirection={"row"} spacing={2} justifyContent={"center"}>
+      <Grid
+        xs={10}
+        container
+        flexDirection={"row"}
+        spacing={2}
+        justifyContent={"center"}
+      >
         <Grid item xs={8}>
           <textarea
             style={{
@@ -121,22 +136,18 @@ export default function NewChatScreen({ chats, to_email,setVideoMode }) {
           <SendIcon
             tabIndex={0}
             onKeyDown={(e) => {
-              if (e.key === 'Enter') {
+              if (e.key === "Enter") {
                 handleSendMessage(to_email);
               }
             }}
-
             onClick={() => {
-              handleSendMessage(to_email)
-            }
-            }
+              handleSendMessage(to_email);
+            }}
             disabled={sendingMessage}
             style={{ fontSize: "35px", color: "#1F4294" }}
           />
         </Grid>
       </Grid>
-
-
     </Grid>
   );
 }

@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import io from 'socket.io-client';
+import React, { useState } from "react";
+import io from "socket.io-client";
 
 const MonitorWSStatus = () => {
-  const [socket, setSocket] = useState(io.connect('http://192.168.1.13:8000'));
+  const [socket, setSocket] = useState(io.connect("http://192.168.1.2:8000"));
   const [messages, setMessages] = useState([]);
-  const [messageInput, setMessageInput] = useState('');
-  const [selectedPrefix, setSelectedPrefix] = useState('AC');
+  const [messageInput, setMessageInput] = useState("");
+  const [selectedPrefix, setSelectedPrefix] = useState("AC");
 
   const handlePrefixChange = (event) => {
     setSelectedPrefix(event.target.value);
@@ -13,12 +13,12 @@ const MonitorWSStatus = () => {
 
   const sendMessage = () => {
     const message = selectedPrefix + messageInput;
-    socket.emit('message', message);
-    setMessageInput('');
+    socket.emit("message", message);
+    setMessageInput("");
   };
 
   React.useEffect(() => {
-    socket.on('message', (data) => {
+    socket.on("message", (data) => {
       setMessages([...messages, data]);
     });
 
@@ -35,8 +35,6 @@ const MonitorWSStatus = () => {
           <li key={index}>{message}</li>
         ))}
       </ul>
-      
-     
     </div>
   );
 };

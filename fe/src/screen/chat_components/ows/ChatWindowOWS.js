@@ -2,16 +2,14 @@ import React, { useEffect, useState, useRef } from "react";
 import RequestScreen from "../RequestScreen";
 import ChatScreen from "./ChatScreen";
 import { withTheme } from "@emotion/react";
-import io from 'socket.io-client';
+import io from "socket.io-client";
 
 import ChatScreenWithInfOWS from "./ChatScreenWithInfOWS";
 import { Button } from "@mui/material";
 
-
-
-export default function ChatWindowOWS({ soc_conn}) {
+export default function ChatWindowOWS({ soc_conn }) {
   // console.log("here we are", rtcData);
-  const [videoView, setvideoView] = useState(false)
+  const [videoView, setvideoView] = useState(false);
   const [loading, setLoading] = useState(true);
   const [chatHistory, setChatHistory] = useState([]);
   const [chats, setChats] = useState([]);
@@ -22,30 +20,26 @@ export default function ChatWindowOWS({ soc_conn}) {
 
   const [connection_open, setConnectionOpened] = useState(null);
   const [intervalId, setIntervalId] = useState(null);
-  const [socket, setSocket] = useState(io.connect('http://192.168.1.13:8000'));
+  const [socket, setSocket] = useState(io.connect("http://192.168.1.2:8000"));
   const [exchange_state, sdpExchange] = useState(null);
-
 
   const sendMessage = (message) => {
     // const prefix = selectedPrefix || 'AC'; // Use 'AC' as the default prefix
     // const message = prefix + messageInput;
     // console.log('werewehere 2nd time')
-    console.log('sendMessage called',message)
-    socket.emit('message', message);
+    console.log("sendMessage called", message);
+    socket.emit("message", message);
     // setMessageInput('');
   };
 
-  
-  
-  
   const delRTCUserEntry = async (id) => {
-    console.log('did it delRTCUserEntry')
+    console.log("did it delRTCUserEntry");
     const JWT_TOKEN = localStorage.getItem("token");
     const token = `Bearer ${JWT_TOKEN}`;
-  
+
     try {
       const response = await fetch(
-        `http://192.168.1.13:8000/api/del_rtc_entry/${id}`,
+        `http://192.168.1.2:8000/api/del_rtc_entry/${id}`,
         {
           method: "GET",
           headers: {
@@ -55,11 +49,11 @@ export default function ChatWindowOWS({ soc_conn}) {
           },
         }
       );
-  
+
       if (response.status === 200) {
         const data = await response.json();
-        setvideoView(true)
-        setConnectionOpened(false)
+        setvideoView(true);
+        setConnectionOpened(false);
         // setRTCData(data);
         // console.log("doesithaveboth?", data.answer, data.sdp);
         // if (data && data.answer && data.sdp) {
@@ -83,14 +77,13 @@ export default function ChatWindowOWS({ soc_conn}) {
     }
   };
 
-
   const fetchRTCUserInfo = async () => {
     const JWT_TOKEN = localStorage.getItem("token");
     const token = `Bearer ${JWT_TOKEN}`;
 
     try {
       const response = await fetch(
-        `http://192.168.1.13:8000/api/rtc_user_info_by_id/${with_userid}`,
+        `http://192.168.1.2:8000/api/rtc_user_info_by_id/${with_userid}`,
         {
           method: "GET",
           headers: {
@@ -133,10 +126,10 @@ export default function ChatWindowOWS({ soc_conn}) {
       initiator: isInitiator,
       sdp: sdp,
       to_user: to_user,
-    }
+    };
 
     try {
-      const response = await fetch(`http://192.168.1.13:8000/api/add_rtc_user`, {
+      const response = await fetch(`http://192.168.1.2:8000/api/add_rtc_user`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -145,7 +138,7 @@ export default function ChatWindowOWS({ soc_conn}) {
         body: JSON.stringify(payload),
       });
 
-      sendMessage(JSON.stringify(payload))
+      sendMessage(JSON.stringify(payload));
 
       if (response.status === 200) {
         const data = await response.json();
@@ -168,9 +161,9 @@ export default function ChatWindowOWS({ soc_conn}) {
       initiator: isInitiator,
       sdp: sdp,
       to_user: to_user,
-    }
+    };
     try {
-      const response = await fetch(`http://192.168.1.13:8000/api/add_rtc_user`, {
+      const response = await fetch(`http://192.168.1.2:8000/api/add_rtc_user`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -178,7 +171,7 @@ export default function ChatWindowOWS({ soc_conn}) {
         },
         body: JSON.stringify(payload),
       });
-      sendMessage(JSON.stringify(payload))
+      sendMessage(JSON.stringify(payload));
       if (response.status === 200) {
         const data = await response.json();
         console.log("successfully saved sdp", data);
@@ -199,7 +192,7 @@ export default function ChatWindowOWS({ soc_conn}) {
 
     try {
       const response = await fetch(
-        `http://192.168.1.13:8000/api/rtc_user_info_by_id/${with_userid}`,
+        `http://192.168.1.2:8000/api/rtc_user_info_by_id/${with_userid}`,
         {
           method: "GET",
           headers: {
@@ -223,10 +216,10 @@ export default function ChatWindowOWS({ soc_conn}) {
     }
   };
   const fetchUserId = async (token, with_email) => {
-    // http://192.168.1.13:8000/api/users/query?q_email=deepaksingh.18feb%40gmail.com
+    // http://192.168.1.2:8000/api/users/query?q_email=deepaksingh.18feb%40gmail.com
     try {
       const response = await fetch(
-        `http://192.168.1.13:8000/api/users/query?q_email=${with_email}`,
+        `http://192.168.1.2:8000/api/users/query?q_email=${with_email}`,
         {
           method: "GET",
           headers: {
@@ -271,7 +264,7 @@ export default function ChatWindowOWS({ soc_conn}) {
 
       dc.onclose = (e) => {
         console.log("connection CLosed! initiator");
-        setvideoView(true)
+        setvideoView(true);
         setConnectionOpened(false);
       };
 
@@ -349,19 +342,19 @@ export default function ChatWindowOWS({ soc_conn}) {
         };
         rc.dc.onclose = async (e) => {
           // setConnectionOpened(false);
-          
+
           //session_id
 
           //session_id
-          console.log("connection CLosed! reponder",myRef.current.session_id);
-          delRTCUserEntry(Number(myRef.current.session_id))
+          console.log("connection CLosed! reponder", myRef.current.session_id);
+          delRTCUserEntry(Number(myRef.current.session_id));
           //make the api call
-            //if success 
-              //let's close the connection
+          //if success
+          //let's close the connection
 
-            //else
-              //show the error to try again
-          };
+          //else
+          //show the error to try again
+        };
       };
 
       rc.setRemoteDescription(offer).then((a) => console.log("offerset"));
@@ -372,18 +365,18 @@ export default function ChatWindowOWS({ soc_conn}) {
       return [rc, null];
     }
   };
-  
+
   useEffect(async () => {
-    console.log('AREEWREWHERE')
+    console.log("AREEWREWHERE");
     const fetchRequestStatus = async () => {
       const JWT_TOKEN = localStorage.getItem("token");
       const token = `Bearer ${JWT_TOKEN}`;
 
       try {
         // const we = 'deepaksingh.18feb%40gmail.com'
-        console.log('WHERE  IS withemail',with_email)
+        console.log("WHERE  IS withemail", with_email);
         const response = await fetch(
-          `http://192.168.1.13:8000/api/handle_request?to_email=${with_email}`,
+          `http://192.168.1.2:8000/api/handle_request?to_email=${with_email}`,
           {
             method: "GET",
             headers: {
@@ -408,8 +401,8 @@ export default function ChatWindowOWS({ soc_conn}) {
     const JWT_TOKEN = localStorage.getItem("token");
     const token = `Bearer ${JWT_TOKEN}`;
     const req_status = await fetchRequestStatus();
-    console.log('hererewis req_status',req_status.status)
-    setRequestStatus(req_status.status)
+    console.log("hererewis req_status", req_status.status);
+    setRequestStatus(req_status.status);
     if (req_status.status == "ACCEPTED") {
       console.log("SHOUDL IT BE ACCEPTED FRO BOTH");
 
@@ -443,7 +436,7 @@ export default function ChatWindowOWS({ soc_conn}) {
           myRef.current = {
             type: "RESPONDER",
             channel: rc,
-            session_id: rtc_entry['id']
+            session_id: rtc_entry["id"],
           };
         }
       }
@@ -487,7 +480,7 @@ export default function ChatWindowOWS({ soc_conn}) {
         // height: "600px",
         // // width: "700px",
         // background: "rgb(221, 237, 240,0.2)",
-         position: "fixed",
+        position: "fixed",
         top: 0,
         left: 0,
         width: "100%",
@@ -495,14 +488,10 @@ export default function ChatWindowOWS({ soc_conn}) {
         background: "white",
       }}
     >
-      {(requestStatus) ? (
+      {requestStatus ? (
         <div>
-
-         
-
           {/* <ChatScreenWithInfOWS soc_conn={soc_conn} ref={myRef} setvideoView={setvideoView} videoView={videoView} with_userid={with_userid} SetWithUserId={SetWithUserId} SetWithEmail={SetWithEmail} requestStatus={requestStatus} connection_open={connection_open} with_email={with_email} chats={chats} sendMsg={sendMsg}/> */}
         </div>
-        
       ) : (
         <div>loadding...</div>
       )}
