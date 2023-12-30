@@ -10,20 +10,7 @@ export default function NewChatScreen({ chats, to_userid }) {
     setTextareaValue(e.target.value);
   };
 
-  const [socket, setSocket] = useState(
-    io.connect("http://192.168.1.2:8000", {
-      query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-    })
-  );
-
-  // const sendMessage = () => {
-  //   // const prefix = selectedPrefix || 'AC'; // Use 'AC' as the default prefix
-  //   const message =textareaValue;
-  //   console.log('werewehere 3nd time')
-  //   //instead let's just make an api call
-  //   // socket.emit('custom_event', message);
-  //   setTextareaValue('');
-  // };
+ 
 
   const sendMsgApi = async (payload, to_userid) => {
     console.log("am I being payload", payload);
