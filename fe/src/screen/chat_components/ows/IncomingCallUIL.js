@@ -196,21 +196,23 @@ function IncomingCallUIL({
       {incomingCallData.responder==auth_data.id && incomingCallData.sdp && !incomingCallData.answer && (
         <div>
           <div>
-            <PhoneCallUI
+            {!connection_open && <PhoneCallUI
               // callStatus={"INITIALIZING"}
               pickUpTheCall={pickUpTheCall}
               // with_userid={with_userid}
-            />
+            />}
           </div>
           <div style={{ display: connection_open ? "block" : "none" }}>
           <div>here is video RESPONDER</div>
             
+            <div style={{width:"100%",height:"100%"}}>
             <video
               ref={myVideoRef} // Add a ref to the video element
               autoPlay
               playsInline
               muted // You may want to remove this if it's not the local video
             ></video>
+            </div>
           </div>
         </div>
       )}

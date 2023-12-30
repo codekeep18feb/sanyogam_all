@@ -11,6 +11,9 @@ import AudioCallIcon from "@mui/icons-material/Call";
 import { Typography } from "@material-ui/core";
 import PhoneCallUI from "../../PhoneCallUI";
 import { connect } from "react-redux";
+import IconButton from '@material-ui/core/IconButton';
+import PhoneIcon from '@material-ui/icons/Phone';
+import CallEndIcon from '@material-ui/icons/CallEnd';
 
 const withChatSocket = (Component) => {
   // const JWT_TOKEN = localStorage.getItem("token");
@@ -486,23 +489,72 @@ function ChatsEditor({
       clearInterval(intervalId);
     };
   }, [socket]);
-
+  const handleAcceptCall = () => {
+    // Add logic for accepting the call
+    // For example: setCallStatus({ status: 'ACCEPTED' });
+  };
+  
+  const handleDisconnectCall = () => {
+    // Add logic for disconnecting the call
+    // For example: setCallStatus({ status: 'DISCONNECTED' });
+  };
+  // const chatScreenBody = (
+  //   <div>
+  //     {loading &&  <CircularProgress />}
+      
+  //     {!loading && videoMode && (
+  //       // <VideoComp with_userid={with_userid} callStatus={callStatus} setCallStatus={setCallStatus}/>
+  //       <div>
+  //         <div>
+  //           {["INITIALIZING", "OUTGOINGCALL", null].includes(callStatus.status) && (
+  //             <PhoneCallUI callStatus={callStatus} 
+  //             with_userid={with_userid}
+              
+  //             />
+  //           )}
+  //         </div>
+  //         <div style={{ display: connection_open ? "block" : "none" }}>
+  //           <div>here is video INITIATOR</div>
+  //           <video
+  //             ref={myVideoRef} // Add a ref to the video element
+  //             autoPlay
+  //             playsInline
+  //             muted // You may want to remove this if it's not the local video
+  //           ></video>
+  //         </div>
+  //       </div>
+  //     )}
+  //     {!loading && allChats && !videoMode && (
+  //       <NewChatScreen chats={allChats} 
+  //       to_userid={with_userid} />
+  //     )}
+  //   </div>
+  // );
   const chatScreenBody = (
     <div>
       {loading &&  <CircularProgress />}
       
       {!loading && videoMode && (
-        // <VideoComp with_userid={with_userid} callStatus={callStatus} setCallStatus={setCallStatus}/>
-        <di>
+        <div>
           <div>
             {["INITIALIZING", "OUTGOINGCALL", null].includes(callStatus.status) && (
-              <PhoneCallUI callStatus={callStatus} 
-              with_userid={with_userid}
-              
-              />
+              <div>
+                <PhoneCallUI callStatus={callStatus} with_userid={with_userid} />
+                {/* Add Accept and Disconnect buttons */}
+                <div>
+                  <IconButton color="primary" onClick={handleAcceptCall}>
+                    <PhoneIcon />
+                  </IconButton>
+                  <IconButton color="secondary" onClick={handleDisconnectCall}>
+                    <CallEndIcon />
+                  </IconButton>
+                </div>
+              </div>
             )}
           </div>
-          <div style={{ display: connection_open ? "block" : "none" }}>
+          {/* <div style={{ display: connection_open ? "block" : "none" }}> */}
+          <div style={{ display: connection_open ? "block" : "none", position: 'relative' }}>
+
             <div>here is video INITIATOR</div>
             <video
               ref={myVideoRef} // Add a ref to the video element
@@ -510,15 +562,22 @@ function ChatsEditor({
               playsInline
               muted // You may want to remove this if it's not the local video
             ></video>
+            <div style={{ position: 'absolute', bottom: '10px', right: '50%', zIndex: 1 }}>
+                <IconButton color="secondary" onClick={handleDisconnectCall}>
+                  <CallEndIcon />
+                </IconButton>
+              </div>
           </div>
-        </di>
+        </div>
       )}
       {!loading && allChats && !videoMode && (
-        <NewChatScreen chats={allChats} 
-        to_userid={with_userid} />
+        <NewChatScreen chats={allChats} to_userid={with_userid} />
       )}
     </div>
   );
+  
+  // Define the functions for handling accept and disconnect actions
+  
 
   return (
     <div>
