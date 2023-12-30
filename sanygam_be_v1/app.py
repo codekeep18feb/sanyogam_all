@@ -23,7 +23,6 @@ def index():
 
 
 
-
 @socketio.on('custom_event')
 def handle_message(*args):
     # token = request.args.get('token')
@@ -147,6 +146,35 @@ def handle_message(message,with_userid):
 
     # socketio.emit('signal_pool', json.dumps(s_pool),room=room_str)  # Echo the message bv
     socketio.emit('signal_pool', json.dumps(s_pool))  # Echo the message bv
+import copy
+global_events_bucket = {'incoming_calls':[],'notifications':[]}
+@socketio.on('listen_global_events')
+def handle_message(for_userid):
+    print('for_userid in global events',for_userid)
+    
+    # first_incoming_call = None
+    cp_s_pool = copy.copy(s_pool)
+    for i in cp_s_pool:
+        if i['responder'] == for_userid:
+            if for_userid not in global_events_bucket['incoming_calls']:
+                global_events_bucket['incoming_calls'].append(i)
+                # first_incoming_call = i
+                print('Received message @listen_global_events:')
+                # socketio.emit('listen_global_events')  # Echo the message b
+                room_str = str(for_userid)
+                join_room(room_str)
+                socketio.emit('listen_global_events', json.dumps(global_events_bucket),room=room_str)  # Echo the message bv
+                break
+        # if first_incoming_call:
+    #     global_events_bucket['incoming_calls'].append(first_incoming_call)
+
+
+    # do the same for other types of data in global_events_bucket?
+
+        # print('Received message @listen_global_events:')
+        # # socketio.emit('listen_global_events')  # Echo the message b
+        # socketio.emit('listen_global_events', json.dumps(global_events_bucket))  # Echo the message bv
+
 
 
 @socketio.on('fetch_online_profiles')

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import HorizontalScroll from '../component/reusables/HorizontalScroll'
 import { makeStyles } from '@material-ui/core/styles';
 import ProfileBriefTile from './ProfileBriefTile';
@@ -55,6 +55,33 @@ function ChatTestLayout() {
   )
 }
 
+
+const MyComponent = () => {
+  const [userData, setUserData] = useState({ name: 'John', age: 25, hobbies: ['Reading', 'Gaming'] });
+
+  const updateHobbies = () => {
+    // Check if the 'hobbies' property exists in the current state
+    if ('hobbies' in userData) {
+      // Using the functional form of setState to conditionally update the state
+      setUserData(prevUserData => {
+        // Creating a new object with the same properties as the previous state
+        // Updating the 'hobbies' property only if it exists
+        return { ...prevUserData, hobbies: [...prevUserData.hobbies, 'Traveling'] };
+      });
+    }
+  };
+
+  return (
+    <div>
+      <p>Name: {userData.name}</p>
+      <p>Age: {userData.age}</p>
+      <p>Hobbies: {userData.hobbies.join(', ')}</p>
+      <button onClick={updateHobbies}>Add Hobby</button>
+    </div>
+  );
+};
+
+
 export default function PlayGround() {
   const classes = useStyles();
 
@@ -63,8 +90,8 @@ export default function PlayGround() {
     {/* <MonitorWSStatus /> */}
     {/* <SendMsgWS />
     <ListnerWS1 /> */}
-  <RoomFeature />
-
+  {/* <RoomFeature /> */}
+    <MyComponent />
     </div>
     // <ImageCircle user={{id:1,online:true}} />
 

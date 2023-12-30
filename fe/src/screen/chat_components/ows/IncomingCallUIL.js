@@ -140,7 +140,7 @@ const ChatScreenHeader = ({
   );
 };
 
-function ChatsEditor({
+function IncomingCallUIL({
   auth_data,
   allChats,
   loading,
@@ -149,6 +149,11 @@ function ChatsEditor({
   SetWithUserId,
   SetWithEmail,
 }) {
+  
+  // const location = useLocation();
+  // const incomingCallData = location.state?.incomingCallData;
+
+  // console.log('waht is type of',incomingCallData)
   const [connection_open, setConnectionOpened] = useState(false);
   console.log("is it opened?", connection_open);
   const [videoMode, setVideoMode] = useState(false);
@@ -532,9 +537,14 @@ function ChatsEditor({
 
   const chatScreenBody = (
     <div>
+
       {(loading && callStatus.status != "INCOMINGCALL") && <CircularProgress />}
+      {/* {!loading && (
+          // <div>incoming calldata - {typeof(incomingCallData.initiator)}</div>
+
+      )} */}
       {callStatus.status == "INCOMINGCALL" && (
-        <div>
+        <di>
           <div>
             <PhoneCallUI
               callStatus={callStatus}
@@ -552,7 +562,7 @@ function ChatsEditor({
               muted // You may want to remove this if it's not the local video
             ></video>
           </div>
-        </div>
+        </di>
       )}
 
       {!loading && videoMode && (
@@ -617,4 +627,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(withChatSocket(ChatsEditor));
+export default connect(mapStateToProps)(withChatSocket(IncomingCallUIL));

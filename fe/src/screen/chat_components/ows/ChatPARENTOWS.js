@@ -163,7 +163,7 @@ export default function ChatPARENTOWS() {
           with_userid - {with_userid} - {with_email}
         </Typography>
         {with_userid && (
-          <ChatsEditor with_userid={with_userid} with_email={with_email} />
+          <ChatsEditor with_userid={with_userid} />
         )}
       </>
     </Paper>

@@ -25,15 +25,15 @@ const SendMsgWS = () => {
     // const prefix = selectedPrefix || 'AC'; // Use 'AC' as the default prefix
     const message = messageInput;
     console.log("werewehere 2nd time");
-    socket.emit("signal_pool", message, room_id);
+    socket.emit("listen_global_events");
     setMessageInput("");
     setRoomId("");
   };
 
   React.useEffect(() => {
-    socket.on("signal_pool", (data, a) => {
-      console.log("dafsdgfhfdghf", data.room, data.to, a, data);
-      setMessages([...messages, data]);
+    socket.on("listen_global_events", (data) => {
+      console.log("do we see this here after", data);
+      // setMessages([...messages, data]);
     });
 
     // return () => {

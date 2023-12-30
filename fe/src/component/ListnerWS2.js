@@ -1,8 +1,10 @@
-import { Button } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import io from "socket.io-client";
 
 const ListnerWS2 = () => {
+  // const [socket, setSocket] = useState(
+  //   io.connect('http://192.168.1.2:8000')
+  // );
   const [socket, setSocket] = useState(
     io.connect("http://192.168.1.2:8000", {
       query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
@@ -12,15 +14,25 @@ const ListnerWS2 = () => {
   // const [socket, setSocket] = useState(io.connect('http://192.168.1.2:8000'));
   const [messages, setMessages] = useState([]);
   const [messageInput, setMessageInput] = useState("");
+  const [room_id, setRoomId] = useState("");
   const [selectedPrefix, setSelectedPrefix] = useState(null);
-  const userAgent = navigator.userAgent;
-  const [browserName, setBrowserName] = useState("");
+
+  const handlePrefixChange = (event) => {
+    setSelectedPrefix(event.target.value);
+  };
+
+  // const sendMessage = () => {
+  //   // const prefix = selectedPrefix || 'AC'; // Use 'AC' as the default prefix
+  //   const message = messageInput;
+  //   console.log("werewehere 2nd time");
+  //   socket.emit("listen_global_events");
+  //   setMessageInput("");
+  //   setRoomId("");
+  // };
 
   React.useEffect(() => {
-    console.log("fjasdf");
-    socket.on("signal_pool", (data) => {
-      console.log("asrere we getting the mess here", data);
-      // console.log('arerwehere??',data)
+    socket.on("listen_global_events", (data) => {
+      console.log("do we see this here after in listner", data);
       // setMessages([...messages, data]);
     });
 
@@ -32,11 +44,56 @@ const ListnerWS2 = () => {
 
   return (
     <div>
-      <div>ListnerWS2</div>
-      {/* <Button onClick={(e)=>{
-        // e.preventDefault()
-        sendMessage('HARDCODED MESSAGE from'+userAgent)
-      }}>Send WS msg</Button> */}
+      <h1>WebSocket Echo</h1>
+      <ul>
+        {messages.map((message, index) => (
+          <li key={index}>{message}</li>
+        ))}
+      </ul>
+
+      <div>
+        <label>
+          <input
+            type="radio"
+            name="prefix"
+            value="AC"
+            defaultChecked={selectedPrefix === null || selectedPrefix === "AC"}
+            onChange={handlePrefixChange}
+          />{" "}
+          AC
+        </label>
+        <label>
+          <input
+            type="radio"
+            name="prefix"
+            value="DC"
+            checked={selectedPrefix === "DC"}
+            onChange={handlePrefixChange}
+          />{" "}
+          DC
+        </label>
+      </div>
+
+      {/* <input
+        type="text"
+        value={messageInput}
+        onChange={(e) => setMessageInput(e.target.value)}
+        placeholder="Type your message"
+      />
+      <input
+        type="text"
+        value={room_id}
+        onChange={(e) => setRoomId(e.target.value)}
+        placeholder="Type room_id"
+      /> */}
+      {/* <button
+        onClick={(e) => {
+          e.preventDefault();
+          sendMessage();
+        }}
+      >
+        Send
+      </button> */}
     </div>
   );
 };

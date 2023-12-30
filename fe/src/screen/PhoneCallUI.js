@@ -3,7 +3,7 @@ import CallEnd from '@mui/icons-material/CallEnd';
 import PickUPIcon from '@mui/icons-material/CallEnd';
 import VolumeMute from '@mui/icons-material/VolumeMute';
 
-export default function PhoneCallUI({callStatus, pickUpTheCall}) {
+export default function PhoneCallUI({callStatus, pickUpTheCall,with_userid}) {
   // const audioRef = useRef(null);
   // console.log('what is it',callStatus)
   // const playAudio = () => {
@@ -76,7 +76,7 @@ export default function PhoneCallUI({callStatus, pickUpTheCall}) {
         
 
       </button> */}
-      <div>callStatus - {callStatus.status}</div>
+      <div>callStatus - {callStatus.status} with - {with_userid}</div>
       <div style={controlsStyle}>
       <PickUPIcon 
       style={buttonStyle}
