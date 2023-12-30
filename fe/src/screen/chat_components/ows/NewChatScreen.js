@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import SendIcon from "@mui/icons-material/Send";
 import io from "socket.io-client";
 
-export default function NewChatScreen({ chats, to_email, setVideoMode }) {
+export default function NewChatScreen({ chats, to_userid }) {
   const [textareaValue, setTextareaValue] = useState("");
   const [sendingMessage, setSendingMessage] = useState(false);
   const handleTextareaChange = (e) => {
@@ -25,14 +25,14 @@ export default function NewChatScreen({ chats, to_email, setVideoMode }) {
   //   setTextareaValue('');
   // };
 
-  const sendMsgApi = async (payload, to_email) => {
+  const sendMsgApi = async (payload, to_userid) => {
     console.log("am I being payload", payload);
     const JWT_TOKEN = localStorage.getItem("token");
     const token = `Bearer ${JWT_TOKEN}`;
 
     try {
       const response = await fetch(
-        `http://192.168.1.2:8000/api/send_msg/${to_email}`,
+        `http://192.168.1.2:8000/api/send_msg/${to_userid}`,
         {
           method: "POST",
           headers: {
@@ -57,13 +57,13 @@ export default function NewChatScreen({ chats, to_email, setVideoMode }) {
     }
   };
 
-  const handleSendMessage = async (to_email) => {
+  const handleSendMessage = async (to_userid) => {
     if (textareaValue.trim() === "") {
       return; // Don't send empty messages
     } else {
       console.log("here istextareaValue", textareaValue);
       // sendMessage(textareaValue)
-      const data = await sendMsgApi(textareaValue, to_email);
+      const data = await sendMsgApi(textareaValue, to_userid);
       console.log("herer sendmsgs", data);
       if (data) {
         setTextareaValue("");
@@ -137,11 +137,11 @@ export default function NewChatScreen({ chats, to_email, setVideoMode }) {
             tabIndex={0}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
-                handleSendMessage(to_email);
+                handleSendMessage(to_userid);
               }
             }}
             onClick={() => {
-              handleSendMessage(to_email);
+              handleSendMessage(to_userid);
             }}
             disabled={sendingMessage}
             style={{ fontSize: "35px", color: "#1F4294" }}

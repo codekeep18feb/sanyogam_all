@@ -154,6 +154,15 @@ components:
       schema:
         type: string
 
+    to_userid:
+      name: to_userid
+      in: path
+      description: "to_userid of the request"
+      required: true
+      schema:
+        type: integer
+
+
     to_email:
       name: to_email
       in: path
@@ -512,17 +521,17 @@ paths:
   
 
   
-  /send_msg/{to_email}:
+  /send_msg/{to_userid}:
     post:
       operationId: "handlers.chathistory.send_msg"
       security:
         - JWTAuth: []
       tags:
         - People
-      summary: "send_msg to user(to_email)"
+      summary: "send_msg to user(to_userid)"
       parameters:
         # - $ref: "#/components/parameters/image"
-        - $ref: "#/components/parameters/to_email"
+        - $ref: "#/components/parameters/to_userid"
       requestBody:
         description: "send msg content"
         required: true

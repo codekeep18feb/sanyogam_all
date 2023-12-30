@@ -554,7 +554,7 @@ function ChatsEditor({
 
       {!loading && videoMode && (
         // <VideoComp with_userid={with_userid} callStatus={callStatus} setCallStatus={setCallStatus}/>
-        <div>
+        <di>
           <div>
             {["INITIALIZING", "OUTGOINGCALL", null].includes(callStatus.status) && (
               <PhoneCallUI callStatus={callStatus} />
@@ -568,10 +568,11 @@ function ChatsEditor({
               muted // You may want to remove this if it's not the local video
             ></video>
           </div>
-        </div>
+        </di>
       )}
       {!loading && allChats && !videoMode && (
-        <NewChatScreen chats={allChats} to_email={with_email} />
+        <NewChatScreen chats={allChats} 
+        to_userid={with_userid} />
       )}
     </div>
   );

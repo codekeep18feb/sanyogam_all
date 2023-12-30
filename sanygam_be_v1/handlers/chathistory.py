@@ -54,10 +54,10 @@ def chathistory(with_email):
 
 # @my_decorator("Hello, world!")
 # @jwt_required()  # Protect this route with JWT authentication
-def send_msg(payload,to_email):
+def send_msg(payload,to_userid):
     # current_user = get_jwt_identity()
     # wondering if we can put a decorator here????
-    print("payloadchat",payload,to_email)
+    print("payloadchat",payload,to_userid)
 
     auth_token = request.headers.get("Authorization")
     print("auth_token",auth_token)
@@ -71,7 +71,8 @@ def send_msg(payload,to_email):
     decoded_data_str = decoded['sub']
     json_dec_data = json.loads(decoded_data_str)
     frm_user = User.query.filter_by(email=json_dec_data['email']).first()
-    to_user =  User.query.filter_by(email=to_email).first()
+    to_user =  User.query.filter_by(id=to_userid).first()
+    print('HOPE THI SI SALL ARIGHT',to_user)
     # existing_req = UserRequests.query.all()[0]# or UserRequests.query.filter_by(to_user=to_user.id).first() ##(frm_user=to_user.id)
     # existing_req1 = UserRequests.query.filter_by(to_user=to_user.id).first()# or UserRequests.query.filter_by(to_user=to_user.id).first() ##(frm_user=to_user.id)
     existing_req = UserRequests.query.filter_by(to_user=frm_user.id).first() or UserRequests.query.filter_by(to_user=to_user.id).first()
