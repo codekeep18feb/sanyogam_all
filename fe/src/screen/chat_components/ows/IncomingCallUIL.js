@@ -11,7 +11,7 @@ import AudioCallIcon from "@mui/icons-material/Call";
 import { Typography } from "@material-ui/core";
 import PhoneCallUI from "../../PhoneCallUI";
 import { connect } from "react-redux";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 
 
@@ -127,12 +127,21 @@ function IncomingCallUIL({
       return [rc];
   };
 
+  const navigate = useNavigate()
   const attachRightListnersToRef = () => {
     myRef.current.channel.addEventListener("iceconnectionstatechange", () => {
       console.log(
         "ICE Connection State changed:",
         myRef.current.channel.iceConnectionState
       );
+
+      if (myRef.current.channel.iceConnectionState === 'closed' ||
+          myRef.current.channel.iceConnectionState === 'failed') {
+            console.log('disconnected now')
+        // The connection is closed or failed
+        // Update call status accordingly
+        // For example: setCallStatus({ status: 'DISCONNECTED' });
+      }
 
       // if (myRef.current.channel.iceConnectionState === 'connected') {
       //   // ICE connection is fully established
@@ -145,7 +154,16 @@ function IncomingCallUIL({
         "Connection State changed:",
         myRef.current.channel.connectionState
       );
+      if (myRef.current.channel.connectionState === 'closed' ||
+      myRef.current.channel.connectionState === 'failed') {
+        console.log('disconnected now connectionstatechange')
+        navigate('/snsydwh')
 
+
+    // The connection is closed or failed
+    // Update call status accordingly
+    // For example: setCallStatus({ status: 'DISCONNECTED' });
+  }
       // if (myRef.current.channel.connectionState === 'connected') {
       //   // Connection is fully established
       //   setConnectionOpened(true);

@@ -307,6 +307,14 @@ function ChatsEditor({
         myRef.current.channel.iceConnectionState
       );
 
+      if (myRef.current.channel.iceConnectionState === 'closed' ||
+          myRef.current.channel.iceConnectionState === 'failed') {
+            console.log('disconnected now')
+        // The connection is closed or failed
+        // Update call status accordingly
+        // For example: setCallStatus({ status: 'DISCONNECTED' });
+      }
+
       // if (myRef.current.channel.iceConnectionState === 'connected') {
       //   // ICE connection is fully established
       //   setConnectionOpened(true);
@@ -318,7 +326,14 @@ function ChatsEditor({
         "Connection State changed:",
         myRef.current.channel.connectionState
       );
+      if (myRef.current.channel.connectionState === 'closed' ||
+      myRef.current.channel.connectionState === 'failed') {
+        console.log('disconnected now connectionstatechange')
 
+    // The connection is closed or failed
+    // Update call status accordingly
+    // For example: setCallStatus({ status: 'DISCONNECTED' });
+  }
       // if (myRef.current.channel.connectionState === 'connected') {
       //   // Connection is fully established
       //   setConnectionOpened(true);
@@ -495,6 +510,10 @@ function ChatsEditor({
   };
   
   const handleDisconnectCall = () => {
+    if (myRef.current && myRef.current.channel){
+      console.log('how can i gracefully disconnect the streams on this channel so the this is the question to chatgpt')
+      myRef.current.channel.close()
+    }
     // Add logic for disconnecting the call
     // For example: setCallStatus({ status: 'DISCONNECTED' });
   };
