@@ -79,7 +79,7 @@ password = "Django@321!"
 
 # URL-encode the password
 encoded_password = quote(password, safe="")
-app.config["SQLALCHEMY_DATABASE_URI"] = f"postgresql://developerRole:{encoded_password}@localhost/sgam"
+app.config["SQLALCHEMY_DATABASE_URI"] = f"postgresql://developerRole:{encoded_password}@localhost/tenant_sgam"
 
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
