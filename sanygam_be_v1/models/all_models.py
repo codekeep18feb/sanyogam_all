@@ -1,5 +1,5 @@
 import enum
-
+from config import app
 from datetime import datetime
 
 from config import db, ma
