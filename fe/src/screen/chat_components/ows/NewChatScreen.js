@@ -10,8 +10,6 @@ export default function NewChatScreen({ chats, to_userid }) {
     setTextareaValue(e.target.value);
   };
 
- 
-
   const sendMsgApi = async (payload, to_userid) => {
     console.log("am I being payload", payload);
     const JWT_TOKEN = localStorage.getItem("token");
@@ -19,7 +17,7 @@ export default function NewChatScreen({ chats, to_userid }) {
 
     try {
       const response = await fetch(
-        `http://192.168.1.2:8000/api/send_msg/${to_userid}`,
+        `http://192.168.1.5:8000/api/send_msg/${to_userid}`,
         {
           method: "POST",
           headers: {

@@ -13,7 +13,7 @@ import ChatsEditor from "./ChatsEditor";
 
 export default function ChatPARENTOWS() {
   // State for storing online profiles
-  
+
   const [onlineProfiles, setOnlineProfiles] = useState(null);
   const [with_userid, SetWithUserId] = useState(null);
   const [with_email, SetWithEmail] = useState(null);
@@ -21,9 +21,9 @@ export default function ChatPARENTOWS() {
   console.log("ChatPARENTOWS parent of profiles and chats");
 
   // State for managing the socket connection
-  // const [socket, setSocket] = useState(() => io.connect('http://192.168.1.2:8000'));
+  // const [socket, setSocket] = useState(() => io.connect('http://192.168.1.5:8000'));
   const [socket, setSocket] = useState(
-    io.connect("http://192.168.1.2:8000", {
+    io.connect("http://192.168.1.5:8000", {
       query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     })
   );
@@ -162,9 +162,7 @@ export default function ChatPARENTOWS() {
     /> */}
           with_userid - {with_userid} - {with_email}
         </Typography>
-        {with_userid && (
-          <ChatsEditor with_userid={with_userid} />
-        )}
+        {with_userid && <ChatsEditor with_userid={with_userid} />}
       </>
     </Paper>
   );

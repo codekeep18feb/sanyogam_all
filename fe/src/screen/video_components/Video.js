@@ -15,7 +15,7 @@ function Video({ auth_data }) {
     const JWT_TOKEN = localStorage.getItem("token");
     const token = `Bearer ${JWT_TOKEN}`;
     console.log("token", token);
-    const response2 = await fetch("http://192.168.1.2:8000/api/profiles", {
+    const response2 = await fetch("http://192.168.1.5:8000/api/profiles", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

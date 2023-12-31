@@ -91,7 +91,7 @@ const withGlobalSocket = (Component) => {
       auth_data
     );
     const [socket, setSocket] = useState(
-      io.connect("http://192.168.1.2:8000", {
+      io.connect("http://192.168.1.5:8000", {
         query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       })
     );
@@ -135,40 +135,44 @@ const withGlobalSocket = (Component) => {
             const pdata = JSON.parse(data);
             console.log("sdfasdafsadfdf", pdata);
             // const f_data = pdata; //.filter((i) => (i.frm_user === with_userid));
-            console.log('f_datahere',pdata["incoming_calls"].length )
+            console.log("f_datahere", pdata["incoming_calls"].length);
             // here i just want to setAllGlobalData if pdata["incoming_calls"].length!= pr
             // setAllGlobalData((prevChats) => {
             //   const cp_prv_chats = JSON.parse(JSON.stringify(prevChats))
             //   if (!prevChats["incoming_calls"].length) {
             //     setAllGlobalData(cp_prv_chats);
             //     // setLoading(false);
-            //   } 
+            //   }
             //   // else if (prevChats && f_data.length !== prevChats.length) {
             //   //   setAllChats(f_data);
             //   //   // setLoading(false);
-            //   //} 
+            //   //}
             //   return prevChats;
             // });
 
-
-            if ('incoming_calls' in pdata) {
-              console.log('incoming_calls yes',pdata['incoming_calls'])
+            if ("incoming_calls" in pdata) {
+              console.log("incoming_calls yes", pdata["incoming_calls"]);
               // Using the functional form of setState to conditionally update the state
-              setAllGlobalData(prevGData => {
+              setAllGlobalData((prevGData) => {
                 // Creating a new object with the same properties as the previous state
                 // Updating the 'hobbies' property only if it exists
-                return { ...prevGData, incoming_calls: [...prevGData.incoming_calls, ...pdata["incoming_calls"]] };
+                return {
+                  ...prevGData,
+                  incoming_calls: [
+                    ...prevGData.incoming_calls,
+                    ...pdata["incoming_calls"],
+                  ],
+                };
               });
             }
-            
-            
+
             // setAllGlobalData((prevData) => {
             //   if (prevData["incoming_calls"].length==0) {
             //     console.log("this was first time");
-                
+
             //     setAllGlobalData(f_data);
             //     // setLoading(false);
-            //   } 
+            //   }
             //   // else if (
             //   //   prevData &&
             //   //   f_data["incoming_calls"].length !==
@@ -209,7 +213,7 @@ const withGlobalSocket = (Component) => {
         }
       };
     }, [socket, auth_data]);
-    console.log("hope not rerendering some many times",allGlobalData);
+    console.log("hope not rerendering some many times", allGlobalData);
 
     return (
       <Component
@@ -228,18 +232,22 @@ const withGlobalSocket = (Component) => {
 function App({ auth_data, allGlobalData, login }) {
   const navigate = useNavigate();
 
-  console.log('hope we can see them here.',allGlobalData,)
+  console.log("hope we can see them here.", allGlobalData);
   useEffect(() => {
     // Perform actions after the page is loaded
     const storedAuthData = localStorage.getItem("meUser");
     if (storedAuthData) {
       const parsedAuthData = JSON.parse(storedAuthData);
       login(parsedAuthData);
-      if (allGlobalData && allGlobalData['incoming_calls'] && allGlobalData['incoming_calls'].length > 0) {
-        // const incomingCallData =  { incoming_call_obj : allGlobalData['incoming_calls'][0] } 
+      if (
+        allGlobalData &&
+        allGlobalData["incoming_calls"] &&
+        allGlobalData["incoming_calls"].length > 0
+      ) {
+        // const incomingCallData =  { incoming_call_obj : allGlobalData['incoming_calls'][0] }
         // navigate('/incoming_call', { "state" : incomingCallData});
-        const incomingCallData = allGlobalData['incoming_calls'][0]; //NOTICE  JUST PROCESSING FIRST CALL IF MORE THERE SHOULD BE AN INFO THAT USER IS ON ANOTHER CALL
-        navigate('/incoming_call', { state: { incomingCallData } });
+        const incomingCallData = allGlobalData["incoming_calls"][0]; //NOTICE  JUST PROCESSING FIRST CALL IF MORE THERE SHOULD BE AN INFO THAT USER IS ON ANOTHER CALL
+        navigate("/incoming_call", { state: { incomingCallData } });
       }
     }
   }, [login, allGlobalData, navigate]); // Dependency on login ensures the effect is re-run when login changes

@@ -59,8 +59,8 @@ def _current_timestamp() -> int:
 basedir = pathlib.Path(__file__).parent.resolve()
 print("AMICORRECT ? basedir", basedir)
 connex_app = connexion.App(__name__, specification_dir=basedir)
-# CORS(connex_app.app, resources={r"/api/*": {"origins": "http://192.168.1.2:3000"}})
-CORS(connex_app.app, resources={r"/api/*": {"origins": ["http://192.168.1.2:3000", "http://192.168.1.2:8000"]}})
+# CORS(connex_app.app, resources={r"/api/*": {"origins": "http://192.168.1.5:3000"}})
+CORS(connex_app.app, resources={r"/api/*": {"origins": ["http://192.168.1.5:3000", "http://192.168.1.5:8000"]}})
 
 # Attach SocketIO to the Flask app
 socketio = SocketIO(cors_allowed_origins="*")
@@ -70,7 +70,17 @@ socketio.init_app(connex_app.app)
 
 app = connex_app.app
 app.json_encoder = CustomJSONEncoder
-app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{basedir / 'sgam.db'}"
+# app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{basedir / 'sgam.db'}"
+# app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://developerRole:Django@321!@localhost/sgam"
+from urllib.parse import quote
+
+# Original password with special characters
+password = "Django@321!"
+
+# URL-encode the password
+encoded_password = quote(password, safe="")
+app.config["SQLALCHEMY_DATABASE_URI"] = f"postgresql://developerRole:{encoded_password}@localhost/sgam"
+
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 ma = Marshmallow(app)

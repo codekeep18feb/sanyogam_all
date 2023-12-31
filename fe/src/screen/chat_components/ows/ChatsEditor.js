@@ -11,9 +11,9 @@ import AudioCallIcon from "@mui/icons-material/Call";
 import { Typography } from "@material-ui/core";
 import PhoneCallUI from "../../PhoneCallUI";
 import { connect } from "react-redux";
-import IconButton from '@material-ui/core/IconButton';
-import PhoneIcon from '@material-ui/icons/Phone';
-import CallEndIcon from '@material-ui/icons/CallEnd';
+import IconButton from "@material-ui/core/IconButton";
+import PhoneIcon from "@material-ui/icons/Phone";
+import CallEndIcon from "@material-ui/icons/CallEnd";
 
 const withChatSocket = (Component) => {
   // const JWT_TOKEN = localStorage.getItem("token");
@@ -21,7 +21,7 @@ const withChatSocket = (Component) => {
 
   return function WithSocketComponent({ auth_data, with_userid, ...props }) {
     const [socket, setSocket] = useState(
-      io.connect("http://192.168.1.2:8000", {
+      io.connect("http://192.168.1.5:8000", {
         query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       })
     );
@@ -156,7 +156,7 @@ function ChatsEditor({
   console.log("is it opened?", connection_open);
   const [videoMode, setVideoMode] = useState(false);
   const [signal_pool, setSignalPool] = useState({});
-  const [callStatus, setCallStatus] = useState({"status":null});
+  const [callStatus, setCallStatus] = useState({ status: null });
 
   const myVideoRef = useRef(null);
   const myRef = useRef(null);
@@ -166,7 +166,7 @@ function ChatsEditor({
   console.log("this shoudl not rerender if other twos are toaking", videoMode);
 
   const [socket, setSocket] = useState(
-    io.connect("http://192.168.1.2:8000", {
+    io.connect("http://192.168.1.5:8000", {
       query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     })
   );
@@ -307,9 +307,11 @@ function ChatsEditor({
         myRef.current.channel.iceConnectionState
       );
 
-      if (myRef.current.channel.iceConnectionState === 'closed' ||
-          myRef.current.channel.iceConnectionState === 'failed') {
-            console.log('disconnected now')
+      if (
+        myRef.current.channel.iceConnectionState === "closed" ||
+        myRef.current.channel.iceConnectionState === "failed"
+      ) {
+        console.log("disconnected now");
         // The connection is closed or failed
         // Update call status accordingly
         // For example: setCallStatus({ status: 'DISCONNECTED' });
@@ -326,14 +328,16 @@ function ChatsEditor({
         "Connection State changed:",
         myRef.current.channel.connectionState
       );
-      if (myRef.current.channel.connectionState === 'closed' ||
-      myRef.current.channel.connectionState === 'failed') {
-        console.log('disconnected now connectionstatechange')
+      if (
+        myRef.current.channel.connectionState === "closed" ||
+        myRef.current.channel.connectionState === "failed"
+      ) {
+        console.log("disconnected now connectionstatechange");
 
-    // The connection is closed or failed
-    // Update call status accordingly
-    // For example: setCallStatus({ status: 'DISCONNECTED' });
-  }
+        // The connection is closed or failed
+        // Update call status accordingly
+        // For example: setCallStatus({ status: 'DISCONNECTED' });
+      }
       // if (myRef.current.channel.connectionState === 'connected') {
       //   // Connection is fully established
       //   setConnectionOpened(true);
@@ -359,12 +363,11 @@ function ChatsEditor({
     });
   };
 
-
   useEffect(async () => {
     console.log("nowwht", signal_pool, typeof signal_pool);
     const ifPoolEmpty = () => Object.keys(signal_pool).length == 0;
 
-    let cs = {"status":null}
+    let cs = { status: null };
     if (ifPoolEmpty()) {
       console.log("wevewrqwe here", videoMode);
       const JWT_TOKEN = localStorage.getItem("token");
@@ -387,7 +390,7 @@ function ChatsEditor({
       }
     } else {
       //if pool is filled already let's chceck first if there are no offers
-      
+
       if (
         signal_pool.sdp &&
         signal_pool.answer &&
@@ -508,11 +511,13 @@ function ChatsEditor({
     // Add logic for accepting the call
     // For example: setCallStatus({ status: 'ACCEPTED' });
   };
-  
+
   const handleDisconnectCall = () => {
-    if (myRef.current && myRef.current.channel){
-      console.log('how can i gracefully disconnect the streams on this channel so the this is the question to chatgpt')
-      myRef.current.channel.close()
+    if (myRef.current && myRef.current.channel) {
+      console.log(
+        "how can i gracefully disconnect the streams on this channel so the this is the question to chatgpt"
+      );
+      myRef.current.channel.close();
     }
     // Add logic for disconnecting the call
     // For example: setCallStatus({ status: 'DISCONNECTED' });
@@ -520,15 +525,15 @@ function ChatsEditor({
   // const chatScreenBody = (
   //   <div>
   //     {loading &&  <CircularProgress />}
-      
+
   //     {!loading && videoMode && (
   //       // <VideoComp with_userid={with_userid} callStatus={callStatus} setCallStatus={setCallStatus}/>
   //       <div>
   //         <div>
   //           {["INITIALIZING", "OUTGOINGCALL", null].includes(callStatus.status) && (
-  //             <PhoneCallUI callStatus={callStatus} 
+  //             <PhoneCallUI callStatus={callStatus}
   //             with_userid={with_userid}
-              
+
   //             />
   //           )}
   //         </div>
@@ -544,21 +549,26 @@ function ChatsEditor({
   //       </div>
   //     )}
   //     {!loading && allChats && !videoMode && (
-  //       <NewChatScreen chats={allChats} 
+  //       <NewChatScreen chats={allChats}
   //       to_userid={with_userid} />
   //     )}
   //   </div>
   // );
   const chatScreenBody = (
     <div>
-      {loading &&  <CircularProgress />}
-      
+      {loading && <CircularProgress />}
+
       {!loading && videoMode && (
         <div>
           <div>
-            {["INITIALIZING", "OUTGOINGCALL", null].includes(callStatus.status) && (
+            {["INITIALIZING", "OUTGOINGCALL", null].includes(
+              callStatus.status
+            ) && (
               <div>
-                <PhoneCallUI callStatus={callStatus} with_userid={with_userid} />
+                <PhoneCallUI
+                  callStatus={callStatus}
+                  with_userid={with_userid}
+                />
                 {/* Add Accept and Disconnect buttons */}
                 <div>
                   <IconButton color="primary" onClick={handleAcceptCall}>
@@ -572,8 +582,12 @@ function ChatsEditor({
             )}
           </div>
           {/* <div style={{ display: connection_open ? "block" : "none" }}> */}
-          <div style={{ display: connection_open ? "block" : "none", position: 'relative' }}>
-
+          <div
+            style={{
+              display: connection_open ? "block" : "none",
+              position: "relative",
+            }}
+          >
             <div>here is video INITIATOR</div>
             <video
               ref={myVideoRef} // Add a ref to the video element
@@ -581,11 +595,18 @@ function ChatsEditor({
               playsInline
               muted // You may want to remove this if it's not the local video
             ></video>
-            <div style={{ position: 'absolute', bottom: '10px', right: '50%', zIndex: 1 }}>
-                <IconButton color="secondary" onClick={handleDisconnectCall}>
-                  <CallEndIcon />
-                </IconButton>
-              </div>
+            <div
+              style={{
+                position: "absolute",
+                bottom: "10px",
+                right: "50%",
+                zIndex: 1,
+              }}
+            >
+              <IconButton color="secondary" onClick={handleDisconnectCall}>
+                <CallEndIcon />
+              </IconButton>
+            </div>
           </div>
         </div>
       )}
@@ -594,9 +615,8 @@ function ChatsEditor({
       )}
     </div>
   );
-  
+
   // Define the functions for handling accept and disconnect actions
-  
 
   return (
     <div>

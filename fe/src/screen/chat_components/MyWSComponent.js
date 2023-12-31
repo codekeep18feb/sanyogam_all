@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import io from "socket.io-client";
 
 const MyWSComponent = () => {
-  const [socket, setSocket] = useState(io.connect("http://192.168.1.2:8000"));
+  const [socket, setSocket] = useState(io.connect("http://192.168.1.5:8000"));
   const [messages, setMessages] = useState([]);
   const [messageInput, setMessageInput] = useState("");
   const [selectedPrefix, setSelectedPrefix] = useState("AC");
