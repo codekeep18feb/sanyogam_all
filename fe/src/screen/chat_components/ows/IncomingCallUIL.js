@@ -205,7 +205,7 @@ function IncomingCallUIL({
     <div>
       {loading && !incomingCallData && <CircularProgress />}
 
-      {incomingCallData.responder == auth_data.id &&
+      {incomingCallData.to_id == auth_data.id &&
         incomingCallData.sdp &&
         !incomingCallData.answer && (
           <div>

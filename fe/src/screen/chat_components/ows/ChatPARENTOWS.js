@@ -11,9 +11,7 @@ import UserChatTileInListCOWs from "./UserChatTileInListCOWS";
 
 import ChatsEditor from "./ChatsEditor";
 
-export default function ChatPARENTOWS() {
-  // State for storing online profiles
-
+const ChatPARENTOWS =() =>{
   const [onlineProfiles, setOnlineProfiles] = useState(null);
   const [with_userid, SetWithUserId] = useState(null);
   const [with_email, SetWithEmail] = useState(null);
@@ -118,3 +116,6 @@ export default function ChatPARENTOWS() {
     </Grid>
   );
 }
+
+
+export default ChatPARENTOWS

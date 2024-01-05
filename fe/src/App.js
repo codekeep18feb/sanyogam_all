@@ -151,16 +151,25 @@ const withGlobalSocket = (Component) => {
             // });
 
             if ("incoming_calls" in pdata) {
-              console.log("incoming_calls yes", pdata["incoming_calls"]);
+              console.log("incoming_calls yessdfsdf", pdata["incoming_calls"]);
+              const obj = {
+                frm_id:pdata["incoming_calls"][0].initiator,
+                to_id:pdata["incoming_calls"][0].responder,
+                state:"incoming",
+                sdp:pdata["incoming_calls"][0].sdp
+                // sdp:pdata["incoming_calls"][0].answer
+
+              }
               // Using the functional form of setState to conditionally update the state
               setAllGlobalData((prevGData) => {
                 // Creating a new object with the same properties as the previous state
                 // Updating the 'hobbies' property only if it exists
+                console.log('obj',obj)
                 return {
                   ...prevGData,
                   incoming_calls: [
                     ...prevGData.incoming_calls,
-                    ...pdata["incoming_calls"],
+                    obj,
                   ],
                 };
               });
@@ -222,7 +231,7 @@ const withGlobalSocket = (Component) => {
         logout={logout}
         allGlobalData={allGlobalData}
         // loading={loading}
-        // {...props}
+        {...props}
         // with_userid={with_userid}
       />
     );
@@ -246,7 +255,8 @@ function App({ auth_data, allGlobalData, login }) {
       ) {
         // const incomingCallData =  { incoming_call_obj : allGlobalData['incoming_calls'][0] }
         // navigate('/incoming_call', { "state" : incomingCallData});
-        const incomingCallData = allGlobalData["incoming_calls"][0]; //NOTICE  JUST PROCESSING FIRST CALL IF MORE THERE SHOULD BE AN INFO THAT USER IS ON ANOTHER CALL
+        const incomingCallData = allGlobalData["incoming_calls"][0];
+        console.log("incomingCallDatadsfadsfa",incomingCallData) //NOTICE  JUST PROCESSING FIRST CALL IF MORE THERE SHOULD BE AN INFO THAT USER IS ON ANOTHER CALL
         navigate("/incoming_call", { state: { incomingCallData } });
       }
     }
