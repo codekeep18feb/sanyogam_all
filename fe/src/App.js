@@ -1,7 +1,7 @@
 import React from "react";
 // import MaterialScreen from './screen/MaterialScreen'
 import MaterialUIExample from "./screen/MaterialUIExample";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import AdvancedMaterialUIExample from "./screen/AdvancedMaterialUIExample";
 import Pricing from "./screen/Pricing";
 import TabPanel from "./screen/TabPanel";
@@ -12,6 +12,8 @@ import io from "socket.io-client";
 import Inbox from "./screen/Inbox";
 
 import { login, logout } from "./redux/counter/AuthAction";
+
+import { setIncomingCall } from "./redux/counter/GlobalAction";
 
 // Import your components
 import HomeScreen from "./screen/HomeScreen.js";
@@ -85,7 +87,13 @@ const withGlobalSocket = (Component) => {
   // const JWT_TOKEN = localStorage.getItem("token");
   // const token = `Bearer ${JWT_TOKEN}`;
 
-  return function WithSocketComponent({ auth_data, login, logout, ...props }) {
+  return function WithSocketComponent({
+    setIncomingCall,
+    auth_data,
+    login,
+    logout,
+    ...props
+  }) {
     console.log(
       "did it rerendering now without me setting the data in sgam.db?",
       auth_data
@@ -153,26 +161,27 @@ const withGlobalSocket = (Component) => {
             if ("incoming_calls" in pdata) {
               console.log("incoming_calls yessdfsdf", pdata["incoming_calls"]);
               const obj = {
-                frm_id:pdata["incoming_calls"][0].initiator,
-                to_id:pdata["incoming_calls"][0].responder,
-                state:"incoming",
-                sdp:pdata["incoming_calls"][0].sdp
+                frm_id: pdata["incoming_calls"][0].initiator,
+                to_id: pdata["incoming_calls"][0].responder,
+                state: "incoming",
+                sdp: pdata["incoming_calls"][0].sdp,
                 // sdp:pdata["incoming_calls"][0].answer
+              };
+              setIncomingCall(obj);
 
-              }
               // Using the functional form of setState to conditionally update the state
-              setAllGlobalData((prevGData) => {
-                // Creating a new object with the same properties as the previous state
-                // Updating the 'hobbies' property only if it exists
-                console.log('obj',obj)
-                return {
-                  ...prevGData,
-                  incoming_calls: [
-                    ...prevGData.incoming_calls,
-                    obj,
-                  ],
-                };
-              });
+              // setAllGlobalData((prevGData) => {
+              //   // Creating a new object with the same properties as the previous state
+              //   // Updating the 'hobbies' property only if it exists
+              //   console.log('obj',obj)
+              //   return {
+              //     ...prevGData,
+              //     incoming_calls: [
+              //       ...prevGData.incoming_calls,
+              //       obj,
+              //     ],
+              //   };
+              // });
             }
 
             // setAllGlobalData((prevData) => {
@@ -193,7 +202,6 @@ const withGlobalSocket = (Component) => {
             //   // }
             //   return prevData;
             // });
-
             // setAllGlobalData((prv_data)=>{
             //   const prv_data_str = JSON.stringify(prv_data)
             //   const g_data_str = JSON.stringify(allGlobalData)
@@ -230,6 +238,7 @@ const withGlobalSocket = (Component) => {
         login={login}
         logout={logout}
         allGlobalData={allGlobalData}
+        setIncomingCall={setIncomingCall}
         // loading={loading}
         {...props}
         // with_userid={with_userid}
@@ -238,9 +247,12 @@ const withGlobalSocket = (Component) => {
   };
 };
 
-function App({ auth_data, allGlobalData, login }) {
+function App({ auth_data, login, setIncomingCall }) {
   const navigate = useNavigate();
-
+  const allGlobalData = useSelector((state) => {
+    console.log('state here dsf',state)
+    return state.globalData
+  });
   console.log("hope we can see them here.", allGlobalData);
   useEffect(() => {
     // Perform actions after the page is loaded
@@ -256,7 +268,7 @@ function App({ auth_data, allGlobalData, login }) {
         // const incomingCallData =  { incoming_call_obj : allGlobalData['incoming_calls'][0] }
         // navigate('/incoming_call', { "state" : incomingCallData});
         const incomingCallData = allGlobalData["incoming_calls"][0];
-        console.log("incomingCallDatadsfadsfa",incomingCallData) //NOTICE  JUST PROCESSING FIRST CALL IF MORE THERE SHOULD BE AN INFO THAT USER IS ON ANOTHER CALL
+        console.log("incomingCallDatadsfadsfa", incomingCallData); //NOTICE  JUST PROCESSING FIRST CALL IF MORE THERE SHOULD BE AN INFO THAT USER IS ON ANOTHER CALL
         navigate("/incoming_call", { state: { incomingCallData } });
       }
     }
@@ -411,7 +423,7 @@ const mapStateToProps = (state) => {
 // export default App;
 // export default connect(mapStateToProps, null)(React.memo(App));
 // export default connect(mapStateToProps, { login, logout })(App);
-export default connect(mapStateToProps, { login, logout })(
+export default connect(mapStateToProps, { login, logout, setIncomingCall })(
   withGlobalSocket(App)
 );
 

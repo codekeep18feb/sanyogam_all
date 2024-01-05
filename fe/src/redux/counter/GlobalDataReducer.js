@@ -1,19 +1,23 @@
-// AuthReducer.js
+// GlobalReducer.js
 const initialState = {
     incoming_calls: [],
     notifications: [],
   }
   
-  const AuthReducer = (state = initialState, action) => {
+  const GlobalReducer = (state = initialState, action) => {
     switch (action.type) {
       case 'ADD_INCOMING_CALL':
-        return {
+        if (state.incoming_calls.length==0){
+          console.log('how many times are we here',initialState.incoming_calls)
+          return {
             ...state,
             incoming_calls: [
               ...state.incoming_calls,
-              action.payload["incoming_calls"],
+              action.payload,
             ],
           };
+        }
+        
     //   case 'LOGOUT':
     //     return {
     //       ...state,
@@ -25,4 +29,4 @@ const initialState = {
     }
   };
   
-  export default AuthReducer;
+  export default GlobalReducer;
