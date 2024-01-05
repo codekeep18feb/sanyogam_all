@@ -1,14 +1,15 @@
-import React, { useRef, useEffect } from 'react';
-import sampleMp3 from './sample.mp3'; // Adjust the path accordingly
+import React, { useRef, useEffect } from "react";
+import sampleMp3 from "./sample.mp3"; // Adjust the path accordingly
 
 const PhoneCallUI = ({ callStatus }) => {
   const audioRef = useRef(null);
 
   const playAudio = () => {
     if (audioRef.current) {
-      audioRef.current.play()
-        .then(() => console.log('Audio playback started'))
-        .catch(error => console.error('Error playing audio:', error));
+      audioRef.current
+        .play()
+        .then(() => console.log("Audio playback started"))
+        .catch((error) => console.error("Error playing audio:", error));
     }
   };
 
@@ -21,13 +22,11 @@ const PhoneCallUI = ({ callStatus }) => {
     // if (callStatus === 'RINGING') {
     //   // You can still perform other actions related to the ringing status here
     // }
-      console.log("callStatus changed now is - ",callStatus);
-
-
+    console.log("callStatus changed now is - ", callStatus);
   }, [callStatus]);
 
   return (
-    <div style={{ textAlign: 'center' }}>
+    <div style={{ textAlign: "center" }}>
       {/* Audio element to play the MP3 recording */}
       <audio ref={audioRef}>
         <source src={sampleMp3} type="audio/mp3" />

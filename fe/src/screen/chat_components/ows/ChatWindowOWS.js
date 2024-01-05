@@ -66,7 +66,7 @@ export default function ChatWindowOWS({ soc_conn }) {
         //     setAnswer(true);
         //   }
         // }
-        // return Object.entries(data).length == 0 ? null : data;
+        // return Object.entries(data).length === 0 ? null : data;
       } else {
         console.log("Error delRTCUserEntry");
       }
@@ -107,7 +107,7 @@ export default function ChatWindowOWS({ soc_conn }) {
             setAnswer(true);
           }
         }
-        return Object.entries(data).length == 0 ? null : data;
+        return Object.entries(data).length === 0 ? null : data;
       } else {
         console.log("Error fetching chat history");
       }
@@ -250,7 +250,7 @@ export default function ChatWindowOWS({ soc_conn }) {
     }
   };
   const initializeNRespondWebRTC = async (token, type) => {
-    if (type == "INITIATOR") {
+    if (type === "INITIATOR") {
       console.log("Ensure it's not called multiple times...");
       const lc = new RTCPeerConnection();
       const dc = lc.createDataChannel("channel");
@@ -303,7 +303,7 @@ export default function ChatWindowOWS({ soc_conn }) {
         .then((o) => lc.setLocalDescription(o))
         .then((a) => console.log("offer set successfully!"));
       return [dc, lc];
-    } else if (type == "RESPONDER") {
+    } else if (type === "RESPONDER") {
       console.log("Ensure it's not called multiple times...");
       const offer_str = await fetchRTCOffer();
       console.log("offer_str", offer_str, typeof offer_str);
@@ -409,7 +409,7 @@ export default function ChatWindowOWS({ soc_conn }) {
     const req_status = await fetchRequestStatus();
     console.log("hererewis req_status", req_status.status);
     setRequestStatus(req_status.status);
-    if (req_status.status == "ACCEPTED") {
+    if (req_status.status === "ACCEPTED") {
       console.log("SHOUDL IT BE ACCEPTED FRO BOTH");
 
       console.log("make call to check if we can get the RTC Entry", req_status);
@@ -419,7 +419,7 @@ export default function ChatWindowOWS({ soc_conn }) {
       }, 10000);
       setIntervalId(intervalId);
       console.log("rtc_entry mayn eed more checks", rtc_entry);
-      if (rtc_entry == null) {
+      if (rtc_entry === null) {
         const [dc, lc] = await initializeNRespondWebRTC(token, "INITIATOR");
         console.log("dowehave dc", dc);
         if (dc) {
@@ -432,7 +432,7 @@ export default function ChatWindowOWS({ soc_conn }) {
           };
           // myRef.current = 'updated Value';
         }
-      } else if (rtc_entry.answer == null && rtc_entry.sdp != null) {
+      } else if (rtc_entry.answer === null && rtc_entry.sdp != null) {
         console.log("here is rtc_entry", rtc_entry);
 
         const [rc, lc] = await initializeNRespondWebRTC(token, "RESPONDER");
@@ -455,17 +455,17 @@ export default function ChatWindowOWS({ soc_conn }) {
       console.log("prvchats", prevChats);
       return [...prevChats, { content: msg, who: "ME" }];
     });
-    if (myRef.current["type"] == "INITIATOR") {
+    if (myRef.current["type"] === "INITIATOR") {
       myRef.current.channel.send(msg);
     } else {
       myRef.current.channel.dc.send(msg);
     }
 
-    // myRef.current['type']=="INITIATOR"
+    // myRef.current['type']==="INITIATOR"
   };
   useEffect(() => {
     if (answer) {
-      if (myRef.current["type"] == "INITIATOR") {
+      if (myRef.current["type"] === "INITIATOR") {
         const answer = JSON.parse(myRef.current.answer);
         myRef.current.lc.setRemoteDescription(answer);
         console.log("should clear right after this", intervalId);

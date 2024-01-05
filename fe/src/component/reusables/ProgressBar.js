@@ -1,12 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import LinearProgress from '@mui/material/LinearProgress';
-import Typography from '@mui/material/Typography';
-import Grid from '@mui/material/Grid';
+import React, { useState, useEffect } from "react";
+import LinearProgress from "@mui/material/LinearProgress";
+import Typography from "@mui/material/Typography";
+import Grid from "@mui/material/Grid";
 
 const ProgressBar = ({ totalWorkDone }) => {
   const [progress, setProgress] = useState(0);
   const intervalDuration = 1000; // interval duration in milliseconds
-  const totalWorkSum = totalWorkDone.reduce((sum, taskProgress) => sum + taskProgress, 0);
+  const totalWorkSum = totalWorkDone.reduce(
+    (sum, taskProgress) => sum + taskProgress,
+    0
+  );
   const targetProgress = (totalWorkSum / totalWorkDone.length) * 100;
 
   useEffect(() => {
@@ -18,7 +21,10 @@ const ProgressBar = ({ totalWorkDone }) => {
         const taskProgress = totalWorkDone[taskIndex] * 100; // convert task progress to percentage
         const newProgress = prevProgress + taskProgress / totalWorkSum;
 
-        if (newProgress >= targetProgress || taskIndex === totalWorkDone.length - 1) {
+        if (
+          newProgress >= targetProgress ||
+          taskIndex === totalWorkDone.length - 1
+        ) {
           clearInterval(intervalId);
           return targetProgress;
         }
@@ -42,22 +48,26 @@ const ProgressBar = ({ totalWorkDone }) => {
 
   return (
     <>
-      <Grid container justifyContent={"space-between"} style={{color:"blue",opacity:.7}}>
+      <Grid
+        container
+        justifyContent={"space-between"}
+        style={{ color: "blue", opacity: 0.7 }}
+      >
         <Grid item>
-
-          <Typography variant="subtitle2" >Your Profile Score:</Typography>
+          <Typography variant="subtitle2">Your Profile Score:</Typography>
         </Grid>
         <Grid item>
           <Typography variant="subtitle2">{progress.toFixed(2)}%</Typography>
-
         </Grid>
-    
       </Grid>
-      <div style={{marginTop:"7px"}}>
-        <LinearProgress variant="determinate" value={progress} color={"primary"} sx={{ height: 10,borderRadius:10, backgroundColor: 'grey', }} />
-
+      <div style={{ marginTop: "7px" }}>
+        <LinearProgress
+          variant="determinate"
+          value={progress}
+          color={"primary"}
+          sx={{ height: 10, borderRadius: 10, backgroundColor: "grey" }}
+        />
       </div>
-    
     </>
   );
 };

@@ -29,7 +29,7 @@ export default function NewChatWindow({ with_email, with_userid }) {
 
       if (response.status === 200) {
         const data = await response.json();
-        return Object.entries(data).length == 0 ? null : data;
+        return Object.entries(data).length === 0 ? null : data;
         // setRTCData(data);
         console.log("datsdafsdaa", data);
       } else {
@@ -333,7 +333,7 @@ export default function NewChatWindow({ with_email, with_userid }) {
 
     fetchRequestStatus();
     const data = await fetchRTCUserInfo();
-    if (data == null) {
+    if (data === null) {
       initializeWebRTC();
     }
     myRef.current.value = "New Value";

@@ -47,7 +47,7 @@ export default function VideoWindow({ with_email, with_userid }) {
             setAnswer(true);
           }
         }
-        return Object.entries(data).length == 0 ? null : data;
+        return Object.entries(data).length === 0 ? null : data;
       } else {
         console.log("Error fetching chat history");
       }
@@ -190,7 +190,7 @@ export default function VideoWindow({ with_email, with_userid }) {
     }
   };
   const initializeWebRTC = async (token, type) => {
-    if (type == "INITIATOR") {
+    if (type === "INITIATOR") {
       console.log("Ensure it's not called multiple times...");
 
       const lc = new RTCPeerConnection();
@@ -245,7 +245,7 @@ export default function VideoWindow({ with_email, with_userid }) {
           );
         });
       return [lc];
-    } else if (type == "RESPONDER") {
+    } else if (type === "RESPONDER") {
       console.log("Ensure it's not called multiple times...");
       const offer_str = await fetchRTCOffer();
       console.log("offer_str", offer_str, typeof offer_str);
@@ -306,7 +306,8 @@ export default function VideoWindow({ with_email, with_userid }) {
         console.log("set remoteDescription with local offer");
         console.log(
           "Signaling State after setting remoteDescription",
-          rc.signalingState,a
+          rc.signalingState,
+          a
         );
       });
 
@@ -415,7 +416,7 @@ export default function VideoWindow({ with_email, with_userid }) {
     // }
 
     const req_status = await fetchRequestStatus();
-    if (req_status.status == "ACCEPTED") {
+    if (req_status.status === "ACCEPTED") {
       console.log("make call to check if we can get the RTC Entry", req_status);
       const rtc_entry = await fetchRTCUserInfo();
       const intervalId = setInterval(() => {
@@ -424,7 +425,7 @@ export default function VideoWindow({ with_email, with_userid }) {
       setIntervalId(intervalId);
 
       console.log("rtc_entry mayn eed more checks", rtc_entry);
-      if (rtc_entry == null) {
+      if (rtc_entry === null) {
         const [lc] = await initializeWebRTC(token, "INITIATOR");
         // console.log("dowehave dc",dc)
         if (lc) {
@@ -437,7 +438,7 @@ export default function VideoWindow({ with_email, with_userid }) {
 
           // myRef.current = 'updated Value';
         }
-      } else if (rtc_entry.answer == null && rtc_entry.sdp != null) {
+      } else if (rtc_entry.answer === null && rtc_entry.sdp != null) {
         console.log("here is rtc_entry", rtc_entry);
 
         const [rc] = await initializeWebRTC(token, "RESPONDER");
@@ -499,9 +500,9 @@ export default function VideoWindow({ with_email, with_userid }) {
       console.log(
         "if INITIATOR I THING WE CAN INITIATE THE CONNECTION??,",
         myRef.current,
-        myRef.current["type"] == "INITIATOR"
+        myRef.current["type"] === "INITIATOR"
       );
-      if (myRef.current["type"] == "INITIATOR") {
+      if (myRef.current["type"] === "INITIATOR") {
         // let's perform the thrid step
         console.log(
           "hereAnswer",

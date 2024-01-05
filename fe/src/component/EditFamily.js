@@ -109,7 +109,7 @@ const EditFamilyForm = () => {
     console.log("thisstate_name changed", type);
     setFormValues((prv) => {
       const obj = JSON.parse(JSON.stringify(prv));
-      if (type == "dropdown") {
+      if (type === "dropdown") {
         obj[state_name] = new_value;
       } else {
         obj[state_name] = e.target.value;
@@ -120,7 +120,7 @@ const EditFamilyForm = () => {
     });
   };
   const all_childs = Object.keys(family_details).map((row) => {
-    if (rules[row]["edit_type"] == "num_input") {
+    if (rules[row]["edit_type"] === "num_input") {
       return (
         <div>
           <NumberField
@@ -133,7 +133,7 @@ const EditFamilyForm = () => {
         </div>
       );
     }
-    if (rules[row]["edit_type"] == "dropdown") {
+    if (rules[row]["edit_type"] === "dropdown") {
       return (
         <div>
           {/* {rules[row]['label'] } here itse {row} */}

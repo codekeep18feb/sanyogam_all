@@ -172,7 +172,7 @@ function ChatsEditor({
   );
 
   const initializeWebRTC = async (token, type) => {
-    if (type == "INITIATOR") {
+    if (type === "INITIATOR") {
       console.log("Ensure it's not called multiple times...");
 
       const lc = new RTCPeerConnection();
@@ -222,7 +222,7 @@ function ChatsEditor({
           );
         });
       return [lc];
-    } else if (type == "RESPONDER") {
+    } else if (type === "RESPONDER") {
       console.log("Ensure it's not called multiple times...");
       const rc = new RTCPeerConnection();
       const stream = await navigator.mediaDevices.getUserMedia({
@@ -365,7 +365,7 @@ function ChatsEditor({
 
   useEffect(async () => {
     console.log("nowwht", signal_pool, typeof signal_pool);
-    const ifPoolEmpty = () => Object.keys(signal_pool).length == 0;
+    const ifPoolEmpty = () => Object.keys(signal_pool).length === 0;
 
     let cs = { status: null };
     if (ifPoolEmpty()) {
@@ -394,7 +394,7 @@ function ChatsEditor({
       if (
         signal_pool.sdp &&
         signal_pool.answer &&
-        signal_pool.initiator == auth_data.id
+        signal_pool.initiator === auth_data.id
       ) {
         cs.status = "ANSWEREDWATINGFORCONNECTION";
         const answer = JSON.parse(signal_pool.answer);
@@ -414,9 +414,9 @@ function ChatsEditor({
       }
     }
 
-    //if OFFER is there -  Object.keys(signal_pool).length == 1 && signal_pool.offer && !signal_pool.answer
+    //if OFFER is there -  Object.keys(signal_pool).length === 1 && signal_pool.offer && !signal_pool.answer
 
-    //if ANS is there Object.keys(signal_pool).length == 1 && signal_pool.offer && signal_pool.answer
+    //if ANS is there Object.keys(signal_pool).length === 1 && signal_pool.offer && signal_pool.answer
 
     // setting correct callStatus
     if (cs) {
@@ -448,7 +448,7 @@ function ChatsEditor({
         const item = data[i];
         console.log("arewegoing", item, item["initiator"], with_userid);
 
-        if (Number(item["initiator"]) == with_userid) {
+        if (Number(item["initiator"]) === with_userid) {
           //RESPONDER CASE
           room_str = `${auth_data_id}_${with_userid}`;
         }

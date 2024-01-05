@@ -185,7 +185,7 @@ const withGlobalSocket = (Component) => {
             }
 
             // setAllGlobalData((prevData) => {
-            //   if (prevData["incoming_calls"].length==0) {
+            //   if (prevData["incoming_calls"].length===0) {
             //     console.log("this was first time");
 
             //     setAllGlobalData(f_data);
@@ -250,8 +250,8 @@ const withGlobalSocket = (Component) => {
 function App({ login }) {
   const navigate = useNavigate();
   const allGlobalData = useSelector((state) => {
-    console.log('state here dsf',state)
-    return state.globalData
+    console.log("state here dsf", state);
+    return state.globalData;
   });
   console.log("hope we can see them here.", allGlobalData);
   useEffect(() => {
@@ -265,7 +265,6 @@ function App({ login }) {
         allGlobalData["incoming_calls"] &&
         allGlobalData["incoming_calls"].length > 0
       ) {
- 
         const incomingCallData = allGlobalData["incoming_calls"][0];
         console.log("incomingCallDatadsfadsfa", incomingCallData); //NOTICE  JUST PROCESSING FIRST CALL IF MORE THERE SHOULD BE AN INFO THAT USER IS ON ANOTHER CALL
         navigate("/incoming_call", { state: { incomingCallData } });

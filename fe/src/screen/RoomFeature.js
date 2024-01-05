@@ -1,20 +1,20 @@
 // App.js
 
-import React, { useState, useEffect } from 'react';
-import io from 'socket.io-client';
+import React, { useState, useEffect } from "react";
+import io from "socket.io-client";
 
-const socket = io('http://localhost:8000');
+const socket = io("http://localhost:8000");
 
 const SendMessage = ({ peerId }) => {
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
 
   const handleMessageSubmit = (e) => {
     e.preventDefault();
-    if (message.trim() !== '') {
+    if (message.trim() !== "") {
       // Emit the 'send_message' event with the message content and peer ID
-      console.log('aewqrewrqwe',message,peerId)
-      socket.emit('send_message', { message, to: peerId });
-      setMessage('');
+      console.log("aewqrewrqwe", message, peerId);
+      socket.emit("send_message", { message, to: peerId });
+      setMessage("");
     }
   };
 
@@ -49,18 +49,18 @@ const ReceiveMessage = ({ messages }) => {
 
 const App = () => {
   const [messages, setMessages] = useState([]);
-  const [peerId, setPeerId] = useState('');
+  const [peerId, setPeerId] = useState("");
 
   useEffect(() => {
     // Event listener for the 'receive_message' event
-    socket.on('receive_message', (data) => {
-      console.log('here there was a message')
+    socket.on("receive_message", (data) => {
+      console.log("here there was a message");
       setMessages((prevMessages) => [...prevMessages, data.message]);
     });
 
     // Clean up the event listener on component unmount
     return () => {
-      socket.off('receive_message');
+      socket.off("receive_message");
     };
   }, []);
 

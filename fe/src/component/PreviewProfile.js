@@ -96,7 +96,7 @@ export default function PreviewProfile() {
           boxShadow: "0px 1px 10px rgba(0, 0, 0, 0.3)",
         }}
       >
-        {profile_info_obj == null || loading ? (
+        {profile_info_obj === null || loading ? (
           <div>loader...</div>
         ) : (
           <FamilyPreview
