@@ -74,44 +74,44 @@ export default function AllMatchesScrollBarC() {
   const classes = useStyles();
   return (
     <HorizontalScroll >
-        <div className={classes.scrollItem}>
+      <div className={classes.scrollItem}>
 
-          <div style={{ display: 'flex' }}>
+        <div style={{ display: 'flex' }}>
+          <div>
+            <img src={"https://images.pexels.com/photos/3206118/pexels-photo-3206118.jpeg?auto=compress&cs=tinysrgb&w=160&h=150&dpr=1"} />
+          </div>
+          <div style={{padding:"0 10px"}}>
+            Pulkit Soni (Noida)
+            <ul style={{ display: 'flex', listStyle: 'none', padding: 0 }}>
+              <li style={{ marginRight: '10px' }}>
+                32 Yrs
+              </li>
+              <li style={{ marginRight: '10px' }}>
+                57
+              </li>
+              <li>
+                Hindu
+              </li>
+            </ul>
             <div>
-              <img src={"https://images.pexels.com/photos/3206118/pexels-photo-3206118.jpeg?auto=compress&cs=tinysrgb&w=160&h=150&dpr=1"} />
-            </div>
-            <div style={{padding:"0 10px"}}>
-              Pulkit Soni (Noida)
-              <ul style={{ display: 'flex', listStyle: 'none', padding: 0 }}>
-                <li style={{ marginRight: '10px' }}>
-                  32 Yrs
-                </li>
-                <li style={{ marginRight: '10px' }}>
-                  57
-                </li>
-                <li>
-                  Hindu
-                </li>
-              </ul>
-              <div>
               <Typography variant="h6">Software Developer</Typography>
               <div style={{ display: 'flex'}}>
-              <ChatIcon style={{ fontSize: '24px', color: 'skyblue' }} />
-              <PhotoCamera style={{ fontSize: '24px', color: 'skyblue' }} />
-              <WhatsApp style={{ fontSize: '24px', color: 'skyblue' }} />
+                <ChatIcon style={{ fontSize: '24px', color: 'skyblue' }} />
+                <PhotoCamera style={{ fontSize: '24px', color: 'skyblue' }} />
+                <WhatsApp style={{ fontSize: '24px', color: 'skyblue' }} />
 
               
+              </div>
             </div>
-            </div>
-            </div>
-
-          
           </div>
 
+          
         </div>
-        <div style={{border:"1px solid red"}}>Content 2</div>
-        <div className={classes.scrollItem}>Content 3</div>
-      </HorizontalScroll>
+
+      </div>
+      <div style={{border:"1px solid red"}}>Content 2</div>
+      <div className={classes.scrollItem}>Content 3</div>
+    </HorizontalScroll>
 
   )
 }

@@ -12,8 +12,8 @@ import VideoWindow from '../video_components/VideoWindow';
 
 const ChatScreenHeader=forwardRef(({ setvideoView, videoView, with_userid, with_email, SetWithUserId,SetWithEmail,onBackClick, user },myRef)=>{
   return (
-   <>
-   {/* <Button
+    <>
+      {/* <Button
         onClick={(e) => {
           e.preventDefault()
           // force close the connection
@@ -24,26 +24,26 @@ const ChatScreenHeader=forwardRef(({ setvideoView, videoView, with_userid, with_
         }}
       >
         forcecloseconnection          </Button> */}
-    <Grid container alignItems="center" justifyContent="space-between">
-      <Grid item xs={1}>
-        <ArrowBackIcon onClick={onBackClick} style={{ cursor: 'pointer' }} />
-      </Grid>
-      <Grid item xs={2}>
-        <ImageCircle dimention={50} user={user} />
-      </Grid>
-      <Grid item xs={3}>
-        <Typography variant="h6" color="textPrimary" align="center" noWrap>
-          {user.name}
-        </Typography>
-        <div style={{ color: user.online ? '#00E676' : 'inherit', align: 'left', fontSize: 12 }}>
-          {user.online ? 'Online' : ''}
-        </div>
-      </Grid>
-      <Grid item xs={2}>
-        <AudioCallIcon style={{ fontSize: '35px', color: '#1F4294' }} />
-      </Grid>
-      <Grid item xs={2}>
-        <VideoCallIcon onClick={(e) => {
+      <Grid container alignItems="center" justifyContent="space-between">
+        <Grid item xs={1}>
+          <ArrowBackIcon onClick={onBackClick} style={{ cursor: 'pointer' }} />
+        </Grid>
+        <Grid item xs={2}>
+          <ImageCircle dimention={50} user={user} />
+        </Grid>
+        <Grid item xs={3}>
+          <Typography variant="h6" color="textPrimary" align="center" noWrap>
+            {user.name}
+          </Typography>
+          <div style={{ color: user.online ? '#00E676' : 'inherit', align: 'left', fontSize: 12 }}>
+            {user.online ? 'Online' : ''}
+          </div>
+        </Grid>
+        <Grid item xs={2}>
+          <AudioCallIcon style={{ fontSize: '35px', color: '#1F4294' }} />
+        </Grid>
+        <Grid item xs={2}>
+          <VideoCallIcon onClick={(e) => {
           e.preventDefault()
           // force close the connection
           // let's catch the ref
@@ -53,9 +53,9 @@ const ChatScreenHeader=forwardRef(({ setvideoView, videoView, with_userid, with_
           // SetWithUserId
 
         }} style={!videoView?{ fontSize: '35px', color: '#1F4294' }:{ fontSize: '35px', color: 'black' }} />
+        </Grid>
       </Grid>
-    </Grid>
-   </>
+    </>
   );
 })
 

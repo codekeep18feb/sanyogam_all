@@ -169,7 +169,7 @@ export default function Home({ users, profile = { name: "Mona Soni (BPSADSFSG151
       </div>
 
       <div style={{padding:"40px 0"}}>
-      <AllMatchesScrollBarC />
+        <AllMatchesScrollBarC />
         
       </div>
     </div>

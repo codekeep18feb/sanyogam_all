@@ -13,7 +13,7 @@ export default function ChatsOWSTile({ chats }) {
   }
   return (
     <div style={{border:"1px solid red"}}>
-          <NewChatScreen chats={chats} sendMsg={sendMsg} />
+      <NewChatScreen chats={chats} sendMsg={sendMsg} />
 
       
     </div>

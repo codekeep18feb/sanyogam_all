@@ -447,7 +447,7 @@ export default function ChatWindowOWS({ soc_conn }) {
         }
       }
     }
-  }, [with_email]);
+  }, [with_email, initializeNRespondWebRTC]);
 
   const sendMsg = (msg) => {
     console.log("here is the msg", msg, myRef.current["type"]);

@@ -13,8 +13,8 @@ export default function DetachVideoWindow({ connection_open, with_email, with_us
         // Add other attributes such as width, height, etc.
       ></video><D */}
       
-    <div>      DetachVideoWindow connection_open - {JSON.stringify(connection_open)} - {with_email}- {with_userid}</div>
+      <div>      DetachVideoWindow connection_open - {JSON.stringify(connection_open)} - {with_email}- {with_userid}</div>
 
-</div>
+    </div>
   )
 }

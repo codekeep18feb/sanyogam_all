@@ -306,7 +306,7 @@ export default function VideoWindow({ with_email, with_userid }) {
         console.log("set remoteDescription with local offer");
         console.log(
           "Signaling State after setting remoteDescription",
-          rc.signalingState
+          rc.signalingState,a
         );
       });
 

@@ -23,18 +23,18 @@ export default function UserChatTileInListC({ profiles, SetWithEmail, SetWithUse
             </Grid>
             <Grid item xs={7}>
               <div style={{textAlign:"center"}}>
-              <div style={{ display: "flex", alignItems: "end", justifyContent: "center" }}>
-                <div >{profile.user_fname} {profile.user_lname}</div>
-                <Icon component={callIcon} style={{ color: "blue", backgroundColor: "white", borderRadius: "50%" }} />
-                <div>
+                <div style={{ display: "flex", alignItems: "end", justifyContent: "center" }}>
+                  <div >{profile.user_fname} {profile.user_lname}</div>
+                  <Icon component={callIcon} style={{ color: "blue", backgroundColor: "white", borderRadius: "50%" }} />
+                  <div>
 
+
+
+                  </div>
 
 
                 </div>
-
-
-              </div>
-              <Typography variant="subtitle2">Has Messsged You!</Typography>
+                <Typography variant="subtitle2">Has Messsged You!</Typography>
               </div>
 
 
@@ -42,9 +42,9 @@ export default function UserChatTileInListC({ profiles, SetWithEmail, SetWithUse
             </Grid>
             <Grid item xs={3}>
               <div>10:20 AM</div>
-            <div>
-            <div style={{border:"1px solid red" }} >2</div>
-            </div>
+              <div>
+                <div style={{border:"1px solid red" }} >2</div>
+              </div>
 
             </Grid>
           </Grid>

@@ -63,8 +63,8 @@ export default function WrapperMobileBackShellWithSave({children,title, onSave})
 
       {/* Bottom Header */}
       <Button variant="contained" style={{borderRadius:0,backgroundColor:"rgba(255,0,153,1)",color:"white"}} onClick={()=>onSave()}>
-      Save1
-    </Button>
+        Save1
+      </Button>
     </div>
   )
 }

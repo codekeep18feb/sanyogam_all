@@ -72,25 +72,25 @@ export default function PhoneCallUI({callStatus, pickUpTheCall,with_userid}) {
   return (
     <div style={containerStyle}>
       <div style={backgroundStyle}>
-      {/* <button style={buttonStyle}>
+        {/* <button style={buttonStyle}>
         
 
       </button> */}
-      {/* <div>callStatus - {callStatus.status} with - {with_userid}</div> */}
-      <div style={controlsStyle}>
-      <PickUPIcon 
+        {/* <div>callStatus - {callStatus.status} with - {with_userid}</div> */}
+        <div style={controlsStyle}>
+          <PickUPIcon 
       style={buttonStyle}
       onClick={()=>{
         pickUpTheCall()
       }}
         />
 
-        {/* <button style={buttonStyle}>Mute</button> */}
-        <CallEnd style={buttonStyle}/>
-        {/* <button style={buttonStyle}>Turn Off Video</button> */}
+          {/* <button style={buttonStyle}>Mute</button> */}
+          <CallEnd style={buttonStyle}/>
+          {/* <button style={buttonStyle}>Turn Off Video</button> */}
 
-        <VolumeMute style={buttonStyle}/> 
-      </div>
+          <VolumeMute style={buttonStyle}/> 
+        </div>
       </div>
       {/* <div style={controlsStyle}>
         <button style={buttonStyle}>Disconnect</button>

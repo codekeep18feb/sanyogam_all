@@ -171,45 +171,45 @@ export default function ProfileBriefTile({ users, profile = { name: "Mona Soni (
       </div>
 
       <div style={{padding:"40px 0"}}>
-      <HorizontalScroll >
-        <div className={classes.scrollItem}>
+        <HorizontalScroll >
+          <div className={classes.scrollItem}>
 
-          <div style={{ display: 'flex' }}>
-            <div>
-              <img src={"https://images.pexels.com/photos/3206118/pexels-photo-3206118.jpeg?auto=compress&cs=tinysrgb&w=160&h=150&dpr=1"} />
-            </div>
-            <div style={{padding:"0 10px"}}>
-            Pulkdfasdit Soni (Noida)
-              <ul style={{ display: 'flex', listStyle: 'none', padding: 0 }}>
-                <li style={{ marginRight: '10px' }}>
-                  32 Yrs
-                </li>
-                <li style={{ marginRight: '10px' }}>
-                  57
-                </li>
-                <li>
-                  Hindu
-                </li>
-              </ul>
+            <div style={{ display: 'flex' }}>
               <div>
-              <Typography variant="h6">Software Developer</Typography>
-              <div style={{ display: 'flex'}}>
-              <ChatIcon style={{ fontSize: '24px', color: 'skyblue' }} />
-              <PhotoCamera style={{ fontSize: '24px', color: 'skyblue' }} />
-              <WhatsApp style={{ fontSize: '24px', color: 'skyblue' }} />
+                <img src={"https://images.pexels.com/photos/3206118/pexels-photo-3206118.jpeg?auto=compress&cs=tinysrgb&w=160&h=150&dpr=1"} />
+              </div>
+              <div style={{padding:"0 10px"}}>
+                Pulkdfasdit Soni (Noida)
+                <ul style={{ display: 'flex', listStyle: 'none', padding: 0 }}>
+                  <li style={{ marginRight: '10px' }}>
+                    32 Yrs
+                  </li>
+                  <li style={{ marginRight: '10px' }}>
+                    57
+                  </li>
+                  <li>
+                    Hindu
+                  </li>
+                </ul>
+                <div>
+                  <Typography variant="h6">Software Developer</Typography>
+                  <div style={{ display: 'flex'}}>
+                    <ChatIcon style={{ fontSize: '24px', color: 'skyblue' }} />
+                    <PhotoCamera style={{ fontSize: '24px', color: 'skyblue' }} />
+                    <WhatsApp style={{ fontSize: '24px', color: 'skyblue' }} />
 
               
-            </div>
-            </div>
-            </div>
+                  </div>
+                </div>
+              </div>
 
           
-          </div>
+            </div>
 
-        </div>
-        <div className={classes.scrollItem}>Content 2</div>
-        <div className={classes.scrollItem}>Content 3</div>
-      </HorizontalScroll>
+          </div>
+          <div className={classes.scrollItem}>Content 2</div>
+          <div className={classes.scrollItem}>Content 3</div>
+        </HorizontalScroll>
 
         
       </div>

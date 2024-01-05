@@ -97,9 +97,9 @@ export const FamilyPreview = ({
 
       <div style={{ display: "flex", padding: "10px 0" }}>
    
-      <Icon style={{ fontSize: '24px', color: 'magenta', padding: '20px' }}>
-        <SelectedIcon iconName='location' />
-      </Icon>;
+        <Icon style={{ fontSize: '24px', color: 'magenta', padding: '20px' }}>
+          <SelectedIcon iconName='location' />
+        </Icon>;
 
      
         <div>

@@ -75,12 +75,12 @@ export default function InboxFilterScrollBarC() {
   const classes = useStyles();
   return (
     <HorizontalScroll >
-        {/* <ManageSearchIcon className={classes.scrollItem} /> */}
-        <div className={classes.scrollItem}>Intrests Received</div>
-        <div className={classes.scrollItem}>Accepted</div>
-        <div className={classes.scrollItem}>Intrests Send</div>
-        <div className={classes.scrollItem}>Intrests Declined</div>
-      </HorizontalScroll>
+      {/* <ManageSearchIcon className={classes.scrollItem} /> */}
+      <div className={classes.scrollItem}>Intrests Received</div>
+      <div className={classes.scrollItem}>Accepted</div>
+      <div className={classes.scrollItem}>Intrests Send</div>
+      <div className={classes.scrollItem}>Intrests Declined</div>
+    </HorizontalScroll>
 
   )
 }

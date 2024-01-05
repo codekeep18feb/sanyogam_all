@@ -20,41 +20,41 @@ export default function UserChatTileInListCOWS({ profiles, SetWithEmail, SetWith
             SetWithEmail(profile.user_email)
           }}
         >
-          <Grid container alignItems='center' justifyContent='center'>
-            <Grid item xs={2}>
-              <ImageCircle dimention={50} user={{ id: profile.id, online: onlines, imageUrl: "https://images.pexels.com/photos/3206118/pexels-photo-3206118.jpeg?auto=compress&cs=tinysrgb&w=160&h=150&dpr=1" }} />
+            <Grid container alignItems='center' justifyContent='center'>
+              <Grid item xs={2}>
+                <ImageCircle dimention={50} user={{ id: profile.id, online: onlines, imageUrl: "https://images.pexels.com/photos/3206118/pexels-photo-3206118.jpeg?auto=compress&cs=tinysrgb&w=160&h=150&dpr=1" }} />
 
-            </Grid>
-            <Grid item xs={7}>
-              <div style={{textAlign:"center"}}>
-              <div style={{ display: "flex", alignItems: "end", justifyContent: "center" }}>
-                <div >{profile.user_fname} {profile.user_lname}</div>
-                <Icon component={callIcon} style={{ color: "blue", backgroundColor: "white", borderRadius: "50%" }} />
-                <div>
+              </Grid>
+              <Grid item xs={7}>
+                <div style={{textAlign:"center"}}>
+                  <div style={{ display: "flex", alignItems: "end", justifyContent: "center" }}>
+                    <div >{profile.user_fname} {profile.user_lname}</div>
+                    <Icon component={callIcon} style={{ color: "blue", backgroundColor: "white", borderRadius: "50%" }} />
+                    <div>
 
 
 
+                    </div>
+
+
+                  </div>
+                  <Typography variant="subtitle2">Has Messsged You!</Typography>
                 </div>
 
 
-              </div>
-              <Typography variant="subtitle2">Has Messsged You!</Typography>
-              </div>
 
+              </Grid>
+              <Grid item xs={3}>
+                <div>10:20 AM</div>
+                <div>
+                  <div  >2</div>
+                </div>
 
-
+              </Grid>
             </Grid>
-            <Grid item xs={3}>
-              <div>10:20 AM</div>
-            <div>
-            <div  >2</div>
-            </div>
-
-            </Grid>
-          </Grid>
 
 
-        </div>
+          </div>
         )
       })}
     </div>

@@ -247,7 +247,7 @@ const withGlobalSocket = (Component) => {
   };
 };
 
-function App({ auth_data, login, setIncomingCall }) {
+function App({ login }) {
   const navigate = useNavigate();
   const allGlobalData = useSelector((state) => {
     console.log('state here dsf',state)
@@ -265,8 +265,7 @@ function App({ auth_data, login, setIncomingCall }) {
         allGlobalData["incoming_calls"] &&
         allGlobalData["incoming_calls"].length > 0
       ) {
-        // const incomingCallData =  { incoming_call_obj : allGlobalData['incoming_calls'][0] }
-        // navigate('/incoming_call', { "state" : incomingCallData});
+ 
         const incomingCallData = allGlobalData["incoming_calls"][0];
         console.log("incomingCallDatadsfadsfa", incomingCallData); //NOTICE  JUST PROCESSING FIRST CALL IF MORE THERE SHOULD BE AN INFO THAT USER IS ON ANOTHER CALL
         navigate("/incoming_call", { state: { incomingCallData } });

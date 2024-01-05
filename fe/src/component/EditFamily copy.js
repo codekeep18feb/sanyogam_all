@@ -62,21 +62,21 @@ const EditFamilyForm = () => {
         </Grid>
         <Grid container spacing={1} justifyContent={"center"} style={{ marginTop: "10px" }}>
           <Grid item xs={10}>
-          <AutocompleteField options={locations} id="current-location" label="Current Location" defaultValue={family_details['family_location']}/>
+            <AutocompleteField options={locations} id="current-location" label="Current Location" defaultValue={family_details['family_location']}/>
 
           </Grid>
          
         </Grid>
         <Grid container spacing={1} justifyContent={"center"} style={{ marginTop: "10px" }}>
           <Grid item xs={10}>
-          <AutocompleteField options={locations} id="native-location" label="Native Location" defaultValue={family_details['native_place']}/>
+            <AutocompleteField options={locations} id="native-location" label="Native Location" defaultValue={family_details['native_place']}/>
 
           </Grid>
          
         </Grid>
         <Grid container spacing={1} justifyContent={"center"} style={{ marginTop: "10px" }}>
           <Grid item xs={10}>
-          <AutocompleteField options={affluenceOptions} id="affluence" label="Affluence" defaultValue={family_details['affluence']} />
+            <AutocompleteField options={affluenceOptions} id="affluence" label="Affluence" defaultValue={family_details['affluence']} />
 
           </Grid>
          

@@ -145,7 +145,7 @@ function InboxProfileBox({
         </div>
         
         <div style={{ ...actionRow }}>
-        <CloseIcon
+          <CloseIcon
           onClick={(e)=>handleRequest(e,"REJECTED")}
             style={{
               color: "white",
@@ -161,7 +161,7 @@ function InboxProfileBox({
           {/* </div> */}
           <button style={{ ...buttonStyle }} onClick={(e)=>handleRequest(e,"ACCEPTED")}>
             
-        {bstate=='accepting'?"accepting...":bstate=='accepted'?'accepted':'Accept'}
+            {bstate=='accepting'?"accepting...":bstate=='accepted'?'accepted':'Accept'}
 
           </button>
           {/* <div style={{ ...flexContainerStyle, flexDirection: "column",textAlign: "center",paddingBottom:"10px" }}>

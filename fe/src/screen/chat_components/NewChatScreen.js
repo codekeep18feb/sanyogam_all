@@ -50,7 +50,7 @@ export default function NewChatScreen({ chats, sendMsg }) {
       <div>
         <Grid container justifyContent={'space-around'}>
           <Grid item xs={8}>
-          <textarea
+            <textarea
           style={{
             width: "100%",
             borderRadius: "20px",
@@ -64,7 +64,7 @@ export default function NewChatScreen({ chats, sendMsg }) {
           </Grid>
           <Grid item  xs={2}>
           
-        <SendIcon style={{ fontSize: "35px", color: "#1F4294" }} onClick={handleSendMessage} disabled={sendingMessage}/>
+            <SendIcon style={{ fontSize: "35px", color: "#1F4294" }} onClick={handleSendMessage} disabled={sendingMessage}/>
           </Grid>
           
         </Grid>

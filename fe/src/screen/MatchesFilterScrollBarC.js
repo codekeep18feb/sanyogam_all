@@ -75,14 +75,14 @@ export default function MatchesFilterScrollBarC() {
   const classes = useStyles();
   return (
     <HorizontalScroll >
-        <ManageSearchIcon className={classes.scrollItem} />
-        <div className={classes.scrollItem}>In Noida</div>
-        <div className={classes.scrollItem}>In Delhi</div>
-        <div className={classes.scrollItem}>Near Me</div>
-        <div className={classes.scrollItem}>Newly joined</div>
-        <div className={classes.scrollItem}>More Matches</div>
-        <div className={classes.scrollItem}>Viewed Me</div>
-      </HorizontalScroll>
+      <ManageSearchIcon className={classes.scrollItem} />
+      <div className={classes.scrollItem}>In Noida</div>
+      <div className={classes.scrollItem}>In Delhi</div>
+      <div className={classes.scrollItem}>Near Me</div>
+      <div className={classes.scrollItem}>Newly joined</div>
+      <div className={classes.scrollItem}>More Matches</div>
+      <div className={classes.scrollItem}>Viewed Me</div>
+    </HorizontalScroll>
 
   )
 }

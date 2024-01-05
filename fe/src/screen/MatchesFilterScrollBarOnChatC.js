@@ -76,21 +76,21 @@ export default function MatchesFilterScrollBarOnChatC() {
   const classes = useStyles();
   return (
     <HorizontalScroll >
-        {/* <ManageSearchIcon className={classes.scrollItem} /> */}
-    <ImageCircle dimention={60} user={{ name:"deepak..", id:1,online:true, imageUrl:"https://images.pexels.com/photos/3206118/pexels-photo-3206118.jpeg?auto=compress&cs=tinysrgb&w=160&h=150&dpr=1"}} />
-    <ImageCircle dimention={60} user={{ name:"deepak..", id:2,online:true, imageUrl:"https://images.pexels.com/photos/3206118/pexels-photo-3206118.jpeg?auto=compress&cs=tinysrgb&w=160&h=150&dpr=1"}} />
-    <ImageCircle dimention={60} user={{ name:"deepak..", id:2,online:true, imageUrl:"https://images.pexels.com/photos/3206118/pexels-photo-3206118.jpeg?auto=compress&cs=tinysrgb&w=160&h=150&dpr=1"}} />
-    <ImageCircle dimention={60} user={{ name:"deepak..", id:4,online:true, imageUrl:"https://images.pexels.com/photos/3206118/pexels-photo-3206118.jpeg?auto=compress&cs=tinysrgb&w=160&h=150&dpr=1"}} />
-    <ImageCircle dimention={60} user={{ name:"deepak..", id:5,online:true, imageUrl:"https://images.pexels.com/photos/3206118/pexels-photo-3206118.jpeg?auto=compress&cs=tinysrgb&w=160&h=150&dpr=1"}} />
-    <ImageCircle dimention={60} user={{ name:"deepak..", id:6,online:true, imageUrl:"https://images.pexels.com/photos/3206118/pexels-photo-3206118.jpeg?auto=compress&cs=tinysrgb&w=160&h=150&dpr=1"}} />
-    <ImageCircle dimention={60} user={{ name:"deepak..", id:7,online:true, imageUrl:"https://images.pexels.com/photos/3206118/pexels-photo-3206118.jpeg?auto=compress&cs=tinysrgb&w=160&h=150&dpr=1"}} />
-    <ImageCircle dimention={60} user={{ name:"deepak..", id:8,online:true, imageUrl:"https://images.pexels.com/photos/3206118/pexels-photo-3206118.jpeg?auto=compress&cs=tinysrgb&w=160&h=150&dpr=1"}} />
-    <ImageCircle dimention={60} user={{ name:"deepak..", id:9,online:true, imageUrl:"https://images.pexels.com/photos/3206118/pexels-photo-3206118.jpeg?auto=compress&cs=tinysrgb&w=160&h=150&dpr=1"}} />
-    <ImageCircle dimention={60} user={{ name:"deepak..", id:10,online:true, imageUrl:"https://images.pexels.com/photos/3206118/pexels-photo-3206118.jpeg?auto=compress&cs=tinysrgb&w=160&h=150&dpr=1"}} />
-    <ImageCircle dimention={60} user={{ name:"deepak..", id:11,online:true, imageUrl:"https://images.pexels.com/photos/3206118/pexels-photo-3206118.jpeg?auto=compress&cs=tinysrgb&w=160&h=150&dpr=1"}} />
-    <ImageCircle dimention={60} user={{ name:"deepak..", id:12,online:true, imageUrl:"https://images.pexels.com/photos/3206118/pexels-photo-3206118.jpeg?auto=compress&cs=tinysrgb&w=160&h=150&dpr=1"}} />
+      {/* <ManageSearchIcon className={classes.scrollItem} /> */}
+      <ImageCircle dimention={60} user={{ name:"deepak..", id:1,online:true, imageUrl:"https://images.pexels.com/photos/3206118/pexels-photo-3206118.jpeg?auto=compress&cs=tinysrgb&w=160&h=150&dpr=1"}} />
+      <ImageCircle dimention={60} user={{ name:"deepak..", id:2,online:true, imageUrl:"https://images.pexels.com/photos/3206118/pexels-photo-3206118.jpeg?auto=compress&cs=tinysrgb&w=160&h=150&dpr=1"}} />
+      <ImageCircle dimention={60} user={{ name:"deepak..", id:2,online:true, imageUrl:"https://images.pexels.com/photos/3206118/pexels-photo-3206118.jpeg?auto=compress&cs=tinysrgb&w=160&h=150&dpr=1"}} />
+      <ImageCircle dimention={60} user={{ name:"deepak..", id:4,online:true, imageUrl:"https://images.pexels.com/photos/3206118/pexels-photo-3206118.jpeg?auto=compress&cs=tinysrgb&w=160&h=150&dpr=1"}} />
+      <ImageCircle dimention={60} user={{ name:"deepak..", id:5,online:true, imageUrl:"https://images.pexels.com/photos/3206118/pexels-photo-3206118.jpeg?auto=compress&cs=tinysrgb&w=160&h=150&dpr=1"}} />
+      <ImageCircle dimention={60} user={{ name:"deepak..", id:6,online:true, imageUrl:"https://images.pexels.com/photos/3206118/pexels-photo-3206118.jpeg?auto=compress&cs=tinysrgb&w=160&h=150&dpr=1"}} />
+      <ImageCircle dimention={60} user={{ name:"deepak..", id:7,online:true, imageUrl:"https://images.pexels.com/photos/3206118/pexels-photo-3206118.jpeg?auto=compress&cs=tinysrgb&w=160&h=150&dpr=1"}} />
+      <ImageCircle dimention={60} user={{ name:"deepak..", id:8,online:true, imageUrl:"https://images.pexels.com/photos/3206118/pexels-photo-3206118.jpeg?auto=compress&cs=tinysrgb&w=160&h=150&dpr=1"}} />
+      <ImageCircle dimention={60} user={{ name:"deepak..", id:9,online:true, imageUrl:"https://images.pexels.com/photos/3206118/pexels-photo-3206118.jpeg?auto=compress&cs=tinysrgb&w=160&h=150&dpr=1"}} />
+      <ImageCircle dimention={60} user={{ name:"deepak..", id:10,online:true, imageUrl:"https://images.pexels.com/photos/3206118/pexels-photo-3206118.jpeg?auto=compress&cs=tinysrgb&w=160&h=150&dpr=1"}} />
+      <ImageCircle dimention={60} user={{ name:"deepak..", id:11,online:true, imageUrl:"https://images.pexels.com/photos/3206118/pexels-photo-3206118.jpeg?auto=compress&cs=tinysrgb&w=160&h=150&dpr=1"}} />
+      <ImageCircle dimention={60} user={{ name:"deepak..", id:12,online:true, imageUrl:"https://images.pexels.com/photos/3206118/pexels-photo-3206118.jpeg?auto=compress&cs=tinysrgb&w=160&h=150&dpr=1"}} />
 
-      </HorizontalScroll>
+    </HorizontalScroll>
 
   )
 }

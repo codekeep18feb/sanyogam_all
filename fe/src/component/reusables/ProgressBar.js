@@ -42,19 +42,19 @@ const ProgressBar = ({ totalWorkDone }) => {
 
   return (
     <>
-    <Grid container justifyContent={"space-between"} style={{color:"blue",opacity:.7}}>
-      <Grid item>
+      <Grid container justifyContent={"space-between"} style={{color:"blue",opacity:.7}}>
+        <Grid item>
 
-      <Typography variant="subtitle2" >Your Profile Score:</Typography>
-      </Grid>
-      <Grid item>
-      <Typography variant="subtitle2">{progress.toFixed(2)}%</Typography>
+          <Typography variant="subtitle2" >Your Profile Score:</Typography>
+        </Grid>
+        <Grid item>
+          <Typography variant="subtitle2">{progress.toFixed(2)}%</Typography>
 
-      </Grid>
+        </Grid>
     
-    </Grid>
+      </Grid>
       <div style={{marginTop:"7px"}}>
-      <LinearProgress variant="determinate" value={progress} color={"primary"} sx={{ height: 10,borderRadius:10, backgroundColor: 'grey', }} />
+        <LinearProgress variant="determinate" value={progress} color={"primary"} sx={{ height: 10,borderRadius:10, backgroundColor: 'grey', }} />
 
       </div>
     

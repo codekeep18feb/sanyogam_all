@@ -79,14 +79,14 @@ export default function ChatScreenWithInfo({ with_userid, SetWithUserId, SetWith
           // <ChatScreen with_email={with_email} chats={chats} sendMsg={sendMsg} />
           // <DetachVideoWindow connection_open={connection_open} with_email={with_email} with_userid={with_userid} />
           <div>VIdeoVIewhere</div>
-          );
+        );
     
       }
       else{
         return (
           // <ChatScreen with_email={with_email} chats={chats} sendMsg={sendMsg} />
           <NewChatScreen chats={chats} sendMsg={sendMsg} />
-          );
+        );
     
       }
     } else if (requestStatus && requestStatus !== 'ACCEPTED') {
@@ -100,7 +100,7 @@ export default function ChatScreenWithInfo({ with_userid, SetWithUserId, SetWith
 
   return (
     <>
-     <Button
+      <Button
             onClick={(e)=>{
               e.preventDefault()
                 // force close the connection
@@ -110,7 +110,7 @@ export default function ChatScreenWithInfo({ with_userid, SetWithUserId, SetWith
 
             }}
           >
-forcecloseconnection          </Button>
+        forcecloseconnection          </Button>
       <ChatScreenHeader setvideoView={setvideoView} with_userid={with_userid} with_email={with_email} SetWithUserId={SetWithUserId} SetWithEmail={SetWithEmail} onBackClick={handleBackClick} user={user} />
 
       <div>

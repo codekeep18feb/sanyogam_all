@@ -204,8 +204,8 @@ function HomeProfileBox({
           
         </div>
         <Button variant="contained" color="primary" sx={{marginLeft:"20px",width:"100%"}} onClick={()=>sendRequest()}>
-        {bstate=='sending'?"sending...":bstate=='sent'?'sent':'send request'}
-      </Button>
+          {bstate=='sending'?"sending...":bstate=='sent'?'sent':'send request'}
+        </Button>
         
 
       </div>

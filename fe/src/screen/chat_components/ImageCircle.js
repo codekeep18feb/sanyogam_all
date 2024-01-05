@@ -27,20 +27,20 @@ const greenDotStyle = {
 
 export function ImageCircle({ user,dimention }) {
   return (
-<div>
-<div style={{padding:"10px 10px 0 10px"}}>
-      <div style={{position:"relative"}}>
-      {user.online && <div style={user.online ? {...greenDotStyle,backgroundColor:"#00E676"}:{...greenDotStyle,backgroundColor:"black"}} />}
-      <img src={user.imageUrl} alt="Circle Image" width={dimention || 90} height={dimention || 90} style={{borderRadius:"50%"}}/>
-    </div>
-    {/* {user && user.name &&  <Typography variant="subtitle2">{user.name}</Typography>} */}
-    </div>
-    <div style={{paddingLeft:"10px"}}>
-      {user && user.name &&  <Typography noWrap variant="subtitle2">{user.name}</Typography>}
+    <div>
+      <div style={{padding:"10px 10px 0 10px"}}>
+        <div style={{position:"relative"}}>
+          {user.online && <div style={user.online ? {...greenDotStyle,backgroundColor:"#00E676"}:{...greenDotStyle,backgroundColor:"black"}} />}
+          <img src={user.imageUrl} alt="Circle Image" width={dimention || 90} height={dimention || 90} style={{borderRadius:"50%"}}/>
+        </div>
+        {/* {user && user.name &&  <Typography variant="subtitle2">{user.name}</Typography>} */}
+      </div>
+      <div style={{paddingLeft:"10px"}}>
+        {user && user.name &&  <Typography noWrap variant="subtitle2">{user.name}</Typography>}
 
-    </div>
+      </div>
 
-</div>    
+    </div>    
   );
 }
 
