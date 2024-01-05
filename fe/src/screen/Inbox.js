@@ -15,13 +15,16 @@ export default function Inbox() {
     // const data = await submitProfileUpdateData({family_info:formValues})
     const JWT_TOKEN = localStorage.getItem("token");
     const token = `Bearer ${JWT_TOKEN}`;
-    const response = await fetch(`http://192.168.1.5:8000/api/handle_request`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: token,
-      },
-    });
+    const response = await fetch(
+      `http://192.168.1.10:8000/api/handle_request`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        },
+      }
+    );
 
     if (response.status === 200) {
       const data = await response.json();

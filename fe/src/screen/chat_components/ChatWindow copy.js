@@ -22,7 +22,7 @@ export default function ChatWindow({ with_email, with_userid }) {
 
     try {
       const response = await fetch(
-        `http://192.168.1.5:8000/api/rtc_user_info_by_id/${with_userid}`,
+        `http://192.168.1.10:8000/api/rtc_user_info_by_id/${with_userid}`,
         {
           method: "GET",
           headers: {
@@ -63,18 +63,21 @@ export default function ChatWindow({ with_email, with_userid }) {
     const token = `Bearer ${JWT_TOKEN}`;
 
     try {
-      const response = await fetch(`http://192.168.1.5:8000/api/add_rtc_user`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: token,
-        },
-        body: JSON.stringify({
-          initiator: isInitiator,
-          sdp: sdp,
-          to_user: to_user,
-        }),
-      });
+      const response = await fetch(
+        `http://192.168.1.10:8000/api/add_rtc_user`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
+          body: JSON.stringify({
+            initiator: isInitiator,
+            sdp: sdp,
+            to_user: to_user,
+          }),
+        }
+      );
 
       if (response.status === 200) {
         const data = await response.json();
@@ -95,18 +98,21 @@ export default function ChatWindow({ with_email, with_userid }) {
     const token = `Bearer ${JWT_TOKEN}`;
 
     try {
-      const response = await fetch(`http://192.168.1.5:8000/api/add_rtc_user`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: token,
-        },
-        body: JSON.stringify({
-          initiator: isInitiator,
-          sdp: sdp,
-          to_user: to_user,
-        }),
-      });
+      const response = await fetch(
+        `http://192.168.1.10:8000/api/add_rtc_user`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
+          body: JSON.stringify({
+            initiator: isInitiator,
+            sdp: sdp,
+            to_user: to_user,
+          }),
+        }
+      );
 
       if (response.status === 200) {
         const data = await response.json();
@@ -128,7 +134,7 @@ export default function ChatWindow({ with_email, with_userid }) {
 
     try {
       const response = await fetch(
-        `http://192.168.1.5:8000/api/rtc_user_info_by_id/${with_userid}`,
+        `http://192.168.1.10:8000/api/rtc_user_info_by_id/${with_userid}`,
         {
           method: "GET",
           headers: {
@@ -152,10 +158,10 @@ export default function ChatWindow({ with_email, with_userid }) {
     }
   };
   const fetchUserId = async (token, with_email) => {
-    // http://192.168.1.5:8000/api/users/query?q_email=deepaksingh.18feb%40gmail.com
+    // http://192.168.1.10:8000/api/users/query?q_email=deepaksingh.18feb%40gmail.com
     try {
       const response = await fetch(
-        `http://192.168.1.5:8000/api/users/query?q_email=${with_email}`,
+        `http://192.168.1.10:8000/api/users/query?q_email=${with_email}`,
         {
           method: "GET",
           headers: {

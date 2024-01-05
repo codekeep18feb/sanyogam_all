@@ -11,7 +11,7 @@ export default function NewChatScreen({ chats, to_email }) {
   };
 
   const [socket, setSocket] = useState(
-    io.connect("http://192.168.1.5:8000", {
+    io.connect("http://192.168.1.10:8000", {
       query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     })
   );
@@ -32,7 +32,7 @@ export default function NewChatScreen({ chats, to_email }) {
 
     try {
       const response = await fetch(
-        `http://192.168.1.5:8000/api/send_msg/${to_email}`,
+        `http://192.168.1.10:8000/api/send_msg/${to_email}`,
         {
           method: "POST",
           headers: {

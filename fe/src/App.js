@@ -91,7 +91,7 @@ const withGlobalSocket = (Component) => {
       auth_data
     );
     const [socket, setSocket] = useState(
-      io.connect("http://192.168.1.5:8000", {
+      io.connect("http://192.168.1.10:8000", {
         query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       })
     );

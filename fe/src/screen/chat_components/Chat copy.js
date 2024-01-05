@@ -148,7 +148,7 @@ function Chat({ auth_data }) {
 
     try {
       const response = await fetch(
-        "http://192.168.1.5:8000/api/read_online_circle",
+        "http://192.168.1.10:8000/api/read_online_circle",
         {
           method: "GET",
           headers: {
@@ -179,7 +179,7 @@ function Chat({ auth_data }) {
 
     try {
       const response = await fetch(
-        `http://192.168.1.5:8000/api/rtc_user_info_by_id`,
+        `http://192.168.1.10:8000/api/rtc_user_info_by_id`,
         {
           method: "GET",
           headers: {
@@ -215,7 +215,7 @@ function Chat({ auth_data }) {
     const JWT_TOKEN = localStorage.getItem("token");
     const token = `Bearer ${JWT_TOKEN}`;
     console.log("token", token);
-    const response2 = await fetch("http://192.168.1.5:8000/api/profiles", {
+    const response2 = await fetch("http://192.168.1.10:8000/api/profiles", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

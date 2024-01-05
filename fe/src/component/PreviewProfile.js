@@ -54,7 +54,7 @@ export default function PreviewProfile() {
     const token = `Bearer ${JWT_TOKEN}`;
 
     try {
-      const response = await fetch(`http://192.168.1.5:8000/api/my_profile`, {
+      const response = await fetch(`http://192.168.1.10:8000/api/my_profile`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

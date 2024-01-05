@@ -12,9 +12,9 @@ export default function ChatOWS({ chats }) {
   const [with_email, SetWithEmail] = useState(null);
 
   // State for managing the socket connection
-  // const [socket, setSocket] = useState(() => io.connect('http://192.168.1.5:8000'));
+  // const [socket, setSocket] = useState(() => io.connect('http://192.168.1.10:8000'));
   const [socket, setSocket] = useState(
-    io.connect("http://192.168.1.5:8000", {
+    io.connect("http://192.168.1.10:8000", {
       query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     })
   );
