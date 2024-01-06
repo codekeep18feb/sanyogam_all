@@ -300,7 +300,7 @@ function App({ login }) {
         }
       />
       <Route path="/login" element={<LoginScreen />} />
-      <Route path="/material" element={<MaterialUX />} />
+      {/* <Route path="/material" element={<MaterialUX />} /> */}
       <Route path="/faq" element={<FAQ />} />
       <Route path="/signup" element={<SignupScreen />} />
       <Route path="/pricing" element={<Pricing />} />
