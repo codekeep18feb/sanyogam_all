@@ -219,7 +219,12 @@ class UserH(object):
         family_info_default = models.FamilyInformation()
         father_default = models.Father()
         
-        user = ModelActionHandler(models.User).add(self)
+        # user = ModelActionHandler(models.User).add(self)
+        data = self.to_dict()
+        user = models.User().create(data)
+        # user = self.model().create(data)
+        # db.session.add(user)
+        # return user
         profile = models.Profile(
             gender=self.gender,
             user=user,

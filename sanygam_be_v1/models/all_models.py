@@ -78,8 +78,10 @@ class User(db.Model):
     friends_ids = db.Column(db.String)
     online = db.Column(db.Boolean, default=False)
     
-    def create(self, data):
-        return User(email=data['email'], password=data['password'], fname=data['fname'], lname=data['lname'], timestamp=data['timestamp'])
+    def create(self, data): #we might wanna make it static :) i think we are arriving now :::::))))))))))
+        user = User(email=data['email'], password=data['password'], fname=data['fname'], lname=data['lname'], timestamp=data['timestamp'])
+        db.session.add(user)
+        return user
     
     
 
