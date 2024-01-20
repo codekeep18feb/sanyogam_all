@@ -168,16 +168,21 @@ def binary_image_to_base62(binary_image):
 
 
 class ModelActionHandler():
-    # def __init__(self):
-        # self.data = data
+    def __init__(self,model):
+        self.model = model
+        
     #CRUD ON any model instance???? can you do it??
     
-    def get(self):
-        pass
+    
+    # def get(self,id):
+    #     if id:
+    #         user = self.model(id)
+    #         return user
+    #     pass
     
     def add(self,data):
         data = data.to_dict()
-        user = models.User(email=data['email'], password=data['password'], fname=data['fname'], lname=data['lname'], timestamp=data['timestamp'])
+        user = self.model().create(data)
         db.session.add(user)
         return user
     
@@ -214,7 +219,7 @@ class UserH(object):
         family_info_default = models.FamilyInformation()
         father_default = models.Father()
         
-        user = ModelActionHandler().add(self)
+        user = ModelActionHandler(models.User).add(self)
         profile = models.Profile(
             gender=self.gender,
             user=user,
@@ -311,7 +316,7 @@ def save_oauth(data):
     timestamp_str = data.get("timestamp", get_timestamp())
     timestamp = datetime.strptime(timestamp_str, '%Y-%m-%d %H:%M:%S')
 
-    user = User(email=email, password=password,fname=fname, lname=lname, timestamp=timestamp)
+    user = User()
     print("user",user)
     # # # Create a profile and link it to the user
     db.session.add(user)

@@ -77,6 +77,11 @@ class User(db.Model):
     )
     friends_ids = db.Column(db.String)
     online = db.Column(db.Boolean, default=False)
+    
+    def create(self, data):
+        return User(email=data['email'], password=data['password'], fname=data['fname'], lname=data['lname'], timestamp=data['timestamp'])
+    
+    
 
 
 # Add an event listener to the UserRequests table for inserts
