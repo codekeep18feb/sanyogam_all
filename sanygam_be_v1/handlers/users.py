@@ -295,7 +295,8 @@ def logout():
 
 
 def signup(signup_data):
-    # raise Exception('This is a test exception')
+    # if not signup_data.validate()
+        # raise Exception('This is a test exception')
     
     [user,profile] = UserH(signup_data).signup()
     send_email(user.email,"Registration with Sgam", 'Successfully Registrated!')
