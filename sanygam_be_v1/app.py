@@ -351,10 +351,13 @@ def handle_message(message):
     socketio.emit('message', message)
 
 
+
+
 # ...
 
 # connex_app = connex_app
 connex_app.add_api(basedir / "swagger.yml")
+
 
 
 if __name__ == "__main__":

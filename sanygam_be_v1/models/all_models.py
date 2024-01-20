@@ -84,6 +84,20 @@ class User(db.Model):
         return user
     
     
+    def get(self, id): #we might wanna make it static :) i think we are arriving now :::::))))))))))
+        user = User(id=id)
+        return user
+    
+    
+    def update(self, id, data): #we might wanna make it static :) i think we are arriving now :::::))))))))))
+        user = User(id=id)
+        return user
+    
+    def delete(self, id, data): #we might wanna make it static :) i think we are arriving now :::::))))))))))
+        user = User(id=id)
+        return user
+    
+    
 
 
 # Add an event listener to the UserRequests table for inserts

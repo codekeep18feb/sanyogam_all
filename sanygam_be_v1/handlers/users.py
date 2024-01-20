@@ -184,6 +184,7 @@ class ModelActionHandler():
         data = data.to_dict()
         user = self.model().create(data)
         db.session.add(user)
+        
         return user
     
     def update(self):
@@ -218,13 +219,8 @@ class UserH(object):
     def signup(self):
         family_info_default = models.FamilyInformation()
         father_default = models.Father()
-        
-        # user = ModelActionHandler(models.User).add(self)
         data = self.to_dict()
         user = models.User().create(data)
-        # user = self.model().create(data)
-        # db.session.add(user)
-        # return user
         profile = models.Profile(
             gender=self.gender,
             user=user,
@@ -299,6 +295,8 @@ def logout():
 
 
 def signup(signup_data):
+    # raise Exception('This is a test exception')
+    
     [user,profile] = UserH(signup_data).signup()
     send_email(user.email,"Registration with Sgam", 'Successfully Registrated!')
     return {

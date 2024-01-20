@@ -8,6 +8,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
 from flask_socketio import SocketIO
+from flask import jsonify
 
 from flask.json import JSONEncoder
 from enum import Enum
@@ -70,6 +71,15 @@ socketio.init_app(connex_app.app)
 
 app = connex_app.app
 app.json_encoder = CustomJSONEncoder
+
+@app.errorhandler(Exception)
+def handle_exception(error):
+    response = {
+        'error': str(error),
+        'message': 'An unexpected error occurred',
+    }
+    return jsonify(response), 500
+
 # app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{basedir / 'sgam.db'}"
 # app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://developerRole:Django@321!@localhost/sgam"
 from urllib.parse import quote
