@@ -10,7 +10,8 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 # from models import MyEnum  # Import the Enum class
 
-from models import *
+# from models import *
+import models
 
 def get_timestamp():
     return datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
@@ -21,7 +22,7 @@ def read_all():
     if False:
         return "Unauthorized", 401
     
-    users = User.query.all()
+    users = models.User.query.all()
     user_schema = UserSchema(many=True)
     return user_schema.dump(users)
 
@@ -55,7 +56,7 @@ def upload_image(id):
 
 
 def read_id_one_query(id):
-    user = User.query.filter_by(id=id).first()
+    user = models.User.query.filter_by(id=id).first()
     
     if user:
         # person_dict = {
@@ -115,16 +116,16 @@ def read_one_query():
     q_email = body.get("q_email", None)
 
     if fname and lname and q_email:
-        user = User.query.filter_by(fname=fname, lname=lname,email=q_email).first()
+        user = models.User.query.filter_by(fname=fname, lname=lname,email=q_email).first()
 
     elif fname and lname:
-        user = User.query.filter_by(fname=fname, lname=lname).first()
+        user = models.User.query.filter_by(fname=fname, lname=lname).first()
     elif fname:
-        user = User.query.filter_by(fname=fname).first()
+        user = models.User.query.filter_by(fname=fname).first()
     elif lname:
-        user = User.query.filter_by(lname=lname).first()
+        user = models.User.query.filter_by(lname=lname).first()
     elif q_email:
-        user = User.query.filter_by(email=q_email).first()
+        user = models.User.query.filter_by(email=q_email).first()
     else:
         abort(404, "No such user found")
 
@@ -165,6 +166,29 @@ def binary_image_to_base62(binary_image):
     return ''.join(reversed(base62_result))
 
 
+
+class ModelActionHandler():
+    # def __init__(self):
+        # self.data = data
+    #CRUD ON any model instance???? can you do it??
+    
+    def get(self):
+        pass
+    
+    def add(self,data):
+        data = data.to_dict()
+        user = models.User(email=data['email'], password=data['password'], fname=data['fname'], lname=data['lname'], timestamp=data['timestamp'])
+        db.session.add(user)
+        return user
+    
+    def update(self):
+        pass
+    
+    def delete(self):
+        pass
+    pass
+
+
 class UserH(object):
     def __init__(self,signup_data):    
         self.lname =    signup_data.get("lname")
@@ -175,14 +199,23 @@ class UserH(object):
         self.timestamp_str = signup_data.get("timestamp", get_timestamp())
         self.timestamp = datetime.strptime(self.timestamp_str, '%Y-%m-%d %H:%M:%S')
 
-    def signup(self):
-        family_info_default = FamilyInformation()
-        father_default = Father()
-        
-        user = User(email=self.email, password=self.password, fname=self.fname, lname=self.lname, timestamp=self.timestamp)
-        db.session.add(user)
+    def to_dict(self):
+        return {
+            "lname": self.lname,
+            "fname": self.fname,
+            "email": self.email,
+            "password": self.password,
+            "gender": self.gender,
+            "timestamp": self.timestamp,
+        }
 
-        profile = Profile(
+
+    def signup(self):
+        family_info_default = models.FamilyInformation()
+        father_default = models.Father()
+        
+        user = ModelActionHandler().add(self)
+        profile = models.Profile(
             gender=self.gender,
             user=user,
             family_info=family_info_default,
@@ -200,7 +233,7 @@ def me():
     decoded = decode_token(token)
     decoded_data_str = decoded['sub']
     json_dec_data = json.loads(decoded_data_str)
-    user = User.query.filter_by(email=json_dec_data['email']).first()
+    user = models.User.query.filter_by(email=json_dec_data['email']).first()
     # base_64_str = binary_image_to_base62(user.profile.image)
     # print("userme",base_64_str)
     if user:
@@ -225,7 +258,7 @@ def login(user):
     
     """
     print("what is it",email)
-    user = User.query.filter_by(email=email,password=password).first()
+    user = models.User.query.filter_by(email=email,password=password).first()
     if not user:
         return "No Such User Found!", 401
     # profile = user.profile if user else None
@@ -247,7 +280,7 @@ def logout():
     decoded = decode_token(token)
     decoded_data_str = decoded['sub']
     json_dec_data = json.loads(decoded_data_str)
-    user = User.query.filter_by(email=json_dec_data['email']).first()
+    user = models.User.query.filter_by(email=json_dec_data['email']).first()
     # profile = user.profile if user else None
     user.online=False
     db.session.add(user)
@@ -256,19 +289,15 @@ def logout():
 
 
 def signup(signup_data):
-    print("signup_datasdfasdfa",signup_data)
     [user,profile] = UserH(signup_data).signup()
-    print('here new',user,profile)
-    # send_email(email,"Registration with Sgam", 'Successfully Registrated!')
-    # return {
-    #     "id": user.id,
-    #     "fname": user.fname,
-    #     "lname": user.lname,
-    #     "gender": profile.gender,
-    #     "timestamp": user.timestamp,
-    # }, 201
-
-    return {"message":"success"},201
+    send_email(user.email,"Registration with Sgam", 'Successfully Registrated!')
+    return {
+        "id": user.id,
+        "fname": user.fname,
+        "lname": user.lname,
+        "gender": profile.gender,
+        "timestamp": user.timestamp,
+    }, 201
 
 def save_oauth(data):
     fname = data.get("name").split(" ")[0]
