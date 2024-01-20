@@ -17,7 +17,7 @@ export default function NewChatScreen({ chats, to_userid }) {
 
     try {
       const response = await fetch(
-        `http://192.168.1.10:8000/api/send_msg/${to_userid}`,
+        `http://192.168.1.13:8000/api/send_msg/${to_userid}`,
         {
           method: "POST",
           headers: {

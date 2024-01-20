@@ -588,7 +588,7 @@ paths:
 
   /handle_request:
     get:
-      operationId: "handlers.users.handle_request"
+      operationId: "handlers.requests.handle_request"
       security:
         - JWTAuth: []
       tags:

@@ -12,7 +12,7 @@ export default function Users() {
     // const data = await submitProfileUpdateData({family_info:formValues})
     const JWT_TOKEN = localStorage.getItem("token");
     const token = `Bearer ${JWT_TOKEN}`;
-    const response = await fetch(`http://192.168.1.10:8000/api/profiles`, {
+    const response = await fetch(`http://192.168.1.13:8000/api/profiles`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

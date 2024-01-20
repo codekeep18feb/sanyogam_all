@@ -59,8 +59,8 @@ def _current_timestamp() -> int:
 basedir = pathlib.Path(__file__).parent.resolve()
 print("AMICORRECT ? basedir", basedir)
 connex_app = connexion.App(__name__, specification_dir=basedir)
-# CORS(connex_app.app, resources={r"/api/*": {"origins": "http://192.168.1.10:3000"}})
-CORS(connex_app.app, resources={r"/api/*": {"origins": ["http://192.168.1.10:3000", "http://192.168.1.10:8000"]}})
+# CORS(connex_app.app, resources={r"/api/*": {"origins": "http://192.168.1.13:3000"}})
+CORS(connex_app.app, resources={r"/api/*": {"origins": ["http://192.168.1.13:3000", "http://192.168.1.13:8000"]}})
 
 # Attach SocketIO to the Flask app
 socketio = SocketIO(cors_allowed_origins="*")
