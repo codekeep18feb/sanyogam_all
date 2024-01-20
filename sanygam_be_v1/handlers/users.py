@@ -11,7 +11,6 @@ from email.mime.multipart import MIMEMultipart
 # from models import MyEnum  # Import the Enum class
 
 from models import *
-from models import UserRequests
 
 def get_timestamp():
     return datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
@@ -25,30 +24,6 @@ def read_all():
     users = User.query.all()
     user_schema = UserSchema(many=True)
     return user_schema.dump(users)
-
-
-PEOPLE = [
-
- {
-        "id":1,
-        "fname": "Deepak",
-        "lname": "Singh",
-        "timestamp": get_timestamp(),
-    },
-{
-        "id":2,
-        "fname": "Rajni",
-        "lname": "Ruprecht",
-        "timestamp": get_timestamp(),
-    },
-{
-        "id":3,
-        "fname": "Easter",
-        "lname": "Bunny",
-        "timestamp": get_timestamp(),
-    }
-
-]
 
 
 def upload_image(id):
@@ -190,6 +165,33 @@ def binary_image_to_base62(binary_image):
     return ''.join(reversed(base62_result))
 
 
+class UserH(object):
+    def __init__(self,signup_data):    
+        self.lname =    signup_data.get("lname")
+        self.fname =    signup_data.get("fname", "")
+        self.email =    signup_data.get("email", "")
+        self.password=  signup_data.get("password", "")
+        self.gender =   signup_data.get("gender")  # New field for gender
+        self.timestamp_str = signup_data.get("timestamp", get_timestamp())
+        self.timestamp = datetime.strptime(self.timestamp_str, '%Y-%m-%d %H:%M:%S')
+
+    def signup(self):
+        family_info_default = FamilyInformation()
+        father_default = Father()
+        
+        user = User(email=self.email, password=self.password, fname=self.fname, lname=self.lname, timestamp=self.timestamp)
+        db.session.add(user)
+
+        profile = Profile(
+            gender=self.gender,
+            user=user,
+            family_info=family_info_default,
+            father=father_default,
+        )
+        db.session.add(profile)
+        db.session.commit()
+        return [user,profile]
+
 def me():
     auth_token = request.headers.get("Authorization")
     if not auth_token:    
@@ -254,54 +256,19 @@ def logout():
 
 
 def signup(signup_data):
-    lname = signup_data.get("lname")
-    fname = signup_data.get("fname", "")
-    email = signup_data.get("email", "")
-    password = signup_data.get("password", "")
-    gender = signup_data.get("gender")  # New field for gender
- 
+    print("signup_datasdfasdfa",signup_data)
+    [user,profile] = UserH(signup_data).signup()
+    print('here new',user,profile)
+    # send_email(email,"Registration with Sgam", 'Successfully Registrated!')
+    # return {
+    #     "id": user.id,
+    #     "fname": user.fname,
+    #     "lname": user.lname,
+    #     "gender": profile.gender,
+    #     "timestamp": user.timestamp,
+    # }, 201
 
-    timestamp_str = signup_data.get("timestamp", get_timestamp())
-    timestamp = datetime.strptime(timestamp_str, '%Y-%m-%d %H:%M:%S')
-
-    
-    family_info_default = FamilyInformation()
-    father_default = Father()
-    # mother_default = Mother()
-    # brother_default = Brother()
-    # sister_default = Sister()
-    # contact_details_default = ContactDetails()
-    # about_me_default = AboutMe()
-    # horoscope_details_default = HoroscopeDetails()
-
-    new_person = User(email=email, password=password, fname=fname, lname=lname, timestamp=timestamp)
-    db.session.add(new_person)
-
-    profile = Profile(
-        gender=gender,
-        user=new_person,
-        family_info=family_info_default,
-        father=father_default,
-        # mother=mother_default,
-        # brother=brother_default,
-        # sister=sister_default,
-        # contact_details=contact_details_default,
-        # about_me=about_me_default,
-        # horoscope_details=horoscope_details_default
-    )
-
-    db.session.add(profile)
-
-    db.session.commit()
-    send_email(email,"Registration with Sgam", 'Successfully Registrated!')
-    return {
-        "id": new_person.id,
-        "fname": new_person.fname,
-        "lname": new_person.lname,
-        "gender": profile.gender,
-        "timestamp": new_person.timestamp,
-    }, 201
-
+    return {"message":"success"},201
 
 def save_oauth(data):
     fname = data.get("name").split(" ")[0]
@@ -315,20 +282,20 @@ def save_oauth(data):
     timestamp_str = data.get("timestamp", get_timestamp())
     timestamp = datetime.strptime(timestamp_str, '%Y-%m-%d %H:%M:%S')
 
-    new_person = User(email=email, password=password,fname=fname, lname=lname, timestamp=timestamp)
-    print("new_person",new_person)
+    user = User(email=email, password=password,fname=fname, lname=lname, timestamp=timestamp)
+    print("user",user)
     # # # Create a profile and link it to the user
-    db.session.add(new_person)
-    profile = Profile(gender=gender, user=new_person,image=image)
+    db.session.add(user)
+    profile = Profile(gender=gender, user=user,image=image)
     db.session.add(profile)
 
     db.session.commit()
     # send_email(email,"Registration with Sgam", 'Successfully Registrated!')
     return {
-        "id": "new_person.id",
-        # "fname": new_person.fname,
-        # "lname": new_person.lname,
+        "id": "user.id",
+        # "fname": user.fname,
+        # "lname": user.lname,
         # "gender": profile.gender,
-        # "timestamp": new_person.timestamp,
+        # "timestamp": user.timestamp,
     }, 201
 
