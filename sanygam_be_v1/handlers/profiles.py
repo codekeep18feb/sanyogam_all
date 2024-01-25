@@ -18,7 +18,7 @@ s3 = boto3.client('s3')
 bucket_name = 'dhankosh' 
 object_key = 'profile_images/{id}.jpg' 
 content_type = 'image/jpeg'
-
+from functools import wraps
 
 def update_my_profile(profile_update_data):
     auth_token = request.headers.get("Authorization")
@@ -73,6 +73,52 @@ def profile(id):
         abort(404, f"Profile with id {id} not found")
 
 
+
+def authenticate(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        print('did the wrapper wran')
+        auth_token = request.headers.get("Authorization")
+        print("auth_token", auth_token)
+        if not auth_token:
+            return "Unauthorized", 401
+
+        scheme, token = auth_token.split('Bearer ')
+        decoded = decode_token(token)
+        decoded_data_str = decoded['sub']
+        json_dec_data = json.loads(decoded_data_str)
+        me = User.query.filter_by(email=json_dec_data['email']).first()
+
+        # print('ME.PROFILE', me.profile)
+
+        # You may want to modify the following line depending on your use case
+        
+        # Add 'me' to kwargs
+        kwargs['me'] = me
+        
+        return func(*args, **kwargs)
+
+    return wrapper
+
+
+
+@authenticate
+def all_profiles(*args, **kwargs):
+    p_filter_obj = args[0] if args else kwargs.get('p_filter_obj') #what the hack is going on there??
+    me = kwargs.get('me')
+    # print('logged in me',me)
+    auth_token = request.headers.get("Authorization")
+    print('ME.PROFILE',me.profile)
+    
+    all_profiles_query = Profile.query
+    all_profiles_data = handle_filtering(all_profiles_query,p_filter_obj,me.profile.id)
+    fres = profiles_schema.dump(all_profiles_data)
+    return fres
+
+   
+
+
+
 def myprofile():
     auth_token = request.headers.get("Authorization")
     if not auth_token:
@@ -118,34 +164,6 @@ def handle_filtering(all_profiles_query, p_filter_obj,user_profile_id):
 
     all_profiles = all_profiles_query.all()
     return all_profiles
-
-
-def all_profiles(p_filter_obj):
-    # print("payloadchat",filters)
-    print('p_filter_obdsfj',p_filter_obj)
-
-    auth_token = request.headers.get("Authorization")
-    print("auth_token",auth_token)
-    if not auth_token:
-        
-        return "Unauthorized", 401
-    
-    
-    scheme, token = auth_token.split('Bearer ')    
-    decoded = decode_token(token)
-    decoded_data_str = decoded['sub']
-    json_dec_data = json.loads(decoded_data_str)
-    me = User.query.filter_by(email=json_dec_data['email']).first()
-
-    print('ME.PROFILE',me.profile)
-    
-    all_profiles_query = Profile.query
-    all_profiles_data = handle_filtering(all_profiles_query,p_filter_obj,me.profile.id)
-    fres = profiles_schema.dump(all_profiles_data)
-    return fres
-
-   
-
 
    
     # else:

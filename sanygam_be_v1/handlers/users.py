@@ -194,8 +194,63 @@ def binary_image_to_base62(binary_image):
 #         pass
 #     pass
 
+# from abc import ABC, abstractmethod
+# class ErrorCore(ABC):
+#     @abstractmethod
+#     def add_error(self):
+#         pass
+    
+    
+# class UserValidation(ErrorCore):
+#     def __init__(self, error, status_code):
+#         self.error = error
+#         self.status_code = status_code
+        
+#     def add_error(self, error):
+#         reutrn 
 
-class UserH(object):
+
+class UserValidation(object):
+    def __init__(self, data) -> None:
+        self.data = data
+        
+    def validate_signup(self):
+        print('here is signup_data you can perform validation')
+        if 'email' not in self.data:
+            return 'Email is required for signup'
+        
+        else:
+            if '@' not in self.data['email']:
+                return 'Email Format is wrong!'
+             
+        if 'password' not in self.data:
+            return 'Password is required for signup'
+        else:
+            if len(self.data['password']) < 8:
+                return 'Password length is less than 8'
+                
+        
+        
+        
+    
+    def validate_login(self):
+        print('here is signup_data you can perform validation')
+        return True
+        
+    
+    def validate_forgot_password(self):
+        return True
+        
+    
+        
+    
+    
+ 
+
+
+class UserH(UserValidation):
+    
+    
     def __init__(self,signup_data):    
         self.lname =    signup_data.get("lname")
         self.fname =    signup_data.get("fname", "")
@@ -204,7 +259,9 @@ class UserH(object):
         self.gender =   signup_data.get("gender")  # New field for gender
         self.timestamp_str = signup_data.get("timestamp", get_timestamp())
         self.timestamp = datetime.strptime(self.timestamp_str, '%Y-%m-%d %H:%M:%S')
+        super().__init__(signup_data)
 
+    
     def to_dict(self):
         return {
             "lname": self.lname,
@@ -214,7 +271,7 @@ class UserH(object):
             "gender": self.gender,
             "timestamp": self.timestamp,
         }
-
+    
     def signup(self):
         family_info_default = models.FamilyInformation()
         father_default = models.Father()
@@ -294,18 +351,21 @@ def logout():
 
 
 def signup(signup_data):
-    # if not signup_data.validate()
-        # raise Exception('This is a test exception')
+    if not UserH(signup_data).validate_signup():
+        return "invalid payload", 401
     
     [user,profile] = UserH(signup_data).signup()
     send_email(user.email,"Registration with Sgam", 'Successfully Registrated!')
-    return {
+    
+    return [{
         "id": user.id,
         "fname": user.fname,
         "lname": user.lname,
         "gender": profile.gender,
         "timestamp": user.timestamp,
-    }, 201
+    }], 201
+
+
 
 def save_oauth(data):
     fname = data.get("name").split(" ")[0]

@@ -76,7 +76,7 @@ app.json_encoder = CustomJSONEncoder
 def handle_exception(error):
     response = {
         'error': str(error),
-        'message': 'An unexpected error occurred',
+        'message': 'An unexpected error occurred caught by Centeral Exception handler',
     }
     return jsonify(response), 500
 
