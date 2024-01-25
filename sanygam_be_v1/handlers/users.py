@@ -214,13 +214,18 @@ class UserValidation(object):
     def __init__(self, data) -> None:
         self.data = data
         # self.mandate = mandate
+    
+    @staticmethod
+    def missing_mandate_func(data, mandate):
+        missing_mandate = []
+        for key in mandate:
+            if key not in data.keys():
+                missing_mandate.append(key)
+        return missing_mandate
         
     def validate_signup(self, mandate):
         print('arewehdsfere',mandate,self.data)
-        missing_mandate = []
-        for key in mandate:
-            if key not in self.data.keys():
-                missing_mandate.append(key)
+        missing_mandate = self.missing_mandate_func(self.data, mandate)
         print('missing_mandate for key sgfdghdfsg',missing_mandate, len(missing_mandate) > 0)
 
         if len(missing_mandate) > 0:
@@ -242,11 +247,7 @@ class UserValidation(object):
     
     def validate_login(self, mandate):
         # print('arewehdsfere',mandate,self.data)
-        missing_mandate = []
-        for key in mandate:
-            if key not in self.data.keys():
-                missing_mandate.append(key)
-        print('missing_mandate for key sgfdghdfsg',missing_mandate, len(missing_mandate) > 0)
+        missing_mandate = self.missing_mandate_func(self.data, mandate)
 
         if len(missing_mandate) > 0:
             print('amithere')
