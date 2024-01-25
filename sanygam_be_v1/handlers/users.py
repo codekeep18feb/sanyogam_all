@@ -211,21 +211,28 @@ def binary_image_to_base62(binary_image):
 
 
 class UserValidation(object):
-    def __init__(self, data) -> None:
+    def __init__(self, data, mandate) -> None:
         self.data = data
+        self.mandate = mandate
         
     def validate_signup(self):
-        print('here is signup_data you can perform validation')
-        if 'email' not in self.data:
-            return 'Email is required for signup'
+        print('arewehdsfere',self.mandate,self.data)
+        missing_mandate = []
+        for key in self.mandate:
+            if key not in self.data.keys():
+                missing_mandate.append(key)
+        print('missing_mandate for key sgfdghdfsg',missing_mandate, len(missing_mandate) > 0)
+
+        if len(missing_mandate) > 0:
+            print('amithere')
+            # return 'missing mandates'
+            return f'missing_mandate keys - {missing_mandate}'
+        
         
         else:
             if '@' not in self.data['email']:
                 return 'Email Format is wrong!'
-             
-        if 'password' not in self.data:
-            return 'Password is required for signup'
-        else:
+
             if len(self.data['password']) < 8:
                 return 'Password length is less than 8'
                 
@@ -259,7 +266,7 @@ class UserH(UserValidation):
         self.gender =   signup_data.get("gender")  # New field for gender
         self.timestamp_str = signup_data.get("timestamp", get_timestamp())
         self.timestamp = datetime.strptime(self.timestamp_str, '%Y-%m-%d %H:%M:%S')
-        super().__init__(signup_data)
+        super().__init__(signup_data, ['fname','lname',"email","password","gender"])
 
     
     def to_dict(self):
@@ -351,8 +358,10 @@ def logout():
 
 
 def signup(signup_data):
-    if not UserH(signup_data).validate_signup():
-        return "invalid payload", 401
+    res = UserH(signup_data).validate_signup()
+    print('what is res',res)
+    if res:
+        return f"invalid payload :: {res}", 401
     
     [user,profile] = UserH(signup_data).signup()
     send_email(user.email,"Registration with Sgam", 'Successfully Registrated!')
