@@ -167,32 +167,32 @@ def binary_image_to_base62(binary_image):
 
 
 
-class ModelActionHandler():
-    def __init__(self,model):
-        self.model = model
+# class ModelActionHandler():
+#     def __init__(self,model):
+#         self.model = model
         
-    #CRUD ON any model instance???? can you do it??
+#     #CRUD ON any model instance???? can you do it??
     
     
-    # def get(self,id):
-    #     if id:
-    #         user = self.model(id)
-    #         return user
-    #     pass
+#     # def get(self,id):
+#     #     if id:
+#     #         user = self.model(id)
+#     #         return user
+#     #     pass
     
-    def add(self,data):
-        data = data.to_dict()
-        user = self.model().create(data)
-        db.session.add(user)
+#     def add(self,data):
+#         data = data.to_dict()
+#         user = self.model().create(data)
+#         db.session.add(user)
         
-        return user
+#         return user
     
-    def update(self):
-        pass
+#     def update(self):
+#         pass
     
-    def delete(self):
-        pass
-    pass
+#     def delete(self):
+#         pass
+#     pass
 
 
 class UserH(object):
@@ -214,7 +214,6 @@ class UserH(object):
             "gender": self.gender,
             "timestamp": self.timestamp,
         }
-
 
     def signup(self):
         family_info_default = models.FamilyInformation()
