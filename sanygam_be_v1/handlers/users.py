@@ -276,15 +276,16 @@ class UserValidation(object):
 class UserH(UserValidation):
     
     
-    def __init__(self, signup_data):    
-        self.lname =    signup_data.get("lname")
-        self.fname =    signup_data.get("fname", "")
-        self.email =    signup_data.get("email", "")
-        self.password=  signup_data.get("password", "")
-        self.gender =   signup_data.get("gender")  # New field for gender
+    def __init__(self, signup_data=None):    
+        self.lname =         signup_data.get("lname")
+        self.fname =         signup_data.get("fname", "")
+        self.email =         signup_data.get("email", "")
+        self.password=       signup_data.get("password", "")
+        self.gender =        signup_data.get("gender")  # New field for gender
         self.timestamp_str = signup_data.get("timestamp", get_timestamp())
         self.timestamp = datetime.strptime(self.timestamp_str, '%Y-%m-%d %H:%M:%S')
-        super().__init__(signup_data)
+        if signup_data:
+            super().__init__(signup_data)
 
     
     def to_dict(self):
@@ -311,6 +312,25 @@ class UserH(UserValidation):
         db.session.add(profile)
         db.session.commit()
         return [user,profile]
+
+    
+    def me(self,email):
+        
+        user = models.User().get(email)
+        # user = models.User.query.filter_by(email=json_dec_data['email']).first()
+        # base_64_str = binary_image_to_base62(user.profile.image)
+        # print("userme",base_64_str)
+        if user:
+            user_dict = {
+                "id": user.id,
+                "fname": user.fname,
+                "lname": user.lname,
+                "image":user.profile.image
+                # "timestamp": user.timestamp.strftime('%Y-%m-%d %H:%M:%S'),  # Format timestamp as string
+            }
+            return user_dict
+        
+
 
     def login(self):
         email = self.email
@@ -344,9 +364,10 @@ def me():
     decoded = decode_token(token)
     decoded_data_str = decoded['sub']
     json_dec_data = json.loads(decoded_data_str)
-    user = models.User.query.filter_by(email=json_dec_data['email']).first()
+    # user = models.User.query.filter_by(email=json_dec_data['email']).first()
     # base_64_str = binary_image_to_base62(user.profile.image)
     # print("userme",base_64_str)
+    user = UserH().me(json_dec_data['email'])
     if user:
         user_dict = {
             "id": user.id,
@@ -359,38 +380,6 @@ def me():
     else:
         abort(404, "No such user found")
 
-
-# def login(user):
-#     email = user.get("email", "")
-#     password = user.get("password", "")
-#     """
-
-#     generate_token(email)
-    
-#     """
-#     print("what is it",email)
-#     user = models.User.query.filter_by(email=email,password=password).first()
-#     if not user:
-#         return "No Such User Found!", 401
-#     # profile = user.profile if user else None
-#     user.online=True
-#     db.session.add(user)
-#     db.session.commit()
-#     print("Logged in User and profile",user)
-
-    # return {
-    #     "token": generate_token({"email":email}),
-    # }, 201
-
-def login(user):
-    res = UserH(user).validate_login(["email","password"])
-    print('what is res logindsf',res, user)
-    if res:
-        return f"invalid payload :: {res}", 401
-    
-    res = UserH(user).login()
-    print('adfasdfdgsfgf',res)
-    return res, 201
 
 
 def logout():
@@ -407,25 +396,6 @@ def logout():
     db.session.add(user)
     db.session.commit()
     return "loggedout", 201
-
-
-def signup(signup_data):
-    res = UserH(signup_data).validate_signup(['fname','lname',"email","password","gender"])
-    print('what is res',res)
-    if res:
-        return f"invalid payload :: {res}", 401
-    
-    [user,profile] = UserH(signup_data).signup()
-    send_email(user.email,"Registration with Sgam", 'Successfully Registrated!')
-    
-    return [{
-        "id": user.id,
-        "fname": user.fname,
-        "lname": user.lname,
-        "gender": profile.gender,
-        "timestamp": user.timestamp,
-    }], 201
-
 
 
 def save_oauth(data):
@@ -456,4 +426,37 @@ def save_oauth(data):
         # "gender": profile.gender,
         # "timestamp": user.timestamp,
     }, 201
+
+
+
+
+def login(user):
+    res = UserH(user).validate_login(["email","password"])
+    print('what is res logindsf',res, user)
+    if res:
+        return f"invalid payload :: {res}", 401
+    
+    res = UserH(user).login()
+    print('adfasdfdgsfgf',res)
+    return res, 201
+
+
+
+def signup(signup_data):
+    res = UserH(signup_data).validate_signup(['fname','lname',"email","password","gender"])
+    print('what is res',res)
+    if res:
+        return f"invalid payload :: {res}", 401
+    
+    [user,profile] = UserH(signup_data).signup()
+    send_email(user.email,"Registration with Sgam", 'Successfully Registrated!')
+    
+    return [{
+        "id": user.id,
+        "fname": user.fname,
+        "lname": user.lname,
+        "gender": profile.gender,
+        "timestamp": user.timestamp,
+    }], 201
+
 

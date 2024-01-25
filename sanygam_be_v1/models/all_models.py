@@ -84,8 +84,10 @@ class User(db.Model):
         return user
     
     
-    def get(self, id): #we might wanna make it static :) i think we are arriving now :::::))))))))))
-        user = User(id=id)
+    def get(self, email): #we might wanna make it static :) i think we are arriving now :::::))))))))))
+        # user = User(email=email)
+        user = User.query.filter_by(email=email).first()
+        
         return user
     
     

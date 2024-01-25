@@ -68,12 +68,16 @@ socketio = SocketIO(cors_allowed_origins="*")
 socketio.init_app(connex_app.app)
 
 # ... (other configurations)
+import logging
+logging.basicConfig(level=logging.DEBUG)
 
 app = connex_app.app
 app.json_encoder = CustomJSONEncoder
 
 @app.errorhandler(Exception)
 def handle_exception(error):
+    logging.exception("An unexpected error occurred caught by Central Exception handler")
+
     response = {
         'error': str(error),
         'message': 'An unexpected error occurred caught by Centeral Exception handler',
