@@ -198,10 +198,6 @@ class UserValidation(object):
             if len(self.data['password']) < 8:
                 return 'Password length is less than 8'
                 
-        
-        
-        
-    
     def validate_login(self, mandate):
         # print('arewehdsfere',mandate,self.data)
         missing_mandate = self.missing_mandate_func(self.data, mandate)
@@ -219,17 +215,10 @@ class UserValidation(object):
             # if len(self.data['password']) < 8:
             #     return 'Password length is less than 8'
                 
-    
     def validate_forgot_password(self):
         return True
         
-    
-        
-    
-    
- 
-
-
+     
 class UserH(UserValidation):
     
     
@@ -311,8 +300,6 @@ class UserH(UserValidation):
             "token": generate_token({"email":email}),
         }
         
-        
-
 def me():
     auth_token = request.headers.get("Authorization")
     if not auth_token:    
@@ -336,8 +323,6 @@ def me():
     else:
         abort(404, "No such user found")
 
-
-
 def logout():
     auth_token = request.headers.get("Authorization")    
     if not auth_token:
@@ -352,7 +337,6 @@ def logout():
     db.session.add(user)
     db.session.commit()
     return "loggedout", 201
-
 
 def save_oauth(data):
     fname = data.get("name").split(" ")[0]
@@ -383,9 +367,6 @@ def save_oauth(data):
         # "timestamp": user.timestamp,
     }, 201
 
-
-
-
 def login(user):
     res = UserH(user).validate_login(["email","password"])
     print('what is res logindsf',res, user)
@@ -395,8 +376,6 @@ def login(user):
     res = UserH(user).login()
     print('adfasdfdgsfgf',res)
     return res, 201
-
-
 
 def signup(signup_data):
     res = UserH(signup_data).validate_signup(['fname','lname',"email","password","gender"])
