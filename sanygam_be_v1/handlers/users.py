@@ -211,14 +211,14 @@ def binary_image_to_base62(binary_image):
 
 
 class UserValidation(object):
-    def __init__(self, data, mandate) -> None:
+    def __init__(self, data) -> None:
         self.data = data
-        self.mandate = mandate
+        # self.mandate = mandate
         
-    def validate_signup(self):
-        print('arewehdsfere',self.mandate,self.data)
+    def validate_signup(self, mandate):
+        print('arewehdsfere',mandate,self.data)
         missing_mandate = []
-        for key in self.mandate:
+        for key in mandate:
             if key not in self.data.keys():
                 missing_mandate.append(key)
         print('missing_mandate for key sgfdghdfsg',missing_mandate, len(missing_mandate) > 0)
@@ -240,10 +240,27 @@ class UserValidation(object):
         
         
     
-    def validate_login(self):
-        print('here is signup_data you can perform validation')
-        return True
+    def validate_login(self, mandate):
+        # print('arewehdsfere',mandate,self.data)
+        missing_mandate = []
+        for key in mandate:
+            if key not in self.data.keys():
+                missing_mandate.append(key)
+        print('missing_mandate for key sgfdghdfsg',missing_mandate, len(missing_mandate) > 0)
+
+        if len(missing_mandate) > 0:
+            print('amithere')
+            # return 'missing mandates'
+            return f'missing_mandate keys - {missing_mandate}'
         
+        
+        else:
+            if '@' not in self.data['email']:
+                return 'Email Format is wrong!'
+
+            # if len(self.data['password']) < 8:
+            #     return 'Password length is less than 8'
+                
     
     def validate_forgot_password(self):
         return True
@@ -258,7 +275,7 @@ class UserValidation(object):
 class UserH(UserValidation):
     
     
-    def __init__(self,signup_data):    
+    def __init__(self, signup_data):    
         self.lname =    signup_data.get("lname")
         self.fname =    signup_data.get("fname", "")
         self.email =    signup_data.get("email", "")
@@ -266,7 +283,7 @@ class UserH(UserValidation):
         self.gender =   signup_data.get("gender")  # New field for gender
         self.timestamp_str = signup_data.get("timestamp", get_timestamp())
         self.timestamp = datetime.strptime(self.timestamp_str, '%Y-%m-%d %H:%M:%S')
-        super().__init__(signup_data, ['fname','lname',"email","password","gender"])
+        super().__init__(signup_data)
 
     
     def to_dict(self):
@@ -294,6 +311,30 @@ class UserH(UserValidation):
         db.session.commit()
         return [user,profile]
 
+    def login(self):
+        email = self.email
+        password = self.password
+        """
+
+        generate_token(email)
+        
+        """
+        print("what is it",email)
+        user = models.User.query.filter_by(email=email,password=password).first()
+        if not user:
+            return "No Such User Found!", 401
+        # profile = user.profile if user else None
+        user.online=True
+        db.session.add(user)
+        db.session.commit()
+        print("Logged in User and profile",user)
+
+        return {
+            "token": generate_token({"email":email}),
+        }
+        
+        
+
 def me():
     auth_token = request.headers.get("Authorization")
     if not auth_token:    
@@ -318,27 +359,37 @@ def me():
         abort(404, "No such user found")
 
 
-def login(user):
-    email = user.get("email", "")
-    password = user.get("password", "")
-    """
+# def login(user):
+#     email = user.get("email", "")
+#     password = user.get("password", "")
+#     """
 
-    generate_token(email)
+#     generate_token(email)
     
-    """
-    print("what is it",email)
-    user = models.User.query.filter_by(email=email,password=password).first()
-    if not user:
-        return "No Such User Found!", 401
-    # profile = user.profile if user else None
-    user.online=True
-    db.session.add(user)
-    db.session.commit()
-    print("Logged in User and profile",user)
+#     """
+#     print("what is it",email)
+#     user = models.User.query.filter_by(email=email,password=password).first()
+#     if not user:
+#         return "No Such User Found!", 401
+#     # profile = user.profile if user else None
+#     user.online=True
+#     db.session.add(user)
+#     db.session.commit()
+#     print("Logged in User and profile",user)
 
-    return {
-        "token": generate_token({"email":email}),
-    }, 201
+    # return {
+    #     "token": generate_token({"email":email}),
+    # }, 201
+
+def login(user):
+    res = UserH(user).validate_login(["email","password"])
+    print('what is res logindsf',res, user)
+    if res:
+        return f"invalid payload :: {res}", 401
+    
+    res = UserH(user).login()
+    print('adfasdfdgsfgf',res)
+    return res, 201
 
 
 def logout():
@@ -358,7 +409,7 @@ def logout():
 
 
 def signup(signup_data):
-    res = UserH(signup_data).validate_signup()
+    res = UserH(signup_data).validate_signup(['fname','lname',"email","password","gender"])
     print('what is res',res)
     if res:
         return f"invalid payload :: {res}", 401
