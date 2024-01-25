@@ -167,49 +167,6 @@ def binary_image_to_base62(binary_image):
 
 
 
-# class ModelActionHandler():
-#     def __init__(self,model):
-#         self.model = model
-        
-#     #CRUD ON any model instance???? can you do it??
-    
-    
-#     # def get(self,id):
-#     #     if id:
-#     #         user = self.model(id)
-#     #         return user
-#     #     pass
-    
-#     def add(self,data):
-#         data = data.to_dict()
-#         user = self.model().create(data)
-#         db.session.add(user)
-        
-#         return user
-    
-#     def update(self):
-#         pass
-    
-#     def delete(self):
-#         pass
-#     pass
-
-# from abc import ABC, abstractmethod
-# class ErrorCore(ABC):
-#     @abstractmethod
-#     def add_error(self):
-#         pass
-    
-    
-# class UserValidation(ErrorCore):
-#     def __init__(self, error, status_code):
-#         self.error = error
-#         self.status_code = status_code
-        
-#     def add_error(self, error):
-#         reutrn 
-
-
 class UserValidation(object):
     def __init__(self, data) -> None:
         self.data = data
@@ -276,7 +233,7 @@ class UserValidation(object):
 class UserH(UserValidation):
     
     
-    def __init__(self, signup_data=None):    
+    def __init__(self, signup_data):    
         self.lname =         signup_data.get("lname")
         self.fname =         signup_data.get("fname", "")
         self.email =         signup_data.get("email", "")
@@ -364,7 +321,6 @@ def me():
     decoded = decode_token(token)
     decoded_data_str = decoded['sub']
     json_dec_data = json.loads(decoded_data_str)
-    # user = models.User.query.filter_by(email=json_dec_data['email']).first()
     # base_64_str = binary_image_to_base62(user.profile.image)
     # print("userme",base_64_str)
     user = UserH().me(json_dec_data['email'])

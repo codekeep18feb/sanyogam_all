@@ -1,3 +1,5 @@
+# ... (other configurations)
+import logging
 import json
 import jwt
 import pathlib
@@ -12,6 +14,7 @@ from flask import jsonify
 
 from flask.json import JSONEncoder
 from enum import Enum
+logging.basicConfig(level=logging.DEBUG)
 
 
 class CustomJSONEncoder(JSONEncoder):
@@ -67,16 +70,14 @@ CORS(connex_app.app, resources={r"/api/*": {"origins": ["http://192.168.1.13:300
 socketio = SocketIO(cors_allowed_origins="*")
 socketio.init_app(connex_app.app)
 
-# ... (other configurations)
-import logging
-logging.basicConfig(level=logging.DEBUG)
+
 
 app = connex_app.app
 app.json_encoder = CustomJSONEncoder
 
 @app.errorhandler(Exception)
 def handle_exception(error):
-    logging.exception("An unexpected error occurred caught by Central Exception handler")
+    logging.exception("An unexpected erxxcvror occurred caught by Central Exception handler")
 
     response = {
         'error': str(error),

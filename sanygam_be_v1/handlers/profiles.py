@@ -7,6 +7,7 @@ from models import Profile,ProfileSchema, profiles_schema
 from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity
 from models import UserRequests, UserRequestsSchema, OnlineUsersSchema, ProfileSchema, FamilyInformation
 from sqlalchemy import or_
+from .common import utils
 
 from datetime import datetime
 import boto3
@@ -74,35 +75,8 @@ def profile(id):
 
 
 
-def authenticate(func):
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        print('did the wrapper wran')
-        auth_token = request.headers.get("Authorization")
-        print("auth_token", auth_token)
-        if not auth_token:
-            return "Unauthorized", 401
 
-        scheme, token = auth_token.split('Bearer ')
-        decoded = decode_token(token)
-        decoded_data_str = decoded['sub']
-        json_dec_data = json.loads(decoded_data_str)
-        me = User.query.filter_by(email=json_dec_data['email']).first()
-
-        # print('ME.PROFILE', me.profile)
-
-        # You may want to modify the following line depending on your use case
-        
-        # Add 'me' to kwargs
-        kwargs['me'] = me
-        
-        return func(*args, **kwargs)
-
-    return wrapper
-
-
-
-@authenticate
+@utils.authenticate
 def all_profiles(*args, **kwargs):
     p_filter_obj = args[0] if args else kwargs.get('p_filter_obj') #what the hack is going on there??
     me = kwargs.get('me')
