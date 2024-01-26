@@ -9,6 +9,7 @@ from config import db, decode_token
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 # from models import MyEnum  # Import the Enum class
+from .common import utils
 
 # from models import *
 import models
@@ -276,6 +277,13 @@ class UserH(UserValidation):
             }
             return user_dict
         
+    def logout(self, email):
+        user = models.User().get(email)
+        # user = models.User.query.filter_by(email=json_dec_data['email']).first()
+        user.online=False
+        db.session.add(user)
+        db.session.commit()
+        
 
 
     def login(self):
@@ -299,43 +307,33 @@ class UserH(UserValidation):
         return {
             "token": generate_token({"email":email}),
         }
-        
-def me():
-    auth_token = request.headers.get("Authorization")
-    if not auth_token:    
-        return "Unauthorized", 401
-    scheme, token = auth_token.split('Bearer ')    
-    decoded = decode_token(token)
-    decoded_data_str = decoded['sub']
-    json_dec_data = json.loads(decoded_data_str)
-    # base_64_str = binary_image_to_base62(user.profile.image)
-    # print("userme",base_64_str)
-    user = UserH().me(json_dec_data['email'])
-    if user:
+
+@utils.authenticate        
+def me(**kwargs):
+    me = kwargs.get('me')
+    if me:
         user_dict = {
-            "id": user.id,
-            "fname": user.fname,
-            "lname": user.lname,
-            "image":user.profile.image
+            "id": me.id,
+            "fname": me.fname,
+            "lname": me.lname,
+            "image":me.profile.image
             # "timestamp": user.timestamp.strftime('%Y-%m-%d %H:%M:%S'),  # Format timestamp as string
         }
         return user_dict
     else:
         abort(404, "No such user found")
 
-def logout():
-    auth_token = request.headers.get("Authorization")    
-    if not auth_token:
-        return "Unauthorized", 401
-    scheme, token = auth_token.split('Bearer ')    
-    decoded = decode_token(token)
-    decoded_data_str = decoded['sub']
-    json_dec_data = json.loads(decoded_data_str)
-    user = models.User.query.filter_by(email=json_dec_data['email']).first()
-    # profile = user.profile if user else None
-    user.online=False
-    db.session.add(user)
-    db.session.commit()
+def logout(**kwargs):
+    me = kwargs.get('me')
+    
+    # auth_token = request.headers.get("Authorization")    
+    # if not auth_token:
+    #     return "Unauthorized", 401
+    # scheme, token = auth_token.split('Bearer ')    
+    # decoded = decode_token(token)
+    # decoded_data_str = decoded['sub']
+    # json_dec_data = json.loads(decoded_data_str)
+    UserH().logout(me.email)
     return "loggedout", 201
 
 def save_oauth(data):
@@ -379,7 +377,6 @@ def login(user):
 
 def signup(signup_data):
     res = UserH(signup_data).validate_signup(['fname','lname',"email","password","gender"])
-    print('what is res',res)
     if res:
         return f"invalid payload :: {res}", 401
     

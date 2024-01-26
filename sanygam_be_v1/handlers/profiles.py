@@ -21,20 +21,8 @@ object_key = 'profile_images/{id}.jpg'
 content_type = 'image/jpeg'
 from functools import wraps
 
-def update_my_profile(profile_update_data):
-    auth_token = request.headers.get("Authorization")
-    if not auth_token:
-        return "Unauthorized", 401
-    
-    
-    scheme, token = auth_token.split('Bearer ')    
-    decoded = decode_token(token)
-    decoded_data_str = decoded['sub']
-    json_dec_data = json.loads(decoded_data_str)
-    me = User.query.filter_by(email=json_dec_data['email']).first()
-    
-
-    # image_data = request.files.get('image')
+def update_my_profile(profile_update_data, **kwargs):
+    me = kwargs.get('me')
     gender =      profile_update_data.get('gender',me.profile.gender)
     fname =       profile_update_data.get('fname',me.profile.user.fname)
     lname =       profile_update_data.get('lname',me.profile.user.lname)
@@ -74,15 +62,12 @@ def profile(id):
         abort(404, f"Profile with id {id} not found")
 
 
-
-
 @utils.authenticate
-def all_profiles(*args, **kwargs):
-    p_filter_obj = args[0] if args else kwargs.get('p_filter_obj') #what the hack is going on there??
+def all_profiles(p_filter_obj, **kwargs):
     me = kwargs.get('me')
-    # print('logged in me',me)
-    auth_token = request.headers.get("Authorization")
-    print('ME.PROFILE',me.profile)
+    print('logged idn me',me)
+    # auth_token = request.headers.get("Authorization")
+    print('ME.PROFILE', me.profile)
     
     all_profiles_query = Profile.query
     all_profiles_data = handle_filtering(all_profiles_query,p_filter_obj,me.profile.id)
@@ -90,21 +75,9 @@ def all_profiles(*args, **kwargs):
     return fres
 
    
-
-
-
-def myprofile():
-    auth_token = request.headers.get("Authorization")
-    if not auth_token:
-        
-        return "Unauthorized", 401
-    
-    
-    scheme, token = auth_token.split('Bearer ')    
-    decoded = decode_token(token)
-    decoded_data_str = decoded['sub']
-    json_dec_data = json.loads(decoded_data_str)
-    me = User.query.filter_by(email=json_dec_data['email']).first()
+def myprofile(**kwargs):
+    me = kwargs.get('me')
+    me = User.query.filter_by(email=me.email).first()
     print('HEREmyprofile',me.profile)
     
     # profile = Profile.query.filter_by(user_id=me.id)
@@ -143,21 +116,12 @@ def handle_filtering(all_profiles_query, p_filter_obj,user_profile_id):
     # else:
     #     abort(500, f"internal server error")
 
-def read_all_profiles_old():
-    print("payloadchat")
 
-    auth_token = request.headers.get("Authorization")
-    print("auth_token",auth_token)
-    if not auth_token:
-        
-        return "Unauthorized", 401
+def read_all_profiles_old(**kwargs):
+    print("payloadchat")
+    me = kwargs.get('me')
     
-    
-    scheme, token = auth_token.split('Bearer ')    
-    decoded = decode_token(token)
-    decoded_data_str = decoded['sub']
-    json_dec_data = json.loads(decoded_data_str)
-    me = User.query.filter_by(email=json_dec_data['email']).first()
+    me = User.query.filter_by(email=me.email).first()
     combined_query = UserRequests.query.filter(
     or_(UserRequests.frm_user == me.id, UserRequests.to_user == me.id),
     UserRequests.status == "ACCEPTED"
@@ -200,65 +164,15 @@ def read_all_profiles_old():
         abort(500, f"internal server error")
 
 
-
 def read_all_profiles_v1():
     profiles = Profile.query.all()
     profile_schema = ProfileSchema(many=True)
     return profile_schema.dump(profiles)
 
 
-# def read_all():
-#     print("payloadchat")
-
-#     auth_token = request.headers.get("Authorization")
-#     print("auth_token",auth_token)
-#     if not auth_token:
-        
-#         return "Unauthorized", 401
+def read_online_circle(**kwargs):
+    me = kwargs.get('me')
     
-    
-#     scheme, token = auth_token.split('Bearer ')    
-#     decoded = decode_token(token)
-#     decoded_data_str = decoded['sub']
-#     json_dec_data = json.loads(decoded_data_str)
-#     me = User.query.filter_by(email=json_dec_data['email']).first()
-#     combined_query = UserRequests.query.filter(
-#     or_(UserRequests.frm_user == me.id, UserRequests.to_user == me.id),
-#     UserRequests.status == "ACCEPTED"
-#     )
-
-#     # Execute the query to get the results
-#     results = combined_query.all()
-#     # send_by_me = UserRequests.query.filter_by(frm_user=me.id, status="ACCEPTED")
-#     # sent_to_me = UserRequests.query.filter_by(to_user=me.id, status="ACCEPTED")
-#     print("sent_to_me",results)
-#     if not results:
-#         abort(400, f"no request exist {results}")
-
-
-#     # print("to_user_request",existing_req.status)
-#     elif results:
-#         user_req_schema = UserRequestsSchema(many=True)
-#         return user_req_schema.dump(results)
-#     else:
-#         abort(500, f"internal server error")
-
-
-def read_online_circle():
-    print("payloadchat")
-
-    auth_token = request.headers.get("Authorization")
-    print("auth_token",auth_token)
-    if not auth_token:
-        
-        return "Unauthorized", 401
-    
-    
-    scheme, token = auth_token.split('Bearer ')    
-    decoded = decode_token(token)
-    decoded_data_str = decoded['sub']
-    json_dec_data = json.loads(decoded_data_str)
-    me = User.query.filter_by(email=json_dec_data['email']).first()
     combined_query = UserRequests.query.filter(
     or_(UserRequests.frm_user == me.id, UserRequests.to_user == me.id),
     UserRequests.status == "ACCEPTED"
@@ -299,6 +213,7 @@ def read_online_circle():
     else:
         abort(500, f"internal server error")
 
+
 def my_decorator(param):
     def wrapper(func):
         def inner(*args, **kwargs):
@@ -309,6 +224,7 @@ def my_decorator(param):
             return result
         return inner
     return wrapper
+
 
 def get_timestamp():
     return datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
