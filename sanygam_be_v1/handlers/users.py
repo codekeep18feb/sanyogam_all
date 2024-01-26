@@ -219,14 +219,15 @@ class ValidationMixin:
 
 class UserH(UserMixin, ValidationMixin):
     def __init__(self, data):
-        super().__init__(data)
-        self.lname = data.get("lname")
-        self.fname = data.get("fname", "")
-        self.email = data.get("email", "")
-        self.password = data.get("password", "")
-        self.gender = data.get("gender")
-        self.timestamp_str = data.get("timestamp", get_timestamp())
-        self.timestamp = datetime.strptime(self.timestamp_str, '%Y-%m-%d %H:%M:%S')
+        if data:
+            super().__init__(data)
+            self.lname = data.get("lname")
+            self.fname = data.get("fname", "")
+            self.email = data.get("email", "")
+            self.password = data.get("password", "")
+            self.gender = data.get("gender")
+            self.timestamp_str = data.get("timestamp", get_timestamp())
+            self.timestamp = datetime.strptime(self.timestamp_str, '%Y-%m-%d %H:%M:%S')
 
     def to_dict(self):
         return {
@@ -255,6 +256,7 @@ class UserH(UserMixin, ValidationMixin):
 
     def me(self):
         user = self.get_user(self.email)
+        print('arew3ehere',user)
         if user:
             user_dict = {
                 "id": user.id,
@@ -283,8 +285,14 @@ class UserH(UserMixin, ValidationMixin):
 # Route functions
 @utils.authenticate
 def me(**kwargs):
-    return kwargs
+    me = kwargs.get('me')
+    # res = UserH(None).me()
+    # return res
+    
+    profile_schema = UserSchema()
+    return profile_schema.dump(me)  
 
+@utils.authenticate
 def logout(**kwargs):
     me = kwargs.get('me')
     UserH(me).logout()
