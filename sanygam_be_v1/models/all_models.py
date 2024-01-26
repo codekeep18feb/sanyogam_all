@@ -8,9 +8,6 @@ from .profile import Profile, FamilyInformation, Father
 from .requests import ChatHistory, OnlineStatusEnumField, UserRequests, RTCUserInfo, ChatBriefRec
 
 
-
-
-
 # Add an event listener to the UserRequests table for inserts
 @event.listens_for(User, 'after_insert')
 def after_user_insert(mapper, connection, target):
@@ -63,25 +60,6 @@ class ProfileSchema(ma.SQLAlchemyAutoSchema):
         sqla_session = db.session
         include_relationships = True
 
-user_schema = UserSchema()
-users_schema = UserSchema(many=True)
-
-family_information_schema = FamilyInformationSchema()
-family_informations_schema = FamilyInformationSchema(many=True)
-
-
-chat_brief_schema = ChatBriefRecSchema()
-chats_brief_schema = ChatBriefRecSchema(many=True)
-
-
-profile_schema = ProfileSchema()
-profiles_schema = ProfileSchema(many=True)
-
-
-father_schema = FatherSchema()
-fathers_schema = FatherSchema(many=True)
-
-
 class ChatHistorySchema(ma.SQLAlchemyAutoSchema):
     status = fields.String(attribute='status.value')  # Use the 'value' attribute of the Enum
     class Meta:
@@ -89,13 +67,6 @@ class ChatHistorySchema(ma.SQLAlchemyAutoSchema):
         load_instance = True
         sqla_session = db.session
         include_relationships = True
-
-
-chat_history_schema = ChatHistorySchema()
-chat_histories_schema = ChatHistorySchema(many=True)
-
-
-
 
 
 
@@ -110,8 +81,6 @@ class UserRequestsSchema(ma.SQLAlchemyAutoSchema):
         sqla_session = db.session
         include_relationships = True
         # exclude = ('timestamp',)  # Exclude the 'timestamp' field
-
-
 
 
 class OnlineUsersSchema(ma.SQLAlchemyAutoSchema):
@@ -137,20 +106,43 @@ class OnlineUsersSchema(ma.SQLAlchemyAutoSchema):
         exclude = ('timestamp','status','frm_user','to_user')  # Exclude the 'timestamp' field
 
 
-user_request_schema = UserRequestsSchema()
-user_requests_schema = UserRequestsSchema(many=True)
-
-
-
-
-
-
 class RTCUserInfoSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = RTCUserInfo
         load_instance = True
         sqla_session = db.session
         include_relationships = True
+
+
+
+user_schema = UserSchema()
+users_schema = UserSchema(many=True)
+
+family_information_schema = FamilyInformationSchema()
+family_informations_schema = FamilyInformationSchema(many=True)
+
+
+chat_brief_schema = ChatBriefRecSchema()
+chats_brief_schema = ChatBriefRecSchema(many=True)
+
+
+profile_schema = ProfileSchema()
+profiles_schema = ProfileSchema(many=True)
+
+
+father_schema = FatherSchema()
+fathers_schema = FatherSchema(many=True)
+
+
+
+chat_history_schema = ChatHistorySchema()
+chat_histories_schema = ChatHistorySchema(many=True)
+
+
+
+user_request_schema = UserRequestsSchema()
+user_requests_schema = UserRequestsSchema(many=True)
+
 
 
 rtc_info_schema = RTCUserInfoSchema()
