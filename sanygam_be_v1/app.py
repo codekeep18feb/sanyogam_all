@@ -49,32 +49,10 @@ def handle_message(*args):
 #     print('AREWEREWR')
 #     # Emit the message to the specific room (between two peers)
 #     socketio.emit('receive_message', {'message': data['message']}, room=room)
-    
-@socketio.on('send_message')
-def handle_send_message(data):
-    # Extract the peer ID from the data
-    peer_id = data.get('to')
 
-    # Join a room based on the peer ID
-    room = f'{peer_id}' #"hardcoded"#f"{request.sid}-{peer_id}"
-    join_room(room)
-    print('AREWEREWR')
-    # Emit the message to the specific room (between two peers)
-    socketio.emit('receive_message', {'message': data['message']}, room=room)
-
-async def make_api_call():
-    api_url = 'https://jsonplaceholder.typicode.com/todos/1'
-
-    async with aiohttp.ClientSession() as session:
-        async with session.get(api_url) as response:
-            # Assuming the API returns JSON data
-            api_data = await response.json()
-
-    return api_data
 
 import asyncio
 import threading
-
 
 s_pool = []
 
@@ -88,81 +66,77 @@ async def make_api_call():
 
     return api_data
 
-def async_emit_signal_pool(auth_token, message, with_userid):
-    with app.app_context():
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
+async def async_emit_signal_pool(auth_token, message, with_userid):
+    # Placeholder for any async operation
+    api_result = await make_api_call()
 
-        # Placeholder for any async operation
-        api_result = loop.run_until_complete(make_api_call())
+    # Process the API call result if needed
+    print("API Call Result:", api_result)
 
-        # Process the API call result if needed
-        print("API Call Result:", api_result)
+    print('check if msg is string only', message, type(message))
+    if not auth_token:
+        print('MARK1')
+        return "Unauthorized", 401
 
-        print('check if msg is string only', message, type(message))
-        if not auth_token:
-            print('MARK1')
-            return "Unauthorized", 401
+    scheme, token = auth_token.split('Bearer ')
+    decoded = decode_token(token)
+    decoded_data_str = decoded['sub']
+    json_dec_data = json.loads(decoded_data_str)
+    me = User.query.filter_by(email=json_dec_data['email']).first()
+    if message:
+        print("COPY MESSAGE", message, type(message))
+        p_payload = json.loads(message)
+        print('prepared p_payload', p_payload, type(p_payload), with_userid)
+        if "action" in p_payload:
+            action = p_payload.pop("action", 'ADD')
+            initator_room_str = f"{with_userid}_{me.id}"
+            p_payload['id'] = initator_room_str
+            if action == 'ADD':
+                payload = {
+                    'sdp': p_payload['sdp'],
+                    'answer': None,
+                    'initiator': me.id,
+                    'responder': with_userid,
+                    'id': p_payload['id']
+                }
+                print('prepared payload', payload)
+                s_pool.append(payload)
 
-        scheme, token = auth_token.split('Bearer ')
-        decoded = decode_token(token)
-        decoded_data_str = decoded['sub']
-        json_dec_data = json.loads(decoded_data_str)
-        me = User.query.filter_by(email=json_dec_data['email']).first()
-        if message:
-            print("COPY MESSAGE", message, type(message))
-            p_payload = json.loads(message)
-            print('prepared p_payload', p_payload, type(p_payload), with_userid)
-            if "action" in p_payload:
-                action = p_payload.pop("action", 'ADD')
-                initator_room_str = f"{with_userid}_{me.id}"
-                p_payload['id'] = initator_room_str
-                if action == 'ADD':
-                    payload = {
-                        'sdp': p_payload['sdp'],
-                        'answer': None,
-                        'initiator': me.id,
-                        'responder': with_userid,
-                        'id': p_payload['id']
-                    }
-                    print('prepared payload', payload)
-                    s_pool.append(payload)
+            elif action == 'UPDATE':
+                print('mark1noww')
+                resp_room_str = f"{me.id}_{with_userid}"
+                p_payload['id'] = resp_room_str
 
-                elif action == 'UPDATE':
-                    print('mark1noww')
-                    resp_room_str = f"{me.id}_{with_userid}"
-                    p_payload['id'] = resp_room_str
+                payload = {
+                    'answer': p_payload['answer'],
+                    'id': p_payload['id']
+                }
 
-                    payload = {
-                        'answer': p_payload['answer'],
-                        'id': p_payload['id']
-                    }
+                for obj in s_pool:
+                    if obj['id'] == p_payload['id']:
+                        print('adfasdf we here')
+                        obj['answer'] = p_payload['answer']
+                        break
 
-                    for obj in s_pool:
-                        if obj['id'] == p_payload['id']:
-                            print('adfasdf we here')
-                            obj['answer'] = p_payload['answer']
-                            break
+            elif action == 'DELETE':
+                payload = {
+                    'id': p_payload['id']
+                }
+                for ind, obj in enumerate(s_pool):
+                    if obj['id'] == p_payload['id']:
+                        deleted_element = s_pool.pop(ind)
+                        print('rip', deleted_element)
+                        break
 
-                elif action == 'DELETE':
-                    payload = {
-                        'id': p_payload['id']
-                    }
-                    for ind, obj in enumerate(s_pool):
-                        if obj['id'] == p_payload['id']:
-                            deleted_element = s_pool.pop(ind)
-                            print('rip', deleted_element)
-                            break
+                print('payload id to delete', payload)
 
-                    print('payload id to delete', payload)
+        print('WERERER1')
+        print('WERERER2')
 
-            print('WERERER1')
-            print('WERERER2')
+    print('now are we here', s_pool)
 
-        print('now are we here', s_pool)
-
-        # Emit the updated signal_pool to connected clients
-        socketio.emit('signal_pool', json.dumps(s_pool))
+    # Emit the updated signal_pool to connected clients
+    socketio.emit('signal_pool', json.dumps(s_pool))
 
 @socketio.on('signal_pool')
 def handle_message(message, with_userid):
@@ -171,10 +145,213 @@ def handle_message(message, with_userid):
     # Extract auth_token from the request
     auth_token = request.args.get('Authorization')
 
-    # Example asynchronous API call using a separate thread
-    threading.Thread(target=async_emit_signal_pool, args=(auth_token, message, with_userid)).start()
+    # Example asynchronous API call without using a separate thread
+    asyncio.run(async_emit_signal_pool(auth_token, message, with_userid))
+    
+    
+# @socketio.on('send_message')
+# def handle_send_message(data):
+#     # Extract the peer ID from the data
+#     peer_id = data.get('to')
+
+#     # Join a room based on the peer ID
+#     room = f'{peer_id}' #"hardcoded"#f"{request.sid}-{peer_id}"
+#     join_room(room)
+#     print('AREWEREWR')
+#     # Emit the message to the specific room (between two peers)
+#     socketio.emit('receive_message', {'message': data['message']}, room=room)
+
+# async def make_api_call():
+#     api_url = 'https://jsonplaceholder.typicode.com/todos/1'
+
+#     async with aiohttp.ClientSession() as session:
+#         async with session.get(api_url) as response:
+#             # Assuming the API returns JSON data
+#             api_data = await response.json()
+
+#     return api_data
+
+# import asyncio
+# import threading
 
 
+# s_pool = []
+
+# async def make_api_call():
+#     api_url = 'https://jsonplaceholder.typicode.com/todos/1'
+
+#     async with aiohttp.ClientSession() as session:
+#         async with session.get(api_url) as response:
+#             # Assuming the API returns JSON data
+#             api_data = await response.json()
+
+#     return api_data
+
+# def async_emit_signal_pool(auth_token, message, with_userid):
+#     with app.app_context():
+#         loop = asyncio.new_event_loop()
+#         asyncio.set_event_loop(loop)
+
+#         # Placeholder for any async operation
+#         api_result = loop.run_until_complete(make_api_call())
+
+#         # Process the API call result if needed
+#         print("API Call Result:", api_result)
+
+#         print('check if msg is string only', message, type(message))
+#         if not auth_token:
+#             print('MARK1')
+#             return "Unauthorized", 401
+
+#         scheme, token = auth_token.split('Bearer ')
+#         decoded = decode_token(token)
+#         decoded_data_str = decoded['sub']
+#         json_dec_data = json.loads(decoded_data_str)
+#         me = User.query.filter_by(email=json_dec_data['email']).first()
+#         if message:
+#             print("COPY MESSAGE", message, type(message))
+#             p_payload = json.loads(message)
+#             print('prepared p_payload', p_payload, type(p_payload), with_userid)
+#             if "action" in p_payload:
+#                 action = p_payload.pop("action", 'ADD')
+#                 initator_room_str = f"{with_userid}_{me.id}"
+#                 p_payload['id'] = initator_room_str
+#                 if action == 'ADD':
+#                     payload = {
+#                         'sdp': p_payload['sdp'],
+#                         'answer': None,
+#                         'initiator': me.id,
+#                         'responder': with_userid,
+#                         'id': p_payload['id']
+#                     }
+#                     print('prepared payload', payload)
+#                     s_pool.append(payload)
+
+#                 elif action == 'UPDATE':
+#                     print('mark1noww')
+#                     resp_room_str = f"{me.id}_{with_userid}"
+#                     p_payload['id'] = resp_room_str
+
+#                     payload = {
+#                         'answer': p_payload['answer'],
+#                         'id': p_payload['id']
+#                     }
+
+#                     for obj in s_pool:
+#                         if obj['id'] == p_payload['id']:
+#                             print('adfasdf we here')
+#                             obj['answer'] = p_payload['answer']
+#                             break
+
+#                 elif action == 'DELETE':
+#                     payload = {
+#                         'id': p_payload['id']
+#                     }
+#                     for ind, obj in enumerate(s_pool):
+#                         if obj['id'] == p_payload['id']:
+#                             deleted_element = s_pool.pop(ind)
+#                             print('rip', deleted_element)
+#                             break
+
+#                     print('payload id to delete', payload)
+
+#             print('WERERER1')
+#             print('WERERER2')
+
+#         print('now are we here', s_pool)
+
+#         # Emit the updated signal_pool to connected clients
+#         socketio.emit('signal_pool', json.dumps(s_pool))
+
+# @socketio.on('signal_pool')
+# def handle_message(message, with_userid):
+#     print('API Call Result: arere??')
+
+#     # Extract auth_token from the request
+#     auth_token = request.args.get('Authorization')
+
+#     # Example asynchronous API call using a separate thread
+#     # thread = threading.Thread(target=async_emit_signal_pool, args=(auth_token, message, with_userid)).start()
+#     # # print('will this line execute when thread has completed??')
+#     # thread.start()
+#     # thread.join()  # Wait for the thread to complete before moving on
+#     # print('Now this line will execute after the thread has completed')
+    
+#     loop = asyncio.new_event_loop()
+#     asyncio.set_event_loop(loop)
+
+#     # Placeholder for any async operation
+#     api_result = loop.run_until_complete(make_api_call())
+
+#     # Process the API call result if needed
+#     print("API Call Result:", api_result)
+
+#     print('check if msg is string only', message, type(message))
+#     if not auth_token:
+#         print('MARK1')
+#         return "Unauthorized", 401
+
+#     scheme, token = auth_token.split('Bearer ')
+#     decoded = decode_token(token)
+#     decoded_data_str = decoded['sub']
+#     json_dec_data = json.loads(decoded_data_str)
+#     me = User.query.filter_by(email=json_dec_data['email']).first()
+#     if message:
+#         print("COPY MESSAGE", message, type(message))
+#         p_payload = json.loads(message)
+#         print('prepared p_payload', p_payload, type(p_payload), with_userid)
+#         if "action" in p_payload:
+#             action = p_payload.pop("action", 'ADD')
+#             initator_room_str = f"{with_userid}_{me.id}"
+#             p_payload['id'] = initator_room_str
+#             if action == 'ADD':
+#                 payload = {
+#                     'sdp': p_payload['sdp'],
+#                     'answer': None,
+#                     'initiator': me.id,
+#                     'responder': with_userid,
+#                     'id': p_payload['id']
+#                 }
+#                 print('prepared payload', payload)
+#                 s_pool.append(payload)
+
+#             elif action == 'UPDATE':
+#                 print('mark1noww')
+#                 resp_room_str = f"{me.id}_{with_userid}"
+#                 p_payload['id'] = resp_room_str
+
+#                 payload = {
+#                     'answer': p_payload['answer'],
+#                     'id': p_payload['id']
+#                 }
+
+#                 for obj in s_pool:
+#                     if obj['id'] == p_payload['id']:
+#                         print('adfasdf we here')
+#                         obj['answer'] = p_payload['answer']
+#                         break
+
+#             elif action == 'DELETE':
+#                 payload = {
+#                     'id': p_payload['id']
+#                 }
+#                 for ind, obj in enumerate(s_pool):
+#                     if obj['id'] == p_payload['id']:
+#                         deleted_element = s_pool.pop(ind)
+#                         print('rip', deleted_element)
+#                         break
+
+#                 print('payload id to delete', payload)
+
+#         print('WERERER1')
+#         print('WERERER2')
+
+#     print('now are we here', s_pool)
+
+#     # Emit the updated signal_pool to connected clients
+#     socketio.emit('signal_pool', json.dumps(s_pool))
+    
+    
 # s_pool=[]
 # @socketio.on('signal_pool')
 # def handle_message(message,with_userid):
