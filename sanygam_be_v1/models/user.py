@@ -32,7 +32,15 @@ class User(db.Model):
         return user
     
     
-    def update(self, id, data): #we might wanna make it static :) i think we are arriving now :::::))))))))))
+    def get_list(self, filter_obj=None): #we might wanna make it static :) i think we are arriving now :::::))))))))))
+        
+        users = User.query.all()
+        return users
+    # will only upate the password for user so far
+    def update(self, id, password): 
         user = User(id=id)
+        user.password = password
+        db.session.add(user)
+        db.session.commit()
         return user
 

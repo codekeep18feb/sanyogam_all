@@ -68,8 +68,6 @@ class ChatHistorySchema(ma.SQLAlchemyAutoSchema):
         sqla_session = db.session
         include_relationships = True
 
-
-
 class UserRequestsSchema(ma.SQLAlchemyAutoSchema):
     frm_user = fields.String(attribute="act_frm_user.email")
     to_user = fields.String(attribute="act_to_user.email")
@@ -81,7 +79,6 @@ class UserRequestsSchema(ma.SQLAlchemyAutoSchema):
         sqla_session = db.session
         include_relationships = True
         # exclude = ('timestamp',)  # Exclude the 'timestamp' field
-
 
 class OnlineUsersSchema(ma.SQLAlchemyAutoSchema):
     # frm_user = fields.String(attribute="act_frm_user.email")
@@ -105,13 +102,13 @@ class OnlineUsersSchema(ma.SQLAlchemyAutoSchema):
         include_relationships = True
         exclude = ('timestamp','status','frm_user','to_user')  # Exclude the 'timestamp' field
 
-
 class RTCUserInfoSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = RTCUserInfo
         load_instance = True
         sqla_session = db.session
         include_relationships = True
+
 
 
 
@@ -134,15 +131,12 @@ father_schema = FatherSchema()
 fathers_schema = FatherSchema(many=True)
 
 
-
 chat_history_schema = ChatHistorySchema()
 chat_histories_schema = ChatHistorySchema(many=True)
 
 
-
 user_request_schema = UserRequestsSchema()
 user_requests_schema = UserRequestsSchema(many=True)
-
 
 
 rtc_info_schema = RTCUserInfoSchema()
