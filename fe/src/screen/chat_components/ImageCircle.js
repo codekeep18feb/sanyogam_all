@@ -1,10 +1,11 @@
 import React, { useRef } from 'react';
 import Grid from '@mui/material/Grid';
+import { Typography } from '@material-ui/core';
 
 const circleStyle = {
   width: '80px',
   height: '80px',
-  backgroundColor: '#007bff',
+  backgroundColor: 'red',
   color: '#fff',
   borderRadius: '50%',
   display: 'flex',
@@ -24,12 +25,22 @@ const greenDotStyle = {
   right: 0,
 };
 
-export function ImageCircle({ user }) {
+export function ImageCircle({ user,dimention }) {
   return (
-    <div style={circleStyle}>
-      {user.online && <div style={greenDotStyle} />}
-      <img src={user.imageUrl} alt="Circle Image" width="60" height="60" />
-    </div>
+    <div>
+      <div style={{padding:"10px 10px 0 10px"}}>
+        <div style={{position:"relative"}}>
+          {user.online && <div style={user.online ? {...greenDotStyle,backgroundColor:"#00E676"}:{...greenDotStyle,backgroundColor:"black"}} />}
+          <img src={user.imageUrl} alt="Circle Image" width={dimention || 90} height={dimention || 90} style={{borderRadius:"50%"}}/>
+        </div>
+        {/* {user && user.name &&  <Typography variant="subtitle2">{user.name}</Typography>} */}
+      </div>
+      <div style={{paddingLeft:"10px"}}>
+        {user && user.name &&  <Typography noWrap variant="subtitle2">{user.name}</Typography>}
+
+      </div>
+
+    </div>    
   );
 }
 

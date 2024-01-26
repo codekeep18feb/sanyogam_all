@@ -1,32 +1,32 @@
-import React, { useState } from 'react';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import Stepper from '@mui/material/Stepper';
-import Step from '@mui/material/Step';
-import StepLabel from '@mui/material/StepLabel';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import TextField from '@mui/material/TextField';
-import Checkbox from '@mui/material/Checkbox';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Paper from '@mui/material/Paper';
+import React, { useState } from "react";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import Stepper from "@mui/material/Stepper";
+import Step from "@mui/material/Step";
+import StepLabel from "@mui/material/StepLabel";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import TextField from "@mui/material/TextField";
+import Checkbox from "@mui/material/Checkbox";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Paper from "@mui/material/Paper";
 
 const theme = createTheme();
 
 function AdvancedMaterialUIExample() {
   const [activeStep, setActiveStep] = useState(0);
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
+    name: "",
+    email: "",
     agree: false,
   });
   const [errors, setErrors] = useState({});
 
-  const steps = ['Step 1', 'Step 2', 'Step 3'];
+  const steps = ["Step 1", "Step 2", "Step 3"];
 
   const handleNext = () => {
     if (activeStep === steps.length - 1) {
       // Submit the form data
-      console.log('Form data submitted:', formData);
+      console.log("Form data submitted:", formData);
       return;
     }
 
@@ -47,17 +47,17 @@ function AdvancedMaterialUIExample() {
     const currentStepErrors = {};
     if (step === 0) {
       if (!formData.name) {
-        currentStepErrors.name = 'Name is required';
+        currentStepErrors.name = "Name is required";
       }
       if (!formData.email) {
-        currentStepErrors.email = 'Email is required';
+        currentStepErrors.email = "Email is required";
       } else if (!isValidEmail(formData.email)) {
-        currentStepErrors.email = 'Invalid email format';
+        currentStepErrors.email = "Invalid email format";
       }
     }
     if (step === 1) {
       if (!formData.agree) {
-        currentStepErrors.agree = 'You must agree to the terms';
+        currentStepErrors.agree = "You must agree to the terms";
       }
     }
     return currentStepErrors;
@@ -80,7 +80,9 @@ function AdvancedMaterialUIExample() {
               fullWidth
               margin="normal"
               value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, name: e.target.value })
+              }
               error={!!errors.name}
               helperText={errors.name}
             />
@@ -90,7 +92,9 @@ function AdvancedMaterialUIExample() {
               fullWidth
               margin="normal"
               value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, email: e.target.value })
+              }
               error={!!errors.email}
               helperText={errors.email}
             />
@@ -102,7 +106,9 @@ function AdvancedMaterialUIExample() {
             control={
               <Checkbox
                 checked={formData.agree}
-                onChange={(e) => setFormData({ ...formData, agree: e.target.checked })}
+                onChange={(e) =>
+                  setFormData({ ...formData, agree: e.target.checked })
+                }
               />
             }
             label="I agree to the terms and conditions"
@@ -117,13 +123,13 @@ function AdvancedMaterialUIExample() {
           </Typography>
         );
       default:
-        return 'Unknown step';
+        return "Unknown step";
     }
   };
 
   return (
     <ThemeProvider theme={theme}>
-      <Paper elevation={3} style={{ padding: '16px' }}>
+      <Paper elevation={3} style={{ padding: "16px" }}>
         <Stepper activeStep={activeStep} alternativeLabel>
           {steps.map((label) => (
             <Step key={label}>
@@ -132,7 +138,7 @@ function AdvancedMaterialUIExample() {
           ))}
         </Stepper>
         {getStepContent(activeStep)}
-        <div style={{ marginTop: '16px' }}>
+        <div style={{ marginTop: "16px" }}>
           <Button
             disabled={activeStep === 0}
             onClick={handleBack}
@@ -140,12 +146,8 @@ function AdvancedMaterialUIExample() {
           >
             Back
           </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleNext}
-          >
-            {activeStep === steps.length - 1 ? 'Submit' : 'Next'}
+          <Button variant="contained" color="primary" onClick={handleNext}>
+            {activeStep === steps.length - 1 ? "Submit" : "Next"}
           </Button>
         </div>
       </Paper>

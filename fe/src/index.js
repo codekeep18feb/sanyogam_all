@@ -1,3 +1,5 @@
+import 'core-js';
+
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
@@ -9,6 +11,8 @@ import store from "./redux/store";
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import PaymentForm from "./screen/PaymentForm"
+import WrapperMobileShell from "./screen/WrapperMobileShell";
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 
 // import PaymentIntentScreen from '.screen/PaymentIntentScreen'; // Import your PaymentIntentScreen component
 
@@ -132,12 +136,16 @@ ReactDOM.render(
   <Provider store={store}>
     <React.StrictMode>
       <Elements stripe={stripePromise}>
-      {/* <PaymentForm /> */}
+        {/* <PaymentForm /> */}
 
 
         {/* <PersistGate persistor={persistor}> */}
         <ThemeProvider theme={theme}>
-          <App />
+          <Router>
+
+            <App />
+          </Router>
+
         </ThemeProvider>
         {/* </PersistGate> */}
       </Elements>

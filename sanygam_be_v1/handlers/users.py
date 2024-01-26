@@ -1,3 +1,4 @@
+import base64
 import sqlite3
 import json
 import smtplib
@@ -7,90 +8,14 @@ from config import db, generate_token
 from config import db, decode_token
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+# from models import OnlineStatusEnum  # Import the Enum class
+from .common import utils
 
-from models import *
-from models import UserRequests,UserRequestsSchema
+# from models import *
+import models
+
 def get_timestamp():
     return datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
-
-
-
-
-
-# @my_decorator("Hello, world!")
-# @jwt_required()  # Protect this route with JWT authentication
-def send_request(to_email):
-    # current_user = get_jwt_identity()
-    # wondering if we can put a decorator here????
-    print("Inside my_function")
-
-    auth_token = request.headers.get("Authorization")
-    print("auth_token",auth_token)
-    if not auth_token:
-        
-        return "Unauthorized", 401
-    
-    
-
-
-    scheme, token = auth_token.split('Bearer ')    
-    decoded = decode_token(token)
-    decoded_data_str = decoded['sub']
-    json_dec_data = json.loads(decoded_data_str)
-    frm_user = User.query.filter_by(email=json_dec_data['email']).first()
-    to_user =  User.query.filter_by(email=to_email).first()
-
-    print("frm_user",frm_user,"to_user",to_user)
-    new_request = UserRequests(frm_user=frm_user.id,to_user=to_user.id,status='SENT')
-    print("new_request",new_request)
-    db.session.add(new_request)
-    db.session.commit()
-
-    # person_dict = {
-    #     "id": profile.id,
-    #     "gender": profile.gender,
-    #     "fname" : profile.user.fname,
-    #     "lname" : profile.user.lname
-    # }
-
-    # uploaded_file = request.files.get("image")
-    # if uploaded_file:
-    #     print(f'Uploaded File:: {uploaded_file}')
-
-        
-    return "sent now"
-    # else:
-    #     abort(404, f"Profile with id {id} not found")
-
-
-# @my_decorator("Hello, world!")
-# @jwt_required()  # Protect this route with JWT authentication
-def respond_request(frm_email):
-    body = request.args
-    action = body.get("action", "ACCEPTED")
-    print("action",action)
-
-    auth_token = request.headers.get("Authorization")
-    print("auth_token",auth_token)
-    if not auth_token:
-        return "Unauthorized", 401
-    scheme, token = auth_token.split('Bearer ')    
-    decoded = decode_token(token)
-    decoded_data_str = decoded['sub']
-    json_dec_data = json.loads(decoded_data_str)
-    frm_user = User.query.filter_by(email=json_dec_data['email']).first()
-    to_user =  User.query.filter_by(email=frm_email).first()
-    print("what is the diff",UserRequests,to_user.id)
-    to_user_request = UserRequests.query.filter_by(frm_user=to_user.id).first() ##(frm_user=to_user.id)
-    if to_user_request.status == 'SENT':
-        to_user_request.status=action
-        db.session.add(to_user_request)
-        db.session.commit()
-        print("here accpet request data",frm_user,to_user,to_user_request)        
-        return "sent now"
-    else:
-        abort(400, f"current request status is {to_user_request.status}")
-
 
 
 def read_all():
@@ -98,34 +23,9 @@ def read_all():
     if False:
         return "Unauthorized", 401
     
-    users = User.query.all()
+    users = models.User.query.all()
     user_schema = UserSchema(many=True)
     return user_schema.dump(users)
-
-
-PEOPLE = [
-
- {
-        "id":1,
-        "fname": "Deepak",
-        "lname": "Singh",
-        "timestamp": get_timestamp(),
-    },
-{
-        "id":2,
-        "fname": "Rajni",
-        "lname": "Ruprecht",
-        "timestamp": get_timestamp(),
-    },
-{
-        "id":3,
-        "fname": "Easter",
-        "lname": "Bunny",
-        "timestamp": get_timestamp(),
-    }
-
-]
-
 
 
 def upload_image(id):
@@ -156,9 +56,8 @@ def upload_image(id):
         abort(404, f"User with id {id} not found")
 
 
-
 def read_id_one_query(id):
-    user = User.query.filter_by(id=id).first()
+    user = models.User.query.filter_by(id=id).first()
     
     if user:
         # person_dict = {
@@ -175,19 +74,6 @@ def read_id_one_query(id):
         return user_schema.dump(user)
     else:
         abort(404, f"User with id {id} not found")
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 # Gmail SMTP settings
 SMTP_SERVER = 'smtp.gmail.com'
@@ -224,8 +110,6 @@ def send_email(recipient_email,subject,message):
         return f"Email could not be sent. Error: {str(e)}"
 
 
-
-
 def read_one_query():
     body = request.args
     fname = body.get("fname", None)
@@ -233,16 +117,16 @@ def read_one_query():
     q_email = body.get("q_email", None)
 
     if fname and lname and q_email:
-        user = User.query.filter_by(fname=fname, lname=lname,email=q_email).first()
+        user = models.User.query.filter_by(fname=fname, lname=lname,email=q_email).first()
 
     elif fname and lname:
-        user = User.query.filter_by(fname=fname, lname=lname).first()
+        user = models.User.query.filter_by(fname=fname, lname=lname).first()
     elif fname:
-        user = User.query.filter_by(fname=fname).first()
+        user = models.User.query.filter_by(fname=fname).first()
     elif lname:
-        user = User.query.filter_by(lname=lname).first()
+        user = models.User.query.filter_by(lname=lname).first()
     elif q_email:
-        user = User.query.filter_by(email=q_email).first()
+        user = models.User.query.filter_by(email=q_email).first()
     else:
         abort(404, "No such user found")
 
@@ -257,8 +141,6 @@ def read_one_query():
     else:
         abort(404, "No such user found")
 
-
-import base64
 
 # Function to convert binary image data to base62
 def binary_image_to_base62(binary_image):
@@ -284,132 +166,174 @@ def binary_image_to_base62(binary_image):
     
     return ''.join(reversed(base62_result))
 
-# # Example usage
-# binary_image_data = b'\xff\xd8\xff\xe0\x00\x10JFIF\x00\x01\x01\x01\x00H\x00H\x00\x00\xff\xe2\x0cXICC_PROFILE\x00\x01\x01\x00\x00\x0cHLino\x02\x10\x00\x00mntrRGB XYZ \x07\xce\x00\x02\x00\t\x00\x06\x001\x00\x00acspMSFT\x00\x00\x00\x00IEC sRGB\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xf6\xd6\x00\x01\x00\x00\x00\x00\xd3-HP  \x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x11cprt\x00\x00\x01P\x00\x00\x003desc\x00\x00\x01\x84\x00\x00\x00lwtpt\x00\x00\x01\xf0\x00\x00\x00\x14bkpt\x00\x00\x02\x04\x00\x00\x00\x14rXYZ\x00\x00\x02\x18\x00\x00\x00\x14gXYZ\x00\x00\x02,\x00\x00\x00\x14bXYZ\x00\x00\x02@\x00\x00\x00\x14dmnd\x00\x00\x02T\x00\x00\x00pdmdd\x00\x00\x02\xc4\x00\x00\x00\x88vued\x00\x00\x03L\x00\x00\x00\x86view\x00\x00\x03\xd4\x00\x00\x00$lumi\x00\x00\x03\xf8\x00\x00\x00\x14meas\x00\x00\x04\x0c\x00\x00\x00$tech\x00\x00\x040\x00\x00\x00\x0crTRC\x00\x00\x04<\x00\x00\x08\x0cgTRC\x00\x00\x04<\x00\x00\x08\x0cbTRC\x00\x00\x04<\x00\x00\x08\x0ctext\x00\x00\x00\x00Copyright (c) 1998 Hewlett-Packard Company\x00\x00desc\x00\x00\x00\x00\x00\x00\x00\x12sRGB IEC61966-2.1\x00\x00\x00\x00\x00\x00'
-
-# base62_image = binary_image_to_base62(binary_image_data)
-
-# # Print the base62-encoded image data
-# print(base62_image)
 
 
+class UserValidation(object):
+    def __init__(self, data) -> None:
+        self.data = data
+        # self.mandate = mandate
+    
+    @staticmethod
+    def missing_mandate_func(data, mandate):
+        missing_mandate = []
+        for key in mandate:
+            if key not in data.keys():
+                missing_mandate.append(key)
+        return missing_mandate
+        
+    def validate_signup(self, mandate):
+        print('arewehdsfere',mandate,self.data)
+        missing_mandate = self.missing_mandate_func(self.data, mandate)
+        print('missing_mandate for key sgfdghdfsg',missing_mandate, len(missing_mandate) > 0)
 
-def me():
-    auth_token = request.headers.get("Authorization")
-    if not auth_token:    
-        return "Unauthorized", 401
-    scheme, token = auth_token.split('Bearer ')    
-    decoded = decode_token(token)
-    decoded_data_str = decoded['sub']
-    json_dec_data = json.loads(decoded_data_str)
-    user = User.query.filter_by(email=json_dec_data['email']).first()
-    # base_64_str = binary_image_to_base62(user.profile.image)
-    # print("userme",base_64_str)
-    if user:
+        if len(missing_mandate) > 0:
+            print('amithere')
+            # return 'missing mandates'
+            return f'missing_mandate keys - {missing_mandate}'
+        
+        
+        else:
+            if '@' not in self.data['email']:
+                return 'Email Format is wrong!'
+
+            if len(self.data['password']) < 8:
+                return 'Password length is less than 8'
+                
+    def validate_login(self, mandate):
+        # print('arewehdsfere',mandate,self.data)
+        missing_mandate = self.missing_mandate_func(self.data, mandate)
+
+        if len(missing_mandate) > 0:
+            print('amithere')
+            # return 'missing mandates'
+            return f'missing_mandate keys - {missing_mandate}'
+        
+        
+        else:
+            if '@' not in self.data['email']:
+                return 'Email Format is wrong!'
+
+            # if len(self.data['password']) < 8:
+            #     return 'Password length is less than 8'
+                
+    def validate_forgot_password(self):
+        return True
+        
+     
+class UserH(UserValidation):
+    
+    
+    def __init__(self, signup_data):    
+        self.lname =         signup_data.get("lname")
+        self.fname =         signup_data.get("fname", "")
+        self.email =         signup_data.get("email", "")
+        self.password=       signup_data.get("password", "")
+        self.gender =        signup_data.get("gender")  # New field for gender
+        self.timestamp_str = signup_data.get("timestamp", get_timestamp())
+        self.timestamp = datetime.strptime(self.timestamp_str, '%Y-%m-%d %H:%M:%S')
+        if signup_data:
+            super().__init__(signup_data)
+    
+    def to_dict(self):
+        return {
+            "lname": self.lname,
+            "fname": self.fname,
+            "email": self.email,
+            "password": self.password,
+            "gender": self.gender,
+            "timestamp": self.timestamp,
+        }
+    
+    def signup(self):
+        family_info_default = models.FamilyInformation()
+        father_default = models.Father()
+        data = self.to_dict()
+        user = models.User().create(data)
+        profile = models.Profile(
+            gender=self.gender,
+            user=user,
+            family_info=family_info_default,
+            father=father_default,
+        )
+        db.session.add(profile)
+        db.session.commit()
+        return [user,profile]
+
+    def me(self,email):
+        
+        user = models.User().get(email)
+        # user = models.User.query.filter_by(email=json_dec_data['email']).first()
+        # base_64_str = binary_image_to_base62(user.profile.image)
+        # print("userme",base_64_str)
+        if user:
+            user_dict = {
+                "id": user.id,
+                "fname": user.fname,
+                "lname": user.lname,
+                "image":user.profile.image
+                # "timestamp": user.timestamp.strftime('%Y-%m-%d %H:%M:%S'),  # Format timestamp as string
+            }
+            return user_dict
+        
+    def logout(self, email):
+        user = models.User().get(email)
+        # user = models.User.query.filter_by(email=json_dec_data['email']).first()
+        user.online=False
+        db.session.add(user)
+        db.session.commit()
+        
+    def login(self):
+        email = self.email
+        password = self.password
+        """
+
+        generate_token(email)
+        
+        """
+        print("what is it",email)
+        user = models.User.query.filter_by(email=email,password=password).first()
+        if not user:
+            return "No Such User Found!", 401
+        # profile = user.profile if user else None
+        user.online=True
+        db.session.add(user)
+        db.session.commit()
+        print("Logged in User and profile",user)
+
+        return {
+            "token": generate_token({"email":email}),
+        }
+
+
+
+
+@utils.authenticate        
+def me(**kwargs):
+    me = kwargs.get('me')
+    if me:
         user_dict = {
-            "id": user.id,
-            "fname": user.fname,
-            "lname": user.lname,
-            "image":user.profile.image
+            "id": me.id,
+            "fname": me.fname,
+            "lname": me.lname,
+            "image":me.profile.image
             # "timestamp": user.timestamp.strftime('%Y-%m-%d %H:%M:%S'),  # Format timestamp as string
         }
         return user_dict
     else:
         abort(404, "No such user found")
 
-
-
-
-def login(user):
-    email = user.get("email", "")
-    password = user.get("password", "")
-    """
-
-    generate_token(email)
+def logout(**kwargs):
+    me = kwargs.get('me')
     
-    """
-    print("what is it",email)
-    user = User.query.filter_by(email=email,password=password).first()
-    if not user:
-        return "No Such User Found!", 401
-    # profile = user.profile if user else None
-    user.online=True
-    db.session.add(user)
-    db.session.commit()
-    print("Logged in User and profile",user)
-
-    return {
-        "token": generate_token({"email":email}),
-    }, 201
-
-
-
-def logout():
-    auth_token = request.headers.get("Authorization")    
-    if not auth_token:
-        return "Unauthorized", 401
-    scheme, token = auth_token.split('Bearer ')    
-    decoded = decode_token(token)
-    decoded_data_str = decoded['sub']
-    json_dec_data = json.loads(decoded_data_str)
-    user = User.query.filter_by(email=json_dec_data['email']).first()
-    # profile = user.profile if user else None
-    user.online=False
-    db.session.add(user)
-    db.session.commit()
+    # auth_token = request.headers.get("Authorization")    
+    # if not auth_token:
+    #     return "Unauthorized", 401
+    # scheme, token = auth_token.split('Bearer ')    
+    # decoded = decode_token(token)
+    # decoded_data_str = decoded['sub']
+    # json_dec_data = json.loads(decoded_data_str)
+    UserH().logout(me.email)
     return "loggedout", 201
-
-
-def signup(signup_data):
-    lname = signup_data.get("lname")
-    fname = signup_data.get("fname", "")
-    email = signup_data.get("email", "")
-    password = signup_data.get("password", "")
-    gender = signup_data.get("gender")  # New field for gender
- 
-
-    timestamp_str = signup_data.get("timestamp", get_timestamp())
-    timestamp = datetime.strptime(timestamp_str, '%Y-%m-%d %H:%M:%S')
-
-    
-    family_info_default = FamilyInformation()
-    father_default = Father()
-    # mother_default = Mother()
-    # brother_default = Brother()
-    # sister_default = Sister()
-    # contact_details_default = ContactDetails()
-    # about_me_default = AboutMe()
-    # horoscope_details_default = HoroscopeDetails()
-
-    new_person = User(email=email, password=password, fname=fname, lname=lname, timestamp=timestamp)
-    db.session.add(new_person)
-
-    profile = Profile(
-        gender=gender,
-        user=new_person,
-        family_info=family_info_default,
-        father=father_default,
-        # mother=mother_default,
-        # brother=brother_default,
-        # sister=sister_default,
-        # contact_details=contact_details_default,
-        # about_me=about_me_default,
-        # horoscope_details=horoscope_details_default
-    )
-
-    db.session.add(profile)
-
-    db.session.commit()
-    send_email(email,"Registration with Sgam", 'Successfully Registrated!')
-    return {
-        "id": new_person.id,
-        "fname": new_person.fname,
-        "lname": new_person.lname,
-        "gender": profile.gender,
-        "timestamp": new_person.timestamp,
-    }, 201
-
-
 
 def save_oauth(data):
     fname = data.get("name").split(" ")[0]
@@ -423,38 +347,47 @@ def save_oauth(data):
     timestamp_str = data.get("timestamp", get_timestamp())
     timestamp = datetime.strptime(timestamp_str, '%Y-%m-%d %H:%M:%S')
 
-    new_person = User(email=email, password=password,fname=fname, lname=lname, timestamp=timestamp)
-    print("new_person",new_person)
+    user = User()
+    print("user",user)
     # # # Create a profile and link it to the user
-    db.session.add(new_person)
-    profile = Profile(gender=gender, user=new_person,image=image)
+    db.session.add(user)
+    profile = Profile(gender=gender, user=user,image=image)
     db.session.add(profile)
 
     db.session.commit()
     # send_email(email,"Registration with Sgam", 'Successfully Registrated!')
     return {
-        "id": "new_person.id",
-        # "fname": new_person.fname,
-        # "lname": new_person.lname,
+        "id": "user.id",
+        # "fname": user.fname,
+        # "lname": user.lname,
         # "gender": profile.gender,
-        # "timestamp": new_person.timestamp,
+        # "timestamp": user.timestamp,
     }, 201
 
-# def create(user):
-#     lname = user.get("lname")
-#     fname = user.get("fname", "")
+def login(user):
+    res = UserH(user).validate_login(["email","password"])
+    print('what is res logindsf',res, user)
+    if res:
+        return f"invalid payload :: {res}", 401
     
-#     timestamp_str = user.get("timestamp", get_timestamp())
-#     timestamp = datetime.strptime(timestamp_str, '%Y-%m-%d %H:%M:%S')
+    res = UserH(user).login()
+    print('adfasdfdgsfgf',res)
+    return res, 201
 
-#     new_person = User(fname=fname, lname=lname, timestamp=timestamp)
+def signup(signup_data):
+    res = UserH(signup_data).validate_signup(['fname','lname',"email","password","gender"])
+    if res:
+        return f"invalid payload :: {res}", 401
+    
+    [user,profile] = UserH(signup_data).signup()
+    send_email(user.email,"Registration with Sgam", 'Successfully Registrated!')
+    
+    return [{
+        "id": user.id,
+        "fname": user.fname,
+        "lname": user.lname,
+        "gender": profile.gender,
+        "timestamp": user.timestamp,
+    }], 201
 
-#     db.session.add(new_person)
-#     db.session.commit()
 
-#     return {
-#         "id": new_person.id,
-#         "fname": new_person.fname,
-#         "lname": new_person.lname,
-#         "timestamp": new_person.timestamp,
-#     }, 201

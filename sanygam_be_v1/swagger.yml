@@ -14,6 +14,12 @@ components:
       bearerFormat: JWT
       x-bearerInfoFunc: config.decode_token
   schemas:
+    ProfileFilterObj:
+      type: "object"
+      properties:
+        family_info:
+          type: "object"
+
     SignUpData:
       type: "object"
       required:
@@ -80,9 +86,9 @@ components:
     MsgContent:
       type: "object"
       required:
-        - content
+        - msg
       properties:
-        content:
+        msg:
           type: "string"
     
     SaveOauthUserData:
@@ -92,13 +98,13 @@ components:
     RTCContent:
       type: "object"
       required:
-        - initiator
+        # - initiator
         - sdp
         - to_user
 
       properties:
-        initiator:
-          type: "boolean"
+        # initiator:
+        #   type: "boolean"
         sdp:
           type: "string"
         to_user:
@@ -148,11 +154,28 @@ components:
       schema:
         type: string
 
+    to_userid:
+      name: to_userid
+      in: path
+      description: "to_userid of the request"
+      required: true
+      schema:
+        type: integer
+
+
     to_email:
       name: to_email
       in: path
       description: "to_email of the request"
       required: true
+      schema:
+        type: string
+
+    to_email_nr:
+      name: to_email
+      in: query
+      description: "to_email of the request"
+      required: false  # 
       schema:
         type: string
 
@@ -167,10 +190,12 @@ components:
     action:
       name: action
       in: query
-      description: "respond_request action in query"
+      description: "handle_request action in query"
       required: false
       schema:
         type: string
+    
+
 
     frm_email:
       name: frm_email
@@ -315,21 +340,18 @@ paths:
             schema:
               x-body-name: "profile_update_data"
               type: object
-              properties:
-                # image:
-                #   type: string
-                #   format: binary
-                gender:
-                  type: string
-                  enum: ["Male", "Female", "Other"]
-                fname:
-                  type: string
-                lname:
-                  type: string
-                family_info:
-                  $ref: "#/components/schemas/FamilyInformationSchema"
-                father:
-                  $ref: "#/components/schemas/FatherSchema"
+              # properties:
+              #   gender:
+              #     type: string
+              #     enum: ["Male", "Female", "Other"]
+              #   fname:
+              #     type: string
+              #   lname:
+              #     type: string
+                # family_info:
+                #   $ref: "#/components/schemas/FamilyInformationSchema"
+                # father:
+                #   $ref: "#/components/schemas/FatherSchema"
 
 
                 # image:
@@ -384,22 +406,21 @@ paths:
   #       "200":
   #         description: "Successfully read rtc_user_info_by_id"
   
-  # del_rtc_user
+  # del_rtc_entry
 
-  /del_rtc_user:
+  /del_rtc_entry/{id}:
     get:
-      operationId: "handlers.rtcuserinfo.del_rtc_user"
+      operationId: "handlers.rtcuserinfo.del_rtc_entry"
       security:
         - JWTAuth: [] 
       tags:
         - "People"
-      summary: "del_rtc_user"
-      # parameters:
-      #   # - $ref: "#/components/parameters/image"
-      #   - $ref: "#/components/parameters/id"
+      summary: "del_rtc_entry"
+      parameters:
+        - $ref: "#/components/parameters/id"
       responses:
         "200":
-          description: "Successfully del_rtc_user"
+          description: "Successfully del_rtc_entry"
       
 
 
@@ -499,35 +520,18 @@ paths:
           description: "Successfully read my detail"
   
 
-  /respond_request/{frm_email}/query:
-    get:
-      operationId: "handlers.users.respond_request"
-      security:
-        - JWTAuth: []
-      tags:
-        - People
-      summary: "respond_request to user(frm_email,action)"
-      parameters:
-        # - $ref: "#/components/parameters/image"
-        - $ref: "#/components/parameters/frm_email"
-        - $ref: "#/components/parameters/action"
-      
-      responses:
-        "200":
-          description: "Successfully read user using query parameter"
   
-
-  /send_msg/{to_email}:
+  /send_msg/{to_userid}:
     post:
       operationId: "handlers.chathistory.send_msg"
       security:
         - JWTAuth: []
       tags:
         - People
-      summary: "send_msg to user(to_email)"
+      summary: "send_msg to user(to_userid)"
       parameters:
         # - $ref: "#/components/parameters/image"
-        - $ref: "#/components/parameters/to_email"
+        - $ref: "#/components/parameters/to_userid"
       requestBody:
         description: "send msg content"
         required: true
@@ -582,20 +586,66 @@ paths:
         "201":
           description: "Successfully added oauth data"
 
-  /send_request/{to_email}:
+  /handle_request:
     get:
-      operationId: "handlers.users.send_request"
+      operationId: "handlers.requests.handle_request"
       security:
         - JWTAuth: []
       tags:
         - People
-      summary: "send_request to user(to_email)"
+      summary: "handle_request to user(to_email,action)"
       parameters:
-        - $ref: "#/components/parameters/to_email"
-      
+        # - $ref: "#/components/parameters/image"
+        - $ref: "#/components/parameters/to_email_nr"
+        - name: action
+          in: query
+          description: "handle_request action in query"
+          required: false
+          schema:
+            type: string
+            enum:
+              - SENT
+              - CANCELED
+              - RECEIVED  
+              - ACCEPTED
+              - REJECTED    
       responses:
         "200":
           description: "Successfully read user using query parameter"
+
+  # /respond_request/{to_email}/query:
+  #   get:
+  #     operationId: "handlers.users.respond_request"
+  #     security:
+  #       - JWTAuth: []
+  #     tags:
+  #       - People
+  #     summary: "respond_request to user(to_email,action)"
+  #     parameters:
+  #       # - $ref: "#/components/parameters/image"
+  #       - $ref: "#/components/parameters/to_email"
+  #       - $ref: "#/components/parameters/action"
+      
+  #     responses:
+  #       "200":
+  #         description: "Successfully read user using query parameter"
+  
+
+
+  # /send_request/{to_email}:
+  #   get:
+  #     operationId: "handlers.users.send_request"
+  #     security:
+  #       - JWTAuth: []
+  #     tags:
+  #       - People
+  #     summary: "send_request to user(to_email)"
+  #     parameters:
+  #       - $ref: "#/components/parameters/to_email"
+      
+  #     responses:
+  #       "200":
+  #         description: "Successfully read user using query parameter"
   
   
   /my_profile:
@@ -643,13 +693,21 @@ paths:
       
   # read_online_circle
   /profiles:
-    get:
-      operationId: "handlers.profiles.read_all_profiles_old"
+    post:
+      operationId: "handlers.profiles.all_profiles"
       security:
         - JWTAuth: [] 
       tags:
         - "People"
       summary: "Read the list of all profiles and with filters"
+      requestBody:
+        description: "Profile Filter Obj"
+        required: false
+        content:
+          application/json:
+            schema:
+              x-body-name: "p_filter_obj"
+              $ref: "#/components/schemas/ProfileFilterObj"
       responses:
         "200":
           description: "Successfully read profiles list"

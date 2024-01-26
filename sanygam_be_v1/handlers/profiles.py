@@ -1,11 +1,13 @@
+
 import json
-from flask import Flask, request, abort  
+from flask import Flask, request, abort, jsonify 
 from config import db, decode_token
 from . import User
-from models import Profile,ProfileSchema
+from models import Profile,ProfileSchema, profiles_schema
 from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity
-from models import UserRequests, UserRequestsSchema, OnlineUsersSchema, ProfileSchema
+from models import UserRequests, UserRequestsSchema, OnlineUsersSchema, ProfileSchema, FamilyInformation
 from sqlalchemy import or_
+from .common import utils
 
 from datetime import datetime
 import boto3
@@ -17,28 +19,21 @@ s3 = boto3.client('s3')
 bucket_name = 'dhankosh' 
 object_key = 'profile_images/{id}.jpg' 
 content_type = 'image/jpeg'
+from functools import wraps
 
 
-def update_my_profile(profile_update_data):
-    # image_data = request.files.get('image')
-    gender =      profile_update_data.get('gender')
-    fname =       profile_update_data.get('fname')
-    lname =       profile_update_data.get('lname')
-    family_info = profile_update_data.get('family_info')
-    father = profile_update_data.get('father')
-    auth_token = request.headers.get("Authorization")
-    
-    if not auth_token:
-        return "Unauthorized", 401
-    
-    
-    scheme, token = auth_token.split('Bearer ')    
-    decoded = decode_token(token)
-    decoded_data_str = decoded['sub']
-    json_dec_data = json.loads(decoded_data_str)
-    me = User.query.filter_by(email=json_dec_data['email']).first()
+
+
+def update_my_profile(profile_update_data, **kwargs):
+    me = kwargs.get('me')
+    gender =      profile_update_data.get('gender',me.profile.gender)
+    fname =       profile_update_data.get('fname',me.profile.user.fname)
+    lname =       profile_update_data.get('lname',me.profile.user.lname)
+    family_info = profile_update_data.get('family_info',None)
+    father = profile_update_data.get('father',None)
     print("family_info",family_info,gender,fname,me.profile.family_info)
-
+    
+    
     # profile = Profile.query.filter_by(id=id).first()
     print('hdsafsadfdsa',father)
     if me.profile:
@@ -46,10 +41,12 @@ def update_my_profile(profile_update_data):
         me.profile.user.fname = fname
         me.profile.user.lname = lname
         # me.profile.father.first_name = 'jakiru'
-        for field, value in family_info.items():
-            setattr(me.profile.family_info, field, value)
-        for field, value in father.items():
-            setattr(me.profile.father, field, value)
+        if family_info:
+            for field, value in family_info.items():
+                setattr(me.profile.family_info, field, value)
+        if father:
+            for field, value in father.items():
+                setattr(me.profile.father, field, value)
         db.session.add(me)
         db.session.commit()
 
@@ -68,18 +65,22 @@ def profile(id):
         abort(404, f"Profile with id {id} not found")
 
 
-def myprofile():
-    auth_token = request.headers.get("Authorization")
-    if not auth_token:
-        
-        return "Unauthorized", 401
+@utils.authenticate
+def all_profiles(p_filter_obj, **kwargs):
+    me = kwargs.get('me')
+    print('logged idn me',me)
+    # auth_token = request.headers.get("Authorization")
+    print('ME.PROFILE', me.profile)
     
-    
-    scheme, token = auth_token.split('Bearer ')    
-    decoded = decode_token(token)
-    decoded_data_str = decoded['sub']
-    json_dec_data = json.loads(decoded_data_str)
-    me = User.query.filter_by(email=json_dec_data['email']).first()
+    all_profiles_query = Profile.query
+    all_profiles_data = handle_filtering(all_profiles_query,p_filter_obj,me.profile.id)
+    fres = profiles_schema.dump(all_profiles_data)
+    return fres
+
+@utils.authenticate
+def myprofile(**kwargs):
+    me = kwargs.get('me')
+    me = User.query.filter_by(email=me.email).first()
     print('HEREmyprofile',me.profile)
     
     # profile = Profile.query.filter_by(user_id=me.id)
@@ -92,21 +93,44 @@ def myprofile():
         abort(404, f"Your profile not found, contact Admin")
 
 
-def read_all_profiles_old():
-    print("payloadchat")
+def handle_filtering(all_profiles_query, p_filter_obj,user_profile_id):
+    all_profiles_query = all_profiles_query.filter(Profile.id != user_profile_id)
 
-    auth_token = request.headers.get("Authorization")
-    print("auth_token",auth_token)
-    if not auth_token:
-        
-        return "Unauthorized", 401
+    if 'family_info' in p_filter_obj and p_filter_obj['family_info']:
+        family_info_filter = p_filter_obj['family_info']
+
+        if 'affluence' in family_info_filter and family_info_filter['affluence']:
+            affluence_value = family_info_filter['affluence']
+            all_profiles_query = all_profiles_query.filter(Profile.family_info.has(FamilyInformation.affluence == affluence_value))
+        if 'location' in family_info_filter and family_info_filter['location']:
+            location_value = family_info_filter['location']
+            family_info_condition = or_(
+                FamilyInformation.family_location == location_value,
+                FamilyInformation.native_place == location_value
+            )
+            all_profiles_query = all_profiles_query.filter(Profile.family_info.has(family_info_condition))
+
+        # Add more filters as needed based on your requirements
+
+    all_profiles = all_profiles_query.all()
+    return all_profiles
+
+   
+    # else:
+    #     abort(500, f"internal server error")
+
+
+
+
+
+
+
+
+def read_all_profiles_old(**kwargs):
+    print("payloadchat")
+    me = kwargs.get('me')
     
-    
-    scheme, token = auth_token.split('Bearer ')    
-    decoded = decode_token(token)
-    decoded_data_str = decoded['sub']
-    json_dec_data = json.loads(decoded_data_str)
-    me = User.query.filter_by(email=json_dec_data['email']).first()
+    me = User.query.filter_by(email=me.email).first()
     combined_query = UserRequests.query.filter(
     or_(UserRequests.frm_user == me.id, UserRequests.to_user == me.id),
     UserRequests.status == "ACCEPTED"
@@ -149,65 +173,15 @@ def read_all_profiles_old():
         abort(500, f"internal server error")
 
 
-
 def read_all_profiles_v1():
     profiles = Profile.query.all()
     profile_schema = ProfileSchema(many=True)
     return profile_schema.dump(profiles)
 
 
-# def read_all():
-#     print("payloadchat")
-
-#     auth_token = request.headers.get("Authorization")
-#     print("auth_token",auth_token)
-#     if not auth_token:
-        
-#         return "Unauthorized", 401
+def read_online_circle(**kwargs):
+    me = kwargs.get('me')
     
-    
-#     scheme, token = auth_token.split('Bearer ')    
-#     decoded = decode_token(token)
-#     decoded_data_str = decoded['sub']
-#     json_dec_data = json.loads(decoded_data_str)
-#     me = User.query.filter_by(email=json_dec_data['email']).first()
-#     combined_query = UserRequests.query.filter(
-#     or_(UserRequests.frm_user == me.id, UserRequests.to_user == me.id),
-#     UserRequests.status == "ACCEPTED"
-#     )
-
-#     # Execute the query to get the results
-#     results = combined_query.all()
-#     # send_by_me = UserRequests.query.filter_by(frm_user=me.id, status="ACCEPTED")
-#     # sent_to_me = UserRequests.query.filter_by(to_user=me.id, status="ACCEPTED")
-#     print("sent_to_me",results)
-#     if not results:
-#         abort(400, f"no request exist {results}")
-
-
-#     # print("to_user_request",existing_req.status)
-#     elif results:
-#         user_req_schema = UserRequestsSchema(many=True)
-#         return user_req_schema.dump(results)
-#     else:
-#         abort(500, f"internal server error")
-
-
-def read_online_circle():
-    print("payloadchat")
-
-    auth_token = request.headers.get("Authorization")
-    print("auth_token",auth_token)
-    if not auth_token:
-        
-        return "Unauthorized", 401
-    
-    
-    scheme, token = auth_token.split('Bearer ')    
-    decoded = decode_token(token)
-    decoded_data_str = decoded['sub']
-    json_dec_data = json.loads(decoded_data_str)
-    me = User.query.filter_by(email=json_dec_data['email']).first()
     combined_query = UserRequests.query.filter(
     or_(UserRequests.frm_user == me.id, UserRequests.to_user == me.id),
     UserRequests.status == "ACCEPTED"
@@ -248,16 +222,6 @@ def read_online_circle():
     else:
         abort(500, f"internal server error")
 
-def my_decorator(param):
-    def wrapper(func):
-        def inner(*args, **kwargs):
-            # Do something before calling the decorated function
-            print(f"Decorator parameter: {param}")
-            result = func(*args, **kwargs)
-            # Do something after calling the decorated function
-            return result
-        return inner
-    return wrapper
 
 def get_timestamp():
     return datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))

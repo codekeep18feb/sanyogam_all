@@ -1,17 +1,74 @@
 import React, { useEffect, useState, useRef } from "react";
 import RequestScreen from "../RequestScreen";
 import ChatScreen from "./ChatScreen";
+import { withTheme } from "@emotion/react";
 
-export default function ChatWindow({ with_email, with_userid }) {
+import ChatScreenWithInfo from "./ChatScreenWithInfo";
+import { Button } from "@mui/material";
+
+export default function ChatWindow({
+  SetWithUserId,
+  SetWithEmail,
+  with_email,
+  with_userid,
+}) {
   // console.log("here we are", rtcData);
+  const [videoView, setvideoView] = useState(false);
   const [loading, setLoading] = useState(true);
   const [chatHistory, setChatHistory] = useState([]);
   const [chats, setChats] = useState([]);
   const [requestStatus, setRequestStatus] = useState(null);
   const [answer, setAnswer] = useState(false);
   const myRef = useRef(null);
-  const [connection_open, setConnectionOpened] = useState(false);
+  const yourVideoRef = useRef(null);
+
+  const [connection_open, setConnectionOpened] = useState(null);
   const [intervalId, setIntervalId] = useState(null);
+
+  const delRTCUserEntry = async (id) => {
+    console.log("did it delRTCUserEntry");
+    const JWT_TOKEN = localStorage.getItem("token");
+    const token = `Bearer ${JWT_TOKEN}`;
+
+    try {
+      const response = await fetch(
+        `http://192.168.1.13:8000/api/del_rtc_entry/${id}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+            // body:JSON.stringify(id)
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        const data = await response.json();
+        setvideoView(true);
+        setConnectionOpened(false);
+        // setRTCData(data);
+        // console.log("doesithaveboth?", data.answer, data.sdp);
+        // if (data && data.answer && data.sdp) {
+        //   console.log("bothexist");
+        //   if (!answer) {
+        //     myRef.current = {
+        //       ...myRef.current,
+        //       answer: data.answer,
+        //     };
+        //     setAnswer(true);
+        //   }
+        // }
+        // return Object.entries(data).length === 0 ? null : data;
+      } else {
+        console.log("Error delRTCUserEntry");
+      }
+    } catch (error) {
+      console.error("An error occurred:", error);
+    } finally {
+      // setLoading(false);
+    }
+  };
 
   const fetchRTCUserInfo = async () => {
     const JWT_TOKEN = localStorage.getItem("token");
@@ -19,7 +76,7 @@ export default function ChatWindow({ with_email, with_userid }) {
 
     try {
       const response = await fetch(
-        `http://13.233.212.156:8000/api/rtc_user_info_by_id/${with_userid}`,
+        `http://192.168.1.13:8000/api/rtc_user_info_by_id/${with_userid}`,
         {
           method: "GET",
           headers: {
@@ -43,7 +100,7 @@ export default function ChatWindow({ with_email, with_userid }) {
             setAnswer(true);
           }
         }
-        return Object.entries(data).length == 0 ? null : data;
+        return Object.entries(data).length === 0 ? null : data;
       } else {
         console.log("Error fetching chat history");
       }
@@ -60,18 +117,21 @@ export default function ChatWindow({ with_email, with_userid }) {
     const token = `Bearer ${JWT_TOKEN}`;
 
     try {
-      const response = await fetch(`http://13.233.212.156:8000/api/add_rtc_user`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: token,
-        },
-        body: JSON.stringify({
-          initiator: isInitiator,
-          sdp: sdp,
-          to_user: to_user,
-        }),
-      });
+      const response = await fetch(
+        `http://192.168.1.13:8000/api/add_rtc_user`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
+          body: JSON.stringify({
+            initiator: isInitiator,
+            sdp: sdp,
+            to_user: to_user,
+          }),
+        }
+      );
 
       if (response.status === 200) {
         const data = await response.json();
@@ -92,18 +152,21 @@ export default function ChatWindow({ with_email, with_userid }) {
     const token = `Bearer ${JWT_TOKEN}`;
 
     try {
-      const response = await fetch(`http://13.233.212.156:8000/api/add_rtc_user`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: token,
-        },
-        body: JSON.stringify({
-          initiator: isInitiator,
-          sdp: sdp,
-          to_user: to_user,
-        }),
-      });
+      const response = await fetch(
+        `http://192.168.1.13:8000/api/add_rtc_user`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
+          body: JSON.stringify({
+            initiator: isInitiator,
+            sdp: sdp,
+            to_user: to_user,
+          }),
+        }
+      );
 
       if (response.status === 200) {
         const data = await response.json();
@@ -125,7 +188,7 @@ export default function ChatWindow({ with_email, with_userid }) {
 
     try {
       const response = await fetch(
-        `http://13.233.212.156:8000/api/rtc_user_info_by_id/${with_userid}`,
+        `http://192.168.1.13:8000/api/rtc_user_info_by_id/${with_userid}`,
         {
           method: "GET",
           headers: {
@@ -149,10 +212,10 @@ export default function ChatWindow({ with_email, with_userid }) {
     }
   };
   const fetchUserId = async (token, with_email) => {
-    // http://13.233.212.156:8000/api/users/query?q_email=deepaksingh.18feb%40gmail.com
+    // http://192.168.1.13:8000/api/users/query?q_email=deepaksingh.18feb%40gmail.com
     try {
       const response = await fetch(
-        `http://13.233.212.156:8000/api/users/query?q_email=${with_email}`,
+        `http://192.168.1.13:8000/api/users/query?q_email=${with_email}`,
         {
           method: "GET",
           headers: {
@@ -177,7 +240,7 @@ export default function ChatWindow({ with_email, with_userid }) {
     }
   };
   const initializeNRespondWebRTC = async (token, type) => {
-    if (type == "INITIATOR") {
+    if (type === "INITIATOR") {
       console.log("Ensure it's not called multiple times...");
       const lc = new RTCPeerConnection();
       const dc = lc.createDataChannel("channel");
@@ -193,6 +256,12 @@ export default function ChatWindow({ with_email, with_userid }) {
       dc.onopen = (e) => {
         console.log("connection opened!");
         setConnectionOpened(true);
+      };
+
+      dc.onclose = (e) => {
+        console.log("connection CLosed! initiator");
+        setvideoView(true);
+        setConnectionOpened(false);
       };
 
       lc.onicecandidate = async (e) => {
@@ -224,7 +293,7 @@ export default function ChatWindow({ with_email, with_userid }) {
         .then((o) => lc.setLocalDescription(o))
         .then((a) => console.log("offer set successfully!"));
       return [dc, lc];
-    } else if (type == "RESPONDER") {
+    } else if (type === "RESPONDER") {
       console.log("Ensure it's not called multiple times...");
       const offer_str = await fetchRTCOffer();
       console.log("offer_str", offer_str, typeof offer_str);
@@ -267,6 +336,21 @@ export default function ChatWindow({ with_email, with_userid }) {
           setConnectionOpened(true);
           console.log("connection opened!");
         };
+        rc.dc.onclose = async (e) => {
+          // setConnectionOpened(false);
+
+          //session_id
+
+          //session_id
+          console.log("connection CLosed! reponder", myRef.current.session_id);
+          delRTCUserEntry(Number(myRef.current.session_id));
+          //make the api call
+          //if success
+          //let's close the connection
+
+          //else
+          //show the error to try again
+        };
       };
 
       rc.setRemoteDescription(offer).then((a) => console.log("offerset"));
@@ -278,13 +362,16 @@ export default function ChatWindow({ with_email, with_userid }) {
     }
   };
   useEffect(async () => {
+    console.log("AREEWREWHERE");
     const fetchRequestStatus = async () => {
       const JWT_TOKEN = localStorage.getItem("token");
       const token = `Bearer ${JWT_TOKEN}`;
 
       try {
+        // const we = 'deepaksingh.18feb%40gmail.com'
+        console.log("WHERE  IS withemail", with_email);
         const response = await fetch(
-          `http://13.233.212.156:8000/api/request_info/${with_email}`,
+          `http://192.168.1.13:8000/api/handle_request?to_email=${with_email}`,
           {
             method: "GET",
             headers: {
@@ -309,7 +396,9 @@ export default function ChatWindow({ with_email, with_userid }) {
     const JWT_TOKEN = localStorage.getItem("token");
     const token = `Bearer ${JWT_TOKEN}`;
     const req_status = await fetchRequestStatus();
-    if (req_status.status == "ACCEPTED") {
+    console.log("hererewis req_status", req_status.status);
+    setRequestStatus(req_status.status);
+    if (req_status.status === "ACCEPTED") {
       console.log("SHOUDL IT BE ACCEPTED FRO BOTH");
 
       console.log("make call to check if we can get the RTC Entry", req_status);
@@ -319,7 +408,7 @@ export default function ChatWindow({ with_email, with_userid }) {
       }, 10000);
       setIntervalId(intervalId);
       console.log("rtc_entry mayn eed more checks", rtc_entry);
-      if (rtc_entry == null) {
+      if (rtc_entry === null) {
         const [dc, lc] = await initializeNRespondWebRTC(token, "INITIATOR");
         console.log("dowehave dc", dc);
         if (dc) {
@@ -328,10 +417,11 @@ export default function ChatWindow({ with_email, with_userid }) {
             type: "INITIATOR",
             channel: dc,
             lc: lc,
+            // session_id:
           };
           // myRef.current = 'updated Value';
         }
-      } else if (rtc_entry.answer == null && rtc_entry.sdp != null) {
+      } else if (rtc_entry.answer === null && rtc_entry.sdp != null) {
         console.log("here is rtc_entry", rtc_entry);
 
         const [rc, lc] = await initializeNRespondWebRTC(token, "RESPONDER");
@@ -341,6 +431,7 @@ export default function ChatWindow({ with_email, with_userid }) {
           myRef.current = {
             type: "RESPONDER",
             channel: rc,
+            session_id: rtc_entry["id"],
           };
         }
       }
@@ -353,17 +444,17 @@ export default function ChatWindow({ with_email, with_userid }) {
       console.log("prvchats", prevChats);
       return [...prevChats, { content: msg, who: "ME" }];
     });
-    if (myRef.current["type"] == "INITIATOR") {
+    if (myRef.current["type"] === "INITIATOR") {
       myRef.current.channel.send(msg);
     } else {
       myRef.current.channel.dc.send(msg);
     }
 
-    // myRef.current['type']=="INITIATOR"
+    // myRef.current['type']==="INITIATOR"
   };
   useEffect(() => {
     if (answer) {
-      if (myRef.current["type"] == "INITIATOR") {
+      if (myRef.current["type"] === "INITIATOR") {
         const answer = JSON.parse(myRef.current.answer);
         myRef.current.lc.setRemoteDescription(answer);
         console.log("should clear right after this", intervalId);
@@ -380,20 +471,36 @@ export default function ChatWindow({ with_email, with_userid }) {
   return (
     <div
       style={{
-        border: "1px solid blue",
-        height: "600px",
-        width: "700px",
-        background: "rgb(221, 237, 240,0.2)",
+        // border: "1px solid blue",
+        // height: "600px",
+        // // width: "700px",
+        // background: "rgb(221, 237, 240,0.2)",
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        background: "white",
       }}
     >
-      {loading ? (
-        <p>Loading...</p>
-      ) : connection_open ? (
-        <ChatScreen with_email={with_email} chats={chats} sendMsg={sendMsg} />
-      ) : requestStatus !== "ACCEPTED" ? (
-        <RequestScreen with_email={with_email} />
+      {requestStatus ? (
+        <div>
+          <ChatScreenWithInfo
+            ref={myRef}
+            setvideoView={setvideoView}
+            videoView={videoView}
+            with_userid={with_userid}
+            SetWithUserId={SetWithUserId}
+            SetWithEmail={SetWithEmail}
+            requestStatus={requestStatus}
+            connection_open={connection_open}
+            with_email={with_email}
+            chats={chats}
+            sendMsg={sendMsg}
+          />
+        </div>
       ) : (
-        <div>Nothing Matched!</div>
+        <div>loadding...</div>
       )}
     </div>
   );

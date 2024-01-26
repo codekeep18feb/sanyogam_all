@@ -14,7 +14,7 @@ export default function VideoWindow({ with_email, with_userid }) {
   const myRef = useRef(null);
 
   const yourVideoRef = useRef(null);
-  const [videoStream, setVideoStream] = useState(null);
+  // const [videoStream, setVideoStream] = useState(null);
 
   const [connection_open, setConnectionOpened] = useState(false);
   const fetchRTCUserInfo = async () => {
@@ -23,7 +23,7 @@ export default function VideoWindow({ with_email, with_userid }) {
 
     try {
       const response = await fetch(
-        `http://13.233.212.156:8000/api/rtc_user_info_by_id/${with_userid}`,
+        `http://192.168.1.13:8000/api/rtc_user_info_by_id/${with_userid}`,
         {
           method: "GET",
           headers: {
@@ -47,7 +47,7 @@ export default function VideoWindow({ with_email, with_userid }) {
             setAnswer(true);
           }
         }
-        return Object.entries(data).length == 0 ? null : data;
+        return Object.entries(data).length === 0 ? null : data;
       } else {
         console.log("Error fetching chat history");
       }
@@ -64,18 +64,21 @@ export default function VideoWindow({ with_email, with_userid }) {
     const token = `Bearer ${JWT_TOKEN}`;
 
     try {
-      const response = await fetch(`http://13.233.212.156:8000/api/add_rtc_user`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: token,
-        },
-        body: JSON.stringify({
-          initiator: isInitiator,
-          sdp: sdp,
-          to_user: to_user,
-        }),
-      });
+      const response = await fetch(
+        `http://192.168.1.13:8000/api/add_rtc_user`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
+          body: JSON.stringify({
+            initiator: isInitiator,
+            sdp: sdp,
+            to_user: to_user,
+          }),
+        }
+      );
 
       if (response.status === 200) {
         const data = await response.json();
@@ -90,27 +93,30 @@ export default function VideoWindow({ with_email, with_userid }) {
     }
   };
 
-  const setStream = (es) => {
-    setVideoStream(es);
-  };
+  // const setStream = (es) => {
+  //   setVideoStream(es);
+  // };
   const saveRTCUserAns = async (isInitiator, sdp, to_user) => {
     console.log("save answer", isInitiator, sdp, to_user);
     const JWT_TOKEN = localStorage.getItem("token");
     const token = `Bearer ${JWT_TOKEN}`;
 
     try {
-      const response = await fetch(`http://13.233.212.156:8000/api/add_rtc_user`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: token,
-        },
-        body: JSON.stringify({
-          initiator: isInitiator,
-          sdp: sdp,
-          to_user: to_user,
-        }),
-      });
+      const response = await fetch(
+        `http://192.168.1.13:8000/api/add_rtc_user`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
+          body: JSON.stringify({
+            initiator: isInitiator,
+            sdp: sdp,
+            to_user: to_user,
+          }),
+        }
+      );
 
       if (response.status === 200) {
         const data = await response.json();
@@ -132,7 +138,7 @@ export default function VideoWindow({ with_email, with_userid }) {
 
     try {
       const response = await fetch(
-        `http://13.233.212.156:8000/api/rtc_user_info_by_id/${with_userid}`,
+        `http://192.168.1.13:8000/api/rtc_user_info_by_id/${with_userid}`,
         {
           method: "GET",
           headers: {
@@ -156,10 +162,10 @@ export default function VideoWindow({ with_email, with_userid }) {
     }
   };
   const fetchUserId = async (token, with_email) => {
-    // http://13.233.212.156:8000/api/users/query?q_email=deepaksingh.18feb%40gmail.com
+    // http://192.168.1.13:8000/api/users/query?q_email=deepaksingh.18feb%40gmail.com
     try {
       const response = await fetch(
-        `http://13.233.212.156:8000/api/users/query?q_email=${with_email}`,
+        `http://192.168.1.13:8000/api/users/query?q_email=${with_email}`,
         {
           method: "GET",
           headers: {
@@ -184,7 +190,7 @@ export default function VideoWindow({ with_email, with_userid }) {
     }
   };
   const initializeWebRTC = async (token, type) => {
-    if (type == "INITIATOR") {
+    if (type === "INITIATOR") {
       console.log("Ensure it's not called multiple times...");
 
       const lc = new RTCPeerConnection();
@@ -195,7 +201,7 @@ export default function VideoWindow({ with_email, with_userid }) {
       console.log("doweseestream", stream);
       yourVideoRef.current.srcObject = stream;
       // myRef.current = {"srcObject":stream};
-      setStream(stream);
+      // setStream(stream);
       lc.addStream(stream);
       lc.onaddstream = (event) => {
         console.log("ON LOCAL @ TRACK", event, event.stream, myRef.current);
@@ -239,7 +245,7 @@ export default function VideoWindow({ with_email, with_userid }) {
           );
         });
       return [lc];
-    } else if (type == "RESPONDER") {
+    } else if (type === "RESPONDER") {
       console.log("Ensure it's not called multiple times...");
       const offer_str = await fetchRTCOffer();
       console.log("offer_str", offer_str, typeof offer_str);
@@ -253,7 +259,7 @@ export default function VideoWindow({ with_email, with_userid }) {
       console.log("doweseestream", stream);
       yourVideoRef.current.srcObject = stream;
       // myRef.current = {"srcObject":stream};
-      setStream(stream);
+      // setStream(stream);
       rc.addStream(stream);
       // const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
       console.log("doweseestream", stream);
@@ -300,7 +306,8 @@ export default function VideoWindow({ with_email, with_userid }) {
         console.log("set remoteDescription with local offer");
         console.log(
           "Signaling State after setting remoteDescription",
-          rc.signalingState
+          rc.signalingState,
+          a
         );
       });
 
@@ -345,7 +352,7 @@ export default function VideoWindow({ with_email, with_userid }) {
 
       try {
         const response = await fetch(
-          `http://13.233.212.156:8000/api/chathistory/${with_email}`,
+          `http://192.168.1.13:8000/api/chathistory/${with_email}`,
           {
             method: "GET",
             headers: {
@@ -374,7 +381,7 @@ export default function VideoWindow({ with_email, with_userid }) {
 
       try {
         const response = await fetch(
-          `http://13.233.212.156:8000/api/request_info/${with_email}`,
+          `http://192.168.1.13:8000/api/handle_request?to_email=${with_email}`,
           {
             method: "GET",
             headers: {
@@ -409,7 +416,7 @@ export default function VideoWindow({ with_email, with_userid }) {
     // }
 
     const req_status = await fetchRequestStatus();
-    if (req_status.status == "ACCEPTED") {
+    if (req_status.status === "ACCEPTED") {
       console.log("make call to check if we can get the RTC Entry", req_status);
       const rtc_entry = await fetchRTCUserInfo();
       const intervalId = setInterval(() => {
@@ -418,7 +425,7 @@ export default function VideoWindow({ with_email, with_userid }) {
       setIntervalId(intervalId);
 
       console.log("rtc_entry mayn eed more checks", rtc_entry);
-      if (rtc_entry == null) {
+      if (rtc_entry === null) {
         const [lc] = await initializeWebRTC(token, "INITIATOR");
         // console.log("dowehave dc",dc)
         if (lc) {
@@ -431,7 +438,7 @@ export default function VideoWindow({ with_email, with_userid }) {
 
           // myRef.current = 'updated Value';
         }
-      } else if (rtc_entry.answer == null && rtc_entry.sdp != null) {
+      } else if (rtc_entry.answer === null && rtc_entry.sdp != null) {
         console.log("here is rtc_entry", rtc_entry);
 
         const [rc] = await initializeWebRTC(token, "RESPONDER");
@@ -493,9 +500,9 @@ export default function VideoWindow({ with_email, with_userid }) {
       console.log(
         "if INITIATOR I THING WE CAN INITIATE THE CONNECTION??,",
         myRef.current,
-        myRef.current["type"] == "INITIATOR"
+        myRef.current["type"] === "INITIATOR"
       );
-      if (myRef.current["type"] == "INITIATOR") {
+      if (myRef.current["type"] === "INITIATOR") {
         // let's perform the thrid step
         console.log(
           "hereAnswer",

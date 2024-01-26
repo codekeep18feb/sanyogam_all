@@ -1,0 +1,17 @@
+module.exports = {
+  extends: [
+    'react-app',
+    'react-app/jest',
+  ],
+  rules: {
+    // Add your custom rules here
+    "no-unused-vars": ["error", { "varsIgnorePattern": "^_.*" }],
+    "react/prop-types": "off",
+    "react/jsx-filename-extension": ["error", { "extensions": [".js", ".jsx"] }],
+    "react/jsx-indent": ["error", 2],
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
+    "eqeqeq": ["error", "always", {"null": "ignore"}] // Enable automatic fixing for 'eqeqeq'
+
+  }
+};

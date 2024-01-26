@@ -17,7 +17,7 @@ export function GoogleAuthorize({ login }) {
   const GOOGLE_CLIENT_ID =
     "93333716320-7ls324ni108j5b3oqtsnp28gc89b0d6s.apps.googleusercontent.com";
   const GOOGLE_CLIENT_SECRET = "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";
-  const GOOGLE_REDIRECT_URI = "http://13.233.212.156:3000/google_authorized";
+  const GOOGLE_REDIRECT_URI = "http://192.168.1.13:3000/google_authorized";
   const GOOGLE_TOKEN_URL = "https://accounts.google.com/o/oauth2/token";
   const GOOGLE_USER_INFO_URL = "https://www.googleapis.com/oauth2/v1/userinfo";
 
@@ -98,7 +98,7 @@ export function GoogleAuthorize({ login }) {
     try {
       // Make the API request with the password and user_info
       const response = await fetch(
-        "http://13.233.212.156:8000/api/save_user_detail",
+        "http://192.168.1.13:8000/api/save_user_detail",
         {
           method: "POST",
           headers: {
@@ -116,7 +116,7 @@ export function GoogleAuthorize({ login }) {
         // const data = await response.json();
         // console.log('API response:', data);
         try {
-          const response = await fetch("http://13.233.212.156:8000/api/login", {
+          const response = await fetch("http://192.168.1.13:8000/api/login", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -132,7 +132,7 @@ export function GoogleAuthorize({ login }) {
             // Save the token to local storage
 
             if (data) {
-              const response = await fetch("http://13.233.212.156:8000/api/me", {
+              const response = await fetch("http://192.168.1.13:8000/api/me", {
                 method: "GET",
                 headers: {
                   "Content-Type": "application/json",
@@ -164,7 +164,7 @@ export function GoogleAuthorize({ login }) {
             setError("Invalid email or password");
           }
 
-          // const response2 = await fetch('http://13.233.212.156:8000/api/profiles', {
+          // const response2 = await fetch('http://192.168.1.13:8000/api/profiles', {
           //   method: 'GET',
           //   headers: {
           //     'Content-Type': 'application/json',

@@ -1,25 +1,24 @@
-import React from 'react';
-import FormControl from '@mui/material/FormControl';
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Radio from '@mui/material/Radio';
-import Select from '@mui/material/Select';
-import Typography from '@mui/material/Typography';
-import TextField from '@mui/material/TextField';
-import MenuItem from '@mui/material/MenuItem';
+import React from "react";
+import FormControl from "@mui/material/FormControl";
+import FormGroup from "@mui/material/FormGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import Radio from "@mui/material/Radio";
+import Select from "@mui/material/Select";
+import Typography from "@mui/material/Typography";
+import TextField from "@mui/material/TextField";
+import MenuItem from "@mui/material/MenuItem";
 
 export default function DummyLogin() {
-  const [selectedGender, setSelectedGender] = React.useState('Male');
-  const [selectedDropdown, setSelectedDropdown] = React.useState('dropdown1'); // Default to 'dropdown1'
-  const [name, setName] = React.useState('');
+  const [selectedGender, setSelectedGender] = React.useState("Male");
+  const [selectedDropdown, setSelectedDropdown] = React.useState("dropdown1"); // Default to 'dropdown1'
+  const [name, setName] = React.useState("");
   const [gender, setGender] = React.useState({
     opt1: false,
     opt2: false,
     other: false,
   });
 
-  
   const handleRadioChange = (event) => {
     const value = event.target.value;
     setSelectedGender(value);
@@ -48,7 +47,7 @@ export default function DummyLogin() {
           <FormControlLabel
             control={
               <Radio
-                checked={selectedGender === 'Male'}
+                checked={selectedGender === "Male"}
                 onChange={handleRadioChange}
                 value="Male"
                 name="gender"
@@ -59,7 +58,7 @@ export default function DummyLogin() {
           <FormControlLabel
             control={
               <Radio
-                checked={selectedGender === 'Female'}
+                checked={selectedGender === "Female"}
                 onChange={handleRadioChange}
                 value="Female"
                 name="gender"

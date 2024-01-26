@@ -1,3 +1,5 @@
+# ... (other configurations)
+import logging
 import json
 import jwt
 import pathlib
@@ -5,9 +7,22 @@ import time
 import connexion
 from flask_marshmallow import Marshmallow
 from flask_sqlalchemy import SQLAlchemy
-from flask_jwt_extended import JWTManager, jwt_required
+from flask_jwt_extended import JWTManager
 from flask_cors import CORS
+from flask_socketio import SocketIO
+from flask import jsonify
 
+from flask.json import JSONEncoder
+from enum import Enum
+logging.basicConfig(level=logging.DEBUG)
+
+
+class CustomJSONEncoder(JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, Enum):
+            return obj.value
+        return super().default(obj)
+    
 JWT_ISSUER = "com.zalando.connexion"
 JWT_SECRET = "change_this"
 JWT_LIFETIME_SECONDS = 6000000
@@ -46,32 +61,43 @@ def _current_timestamp() -> int:
 
 
 basedir = pathlib.Path(__file__).parent.resolve()
-print("AMICORRECT ? basedir",basedir)
+print("AMICORRECT ? basedir", basedir)
 connex_app = connexion.App(__name__, specification_dir=basedir)
-# Initialize CORS to allow requests from http://13.233.212.156:3000
-# CORS(connex_app.app)
-CORS(connex_app.app, resources={r"/api/*": {"origins": "http://13.233.212.156:3000"}})
+# CORS(connex_app.app, resources={r"/api/*": {"origins": "http://192.168.1.13:3000"}})
+CORS(connex_app.app, resources={r"/api/*": {"origins": ["http://192.168.1.13:3000", "http://192.168.1.13:8000"]}})
 
-
-
-
-@connex_app.app.after_request
-def add_cors_headers(response):
-    response.headers['Access-Control-Allow-Origin'] = '*'
-    response.headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS'
-    response.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
-    return response
+# Attach SocketIO to the Flask app
+socketio = SocketIO(cors_allowed_origins="*")
+socketio.init_app(connex_app.app)
 
 
 
 app = connex_app.app
+app.json_encoder = CustomJSONEncoder
+
+@app.errorhandler(Exception)
+def handle_exception(error):
+    logging.exception("An unexpected erxxcvror occurred caught by Central Exception handler")
+
+    response = {
+        'error': str(error),
+        'message': 'An unexpected error occurred caught by Centeral Exception handler',
+    }
+    return jsonify(response), 500
+
+# app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{basedir / 'sgam.db'}"
+# app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://developerRole:Django@321!@localhost/sgam"
+from urllib.parse import quote
+
+# Original password with special characters
+password = "Django@321!"
+
+# URL-encode the password
+encoded_password = quote(password, safe="")
+# app.config["SQLALCHEMY_DATABASE_URI"] = f"postgresql://developerRole:{encoded_password}@localhost/sgam"
 app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{basedir / 'sgam.db'}"
+
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-
-# Add JWT configuration
-# app.config["JWT_SECRET_KEY"] = "your_secret_key"  # Replace with your secret key
-# jwt = JWTManager(app)
-
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
-
+# jwt = JWTManager(app)
