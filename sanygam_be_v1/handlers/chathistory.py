@@ -5,7 +5,7 @@ from flask import Flask, request, abort ,jsonify
 from config import db, generate_token
 from config import db, decode_token
 
-from models import MyEnum, User, users_schema, user_schema, UserSchema,Profile,ChatHistory
+from models import OnlineStatusEnum, User, users_schema, user_schema, UserSchema,Profile,ChatHistory
 from models import chat_histories_schema, UserRequests,UserRequestsSchema,ChatHistorySchema
 
 def get_timestamp():
@@ -83,9 +83,9 @@ def send_msg(payload,to_userid):
 
 
     print("to_user_request",existing_req.status)
-    if not existing_req.status==MyEnum.ACCEPTED:
+    if not existing_req.status==OnlineStatusEnum.ACCEPTED:
         abort(400, f"request status {existing_req.status}")
-    elif existing_req.status==MyEnum.ACCEPTED:
+    elif existing_req.status==OnlineStatusEnum.ACCEPTED:
         print("frm_user",frm_user,"to_user",to_user)
         # print("here sicontent",content)
         new_chat = ChatHistory(msg=payload['msg'],

@@ -76,7 +76,7 @@ def handle_request():
             
             #reciever case
             print('all_requests_query.status',all_requests_query.status)
-            if all_requests_query and all_requests_query.status==MyEnum.SENT and (action == 'ACCEPTED' or action == 'REJECTED'):
+            if all_requests_query and all_requests_query.status==OnlineStatusEnum.SENT and (action == 'ACCEPTED' or action == 'REJECTED'):
                 # if all_requests_query.to_user==me_user.id:
                 #     abort(400, f"It's sent by you only so you can't `Accept` it")
 
@@ -86,7 +86,7 @@ def handle_request():
                 return f"Successfully Accepted"
             
 
-            # if to_user_request and to_user_request.status == MyEnum.SENT:
+            # if to_user_request and to_user_request.status == OnlineStatusEnum.SENT:
             #     prv_user_request_s = to_user_request.status.name
             #     to_user_request.status = action
             #     db.session.add(to_user_request)
@@ -162,7 +162,7 @@ def respond_request(to_email):
     print("what is the diff",UserRequests,to_user.id)
     to_user_request = UserRequests.query.filter_by(frm_user=to_user.id).first() ##(frm_user=to_user.id)
     print('to_user_reqsdfsduest',to_user_request.status)
-    if to_user_request.status == MyEnum.SENT:
+    if to_user_request.status == OnlineStatusEnum.SENT:
         prv_user_request_s = to_user_request.status.name
         to_user_request.status=action
         db.session.add(to_user_request)

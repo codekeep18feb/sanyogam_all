@@ -21,6 +21,9 @@ object_key = 'profile_images/{id}.jpg'
 content_type = 'image/jpeg'
 from functools import wraps
 
+
+
+
 def update_my_profile(profile_update_data, **kwargs):
     me = kwargs.get('me')
     gender =      profile_update_data.get('gender',me.profile.gender)
@@ -74,7 +77,7 @@ def all_profiles(p_filter_obj, **kwargs):
     fres = profiles_schema.dump(all_profiles_data)
     return fres
 
-   
+@utils.authenticate
 def myprofile(**kwargs):
     me = kwargs.get('me')
     me = User.query.filter_by(email=me.email).first()
@@ -115,6 +118,12 @@ def handle_filtering(all_profiles_query, p_filter_obj,user_profile_id):
    
     # else:
     #     abort(500, f"internal server error")
+
+
+
+
+
+
 
 
 def read_all_profiles_old(**kwargs):
@@ -212,18 +221,6 @@ def read_online_circle(**kwargs):
         # return user_req_schema.dump(results)
     else:
         abort(500, f"internal server error")
-
-
-def my_decorator(param):
-    def wrapper(func):
-        def inner(*args, **kwargs):
-            # Do something before calling the decorated function
-            print(f"Decorator parameter: {param}")
-            result = func(*args, **kwargs)
-            # Do something after calling the decorated function
-            return result
-        return inner
-    return wrapper
 
 
 def get_timestamp():

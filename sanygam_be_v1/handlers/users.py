@@ -8,7 +8,7 @@ from config import db, generate_token
 from config import db, decode_token
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-# from models import MyEnum  # Import the Enum class
+# from models import OnlineStatusEnum  # Import the Enum class
 from .common import utils
 
 # from models import *
@@ -233,7 +233,6 @@ class UserH(UserValidation):
         self.timestamp = datetime.strptime(self.timestamp_str, '%Y-%m-%d %H:%M:%S')
         if signup_data:
             super().__init__(signup_data)
-
     
     def to_dict(self):
         return {
@@ -260,7 +259,6 @@ class UserH(UserValidation):
         db.session.commit()
         return [user,profile]
 
-    
     def me(self,email):
         
         user = models.User().get(email)
@@ -284,8 +282,6 @@ class UserH(UserValidation):
         db.session.add(user)
         db.session.commit()
         
-
-
     def login(self):
         email = self.email
         password = self.password
@@ -307,6 +303,9 @@ class UserH(UserValidation):
         return {
             "token": generate_token({"email":email}),
         }
+
+
+
 
 @utils.authenticate        
 def me(**kwargs):
