@@ -279,24 +279,9 @@ class UserH(UserMixin, ValidationMixin):
         db.session.commit()
         return {"token": generate_token({"email": self.email})}
 
-# Authentication decorator
-def authenticate(func):
-    def wrapper(**kwargs):
-        me = kwargs.get('me')
-        if me:
-            user_dict = {
-                "id": me.id,
-                "fname": me.fname,
-                "lname": me.lname,
-                "image": me.profile.image
-            }
-            return user_dict
-        else:
-            abort(404, "No such user found")
-    return wrapper
 
 # Route functions
-@authenticate
+@utils.authenticate
 def me(**kwargs):
     return kwargs
 
