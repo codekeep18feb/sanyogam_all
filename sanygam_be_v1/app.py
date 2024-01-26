@@ -56,33 +56,54 @@ import threading
 
 s_pool = []
 
-async def make_api_call():
-    api_url = 'https://jsonplaceholder.typicode.com/todos/1'
+async def make_api_call(authorization_token):
+    api_url = 'http://192.168.1.13:3000/api/me'
 
+    headers = {
+        'Authorization': f'{authorization_token}',
+        'Content-Type': 'application/json',  # Adjust content type if needed
+    }
+    
     async with aiohttp.ClientSession() as session:
-        async with session.get(api_url) as response:
+        async with session.get(api_url, headers=headers) as response:
             # Assuming the API returns JSON data
             api_data = await response.json()
+            print("api_dafasdfta",api_data)
 
     return api_data
 
+
+class DictWithDotAccess:
+    def __init__(self, dictionary):
+        self.dictionary = dictionary
+
+    def __getattr__(self, key):
+        if key in self.dictionary:
+            return self.dictionary[key]
+        else:
+            raise AttributeError(f"'DictWithDotAccess' object has no attribute '{key}'")
+
+
+
 async def async_emit_signal_pool(auth_token, message, with_userid):
     # Placeholder for any async operation
-    api_result = await make_api_call()
+    api_result = await make_api_call(auth_token)
 
-    # Process the API call result if needed
-    print("API Call Result:", api_result)
+    # # Process the API call result if needed
+    # print("API Call Result:", api_result)
 
-    print('check if msg is string only', message, type(message))
-    if not auth_token:
-        print('MARK1')
-        return "Unauthorized", 401
+    # print('check if msg is string only', message, type(message))
+    # if not auth_token:
+    #     print('MARK1')
+    #     return "Unauthorized", 401
 
-    scheme, token = auth_token.split('Bearer ')
-    decoded = decode_token(token)
-    decoded_data_str = decoded['sub']
-    json_dec_data = json.loads(decoded_data_str)
-    me = User.query.filter_by(email=json_dec_data['email']).first()
+    # scheme, token = auth_token.split('Bearer ')
+    # decoded = decode_token(token)
+    # decoded_data_str = decoded['sub']
+    # json_dec_data = json.loads(decoded_data_str)
+    # me = User.query.filter_by(email=json_dec_data['email']).first()
+    me = DictWithDotAccess(api_result)
+    
     if message:
         print("COPY MESSAGE", message, type(message))
         p_payload = json.loads(message)

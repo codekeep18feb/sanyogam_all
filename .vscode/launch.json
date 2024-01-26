@@ -1,0 +1,21 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Flask",
+            "type": "python",
+            "request": "launch",
+            "program": "/home/djangoboy/Desktop/workspaces/p__workspace/sanyogam_all_versions/v3/sanyogam_all/sanygam_be_v1/app.py",
+            "args": [
+                "run",
+                "--no-debugger",
+                "--no-reload"
+            ],
+            "env": {
+                "FLASK_APP": "/home/djangoboy/Desktop/workspaces/p__workspace/sanyogam_all_versions/v3/sanyogam_all/sanygam_be_v1/app.py",
+                "FLASK_ENV": "development",
+                "FLASK_DEBUG": "0"
+            }
+        }
+    ]
+}
