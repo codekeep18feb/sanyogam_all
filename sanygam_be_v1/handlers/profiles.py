@@ -79,6 +79,32 @@ def all_profiles(p_filter_obj, **kwargs):
     fres = profiles_schema.dump(all_profiles_data)
     return fres
 
+
+
+@utils.authenticate
+def fetch_online_profiles(p_filter_obj, **kwargs):
+    me = kwargs.get('me')
+    # print('api_rdfsfesult',api_result)
+
+    # me =  DictWithDotAccess(api_result)
+    
+    print('ME.PROFILE',me.profile)
+    
+    all_profiles_query = Profile.query
+    print('MARK4')
+    all_profiles_data = handle_filtering(all_profiles_query,
+        {
+        "family_info": {}
+        },
+        me.profile.id)
+    print('MARK5')
+    
+    fres = profiles_schema.dump(all_profiles_data)
+    
+    return fres   
+
+
+
 @utils.authenticate
 def myprofile(**kwargs):
     me = kwargs.get('me')

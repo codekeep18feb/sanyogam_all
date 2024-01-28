@@ -49,6 +49,7 @@ def handle_message(*args):
 
 
 s_pool = []
+
 async def make_me_api_call(authorization_token):
     api_url = 'http://192.168.1.13:3000/api/me'
 
@@ -64,6 +65,27 @@ async def make_me_api_call(authorization_token):
             print("api_dafasdfta",api_data)
 
     return api_data
+
+
+
+async def make_all_profiles_api_call(authorization_token, request_data):
+    api_url = 'http://192.168.1.13:3000/api/fetch_online_profiles'
+
+    headers = {
+        'Authorization': f'{authorization_token}',
+        'Content-Type': 'application/json',  # Adjust content type if needed
+    }
+    
+    async with aiohttp.ClientSession() as session:
+        async with session.post(api_url, headers=headers, json=request_data) as response:
+            # Assuming the API returns JSON data
+            api_data = await response.json()
+            print("api_dafasdfta",api_data)
+
+    return api_data
+
+
+
 
 class DictWithDotAccess:
     def __init__(self, dictionary):
@@ -178,7 +200,9 @@ def handle_message(for_userid):
 
 async def async_emit_fetch_online_profiles(*args):
     message = 'merersg'
-    print('Received payload for fetch_online_profiles:', message,args,request.sid)
+    auth_token = request.args.get('Authorization')
+    
+    # print('Received payload for fetch_online_profiles:', auth_token)
     
     
     #********************IDEA IS SIMPLE*************
@@ -186,102 +210,60 @@ async def async_emit_fetch_online_profiles(*args):
     #handlers.profiles.all_profiles
     #infact use the same code if possible
     # auth_token = request.headers.get("Authorization")
-    auth_token = request.args.get('Authorization')
+    # auth_token = request.args.get('Authorization')
     if not auth_token:
         print('MARK1')
         return "Unauthorized", 401
     
-    print("auth_token",auth_token)
+    # print("auth_token",auth_token)
     
-    scheme, token = auth_token.split('Bearer ')    
-    decoded = decode_token(token)
-    decoded_data_str = decoded['sub']
-    print('MARK2')
+    # scheme, token = auth_token.split('Bearer ')    
+    # decoded = decode_token(token)
+    # decoded_data_str = decoded['sub']
+    # print('MARK2')
     
-    json_dec_data = json.loads(decoded_data_str)
-    print('MARK3')
-    me = User.query.filter_by(email=json_dec_data['email']).first()
+    # json_dec_data = json.loads(decoded_data_str)
+    # print('MARK3')
+    # me = User.query.filter_by(email=json_dec_data['email']).first()
 
-    print('ME.PROFILE',me.profile)
-    
-    all_profiles_query = Profile.query
-    print('MARK4')
-    all_profiles_data = handle_filtering(all_profiles_query,
-        {
+    api_result = await make_all_profiles_api_call(auth_token,{
         "family_info": {}
-        },
-        me.profile.id)
-    print('MARK5')
+        })
+    print('fghsdfasdfasdgjhgfyghjgh',api_result)
+
+    # me =  DictWithDotAccess(api_result)
     
-    fres = profiles_schema.dump(all_profiles_data)
+    # print('ME.PROFILE',me.profile)
     
-    print('RESUSLT: ',fres)
+    # all_profiles_query = Profile.query
+    # print('MARK4')
+    # all_profiles_data = handle_filtering(all_profiles_query,
+        # {
+        # "family_info": {}
+        # },
+    #     me.profile.id)
+    # print('MARK5')
+    
+    # fres = profiles_schema.dump(api_result)
+    
+    print('RESUSLT:sdfsadfsd ',api_result)
     # return fres
-    socketio.emit('fetch_online_profiles', json.dumps(fres))
+    socketio.emit('fetch_online_profiles', json.dumps(api_result))
 
 @socketio.on('fetch_online_profiles')
 def handle_message(*args):
+    auth_token = request.args.get('Authorization')
+    print('dfasdf',auth_token)
     asyncio.run(async_emit_fetch_online_profiles(*args))
     
 
-
-# Set to store existing rooms
-existing_rooms = set()
-
-@socketio.on('fetch_profile_chats')
-def handle_message(*args):
+async def async_emit_fetch_profile_chats(*args,auth_token):
     with_user_id = args[0]
     message = 'merersg'
     
+    api_result = await make_me_api_call(auth_token)
+    me =  DictWithDotAccess(api_result)
     
-    #********************IDEA IS SIMPLE*************
-    #Let's return the same we used to respective apis
-    #handlers.profiles.all_profiles
-    #infact use the same code if possible
-    # auth_token = request.headers.get("Authorization")
-    auth_token = request.args.get('Authorization')
-    if not auth_token:
-        print('MARKDSFSDF1')
-        return "Unauthorized", 401
-    
-    print("auth_token",auth_token)
-    
-    scheme, token = auth_token.split('Bearer ')    
-    decoded = decode_token(token)
-    decoded_data_str = decoded['sub']
-    print('MARK2')
-    
-    json_dec_data = json.loads(decoded_data_str)
-    print('MARK3')
-    me = User.query.filter_by(email=json_dec_data['email']).first()
-
-    print('ME.PROFILE',me.profile)
-    print('Received chat msgsfdssdf:', with_user_id,me.id)
-    # query = ChatHistory.query
-    # all_chats = query.filter(
-    #     (ChatHistory.frm_user_id == me.id)
-    # )
-
-    # all_chats = ChatHistory.query.filter(
-    #     (ChatHistory.frm_user_id == me.id)
-    # )
-    
-    all_chats = ChatHistory.query.filter(
-        and_(
-            or_(ChatHistory.frm_user_id == me.id, ChatHistory.to_user_id == me.id),
-            or_(ChatHistory.frm_user_id == with_user_id, ChatHistory.to_user_id == with_user_id),
-        )
-        )
-
-    all_chats = all_chats.all()
-
-    print('MARK4afasdf',all_chats)
-    # all_profiles_data = handle_filtering(all_profiles_query,
-    #     {
-    #     "family_info": {}
-    #     },
-    #     me.profile.id)
-    # print('MARK5')
     
     chats = chat_histories_schema.dump([])
     room_str = f"{me.id}_{with_user_id}"
@@ -293,7 +275,38 @@ def handle_message(*args):
     # existing_rooms.add(room_str)
     join_room(room_str)
     socketio.emit('fetch_profile_chats', json.dumps(chats), room=room_str)
-    # socketio.emit('fetch_profile_chats', chat_histories_schema.dump(all_chats))
+    # socketio.emit('fetch_profile_chats', chat_histories_schema.dump(all_cha
+
+
+
+
+
+# Set to store existing rooms
+existing_rooms = set()
+
+@socketio.on('fetch_profile_chats')
+def handle_message(*args):
+    # with_user_id = args[0]
+    # message = 'merersg'
+    
+    
+    
+    # chats = chat_histories_schema.dump([])
+    # room_str = f"{me.id}_{with_user_id}"
+    # first, second = room_str.split('_')
+    # new_roo_str = f"{second}_{first}"
+    # if room_str not in existing_rooms and new_roo_str not in existing_rooms:
+    #     existing_rooms.add(room_str)
+
+    # # existing_rooms.add(room_str)
+    # join_room(room_str)
+    # socketio.emit('fetch_profile_chats', json.dumps(chats), room=room_str)
+    # # socketio.emit('fetch_profile_chats', chat_histories_schema.dump(all_chats))
+    auth_token = request.headers.get("Authorization")
+    
+    asyncio.run(async_emit_fetch_profile_chats(*args,auth_token))
+
+
 
 
 
@@ -337,3 +350,76 @@ connex_app.add_api(basedir / "swagger.yml")
 if __name__ == "__main__":
     # connex_app.run(host="0.0.0.0", port=8000, debug=True)
     socketio.run(app, host="0.0.0.0", port=8000, debug=True)
+
+
+
+#  to store existing rooms
+# existing_rooms = set()
+
+# @socketio.on('fetch_profile_chats')
+# def handle_message(*args):
+#     with_user_id = args[0]
+#     message = 'merersg'
+    
+    
+#     #********************IDEA IS SIMPLE*************
+#     #Let's return the same we used to respective apis
+#     #handlers.profiles.all_profiles
+#     #infact use the same code if possible
+#     # auth_token = request.headers.get("Authorization")
+#     # auth_token = request.args.get('Authorization')
+#     # if not auth_token:
+#     #     print('MARKDSFSDF1')
+#     #     return "Unauthorized", 401
+    
+#     # print("auth_token",auth_token)
+    
+#     # scheme, token = auth_token.split('Bearer ')    
+#     # decoded = decode_token(token)
+#     # decoded_data_str = decoded['sub']
+#     # print('MARK2')
+    
+#     # json_dec_data = json.loads(decoded_data_str)
+#     # print('MARK3')
+#     # me = User.query.filter_by(email=json_dec_data['email']).first()
+
+#     # print('ME.PROFILE',me.profile)
+#     # print('Received chat msgsfdssdf:', with_user_id,me.id)
+#     # # query = ChatHistory.query
+#     # # all_chats = query.filter(
+#     # #     (ChatHistory.frm_user_id == me.id)
+#     # # )
+
+#     # # all_chats = ChatHistory.query.filter(
+#     # #     (ChatHistory.frm_user_id == me.id)
+#     # # )
+    
+#     # all_chats = ChatHistory.query.filter(
+#     #     and_(
+#     #         or_(ChatHistory.frm_user_id == me.id, ChatHistory.to_user_id == me.id),
+#     #         or_(ChatHistory.frm_user_id == with_user_id, ChatHistory.to_user_id == with_user_id),
+#     #     )
+#     #     )
+
+#     # all_chats = all_chats.all()
+
+#     # print('MARK4afasdf',all_chats)
+#     # all_profiles_data = handle_filtering(all_profiles_query,
+#     #     {
+#     #     "family_info": {}
+#     #     },
+#     #     me.profile.id)
+#     # print('MARK5')
+    
+#     chats = chat_histories_schema.dump([])
+#     room_str = f"{me.id}_{with_user_id}"
+#     first, second = room_str.split('_')
+#     new_roo_str = f"{second}_{first}"
+#     if room_str not in existing_rooms and new_roo_str not in existing_rooms:
+#         existing_rooms.add(room_str)
+
+#     # existing_rooms.add(room_str)
+#     join_room(room_str)
+#     socketio.emit('fetch_profile_chats', json.dumps(chats), room=room_str)
+#     # socketio.emit('fetch_profile_chats', chat_histories_schema.dump(all_chats))
+

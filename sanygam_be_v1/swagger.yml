@@ -691,7 +691,6 @@ paths:
         "200":
           description: "Successfully read profiles list read_online_circle"
       
-  # read_online_circle
   /profiles:
     post:
       operationId: "handlers.profiles.all_profiles"
@@ -711,4 +710,25 @@ paths:
       responses:
         "200":
           description: "Successfully read profiles list"
+      
+
+  /fetch_online_profiles:
+    post:
+      operationId: "handlers.profiles.fetch_online_profiles"
+      security:
+        - JWTAuth: [] 
+      tags:
+        - "People"
+      summary: "Read the list of alfetch_online_profiles"
+      requestBody:
+        description: "Profile Filter Obj"
+        required: false
+        content:
+          application/json:
+            schema:
+              x-body-name: "p_filter_obj"
+              $ref: "#/components/schemas/ProfileFilterObj"
+      responses:
+        "200":
+          description: "Successfully reafetch_online_profilesist"
       
