@@ -257,7 +257,9 @@ def handle_message(*args):
     asyncio.run(async_emit_fetch_online_profiles(*args))
     
 
-async def async_emit_fetch_profile_chats(*args,auth_token):
+async def async_emit_fetch_profile_chats(*args):
+    auth_token = request.args.get('Authorization')
+    
     with_user_id = args[0]
     message = 'merersg'
     
@@ -303,8 +305,8 @@ def handle_message(*args):
     # socketio.emit('fetch_profile_chats', json.dumps(chats), room=room_str)
     # # socketio.emit('fetch_profile_chats', chat_histories_schema.dump(all_chats))
     auth_token = request.headers.get("Authorization")
-    
-    asyncio.run(async_emit_fetch_profile_chats(*args,auth_token))
+    # print('DWOEASDFASDF',auth_token)
+    asyncio.run(async_emit_fetch_profile_chats(*args))
 
 
 
