@@ -12,7 +12,6 @@ def get_timestamp():
     return datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
 
 
-
 def chathistory(with_email):
     print("with_email",with_email)
     auth_token = request.headers.get("Authorization")
