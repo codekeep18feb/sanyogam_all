@@ -1,5 +1,6 @@
 import request
 import json
+from .utils import DictWithDotAccess
 
 
 from flask import Flask

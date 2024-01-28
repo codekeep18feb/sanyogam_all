@@ -16,6 +16,8 @@ from handlers.profiles import handle_filtering
 
 from config import app, db,decode_token, socketio, connex_app,basedir  # Assuming your Flask app instance is named 'app'
 migrate = Migrate(app, db)
+from common.utils import DictWithDotAccess
+# from utils  import DictWithDotAccess
 # socketio = SocketIO(app)  # Initialize SocketIO
 
 # # ... existing code ...
@@ -73,6 +75,7 @@ async def make_api_call(authorization_token):
     return api_data
 
 
+
 class DictWithDotAccess:
     def __init__(self, dictionary):
         self.dictionary = dictionary
@@ -88,6 +91,7 @@ class DictWithDotAccess:
 async def async_emit_signal_pool(auth_token, message, with_userid):
     # Placeholder for any async operation
     api_result = await make_api_call(auth_token)
+    print('api_rdfsfesult',api_result)
 
     # # Process the API call result if needed
     # print("API Call Result:", api_result)
@@ -102,7 +106,7 @@ async def async_emit_signal_pool(auth_token, message, with_userid):
     # decoded_data_str = decoded['sub']
     # json_dec_data = json.loads(decoded_data_str)
     # me = User.query.filter_by(email=json_dec_data['email']).first()
-    me = DictWithDotAccess(api_result)
+    me =  DictWithDotAccess(api_result)
     
     if message:
         print("COPY MESSAGE", message, type(message))
