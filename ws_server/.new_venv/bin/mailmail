@@ -1,0 +1,8 @@
+#!/home/djangoboy/Desktop/workspaces/p__workspace/sanyogam_all_versions/v3/sanyogam_all/ws_server/.new_venv/bin/python3
+# -*- coding: utf-8 -*-
+import re
+import sys
+from twisted.mail.scripts.mailmail import run
+if __name__ == '__main__':
+    sys.argv[0] = re.sub(r'(-script\.pyw|\.exe)?$', '', sys.argv[0])
+    sys.exit(run())
