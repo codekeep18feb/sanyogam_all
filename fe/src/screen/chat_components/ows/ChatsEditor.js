@@ -21,7 +21,7 @@ const withChatSocket = (Component) => {
 
   return function WithSocketComponent({ auth_data, with_userid, ...props }) {
     const [socket, setSocket] = useState(
-      io.connect("http://192.168.1.13:8000", {
+      io.connect('http://192.168.1.13:8001', {
         query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       })
     );
@@ -166,7 +166,7 @@ function ChatsEditor({
   console.log("this shoudl not rerender if other twos are toaking", videoMode);
 
   const [socket, setSocket] = useState(
-    io.connect("http://192.168.1.13:8000", {
+    io.connect('http://192.168.1.13:8001', {
       query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     })
   );

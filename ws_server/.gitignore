@@ -1,0 +1,4 @@
+.venv
+./__pycache__/people.cpython-310.pyc
+__pycache__/people.cpython-310.pyc
+__pycache__/*

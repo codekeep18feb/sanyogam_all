@@ -26,7 +26,7 @@ export default function ChatWindowWS({
 
   const [connection_open, setConnectionOpened] = useState(null);
   const [intervalId, setIntervalId] = useState(null);
-  const [socket, setSocket] = useState(io.connect("http://192.168.1.13:8000"));
+  const [socket, setSocket] = useState(io.connect('http://192.168.1.13:8001'));
   const [exchange_state, sdpExchange] = useState(null);
 
   const sendMessage = (message) => {

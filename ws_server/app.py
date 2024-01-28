@@ -1,13 +1,17 @@
-import request
+import aiohttp
 import json
-from .utils import DictWithDotAccess
-
-
-from flask import Flask
-from flask_socketio import SocketIO
+import asyncio
+import threading
+import copy
+from flask import Flask, render_template, request
+from flask_socketio import SocketIO, join_room
 
 app = Flask(__name__)
-socketio = SocketIO(app)
+socketio = SocketIO(app, cors_allowed_origins="*")  # Allowing all origins for simplicity, replace "*" with a list of allowed origins
+
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 
 
@@ -24,124 +28,133 @@ def handle_message(*args):
     print('Received message custom_event:', message)
     socketio.emit('custom_event', message)  # Echo the message b
 
-# @socketio.on('send_message')
-# def handle_send_message(data):
-#     # Extract the peer ID from the data
-#     peer_id = data.get('to')
 
-#     # Join a room based on the peer ID
-#     room = f'{peer_id}' #"hardcoded"#f"{request.sid}-{peer_id}"
-#     join_room(room)
-#     print('AREWEREWR')
-#     # Emit the message to the specific room (between two peers)
-#     socketio.emit('receive_message', {'message': data['message']}, room=room)
+
+s_pool = []
+
+async def make_me_api_call(authorization_token):
+    api_url = 'http://192.168.1.13:3000/api/me'
+
+    headers = {
+        'Authorization': f'{authorization_token}',
+        'Content-Type': 'application/json',  # Adjust content type if needed
+    }
     
-@socketio.on('send_message')
-def handle_send_message(data):
-    # Extract the peer ID from the data
-    peer_id = data.get('to')
+    async with aiohttp.ClientSession() as session:
+        async with session.get(api_url, headers=headers) as response:
+            # Assuming the API returns JSON data
+            api_data = await response.json()
+            print("api_dafasdfta",api_data)
 
-    # Join a room based on the peer ID
-    room = f'{peer_id}' #"hardcoded"#f"{request.sid}-{peer_id}"
-    join_room(room)
-    print('AREWEREWR')
-    # Emit the message to the specific room (between two peers)
-    socketio.emit('receive_message', {'message': data['message']}, room=room)
+    return api_data
 
-s_pool=[]
-@socketio.on('signal_pool')
-def handle_message(message,with_userid):
-    print('check if msg is string only',message,type(message))
-    auth_token = request.args.get('Authorization')
-    # if not auth_token:
-    #     print('MARK1')
-    #     return "Unauthorized", 401
+
+
+async def make_all_profiles_api_call(authorization_token, request_data):
+    api_url = 'http://192.168.1.13:3000/api/fetch_online_profiles'
+
+    headers = {
+        'Authorization': f'{authorization_token}',
+        'Content-Type': 'application/json',  # Adjust content type if needed
+    }
     
-    # scheme, token = auth_token.split('Bearer ')    
-    # decoded = decode_token(token)
-    # decoded_data_str = decoded['sub']
-    # json_dec_data = json.loads(decoded_data_str)
-    # me = User.query.filter_by(email=json_dec_data['email']).first()
-    me = getUser()
+    async with aiohttp.ClientSession() as session:
+        async with session.post(api_url, headers=headers, json=request_data) as response:
+            # Assuming the API returns JSON data
+            api_data = await response.json()
+            print("api_dafasdfta",api_data)
+
+    return api_data
+
+
+
+
+class DictWithDotAccess:
+    def __init__(self, dictionary):
+        self.dictionary = dictionary
+
+    def __getattr__(self, key):
+        if key in self.dictionary:
+            return self.dictionary[key]
+        else:
+            raise AttributeError(f"'DictWithDotAccess' object has no attribute '{key}'")
+
+async def async_emit_signal_pool(auth_token, message, with_userid):
+    # Placeholder for any async operation
+    api_result = await make_me_api_call(auth_token)
+    print('api_rdfsfesult',api_result)
+
+    me =  DictWithDotAccess(api_result)
+    
     if message:
-        print("COPY MESSAGE",message,type(message))
+        print("COPY MESSAGE", message, type(message))
         p_payload = json.loads(message)
-        # p_payload['with_userid'] = with_userid
-        print('prepared p_payload', p_payload,type(p_payload),with_userid)
+        print('prepared p_payload', p_payload, type(p_payload), with_userid)
         if "action" in p_payload:
-        # Save the value of the key
-            # action = del p_payload["action"]
-            
-            action = p_payload.pop("action",'ADD')
-            # room_str = with_userid
-            # first, second = room_str.split('_')
+            action = p_payload.pop("action", 'ADD')
             initator_room_str = f"{with_userid}_{me.id}"
-            p_payload['id']=initator_room_str
-            if action=='ADD':
-                # delete ids already in the pool
+            p_payload['id'] = initator_room_str
+            if action == 'ADD':
                 payload = {
-                    'sdp':p_payload['sdp'],
-                    'answer':None,
-                    'initiator':me.id,
-                    'responder':with_userid,
-                    'id':p_payload['id']
+                    'sdp': p_payload['sdp'],
+                    'answer': None,
+                    'initiator': me.id,
+                    'responder': with_userid,
+                    'id': p_payload['id']
                 }
                 print('prepared payload', payload)
                 s_pool.append(payload)
 
-            elif action=='UPDATE':
+            elif action == 'UPDATE':
                 print('mark1noww')
                 resp_room_str = f"{me.id}_{with_userid}"
-                p_payload['id']=resp_room_str
-                
-                payload = {
-                    'answer':p_payload['answer'],
-                    # 'responder':p_payload['responder'],
-                    'id':p_payload['id']
-                }
-                # s_pool.append(payload)
-                # desired_dict = next((d for d in s_pool if d.get('id') == p_payload['id']), None)
-                for obj in s_pool:
-                    if obj['id']==p_payload['id']:
-                        print('adfasdf we here')
-                        obj['answer']=p_payload['answer']
-                        # obj['responder']=p_payload['responder']
-                        break
-                # print('prepared payload', desired_dict)
+                p_payload['id'] = resp_room_str
 
-            elif action=='DELETE':
                 payload = {
-                    'id':p_payload['id']
+                    'answer': p_payload['answer'],
+                    'id': p_payload['id']
+                }
+
+                for obj in s_pool:
+                    if obj['id'] == p_payload['id']:
+                        print('adfasdf we here')
+                        obj['answer'] = p_payload['answer']
+                        break
+
+            elif action == 'DELETE':
+                payload = {
+                    'id': p_payload['id']
                 }
                 for ind, obj in enumerate(s_pool):
-                    if obj['id']==p_payload['id']:
+                    if obj['id'] == p_payload['id']:
                         deleted_element = s_pool.pop(ind)
-                        print('rip',deleted_element)
+                        print('rip', deleted_element)
                         break
 
                 print('payload id to delete', payload)
-                # s_pool.append(payload)
+
         print('WERERER1')
-        # room_str = f"{with_userid}"
-        # first, second = room_str.split('_')
-        # new_roo_str = f"{second}_{first}"
-        # if room_str not in existing_rooms and new_roo_str not in existing_rooms:
-        #     existing_rooms.add(room_str)
         print('WERERER2')
 
-    # existing_rooms.add(room_str)
-    # join_room(room_str)
-    print('now are we heresdafsdf',s_pool)
+    print('now are we here', s_pool)
 
-    # socketio.emit('signal_pool', json.dumps(s_pool),room=room_str)  # Echo the message bv
-    socketio.emit('signal_pool', json.dumps(s_pool))  # Echo the message bv
-import copy
-global_events_bucket = {'incoming_calls':[],'notifications':[]}
-@socketio.on('listen_global_events')
-def handle_message(for_userid):
-    print('for_userid in global events',for_userid)
+    # Emit the updated signal_pool to connected clients
+    socketio.emit('signal_pool', json.dumps(s_pool))
+
+@socketio.on('signal_pool')
+def handle_message(message, with_userid):
+    print('API Call Result: arere??')
+
+    # Extract auth_token from the request
+    auth_token = request.args.get('Authorization')
+
+    # Example asynchronous API call without using a separate thread
+    asyncio.run(async_emit_signal_pool(auth_token, message, with_userid))
     
-    # first_incoming_call = None
+
+
+async def async_emit_listen_global_events(for_userid):
+     # # first_incoming_call = None
     cp_s_pool = copy.copy(s_pool)
     for i in cp_s_pool:
         if i['responder'] == for_userid:
@@ -149,27 +162,29 @@ def handle_message(for_userid):
                 global_events_bucket['incoming_calls'].append(i)
                 # first_incoming_call = i
                 print('Received message @listen_global_events:')
-                # socketio.emit('listen_global_events')  # Echo the message b
                 room_str = str(for_userid)
                 join_room(room_str)
+                print('DWOEREWFSDFC')
                 socketio.emit('listen_global_events', json.dumps(global_events_bucket),room=room_str)  # Echo the message bv
                 break
-        # if first_incoming_call:
-    #     global_events_bucket['incoming_calls'].append(first_incoming_call)
+    
+    socketio.emit('signal_pool', json.dumps(s_pool))
+
+global_events_bucket = {'incoming_calls':[],'notifications':[]}
+@socketio.on('listen_global_events')
+def handle_message(for_userid):
+    # Example asynchronous API call without using a separate thread
+    asyncio.run(async_emit_listen_global_events(for_userid))
+    
 
 
-    # do the same for other types of data in global_events_bucket?
-
-        # print('Received message @listen_global_events:')
-        # # socketio.emit('listen_global_events')  # Echo the message b
-        # socketio.emit('listen_global_events', json.dumps(global_events_bucket))  # Echo the message bv
 
 
-
-@socketio.on('fetch_online_profiles')
-def handle_message(*args):
+async def async_emit_fetch_online_profiles(*args):
     message = 'merersg'
-    print('Received payload for fetch_online_profiles:', message,args,request.sid)
+    auth_token = request.args.get('Authorization')
+    
+    # print('Received payload for fetch_online_profiles:', auth_token)
     
     
     #********************IDEA IS SIMPLE*************
@@ -177,61 +192,75 @@ def handle_message(*args):
     #handlers.profiles.all_profiles
     #infact use the same code if possible
     # auth_token = request.headers.get("Authorization")
-    auth_token = request.args.get('Authorization')
+    # auth_token = request.args.get('Authorization')
     if not auth_token:
         print('MARK1')
         return "Unauthorized", 401
     
-    print("auth_token",auth_token)
+    # print("auth_token",auth_token)
     
-    scheme, token = auth_token.split('Bearer ')    
-    decoded = decode_token(token)
-    decoded_data_str = decoded['sub']
-    print('MARK2')
-    
-    json_dec_data = json.loads(decoded_data_str)
-    print('MARK3')
-    me = User.query.filter_by(email=json_dec_data['email']).first()
-
-    print('ME.PROFILE',me.profile)
-    
-    all_profiles_query = Profile.query
-    print('MARK4')
-    all_profiles_data = handle_filtering(all_profiles_query,
-        {
-        "family_info": {}
-        },
-        me.profile.id)
-    print('MARK5')
-    
-    fres = profiles_schema.dump(all_profiles_data)
-    
-    print('RESUSLT: ',fres)
-    # return fres
-    socketio.emit('fetch_online_profiles', json.dumps(fres))
-
-
-
-    
-    # token = request.args.get('token')
-    # print('tokendsfds',token)
-    # # socketio.emit('message', message+"hd")  # Echo the message b
-
-    # print('Here lets mdsfsake THE DB CALLS', message,request.sid)
-    # scheme, token = token.split('Bearer ')    
+    # scheme, token = auth_token.split('Bearer ')    
     # decoded = decode_token(token)
-    # print('makr 2')
     # decoded_data_str = decoded['sub']
-    # json_dec_data = json.loads(decoded_data_str)
-    # me = User.query.filter_by(email=json_dec_data['email']).first()
-    # print('HEREmydsfprofile',me.profile)
+    # print('MARK2')
     
-    # # profile = Profile.query.filter_by(user_id=me.id)
-    # if me.profile:
-    #     print('makr 3')
-    #     profile_schema = ProfileSchema()
-    #     return profile_schema.dump(me.profile)   
-    # socketio.emit('fetch_online_profiles', message)
+    # json_dec_data = json.loads(decoded_data_str)
+    # print('MARK3')
+    # me = User.query.filter_by(email=json_dec_data['email']).first()
+
+    api_result = await make_all_profiles_api_call(auth_token,{
+        "family_info": {}
+        })
+    print('fghsdfasdfasdgjhgfyghjgh',api_result)
+
+    # me =  DictWithDotAccess(api_result)
+    
+    # print('ME.PROFILE',me.profile)
+    
+    # all_profiles_query = Profile.query
+    # print('MARK4')
+    # all_profiles_data = handle_filtering(all_profiles_query,
+        # {
+        # "family_info": {}
+        # },
+    #     me.profile.id)
+    # print('MARK5')
+    
+    # fres = profiles_schema.dump(api_result)
+    
+    print('RESUSLT:sdfsadfsd ',api_result)
+    # return fres
+    socketio.emit('fetch_online_profiles', json.dumps(api_result))
+
+@socketio.on('fetch_online_profiles')
+def handle_message(*args):
+    auth_token = request.args.get('Authorization')
+    print('dfasdf',auth_token)
+    asyncio.run(async_emit_fetch_online_profiles(*args))
+    
+
+async def async_emit_fetch_profile_chats(*args):
+    auth_token = request.args.get('Authorization')
+    
+    with_user_id = args[0]
+    message = 'merersg'
+    
+    api_result = await make_me_api_call(auth_token)
+    me =  DictWithDotAccess(api_result)
+    
+    
+    # chats = chat_histories_schema.dump([])
+    room_str = f"{me.id}_{with_user_id}"
+    first, second = room_str.split('_')
+    new_roo_str = f"{second}_{first}"
+    if room_str not in existing_rooms and new_roo_str not in existing_rooms:
+        existing_rooms.add(room_str)
+
+    # existing_rooms.add(room_str)
+    join_room(room_str)
+    socketio.emit('fetch_profile_chats', json.dumps([]), room=room_str)
+    # socketio.emit('fetch_profile_chats', chat_histories_schema.dump(all_cha
+
 
 
 
@@ -241,74 +270,27 @@ existing_rooms = set()
 
 @socketio.on('fetch_profile_chats')
 def handle_message(*args):
-    with_user_id = args[0]
-    message = 'merersg'
+    # with_user_id = args[0]
+    # message = 'merersg'
     
     
-    #********************IDEA IS SIMPLE*************
-    #Let's return the same we used to respective apis
-    #handlers.profiles.all_profiles
-    #infact use the same code if possible
-    # auth_token = request.headers.get("Authorization")
-    auth_token = request.args.get('Authorization')
-    if not auth_token:
-        print('MARKDSFSDF1')
-        return "Unauthorized", 401
     
-    print("auth_token",auth_token)
-    
-    scheme, token = auth_token.split('Bearer ')    
-    decoded = decode_token(token)
-    decoded_data_str = decoded['sub']
-    print('MARK2')
-    
-    json_dec_data = json.loads(decoded_data_str)
-    print('MARK3')
-    me = User.query.filter_by(email=json_dec_data['email']).first()
+    # chats = chat_histories_schema.dump([])
+    # room_str = f"{me.id}_{with_user_id}"
+    # first, second = room_str.split('_')
+    # new_roo_str = f"{second}_{first}"
+    # if room_str not in existing_rooms and new_roo_str not in existing_rooms:
+    #     existing_rooms.add(room_str)
 
-    print('ME.PROFILE',me.profile)
-    print('Received chat msgsfdssdf:', with_user_id,me.id)
-    # query = ChatHistory.query
-    # all_chats = query.filter(
-    #     (ChatHistory.frm_user_id == me.id)
-    # )
+    # # existing_rooms.add(room_str)
+    # join_room(room_str)
+    # socketio.emit('fetch_profile_chats', json.dumps(chats), room=room_str)
+    # # socketio.emit('fetch_profile_chats', chat_histories_schema.dump(all_chats))
+    auth_token = request.headers.get("Authorization")
+    # print('DWOEASDFASDF',auth_token)
+    asyncio.run(async_emit_fetch_profile_chats(*args))
 
-    # all_chats = ChatHistory.query.filter(
-    #     (ChatHistory.frm_user_id == me.id)
-    # )
-    
-    all_chats = ChatHistory.query.filter(
-        and_(
-            or_(ChatHistory.frm_user_id == me.id, ChatHistory.to_user_id == me.id),
-            or_(ChatHistory.frm_user_id == with_user_id, ChatHistory.to_user_id == with_user_id),
-        )
-        )
 
-    all_chats = all_chats.all()
-
-    print('MARK4afasdf',all_chats)
-    # all_profiles_data = handle_filtering(all_profiles_query,
-    #     {
-    #     "family_info": {}
-    #     },
-    #     me.profile.id)
-    # print('MARK5')
-    
-    chats = chat_histories_schema.dump(all_chats)
-    
-    print('RESUSLdT: ',chats)
-    # return fres
-    # room = "hardcoded"#f"{request.sid}-{peer_id}"
-    room_str = f"{me.id}_{with_user_id}"
-    first, second = room_str.split('_')
-    new_roo_str = f"{second}_{first}"
-    if room_str not in existing_rooms and new_roo_str not in existing_rooms:
-        existing_rooms.add(room_str)
-
-    # existing_rooms.add(room_str)
-    join_room(room_str)
-    socketio.emit('fetch_profile_chats', json.dumps(chats), room=room_str)
-    # socketio.emit('fetch_profile_chats', chat_histories_schema.dump(all_chats))
 
 
 
@@ -340,5 +322,7 @@ def handle_message(message):
     socketio.emit('message', message)
 
 
+
+
 if __name__ == '__main__':
-    socketio.run(app, debug=True)
+    socketio.run(app, host="0.0.0.0", port=8001, debug=True)

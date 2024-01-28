@@ -12,11 +12,11 @@ import io from "socket.io-client";
 
 function ChatWS({ auth_data }) {
   const [socket, setSocket] = useState(
-    io.connect("http://192.168.1.13:8000", {
+    io.connect('http://192.168.1.13:8001', {
       query: { token: `Bearer ${localStorage.getItem("token")}` },
     })
   );
-  // const [socket, setSocket] = useState(io.connect('http://192.168.1.13:8000'));
+  // const [socket, setSocket] = useState(io.connect('http://192.168.1.13:8001'));
   const [soc_conn, setsoc_conn] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 

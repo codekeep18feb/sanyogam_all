@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import io from "socket.io-client";
 
 const ListnerWS1 = () => {
-  const [socket, setSocket] = useState(io.connect("http://192.168.1.13:8000"));
+  const [socket, setSocket] = useState(io.connect('http://192.168.1.13:8001'));
   const [messages, setMessages] = useState([]);
   const [messageInput, setMessageInput] = useState("");
   const [selectedPrefix, setSelectedPrefix] = useState(null);
