@@ -4,6 +4,8 @@ from datetime import datetime
 from flask import Flask, request, abort ,jsonify
 from config import db, generate_token
 from config import db, decode_token
+# from .common import utils
+from sqlalchemy import or_, and_
 
 from models import OnlineStatusEnum, User, users_schema, user_schema, UserSchema,Profile,ChatHistory
 from models import chat_histories_schema, UserRequests,UserRequestsSchema,ChatHistorySchema
@@ -11,7 +13,7 @@ from models import chat_histories_schema, UserRequests,UserRequestsSchema,ChatHi
 def get_timestamp():
     return datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
 
-
+# @utils.authenticate
 def chathistory(with_email):
     print("with_email",with_email)
     auth_token = request.headers.get("Authorization")
@@ -25,28 +27,51 @@ def chathistory(with_email):
     me = User.query.filter_by(email=json_dec_data['email']).first()
     
     chats = ChatHistory.query.all()
-    # # chat_history_schema = ChatHistorySchema(many=True)
-    # # return chat_history_schema.dump(chats)
-    #     # Create a list to store the chat history with the "who" field
-    # chat_history_with_who = []
-
-    # for chat in chats:
-    #     chat_dict = {
-    #         "content": chat.content,
-    #         "id": chat.id,
-    #         "timestamp": chat.timestamp
-    #     }
-
-    #     # Add the "who" field based on the comparison
-    #     if me.email == chat.act_frm_user.email:
-    #         chat_dict["who"] = "ME"
-    #     else:
-    #         chat_dict["who"] = "OTHER"
-
-    #     chat_history_with_who.append(chat_dict)
-
-    # return jsonify(chat_history_with_who) 
+    
     return chat_histories_schema.dump(chats)
+
+
+# @utils.authenticate
+def chathistory2(with_user_id): # ws handler's code was transferred here...
+    auth_token = request.args.get('Authorization')
+    if not auth_token:
+        print('MARKDSFSDF1')
+        return "Unauthorized", 401
+    
+    print("auth_token",auth_token)
+    
+    scheme, token = auth_token.split('Bearer ')    
+    decoded = decode_token(token)
+    decoded_data_str = decoded['sub']
+    print('MARK2')
+    
+    json_dec_data = json.loads(decoded_data_str)
+    print('MARK3')
+    me = User.query.filter_by(email=json_dec_data['email']).first()
+
+    print('ME.PROFILE',me.profile)
+    print('Received chat msgsfdssdf:', with_user_id,me.id)
+    # query = ChatHistory.query
+    # all_chats = query.filter(
+    #     (ChatHistory.frm_user_id == me.id)
+    # )
+
+    # all_chats = ChatHistory.query.filter(
+    #     (ChatHistory.frm_user_id == me.id)
+    # )
+    
+    all_chats = ChatHistory.query.filter(
+        and_(
+            or_(ChatHistory.frm_user_id == me.id, ChatHistory.to_user_id == me.id),
+            or_(ChatHistory.frm_user_id == with_user_id, ChatHistory.to_user_id == with_user_id),
+        )
+        )
+
+    all_chats = all_chats.all()
+
+    print('MARK4afasdf',all_chats)
+    return chat_histories_schema.dump(all_chats)
+
 
 
 

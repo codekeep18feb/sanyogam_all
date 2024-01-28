@@ -283,7 +283,7 @@ def handle_message(*args):
     #     me.profile.id)
     # print('MARK5')
     
-    chats = chat_histories_schema.dump(all_chats)
+    chats = chat_histories_schema.dump([])
     room_str = f"{me.id}_{with_user_id}"
     first, second = room_str.split('_')
     new_roo_str = f"{second}_{first}"
