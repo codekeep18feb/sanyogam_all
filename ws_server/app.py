@@ -9,9 +9,9 @@ from flask_socketio import SocketIO, join_room
 app = Flask(__name__)
 socketio = SocketIO(app, cors_allowed_origins="*")  # Allowing all origins for simplicity, replace "*" with a list of allowed origins
 
-@app.route('/')
-def index():
-    return render_template('index.html')
+# @app.route('/')
+# def index():
+#     return render_template('index.html')
 
 
 
