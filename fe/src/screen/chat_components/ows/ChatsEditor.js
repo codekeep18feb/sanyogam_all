@@ -14,6 +14,8 @@ import { connect } from "react-redux";
 import IconButton from "@material-ui/core/IconButton";
 import PhoneIcon from "@material-ui/icons/Phone";
 import CallEndIcon from "@material-ui/icons/CallEnd";
+import CallEndIcon2 from "@material-ui/icons/CallEndTwoTone";
+import { useNavigate } from "react-router-dom";
 
 const withChatSocket = (Component) => {
   // const JWT_TOKEN = localStorage.getItem("token");
@@ -170,6 +172,9 @@ function ChatsEditor({
       query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     })
   );
+
+  const nagivate = useNavigate();
+
 
   const initializeWebRTC = async (token, type) => {
     if (type === "INITIATOR") {
@@ -414,6 +419,7 @@ function ChatsEditor({
       }
     }
 
+
     //if OFFER is there -  Object.keys(signal_pool).length === 1 && signal_pool.offer && !signal_pool.answer
 
     //if ANS is there Object.keys(signal_pool).length === 1 && signal_pool.offer && signal_pool.answer
@@ -500,6 +506,8 @@ function ChatsEditor({
 
     socket.on("disconnect", () => {
       console.log("Socket_pool disconnected");
+      // nagivate(-1);
+
     });
 
     return () => {
@@ -518,6 +526,7 @@ function ChatsEditor({
         "how can i gracefully disconnect the streams on this channel so the this is the question to chatgpt"
       );
       myRef.current.channel.close();
+      SetWithUserId(null)
     }
     // Add logic for disconnecting the call
     // For example: setCallStatus({ status: 'DISCONNECTED' });
@@ -575,7 +584,7 @@ function ChatsEditor({
                     <PhoneIcon />
                   </IconButton>
                   <IconButton color="secondary" onClick={handleDisconnectCall}>
-                    <CallEndIcon />
+                    <CallEndIcon2 />
                   </IconButton>
                 </div>
               </div>

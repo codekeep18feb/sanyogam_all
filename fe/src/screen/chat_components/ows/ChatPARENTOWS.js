@@ -79,7 +79,7 @@ const ChatPARENTOWS =() =>{
         <Typography variant="h5" gutterBottom>
           with_userid - {with_userid} - {with_email}
         </Typography>
-        {with_userid && <ChatsEditor with_userid={with_userid} />}
+        {with_userid && <ChatsEditor with_userid={with_userid} SetWithUserId={SetWithUserId}/>}
       </>
     </Paper>
   );
