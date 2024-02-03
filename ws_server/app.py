@@ -36,8 +36,11 @@ def handle_leave_room(data):
         leave_room(room)
 
 async def handle_trigger_now(token,for_userid):
+    #get request id
+    request_d = await make_get_request_info_by_id_call(token,for_userid)
+    
     me = await make_me_api_call(token)
-    print('ddddo you see me now then you are learning async ??',me['id'])
+    print('ddddo you see me now then you are learning async ??',me['id'],request_d['id'],for_userid)
     # print('heremenow',me)
     
     data = request.get_json()
@@ -46,10 +49,10 @@ async def handle_trigger_now(token,for_userid):
     data['msg'] = "hjardidsf coded msg"
     # print('here is your data', data, type(data))
     # data = json.dumps(data)
-    print('areweheretoo')
+    print('areweheretoo',request_d['id'])
 
     # Emit the message only to the specific room (for_userid)
-    socketio.emit('new_data_event', "somedata") #, room=for_userid)
+    socketio.emit('new_data_event', "somedata",room=str(request_d['id'])) #, room=equest_d['id'])
 
 @app.route('/new_data_event_trigger/<for_userid>', methods=['POST'])
 def handle_some_event(for_userid):
@@ -81,6 +84,23 @@ s_pool = []
 
 async def make_me_api_call(authorization_token):
     api_url = 'http://192.168.1.13:3000/api/me'
+
+    headers = {
+        'Authorization': f'{authorization_token}',
+        'Content-Type': 'application/json',  # Adjust content type if needed
+    }
+    
+    async with aiohttp.ClientSession() as session:
+        async with session.get(api_url, headers=headers) as response:
+            # Assuming the API returns JSON data
+            api_data = await response.json()
+            print("api_dafasdfta",api_data)
+
+    return api_data
+
+
+async def make_get_request_info_by_id_call(authorization_token,with_userid):
+    api_url = 'http://192.168.1.13:8000/api/get_request_info_by_id/'+with_userid
 
     headers = {
         'Authorization': f'{authorization_token}',
