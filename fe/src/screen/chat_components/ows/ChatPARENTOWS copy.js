@@ -11,7 +11,7 @@ import UserChatTileInListCOWs from "./UserChatTileInListCOWS";
 
 import ChatsEditor from "./ChatsEditor";
 
-const ChatPARENTOWS = () => {
+const ChatPARENTOWS =() =>{
   const [onlineProfiles, setOnlineProfiles] = useState(null);
   const [with_userid, SetWithUserId] = useState(null);
   const [with_email, SetWithEmail] = useState(null);
@@ -79,7 +79,7 @@ const ChatPARENTOWS = () => {
         <Typography variant="h5" gutterBottom>
           with_userid - {with_userid} - {with_email}
         </Typography>
-        {with_userid && <ChatsEditor with_userid={with_userid} SetWithUserId={SetWithUserId} />}
+        {with_userid && <ChatsEditor with_userid={with_userid} SetWithUserId={SetWithUserId}/>}
       </>
     </Paper>
   );

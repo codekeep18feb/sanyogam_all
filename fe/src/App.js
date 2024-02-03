@@ -114,21 +114,30 @@ const withGlobalSocket = (Component) => {
     useEffect(() => {
       let intervalId;
       if (auth_data) {
-        const fetchGlobalEvents = () => {
-          // const room = "hardcode";
-          console.log("authherenow", auth_data, login);
-          socket.emit("listen_global_events", auth_data.id);
-        };
+        // const fetchGlobalEvents = () => {
+        //   // const room = "hardcode";
+        //   console.log("authherenow", auth_data, login);
+        //   socket.emit("listen_global_events", auth_data.id);
+        // };
 
-        fetchGlobalEvents();
+        // fetchGlobalEvents();
 
-        intervalId = setInterval(() => {
-          fetchGlobalEvents();
-        }, 1000);
+        // intervalId = setInterval(() => {
+        //   fetchGlobalEvents();
+        // }, 1000);
 
         socket.on("listen_global_events", (data) => {
           if (data) {
-            // console.log("here is global data", "data",data);
+            const p_data = JSON.parse(data)
+            console.log("my user id is ", auth_data.id, "will parse for incomming calls", p_data,typeof(p_data));
+            if (data) {
+              if (auth_data.id==p_data['to_id']){
+                console.log('arewqewrrewqr')
+                setIncomingCall(data);
+
+              }
+
+            }
             // setAllGlobalData((prv) => {
             //   if ( JSON.stringify(prv_data) !==  JSON.stringify(data)) {
             //     return cs;
@@ -141,10 +150,23 @@ const withGlobalSocket = (Component) => {
             // const f_data = pdata;
             // console.log('f_datahere',f_data)
             // console.log("dafsfasd", data.room);
-            const pdata = JSON.parse(data);
-            console.log("sdfasdafsadfdf", pdata);
-            // const f_data = pdata; //.filter((i) => (i.frm_user === with_userid));
-            console.log("f_datahere", pdata["incoming_calls"].length);
+            // if (data && Object.keys(data)) {
+            //   const pdata = JSON.parse(data);
+
+            //   // console.log("sdfasdafsadfdf", pdata);
+            //   // const f_data = pdata; //.filter((i) => (i.frm_user === with_userid));
+            //   // console.log("f_datahere", pdata["incoming_calls"].length);
+            //   const obj = {
+            //     frm_id: data.initiator,
+            //     to_id: data.responder,
+            //     state: "incoming",
+            //     sdp: data.sdp,
+            //   };
+            //   console.log("let me see if it's alrightight")
+            //   // setIncomingCall(obj);
+            // }
+
+
             // here i just want to setAllGlobalData if pdata["incoming_calls"].length!= pr
             // setAllGlobalData((prevChats) => {
             //   const cp_prv_chats = JSON.parse(JSON.stringify(prevChats))
@@ -159,31 +181,31 @@ const withGlobalSocket = (Component) => {
             //   return prevChats;
             // });
 
-            if ("incoming_calls" in pdata) {
-              console.log("incoming_calls yessdfsdf", pdata["incoming_calls"]);
-              const obj = {
-                frm_id: pdata["incoming_calls"][0].initiator,
-                to_id: pdata["incoming_calls"][0].responder,
-                state: "incoming",
-                sdp: pdata["incoming_calls"][0].sdp,
-                // sdp:pdata["incoming_calls"][0].answer
-              };
-              setIncomingCall(obj);
+            // if ("incoming_calls" in pdata) {
+            //   console.log("incoming_calls yessdfsdf", pdata["incoming_calls"]);
+            //   const obj = {
+            //     frm_id: pdata["incoming_calls"][0].initiator,
+            //     to_id: pdata["incoming_calls"][0].responder,
+            //     state: "incoming",
+            //     sdp: pdata["incoming_calls"][0].sdp,
+            //     // sdp:pdata["incoming_calls"][0].answer
+            //   };
+            //   setIncomingCall(obj);
 
-              // Using the functional form of setState to conditionally update the state
-              // setAllGlobalData((prevGData) => {
-              //   // Creating a new object with the same properties as the previous state
-              //   // Updating the 'hobbies' property only if it exists
-              //   console.log('obj',obj)
-              //   return {
-              //     ...prevGData,
-              //     incoming_calls: [
-              //       ...prevGData.incoming_calls,
-              //       obj,
-              //     ],
-              //   };
-              // });
-            }
+            //   // Using the functional form of setState to conditionally update the state
+            //   // setAllGlobalData((prevGData) => {
+            //   //   // Creating a new object with the same properties as the previous state
+            //   //   // Updating the 'hobbies' property only if it exists
+            //   //   console.log('obj',obj)
+            //   //   return {
+            //   //     ...prevGData,
+            //   //     incoming_calls: [
+            //   //       ...prevGData.incoming_calls,
+            //   //       obj,
+            //   //     ],
+            //   //   };
+            //   // });
+            // }
 
             // setAllGlobalData((prevData) => {
             //   if (prevData["incoming_calls"].length===0) {
@@ -242,7 +264,7 @@ const withGlobalSocket = (Component) => {
         setIncomingCall={setIncomingCall}
         // loading={loading}
         {...props}
-        // with_userid={with_userid}
+      // with_userid={with_userid}
       />
     );
   };
@@ -307,7 +329,7 @@ function App({ login }) {
       <Route path="/pricing" element={<Pricing />} />
       <Route path="/google_authorized" element={<GoogleAuthorize />} />
       <Route path="/test_ws_right_way/:for_roomid" element={<TestWsRightWay />} />
-      
+
       <Route
         path="/all_users"
         element={

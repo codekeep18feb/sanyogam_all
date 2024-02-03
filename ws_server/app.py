@@ -5,10 +5,14 @@ import threading
 import copy
 from flask import Flask, render_template, request
 from flask_socketio import SocketIO, join_room, leave_room
+from flask_cors import CORS
 
 
 app = Flask(__name__)
-socketio = SocketIO(app, cors_allowed_origins="*")  # Allowing all origins for simplicity, replace "*" with a list of allowed origins
+# socketio = SocketIO(app)  # Allowing all origins for simplicity, replace "*" with a list of allowed origins
+CORS(app, resources={r"/*": {"origins": ["http://192.168.1.13:3000", "http://192.168.1.13:8000","http://192.168.1.13:8001"]}})
+socketio = SocketIO(cors_allowed_origins="*")
+socketio.init_app(app)
 
 # @app.route('/')
 # def index():
@@ -39,7 +43,7 @@ def handle_some_event(for_userid):
     data = json.dumps(data)
 
     # Emit the message only to the specific room (for_userid)
-    socketio.emit('new_data_event', data, room=for_userid)
+    socketio.emit('listen_global_events', data) #, room=for_userid)
 
     return "success", 200
 
