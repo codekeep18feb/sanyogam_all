@@ -21,7 +21,7 @@ const TestWsRightWay = () => {
     };
 
     // Listen for 'new_data_event' events
-    socket.on("fetch_online_profiles", handleNewDataEvent);
+    socket.on("new_data_event", handleNewDataEvent);
 
     // Clean up the socket connection on component unmount
     return () => {

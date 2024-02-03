@@ -35,15 +35,29 @@ def handle_leave_room(data):
     if room:
         leave_room(room)
 
-@app.route('/new_data_event_trigger/<for_userid>', methods=['POST'])
-def handle_some_event(for_userid):
+async def handle_trigger_now(token,for_userid):
+    me = await make_me_api_call(token)
+    print('ddddo you see me now then you are learning async ??',me['id'])
+    # print('heremenow',me)
+    
     data = request.get_json()
-    data['for_userid'] = for_userid
-    print('here is your data', data, type(data))
-    data = json.dumps(data)
+    data['to_userid'] = for_userid
+    data['frm_userid'] = me['id']
+    data['msg'] = "hjardidsf coded msg"
+    # print('here is your data', data, type(data))
+    # data = json.dumps(data)
+    print('areweheretoo')
 
     # Emit the message only to the specific room (for_userid)
-    socketio.emit('listen_global_events', data) #, room=for_userid)
+    socketio.emit('new_data_event', "somedata") #, room=for_userid)
+
+@app.route('/new_data_event_trigger/<for_userid>', methods=['POST'])
+def handle_some_event(for_userid):
+    auth_header = request.headers.get('Authorization')
+    # me = await make_me_api_call('Bearer '+auth_header)
+    print('dddoauth_header',auth_header)
+    asyncio.run(handle_trigger_now('Bearer '+auth_header,for_userid))
+    
 
     return "success", 200
 

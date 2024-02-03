@@ -8,6 +8,49 @@ from flask import jsonify
 
 
 
+def get_request(with_id):
+    auth_token = request.headers.get("Authorization")
+    with_userid = with_id #request.args.get("with_id",None)
+
+    print('fdrthjrtf')
+    if not auth_token:
+        return "Unauthorized", 401
+
+    scheme, token = auth_token.split('Bearer ')    
+    decoded = decode_token(token)
+    decoded_data_str = decoded['sub']
+    json_dec_data = json.loads(decoded_data_str)
+    me_user = User.query.filter_by(email=json_dec_data['email']).first()
+    print('to_emaiadsfl',with_userid)
+    if with_userid:
+        to_user =  User.query.filter_by(id=with_userid).first()
+
+        print("frm_usdsfsdafer", me_user, "to_user", to_user)
+
+        # Check if action query parameter is present
+        # action = request.args.get("action",None)
+
+        # if action is None:
+            # GET request status when GET whithout query(action)
+            # all_requests_query = UserRequests.query
+        all_requests_query = UserRequests.query.filter(
+        or_(
+            (UserRequests.frm_user == me_user.id) & (UserRequests.to_user == to_user.id),
+            (UserRequests.frm_user == to_user.id) & (UserRequests.to_user == me_user.id)
+            )
+        ).first()
+            
+        res = user_request_schema.dump(all_requests_query)
+        print('any request between users',type(res),res)
+        return jsonify(res)  
+        
+        
+
+# Add your route definition for /handle_request/{to_email}/query here
+
+
+
+
 # @my_decorator("Hello, world!")
 # @jwt_required()  # Protect this route with JWT authentication
 def handle_request():

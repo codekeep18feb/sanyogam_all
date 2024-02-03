@@ -439,6 +439,23 @@ paths:
           description: "Successfully rtc_user_info_by_id"
 
 
+
+
+  /get_request_info_by_id/{with_id}:
+      get:
+        operationId: "handlers.requests.get_request"
+        security:
+          - JWTAuth: [] 
+        tags:
+          - "People"
+        summary: "get_request_info_by_id"
+        parameters:
+          - $ref: "#/components/parameters/with_id"
+        responses:
+          "200":
+            description: "Successfully get_request_info_by_id"
+
+
   /get_my_rtc_offer:
     get:
       operationId: "handlers.rtcuserinfo.get_my_rtc_offer"
