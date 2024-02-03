@@ -3,18 +3,17 @@ import { useParams } from "react-router-dom";
 import io from "socket.io-client";
 
 const TestWsRightWay = () => {
-    // Connect to the WebSocket server
-    // Connect to the WebSocket server
-    const id = useParams('id')
+  const { for_roomid } = useParams();
 
-    useEffect(() => {
-    // Connect to the WebSocket server
-    // const socket = io.connect("http://your-server-url");
-const socket = io.connect("http://192.168.1.13:8000");
+  useEffect(() => {
+    const socket = io.connect("http://192.168.1.13:8001");
+
+    // Join the room corresponding to for_roomid
+    socket.emit('join_room', { room: for_roomid });
 
     // Event handler for 'new_data_event'
     const handleNewDataEvent = (data) => {
-      console.log("New data received:",id, data);
+      console.log("New data received for room", for_roomid, data);
       // Handle the new data as needed
     };
 
@@ -23,9 +22,11 @@ const socket = io.connect("http://192.168.1.13:8000");
 
     // Clean up the socket connection on component unmount
     return () => {
+      // Leave the room when the component unmounts
+      socket.emit('leave_room', { room: for_roomid });
       socket.disconnect();
     };
-  }, []); // Empty dependency array to run the effect only once during component mount
+  }, [for_roomid]); // Include for_roomid in the dependency array
 
   return (
     <div>

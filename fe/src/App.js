@@ -306,7 +306,7 @@ function App({ login }) {
       <Route path="/signup" element={<SignupScreen />} />
       <Route path="/pricing" element={<Pricing />} />
       <Route path="/google_authorized" element={<GoogleAuthorize />} />
-      <Route path="/test_ws_right_way/:id" element={<TestWsRightWay />} />
+      <Route path="/test_ws_right_way/:for_roomid" element={<TestWsRightWay />} />
       
       <Route
         path="/all_users"

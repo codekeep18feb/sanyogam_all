@@ -4,7 +4,7 @@ import asyncio
 import threading
 import copy
 from flask import Flask, render_template, request
-from flask_socketio import SocketIO, join_room
+from flask_socketio import SocketIO, join_room, leave_room
 
 
 app = Flask(__name__)
@@ -17,20 +17,32 @@ socketio = SocketIO(app, cors_allowed_origins="*")  # Allowing all origins for s
 
 
 # @utils.authenticate        
-@app.route('/new_data_event_trigger/<id>',methods=['POST'])
-def handle_some_event(id, **kwargs):
-    me = kwargs.get('me')
-    
-    # this shoudl be the rest endpoint
+global_events_bucket2 = {'incoming_calls': [], 'notifications': []}
+
+@socketio.on('join_room')
+def handle_join_room(data):
+    room = data.get('room')
+    if room:
+        join_room(room)
+
+@socketio.on('leave_room')
+def handle_leave_room(data):
+    room = data.get('room')
+    if room:
+        leave_room(room)
+
+@app.route('/new_data_event_trigger/<for_userid>', methods=['POST'])
+def handle_some_event(for_userid):
     data = request.get_json()
-    data['for_id']=id
-    print('here is your data',data,type(data))
+    data['for_userid'] = for_userid
+    print('here is your data', data, type(data))
     data = json.dumps(data)
-    # Emit a new WebSocket event to all connected clients
-    socketio.emit('new_data_event', data)
+
+    # Emit the message only to the specific room (for_userid)
+    socketio.emit('new_data_event', data, room=for_userid)
+
     return "success", 200
-    
-    
+
 
 @socketio.on('custom_event')
 def handle_message(*args):
@@ -182,10 +194,10 @@ async def async_emit_listen_global_events(for_userid):
                 room_str = str(for_userid)
                 join_room(room_str)
                 print('DWOEREWFSDFC')
-                socketio.emit('listen_global_events', json.dumps(global_events_bucket),room=room_str)  # Echo the message bv
+                socketio.emit('listen_global_events', json.dumps(global_events_bucket))  # Echo the message bv
                 break
     
-    socketio.emit('signal_pool', json.dumps(s_pool))
+    # socketio.emit('signal_pool', json.dumps(s_pool))
 
 global_events_bucket = {'incoming_calls':[],'notifications':[]}
 @socketio.on('listen_global_events')
@@ -193,6 +205,40 @@ def handle_message(for_userid):
     # Example asynchronous API call without using a separate thread
     asyncio.run(async_emit_listen_global_events(for_userid))
     
+
+
+
+
+# global_events_bucket2 = {'incoming_calls':[],'notifications':[]}
+# def emit_new_data_event():
+#     #we should probably update global_events_bucket with incomming call
+#     # and send it to the right user room/session???
+    
+    
+#     socketio.emit('new_data_event', json.dumps(global_events_bucket2))  # Echo the message bv
+    
+    #  # # first_incoming_call = None
+    # cp_s_pool = copy.copy(s_pool)
+    # for i in cp_s_pool:
+    #     if i['responder'] == for_userid:
+    #         if for_userid not in global_events_bucket['incoming_calls']:
+    #             global_events_bucket['incoming_calls'].append(i)
+    #             # first_incoming_call = i
+    #             print('Received message @listen_global_events:')
+    #             room_str = str(for_userid)
+    #             join_room(room_str)
+    #             print('DWOEREWFSDFC')
+    #             socketio.emit('listen_global_events', json.dumps(global_events_bucket))  # Echo the message bv
+    #             break
+    
+    # # socketio.emit('signal_pool', json.dumps(s_pool))
+
+# @socketio.on('new_data_event')
+# def handle_message(for_userid):
+#     # Example asynchronous API call without using a separate thread
+#     asyncio.run(async_emit_new_data_event(for_userid))
+    
+
 
 
 
