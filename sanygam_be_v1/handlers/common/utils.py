@@ -1,11 +1,9 @@
 
-
 import json
-from .. import User
+from ...models.user import User
 from flask import request
 from functools import wraps
 from config import db, decode_token
-
 
 def authenticate(func):
     @wraps(func)

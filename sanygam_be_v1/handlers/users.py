@@ -10,7 +10,6 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 # from models import OnlineStatusEnum  # Import the Enum class
 from .common import utils
-
 # from models import *
 from models import *
 def get_timestamp():

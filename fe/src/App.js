@@ -55,6 +55,7 @@ import ChatWS from "./screen/chat_components/ChatWS.js";
 import PlayGround2 from "./screen/PlayGround2.js";
 import ChatPARENTOWS from "./screen/chat_components/ows/ChatPARENTOWS.js";
 import IncomingCallUI from "./screen/chat_components/ows/IncomingCallUI";
+import TestWsRightWay from "./screen/TestWsRightWay.js";
 // import ProfileBriefTile from './screen/ProfileBriefTile.js';
 
 const MaterialUX = () => {
@@ -305,6 +306,8 @@ function App({ login }) {
       <Route path="/signup" element={<SignupScreen />} />
       <Route path="/pricing" element={<Pricing />} />
       <Route path="/google_authorized" element={<GoogleAuthorize />} />
+      <Route path="/test_ws_right_way/:id" element={<TestWsRightWay />} />
+      
       <Route
         path="/all_users"
         element={

@@ -6,6 +6,7 @@ import copy
 from flask import Flask, render_template, request
 from flask_socketio import SocketIO, join_room
 
+
 app = Flask(__name__)
 socketio = SocketIO(app, cors_allowed_origins="*")  # Allowing all origins for simplicity, replace "*" with a list of allowed origins
 
@@ -14,6 +15,22 @@ socketio = SocketIO(app, cors_allowed_origins="*")  # Allowing all origins for s
 #     return render_template('index.html')
 
 
+
+# @utils.authenticate        
+@app.route('/new_data_event_trigger/<id>',methods=['POST'])
+def handle_some_event(id, **kwargs):
+    me = kwargs.get('me')
+    
+    # this shoudl be the rest endpoint
+    data = request.get_json()
+    data['for_id']=id
+    print('here is your data',data,type(data))
+    data = json.dumps(data)
+    # Emit a new WebSocket event to all connected clients
+    socketio.emit('new_data_event', data)
+    return "success", 200
+    
+    
 
 @socketio.on('custom_event')
 def handle_message(*args):
