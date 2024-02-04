@@ -16,13 +16,16 @@ const makeTriggerCall = async (with_userid,frm_id,message) => {
       "to_id": with_userid,
       "message": message
     }
+    const JWT_TOKEN = localStorage.getItem("token");
+    const token = `Bearer ${JWT_TOKEN}`;
+    console.log('here is tokene',token)
     const response = await fetch(
       `http://192.168.1.13:8001/new_data_event_trigger/${with_userid}`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          // Authorization: token,
+          Authorization: token,
         },
         body: JSON.stringify(data),
 

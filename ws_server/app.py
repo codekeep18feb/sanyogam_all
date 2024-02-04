@@ -59,7 +59,7 @@ def handle_some_event(for_userid):
     auth_header = request.headers.get('Authorization')
     # me = await make_me_api_call('Bearer '+auth_header)
     print('dddoauth_header',auth_header)
-    asyncio.run(handle_trigger_now('Bearer '+auth_header,for_userid))
+    asyncio.run(handle_trigger_now(auth_header,for_userid))
     
 
     return "success", 200
