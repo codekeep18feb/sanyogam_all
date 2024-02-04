@@ -80,117 +80,90 @@ const getRequestUID = async (with_userid, token) => {
 };
 
 const ChatsEditor = ({ auth_data, with_userid }) => {
-  const [socket, setSocket] = useState(
-    io.connect('http://192.168.1.13:8001', {
+  const [socket, setSocket] = useState(null);
+  const [my_room, setMyRoomAs] = useState(null);
+  const [message, setMessage] = useState("");
+  const [dependentVariable, setDependentVariable] = useState("dependent");
+
+  const connectSocket = () => {
+    console.log(dependentVariable); // Using dependentVariable in connectSocket
+
+    const newSocket = io.connect('http://192.168.1.13:8001', {
       query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-    })
-  );
+    });
+    setSocket(newSocket);
 
-  
-
-  // useEffect(() => {
-    
-
-  //   socket.on("new_data_event", (data) => {
-  //     if (data) {
-  //       console.log("dafsuyiiuytfasd", data, typeof data);
-  //       if (data) {
-  //         const p_data = JSON.parse(data);
-  //         const d_type = myRef && myRef.current ? myRef.current.type : null;
-  //         console.log("amiherenow", p_data);
-  //         let ret_data = ifMyDataExist(
-  //           p_data,
-  //           (with_userid = with_userid),
-  //           auth_data.id,
-  //           true
-  //         );
-  //         // const ret_data2 = ifMyDataExist(p_data,auth_data.id,with_userid=with_userid,false)
-  //         console.log(signal_pool, "ret_dsfsddata", ret_data);
-  //         if (ret_data) {
-  //           setSignalPool(ret_data);
-  //         }
-  //       }
-  //       const pdata = JSON.parse(data);
-  //       console.log("abcdef", pdata, myRef, with_userid);
-  //     }
-  //   });
-
-  //   socket.on("connect", () => {
-  //     console.log("Socket_pool connected");
-  //   });
-
-  //   socket.on("disconnect", () => {
-  //     console.log("Socket_pool disconnected");
-  //     // nagivate(-1);
-
-  //   });
-
-  //   return () => {
-  //     socket.disconnect();
-  //     clearInterval(intervalId);
-  //   };
-  // }, [socket]);
-
-  
-  const [my_room, setMyRoomAs] = useState(null)
-  console.log('myroom',my_room)
-  useEffect(async() => {
-
-    // Join the room corresponding to for_roomid
-    // socket.emit('join_room', { room: my_room });
-
-    // // Event handler for 'new_data_event'
-    const JWT_TOKEN = localStorage.getItem("token");
-    const token = `Bearer ${JWT_TOKEN}`;
-
-    const request_d = await getRequestUID(with_userid,token)
-    console.log('can you grab request.id',request_d.id)
-    setMyRoomAs(request_d.id)
-    
-
-    // Listen for 'new_data_event' events
-    
-
-  }, [with_userid]); // Include for_roomid in the dependency array
+    return () => {
+      newSocket.disconnect();
+    };
+  };
 
   useEffect(() => {
-    const handleNewDataEvent = (data) => {
-      console.log("new msg recieved on socket.");
+    const connectSocket = () => {
+      const newSocket = io.connect('http://192.168.1.13:8001', {
+        query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
+      setSocket(newSocket);
 
-      // Handle the new data as needed
+      return () => {
+        newSocket.disconnect();
+      };
     };
-    
-    socket.on("new_data_event", handleNewDataEvent);
 
-    // Clean up the socket connection on component unmount
+    connectSocket();
+
     return () => {
-      // Leave the room when the component unmounts
-      // socket.emit('leave_room', { room: my_room });
-      socket.disconnect();
+      // Cleanup on component unmount
+      if (socket) {
+        socket.disconnect();
+      }
+    };
+  }, []); // Empty dependency array to run only on mount and unmount
+
+  useEffect(() => {
+    const updateRoom = async () => {
+      const JWT_TOKEN = localStorage.getItem("token");
+      const token = `Bearer ${JWT_TOKEN}`;
+      const request_d = await getRequestUID(with_userid, token);
+      setMyRoomAs(request_d.id);
     };
 
-  }, [my_room])
-  
+    updateRoom();
+  }, [with_userid]);
 
-  const [message, setMessage] = useState("");
+  useEffect(() => {
+    if (socket && my_room) {
+      // Join the room corresponding to my_room
+      socket.emit('join_room', { room: String(my_room) });
+
+      // Event handler for 'new_data_event'
+      const handleNewDataEvent = (data) => {
+        console.log("Received data in room", my_room, data);
+        // Handle the new data as needed
+      };
+
+      // Listen for 'new_data_event' events
+      socket.on("new_data_event", handleNewDataEvent);
+
+      // Clean up the socket connection on component unmount or when my_room changes
+      return () => {
+        socket.emit('leave_room', { room: String(my_room) });
+        socket.off("new_data_event", handleNewDataEvent);
+      };
+    }
+  }, [socket, my_room]);
 
   const handleSubmit = () => {
-    // Handle the submission of the message, you can dispatch an action or perform any other logic here.
+    // Handle the submission of the message
     console.log("Submitted message:", message);
-    makeTriggerCall(with_userid,auth_data.id,message)
-
-
+    makeTriggerCall(with_userid, auth_data.id, message);
   };
 
   return (
     <div>
       <Grid container alignItems="center">
         <Grid item>
-          {/* {JSON.stringify(auth_data.id)} */}
           <ArrowBackIcon />
-        </Grid>
-        <Grid item>
-          {/* <ImageCircle /> */}
         </Grid>
         <Grid item>
           <Typography variant="h6">{auth_data.username}</Typography>
@@ -218,6 +191,7 @@ const ChatsEditor = ({ auth_data, with_userid }) => {
     </div>
   );
 };
+
 
 const mapStateToProps = (state) => {
   return {
