@@ -87,7 +87,7 @@ const ChatsEditor = ({ auth_data, with_userid }) => {
   const [my_room, setMyRoomAs] = useState(null);
   const [message, setMessage] = useState("");
   const [dependentVariable, setDependentVariable] = useState("dependent");
-
+  const [chat_data, setChat_data] = useState([])
   const connectSocket = () => {
     console.log(dependentVariable); // Using dependentVariable in connectSocket
 
@@ -140,8 +140,13 @@ const ChatsEditor = ({ auth_data, with_userid }) => {
       socket.emit('join_room', { room: String(my_room) });
 
       // Event handler for 'new_data_event'
-      const handleNewDataEvent = (data) => {
-        console.log("Received data in room", my_room, data);
+      const handleNewDataEvent = (msg) => {
+        console.log("Received data in room", my_room, msg);
+        setChat_data(prv=>{
+          let cp_prv = JSON.parse(JSON.stringify(prv))
+          cp_prv.push(msg)
+          return cp_prv
+        })
         // Handle the new data as needed
       };
 
@@ -162,6 +167,12 @@ const ChatsEditor = ({ auth_data, with_userid }) => {
     makeTriggerCall(with_userid, auth_data.id, message);
   };
 
+  const all_chats = chat_data.map(i=>{
+    return(
+      <div>{i}</div>
+    )
+  })
+
   return (
     <div>
       <Grid container alignItems="center">
@@ -178,7 +189,7 @@ const ChatsEditor = ({ auth_data, with_userid }) => {
           <AudioCallIcon />
         </Grid>
       </Grid>
-
+      {all_chats}
       <TextField
         label="Type your message"
         variant="outlined"
