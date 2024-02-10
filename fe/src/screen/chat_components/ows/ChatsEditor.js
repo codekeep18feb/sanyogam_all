@@ -8,7 +8,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { ImageCircle } from "../../chat_components/ImageCircle";
 
 import { Grid, Typography, TextField, Button } from "@mui/material";
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import WrapperChatShellWithSend from "../../WrapperChatShellWithSend";
 
 const makeTriggerCall = async (with_userid, frm_id, message) => {
@@ -113,10 +113,34 @@ const getRequestUID = async (with_userid, token) => {
   }
 };
 
+const initialState = {
+  message: '',
+};
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case 'SET_MESSAGE':
+      return {
+        ...state,
+        message: action.payload,
+      };
+    case 'RESET_MESSAGE':
+      return {
+        ...state,
+        message: '',
+      };
+    default:
+      return state;
+  }
+};
+
+
 const ChatsEditor = ({ auth_data, with_userid }) => {
   const [socket, setSocket] = useState(null);
   const [my_room, setMyRoomAs] = useState(null);
-  const [message, setMessage] = useState("");
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const { message } = state;
+
   const [dependentVariable, setDependentVariable] = useState("dependent");
   const [chat_data, setChat_data] = useState([])
   const connectSocket = () => {
@@ -196,11 +220,15 @@ const ChatsEditor = ({ auth_data, with_userid }) => {
 
 
 
+
+
+
   const handleSubmit = () => {
     // Handle the submission of the message
     console.log("Submitted message:", message);
     makeTriggerCall(with_userid, auth_data.id, message);
-    setMessage("")
+    // setMessage("")
+    dispatch({ type: 'RESET_MESSAGE' });
   };
 
   const classes = useStyles();
@@ -229,6 +257,9 @@ const ChatsEditor = ({ auth_data, with_userid }) => {
   //   </div>
   // );
 
+  const setMessage = (message) => {
+    dispatch({ type: 'SET_MESSAGE', payload: message });
+  }
   return (
     <WrapperChatShellWithSend title={"chats"} onSave={handleSubmit} setMessage={setMessage} message={message}>
       {all_chats}
