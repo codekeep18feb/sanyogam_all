@@ -205,9 +205,18 @@ const ChatsEditor = ({ auth_data, with_userid }) => {
   const classes = useStyles();
 
 
-  const all_chats = chat_data.map(i=>{
-    return(
-      <div>{i}</div>
+  const all_chats = chat_data.map(i => {
+    return (
+      <div style={{ marginTop: "15px", border: "1px solid red", display: "flex", justifyContent: "flex-end" }}>
+        <div
+          style={{
+            backgroundColor: "#ceebeb",
+            padding: "15px 20px",
+            width: "80%",
+            borderBottomLeftRadius: "25%"
+          }}
+        >{i}</div>
+      </div>
     )
   })
 
