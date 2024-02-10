@@ -35,31 +35,33 @@ def handle_leave_room(data):
     if room:
         leave_room(room)
 
-async def handle_trigger_now(token,for_userid):
+async def handle_trigger_now(token,for_userid,message):
     #get request id
     request_d = await make_get_request_info_by_id_call(token,for_userid)
     
     me = await make_me_api_call(token)
     print('ddddo you see me now then you are learning async ??',me['id'],request_d['id'],for_userid)
-    # print('heremenow',me)
+    print('heremenmessageow',message)
     
     data = request.get_json()
     data['to_userid'] = for_userid
     data['frm_userid'] = me['id']
-    data['msg'] = "hjardidsf coded msg"
+    data['msg'] = message
     # print('here is your data', data, type(data))
     # data = json.dumps(data)
     print('areweheretoo',request_d['id'])
 
     # Emit the message only to the specific room (for_userid)
-    socketio.emit('new_data_event', "somedata",room=str(request_d['id'])) #, room=equest_d['id'])
+    socketio.emit('new_data_event', message,room=str(request_d['id'])) #, room=equest_d['id'])
 
 @app.route('/new_data_event_trigger/<for_userid>', methods=['POST'])
 def handle_some_event(for_userid):
     auth_header = request.headers.get('Authorization')
     # me = await make_me_api_call('Bearer '+auth_header)
+    message = request.json.get('message',"no msg!")  # Assuming the message is sent in the request body as JSON
+
     print('dddoauth_header',auth_header)
-    asyncio.run(handle_trigger_now(auth_header,for_userid))
+    asyncio.run(handle_trigger_now(auth_header,for_userid,message))
     
 
     return "success", 200

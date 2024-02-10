@@ -200,6 +200,7 @@ const ChatsEditor = ({ auth_data, with_userid }) => {
     // Handle the submission of the message
     console.log("Submitted message:", message);
     makeTriggerCall(with_userid, auth_data.id, message);
+    setMessage("")
   };
 
   const classes = useStyles();
