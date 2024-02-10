@@ -51,7 +51,7 @@ function BottomMobile({ auth_data, logout }) {
               </Link>
             </Button>
             <Button color="inherit" style={{ flex: 1 }}>
-              <Link to="/chat" style={linkStyle}>
+              <Link to="/chat_ows" style={linkStyle}>
                 <ChatIcon />
                 <div>Chat</div>
               </Link>

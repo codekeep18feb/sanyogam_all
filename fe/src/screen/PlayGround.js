@@ -12,6 +12,7 @@ import ListnerWS1 from '../component/ListnerWS1';
 
 import SendMsgWS from '../component/SendMsgWS';
 import RoomFeature from './RoomFeature';
+import ChatsEditor from './chat_components/ows/ChatsEditor';
 
 const useStyles = makeStyles({
   scrollContainer: {
@@ -37,20 +38,20 @@ function ChatTestLayout() {
 
   return (
     <div>
-      <Grid container style={{textAlign:"center"}} spacing={1}>
+      <Grid container style={{ textAlign: "center" }} spacing={1}>
         <Grid item xs={6} >
-          <div style={{ borderRadius: 0, backgroundColor: "#FF0099",color:"white",padding:"20px 0 20px 0" }}>Recent</div> 
+          <div style={{ borderRadius: 0, backgroundColor: "#FF0099", color: "white", padding: "20px 0 20px 0" }}>Recent</div>
         </Grid>
         <Grid item xs={6}>
-          <div style={{ borderRadius: 0, backgroundColor: "white", color: "#FF0099",padding:"20px 0 20px 0" }}>Active</div> 
+          <div style={{ borderRadius: 0, backgroundColor: "white", color: "#FF0099", padding: "20px 0 20px 0" }}>Active</div>
         </Grid>
       </Grid>
 
-      
+
       <div>My Matches</div>
       <MatchesFilterScrollBarOnChatC />
     </div>
-     
+
 
   )
 }
@@ -86,13 +87,14 @@ export default function PlayGround() {
   const classes = useStyles();
 
   return (
-    <div>
-      {/* <MonitorWSStatus /> */}
-      {/* <SendMsgWS />
-    <ListnerWS1 /> */}
-      {/* <RoomFeature /> */}
-      <MyComponent />
-    </div>
+    <ChatsEditor with_userid={1} SetWithUserId={() => console.log('first')} />
+    // <div>
+    //   {/* <MonitorWSStatus /> */}
+    //   {/* <SendMsgWS />
+    // <ListnerWS1 /> */}
+    //   {/* <RoomFeature /> */}
+    //   <MyComponent />
+    // </div>
     // <ImageCircle user={{id:1,online:true}} />
 
     // <HorizontalScroll >

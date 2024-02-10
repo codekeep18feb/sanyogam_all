@@ -23,7 +23,7 @@ const withChatSocket = (Component) => {
 
   return function WithSocketComponent({ auth_data, with_userid, ...props }) {
     const [socket, setSocket] = useState(
-      io.connect('http://192.168.1.13:8001', {
+      io.connect('http://192.168.1.9:8001', {
         query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       })
     );
@@ -112,7 +112,7 @@ const ChatScreenHeader = ({
         "sdp": "sdpSADASAMUNH"
       }
       const response = await fetch(
-        `http://192.168.1.13:8001/new_data_event_trigger/${with_userid}`,
+        `http://192.168.1.9:8001/new_data_event_trigger/${with_userid}`,
         {
           method: "POST",
           headers: {
@@ -215,7 +215,7 @@ function ChatsEditor({
   console.log("this shoudl not rerender if other twos are toaking", videoMode);
 
   const [socket, setSocket] = useState(
-    io.connect('http://192.168.1.13:8001', {
+    io.connect('http://192.168.1.9:8001', {
       query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     })
   );

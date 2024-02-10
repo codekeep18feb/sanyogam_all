@@ -100,7 +100,7 @@ const withGlobalSocket = (Component) => {
       auth_data
     );
     const [socket, setSocket] = useState(
-      io.connect('http://192.168.1.13:8001', {
+      io.connect('http://192.168.1.9:8001', {
         query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       })
     );
@@ -129,9 +129,9 @@ const withGlobalSocket = (Component) => {
         socket.on("listen_global_events", (data) => {
           if (data) {
             const p_data = JSON.parse(data)
-            console.log("my user id is ", auth_data.id, "will parse for incomming calls", p_data,typeof(p_data));
+            console.log("my user id is ", auth_data.id, "will parse for incomming calls", p_data, typeof (p_data));
             if (data) {
-              if (auth_data.id==p_data['to_id']){
+              if (auth_data.id == p_data['to_id']) {
                 console.log('arewqewrrewqr')
                 setIncomingCall(data);
 
@@ -354,9 +354,8 @@ function App({ login }) {
       <Route
         path="/practice"
         element={
-          <WrapperMobileShell>
-            <PlayGround />
-          </WrapperMobileShell>
+          // <WrapperMobileShell>
+          <PlayGround />
         }
       />
       <Route
@@ -381,9 +380,9 @@ function App({ login }) {
         path="/chat_ows"
         element={
           <PrivateRoute>
-            <WrapperMobileShell>
-              <ChatPARENTOWS />
-            </WrapperMobileShell>
+            {/* <WrapperMobileShell> */}
+            <ChatPARENTOWS />
+            {/* </WrapperMobileShell> */}
           </PrivateRoute>
         }
       />

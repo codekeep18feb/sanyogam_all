@@ -12,11 +12,11 @@ import io from "socket.io-client";
 
 function ChatWS({ auth_data }) {
   const [socket, setSocket] = useState(
-    io.connect('http://192.168.1.13:8001', {
+    io.connect('http://192.168.1.9:8001', {
       query: { token: `Bearer ${localStorage.getItem("token")}` },
     })
   );
-  // const [socket, setSocket] = useState(io.connect('http://192.168.1.13:8001'));
+  // const [socket, setSocket] = useState(io.connect('http://192.168.1.9:8001'));
   const [soc_conn, setsoc_conn] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -179,7 +179,7 @@ function ChatWS({ auth_data }) {
 
     try {
       const response = await fetch(
-        "http://192.168.1.13:8000/api/read_online_circle",
+        "http://192.168.1.9:8000/api/read_online_circle",
         {
           method: "GET",
           headers: {
@@ -210,7 +210,7 @@ function ChatWS({ auth_data }) {
 
     try {
       const response = await fetch(
-        `http://192.168.1.13:8000/api/rtc_user_info_by_id`,
+        `http://192.168.1.9:8000/api/rtc_user_info_by_id`,
         {
           method: "GET",
           headers: {
@@ -246,7 +246,7 @@ function ChatWS({ auth_data }) {
     const JWT_TOKEN = localStorage.getItem("token");
     const token = `Bearer ${JWT_TOKEN}`;
     console.log("token", token);
-    const response2 = await fetch("http://192.168.1.13:8000/api/profiles", {
+    const response2 = await fetch("http://192.168.1.9:8000/api/profiles", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

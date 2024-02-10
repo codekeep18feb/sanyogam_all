@@ -3,13 +3,15 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import AudioCallIcon from "@mui/icons-material/Call";
 import { connect } from "react-redux";
 import io from "socket.io-client";
+import { makeStyles } from '@material-ui/core/styles';
 
 import { ImageCircle } from "../../chat_components/ImageCircle";
 
 import { Grid, Typography, TextField, Button } from "@mui/material";
 import React, { useEffect, useState } from 'react';
+import WrapperChatShellWithSend from "../../WrapperChatShellWithSend";
 
-const makeTriggerCall = async (with_userid,frm_id,message) => {
+const makeTriggerCall = async (with_userid, frm_id, message) => {
   try {
     const data = {
       "frm_id": frm_id,
@@ -18,9 +20,9 @@ const makeTriggerCall = async (with_userid,frm_id,message) => {
     }
     const JWT_TOKEN = localStorage.getItem("token");
     const token = `Bearer ${JWT_TOKEN}`;
-    console.log('here is tokene',token)
+    console.log('here is tokene', token)
     const response = await fetch(
-      `http://192.168.1.13:8001/new_data_event_trigger/${with_userid}`,
+      `http://192.168.1.9:8001/new_data_event_trigger/${with_userid}`,
       {
         method: "POST",
         headers: {
@@ -47,6 +49,35 @@ const makeTriggerCall = async (with_userid,frm_id,message) => {
   }
 };
 
+const useStyles = makeStyles({
+  root: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '60vh', // Set the container height to 100% of the viewport height
+    overflowY: 'auto', // Add vertical scrollbar if content overflows
+  },
+  segment1: {
+    flex: '0 0 10%', // 10% height, don't grow or shrink
+    backgroundColor: 'lightblue',
+  },
+  segment2: {
+    flex: '1 0 80%', // 80% height, grow as needed, don't shrink
+    backgroundColor: 'lightgreen',
+  },
+  segment3: {
+    flex: '0 0 10%', // 10% height, don't grow or shrink
+    backgroundColor: 'lightcoral',
+  },
+  bottom: {
+    position: 'sticky',
+    bottom: 0,
+    height: '10vh', // Set the height to 10% of the viewport height
+    backgroundColor: 'white',
+    padding: '10px', // Add some padding for spacing
+  },
+});
+
+
 const getRequestUID = async (with_userid, token) => {
   try {
     // const data = {
@@ -55,7 +86,7 @@ const getRequestUID = async (with_userid, token) => {
     //   "message": message
     // }
     const response = await fetch(
-      `http://192.168.1.13:8000/api/get_request_info_by_id/${with_userid}`,
+      `http://192.168.1.9:8000/api/get_request_info_by_id/${with_userid}`,
       {
         method: "GET",
         headers: {
@@ -91,7 +122,7 @@ const ChatsEditor = ({ auth_data, with_userid }) => {
   const connectSocket = () => {
     console.log(dependentVariable); // Using dependentVariable in connectSocket
 
-    const newSocket = io.connect('http://192.168.1.13:8001', {
+    const newSocket = io.connect('http://192.168.1.9:8001', {
       query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
     setSocket(newSocket);
@@ -103,7 +134,7 @@ const ChatsEditor = ({ auth_data, with_userid }) => {
 
   useEffect(() => {
     const connectSocket = () => {
-      const newSocket = io.connect('http://192.168.1.13:8001', {
+      const newSocket = io.connect('http://192.168.1.9:8001', {
         query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       setSocket(newSocket);
@@ -142,7 +173,7 @@ const ChatsEditor = ({ auth_data, with_userid }) => {
       // Event handler for 'new_data_event'
       const handleNewDataEvent = (msg) => {
         console.log("Received data in room", my_room, msg);
-        setChat_data(prv=>{
+        setChat_data(prv => {
           let cp_prv = JSON.parse(JSON.stringify(prv))
           cp_prv.push(msg)
           return cp_prv
@@ -161,11 +192,18 @@ const ChatsEditor = ({ auth_data, with_userid }) => {
     }
   }, [socket, my_room]);
 
+
+
+
+
   const handleSubmit = () => {
     // Handle the submission of the message
     console.log("Submitted message:", message);
     makeTriggerCall(with_userid, auth_data.id, message);
   };
+
+  const classes = useStyles();
+
 
   const all_chats = chat_data.map(i=>{
     return(
@@ -173,36 +211,33 @@ const ChatsEditor = ({ auth_data, with_userid }) => {
     )
   })
 
-  return (
-    <div>
-      <Grid container alignItems="center">
-        <Grid item>
-          <ArrowBackIcon />
-        </Grid>
-        <Grid item>
-          <Typography variant="h6">{auth_data.username}</Typography>
-        </Grid>
-        <Grid item>
-          <VideoCallIcon />
-        </Grid>
-        <Grid item>
-          <AudioCallIcon />
-        </Grid>
-      </Grid>
-      {all_chats}
-      <TextField
-        label="Type your message"
-        variant="outlined"
-        fullWidth
-        margin="normal"
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-      />
+  // const all_chats = (
+  //   <div   >
+  //     <div >Segment 1</div>
+  //     <div >Segment 2</div>
+  //     <div >Segment 3</div>
+  //   </div>
+  // );
 
-      <Button variant="contained" color="primary" onClick={handleSubmit}>
-        Send
-      </Button>
-    </div>
+  return (
+    <WrapperChatShellWithSend title={"chats"} onSave={handleSubmit} setMessage={setMessage} message={message}>
+      {all_chats}
+      {/* <div className={classes.bottom}>
+              <TextField
+                label="Type your message"
+                variant="outlined"
+                fullWidth
+                margin="normal"
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+              />
+
+              <Button variant="contained" color="primary" onClick={handleSubmit}>
+                Send
+              </Button>
+            </div> */}
+
+    </WrapperChatShellWithSend>
   );
 };
 
