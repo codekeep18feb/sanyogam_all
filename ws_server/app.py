@@ -52,7 +52,7 @@ async def handle_trigger_now(token,for_userid,message):
     # print('areweheretoo',request_d['id'])
 
     # Emit the message only to the specific room (for_userid)
-    socketio.emit('new_data_event', message,room=str(for_userid)) #, room=equest_d['id'])
+    socketio.emit('new_data_event', json.dumps(data),room=str(for_userid)) #, room=equest_d['id'])
 
 @app.route('/new_data_event_trigger/<for_userid>', methods=['POST'])
 def handle_some_event(for_userid):

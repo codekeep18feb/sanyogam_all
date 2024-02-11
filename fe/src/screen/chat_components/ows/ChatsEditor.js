@@ -198,11 +198,12 @@ const ChatsEditor = ({ auth_data, with_userid }) => {
       socket.emit('join_room', { room: String(auth_data.id) });
 
       // Event handler for 'new_data_event'
-      const handleNewDataEvent = (msg) => {
-        console.log("Received data in room", auth_data.id, msg);
+      const handleNewDataEvent = (data) => {
+        const p_data = JSON.parse(data)
+        console.log("Received data in room", auth_data.id, p_data.msg);
         setChat_data(prv => {
           let cp_prv = JSON.parse(JSON.stringify(prv))
-          cp_prv.push(msg)
+          cp_prv.push(p_data.msg)
           return cp_prv
         })
         // Handle the new data as needed
