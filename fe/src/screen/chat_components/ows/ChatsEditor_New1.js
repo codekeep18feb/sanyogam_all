@@ -10,7 +10,6 @@ import { Grid, Typography, TextField, Button } from "@mui/material";
 import React, { useEffect, useReducer, useState } from 'react';
 import WrapperChatShellWithSend from "../../WrapperChatShellWithSend";
 import VideoCallIcon from "@mui/icons-material/VideoCall";
-import PhoneCallUI from "../../PhoneCallUI";
 
 const makeTriggerCall = async (with_userid, frm_id, message) => {
   try {
@@ -137,7 +136,6 @@ const reducer = (state, action) => {
 
 
 const ChatsEditor = ({ auth_data, with_userid }) => {
-  const [callStatus, setcallStatus] = useState(null)
   const [socket, setSocket] = useState(null);
   const [my_room, setMyRoomAs] = useState(null);
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -251,29 +249,36 @@ const ChatsEditor = ({ auth_data, with_userid }) => {
     )
   })
 
+  // const all_chats = (
+  //   <div   >
+  //     <div >Segment 1</div>
+  //     <div >Segment 2</div>
+  //     <div >Segment 3</div>
+  //   </div>
+  // );
 
   const setMessage = (message) => {
     dispatch({ type: 'SET_MESSAGE', payload: message });
   }
-
-  
   return (
     <WrapperChatShellWithSend title={"chats"} onSave={handleSubmit} setMessage={setMessage} message={message}>
-      {(!callStatus || callStatus == 'calling') && all_chats}
-      {callStatus == 'calling' && <PhoneCallUI
-        callStatus={callStatus}
-        with_userid={with_userid}
-      />}
+      {all_chats}
       <VideoCallIcon
-        style={{ fontSize: "35px", color: "#1F4294" }}
-        onClick={() => {
-          console.log('got video click')
-          setcallStatus("calling")
+        style={{ fontSize: "35px", color: "#1F4294" }} />
+      {/* <div className={classes.bottom}>
+              <TextField
+                label="Type your message"
+                variant="outlined"
+                fullWidth
+                margin="normal"
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+              />
 
-          //
-        }}
-      />
-
+              <Button variant="contained" color="primary" onClick={handleSubmit}>
+                Send
+              </Button>
+            </div> */}
 
     </WrapperChatShellWithSend>
   );

@@ -47,7 +47,12 @@ const ChatModal = ({ SetWithUserId, with_userid, with_email }) => {
             </div>
           </Grid>
           <Grid item xs={2}><AudioCallIcon style={{ fontSize: "35px", color: "#1F4294" }} /></Grid>
-          <Grid item xs={2} ><VideoCallIcon style={{ fontSize: "35px", color: "#1F4294" }} /></Grid>
+          <Grid item xs={2} >
+            <VideoCallIcon style={{ fontSize: "35px", color: "#1F4294" }} />
+            
+            
+            
+            </Grid>
         </Grid>
       </div>
       <div>
