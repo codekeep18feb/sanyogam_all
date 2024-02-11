@@ -10,11 +10,17 @@ import {
 import UserChatTileInListCOWs from "./UserChatTileInListCOWS";
 
 import ChatsEditor from "./ChatsEditor";
+import { connect } from "react-redux";
 
-const ChatPARENTOWS = () => {
+const ChatPARENTOWS = ({ auth_data }) => {
   const [onlineProfiles, setOnlineProfiles] = useState(null);
   const [with_userid, SetWithUserId] = useState(null);
   const [with_email, SetWithEmail] = useState(null);
+  const [chat_socket, setChatSocket] = useState(null);
+
+
+
+
 
   console.log("ChatPARENTOWS parent of profiles and chats");
   const [socket, setSocket] = useState(
@@ -22,6 +28,7 @@ const ChatPARENTOWS = () => {
       query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     })
   );
+  const [chat_data, setChat_data] = useState([])
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const fetchOnlineProfiles = () => {
@@ -60,10 +67,64 @@ const ChatPARENTOWS = () => {
       }
     });
 
+
+    const connectChatSocket = () => {
+      const newChatSocket = io.connect('http://192.168.1.9:8001', {
+        query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
+      setChatSocket(newChatSocket);
+
+      return () => {
+        newChatSocket.disconnect();
+      };
+    };
+
+    connectChatSocket();
+
+    return () => {
+      // Cleanup on component unmount
+      if (socket) {
+        socket.disconnect();
+        chat_socket.disconnect();
+      }
+    };
+
+
     return () => {
       clearInterval(intervalId);
     };
   }, []); // Include socket in the dependency array
+
+
+  useEffect(() => {
+    if (chat_socket && auth_data && auth_data.id) {
+      // Join the room corresponding to my_room
+      console.log('AREWEHERERE', auth_data.id)
+      chat_socket.emit('join_room', { room: String(auth_data.id) });
+
+      // Event handler for 'new_data_event'
+      const handleNewDataEvent = (data) => {
+        const p_data = JSON.parse(data)
+        console.log("Received data in room", auth_data.id, p_data.msg);
+        setChat_data(prv => {
+          let cp_prv = JSON.parse(JSON.stringify(prv))
+          cp_prv.push(p_data.msg)
+          return cp_prv
+        })
+        // Handle the new data as needed
+      };
+
+      // Listen for 'new_data_event' events
+      chat_socket.on("new_data_event", handleNewDataEvent);
+
+      // Clean up the socket connection on component unmount or when my_room changes
+      return () => {
+        chat_socket.emit('leave_room', { room: String(auth_data.id) });
+        chat_socket.off("new_data_event", handleNewDataEvent);
+      };
+    }
+  }, [chat_socket, auth_data]);
+
 
   const all_online_profiles = onlineProfiles && (
     <UserChatTileInListCOWs
@@ -118,4 +179,11 @@ const ChatPARENTOWS = () => {
 }
 
 
-export default ChatPARENTOWS
+// export default ChatPARENTOWS
+const mapStateToProps = (state) => {
+  return {
+    auth_data: state.auth.data,
+  };
+};
+
+export default connect(mapStateToProps)(ChatPARENTOWS);

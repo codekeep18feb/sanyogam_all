@@ -138,47 +138,47 @@ const reducer = (state, action) => {
 
 const ChatsEditor = ({ auth_data, with_userid }) => {
   const [callStatus, setcallStatus] = useState(null)
-  const [socket, setSocket] = useState(null);
+  // const [socket, setSocket] = useState(null);
   const [my_room, setMyRoomAs] = useState(null);
   const [state, dispatch] = useReducer(reducer, initialState);
   const { message } = state;
 
   const [dependentVariable, setDependentVariable] = useState("dependent");
   const [chat_data, setChat_data] = useState([])
-  const connectSocket = () => {
-    console.log(dependentVariable); // Using dependentVariable in connectSocket
+  // const connectSocket = () => {
+  //   console.log(dependentVariable); // Using dependentVariable in connectSocket
 
-    const newSocket = io.connect('http://192.168.1.9:8001', {
-      query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-    });
-    setSocket(newSocket);
+  //   const newSocket = io.connect('http://192.168.1.9:8001', {
+  //     query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+  //   });
+  //   setSocket(newSocket);
 
-    return () => {
-      newSocket.disconnect();
-    };
-  };
+  //   return () => {
+  //     newSocket.disconnect();
+  //   };
+  // };
 
-  useEffect(() => {
-    const connectSocket = () => {
-      const newSocket = io.connect('http://192.168.1.9:8001', {
-        query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      });
-      setSocket(newSocket);
+  // useEffect(() => {
+  //   const connectSocket = () => {
+  //     const newSocket = io.connect('http://192.168.1.9:8001', {
+  //       query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+  //     });
+  //     setSocket(newSocket);
 
-      return () => {
-        newSocket.disconnect();
-      };
-    };
+  //     return () => {
+  //       newSocket.disconnect();
+  //     };
+  //   };
 
-    connectSocket();
+  //   connectSocket();
 
-    return () => {
-      // Cleanup on component unmount
-      if (socket) {
-        socket.disconnect();
-      }
-    };
-  }, []); // Empty dependency array to run only on mount and unmount
+  //   return () => {
+  //     // Cleanup on component unmount
+  //     if (socket) {
+  //       socket.disconnect();
+  //     }
+  //   };
+  // }, []); // Empty dependency array to run only on mount and unmount
 
   // useEffect(() => {
   //   const getRoom = async () => {
@@ -191,34 +191,34 @@ const ChatsEditor = ({ auth_data, with_userid }) => {
   //   getRoom();
   // }, [with_userid]);
 
-  useEffect(() => {
-    if (socket && auth_data && auth_data.id) {
-      // Join the room corresponding to my_room
-      console.log('AREWEHERERE', auth_data.id)
-      socket.emit('join_room', { room: String(auth_data.id) });
+  // useEffect(() => {
+  //   if (socket && auth_data && auth_data.id) {
+  //     // Join the room corresponding to my_room
+  //     console.log('AREWEHERERE', auth_data.id)
+  //     socket.emit('join_room', { room: String(auth_data.id) });
 
-      // Event handler for 'new_data_event'
-      const handleNewDataEvent = (data) => {
-        const p_data = JSON.parse(data)
-        console.log("Received data in room", auth_data.id, p_data.msg);
-        setChat_data(prv => {
-          let cp_prv = JSON.parse(JSON.stringify(prv))
-          cp_prv.push(p_data.msg)
-          return cp_prv
-        })
-        // Handle the new data as needed
-      };
+  //     // Event handler for 'new_data_event'
+  //     const handleNewDataEvent = (data) => {
+  //       const p_data = JSON.parse(data)
+  //       console.log("Received data in room", auth_data.id, p_data.msg);
+  //       setChat_data(prv => {
+  //         let cp_prv = JSON.parse(JSON.stringify(prv))
+  //         cp_prv.push(p_data.msg)
+  //         return cp_prv
+  //       })
+  //       // Handle the new data as needed
+  //     };
 
-      // Listen for 'new_data_event' events
-      socket.on("new_data_event", handleNewDataEvent);
+  //     // Listen for 'new_data_event' events
+  //     socket.on("new_data_event", handleNewDataEvent);
 
-      // Clean up the socket connection on component unmount or when my_room changes
-      return () => {
-        socket.emit('leave_room', { room: String(my_room) });
-        socket.off("new_data_event", handleNewDataEvent);
-      };
-    }
-  }, [socket, auth_data]);
+  //     // Clean up the socket connection on component unmount or when my_room changes
+  //     return () => {
+  //       socket.emit('leave_room', { room: String(my_room) });
+  //       socket.off("new_data_event", handleNewDataEvent);
+  //     };
+  //   }
+  // }, [socket, auth_data]);
 
 
 
