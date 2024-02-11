@@ -49,6 +49,9 @@ function Login({ login, logout }) {
             localStorage.setItem("meUser", JSON.stringify(meUser));
             console.log("meUser", meUser);
             login(meUser);
+
+            //let's add my_room as user.id
+
             // Redirect to /people on successful login
             navigate("/");
           } else {

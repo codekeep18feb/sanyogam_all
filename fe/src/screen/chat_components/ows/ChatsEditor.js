@@ -21,7 +21,7 @@ const makeTriggerCall = async (with_userid, frm_id, message) => {
     }
     const JWT_TOKEN = localStorage.getItem("token");
     const token = `Bearer ${JWT_TOKEN}`;
-    console.log('here is tokene', token)
+    console.log('dsfhere is with_userid', with_userid)
     const response = await fetch(
       `http://192.168.1.9:8001/new_data_event_trigger/${with_userid}`,
       {
@@ -180,25 +180,26 @@ const ChatsEditor = ({ auth_data, with_userid }) => {
     };
   }, []); // Empty dependency array to run only on mount and unmount
 
-  useEffect(() => {
-    const updateRoom = async () => {
-      const JWT_TOKEN = localStorage.getItem("token");
-      const token = `Bearer ${JWT_TOKEN}`;
-      const request_d = await getRequestUID(with_userid, token);
-      setMyRoomAs(request_d.id);
-    };
+  // useEffect(() => {
+  //   const getRoom = async () => {
+  //     const JWT_TOKEN = localStorage.getItem("token");
+  //     const token = `Bearer ${JWT_TOKEN}`;
+  //     const request_d = await getRequestUID(with_userid, token);
+  //     setMyRoomAs(request_d.id);
+  //   };
 
-    updateRoom();
-  }, [with_userid]);
+  //   getRoom();
+  // }, [with_userid]);
 
   useEffect(() => {
-    if (socket && my_room) {
+    if (socket && auth_data && auth_data.id) {
       // Join the room corresponding to my_room
-      socket.emit('join_room', { room: String(my_room) });
+      console.log('AREWEHERERE', auth_data.id)
+      socket.emit('join_room', { room: String(auth_data.id) });
 
       // Event handler for 'new_data_event'
       const handleNewDataEvent = (msg) => {
-        console.log("Received data in room", my_room, msg);
+        console.log("Received data in room", auth_data.id, msg);
         setChat_data(prv => {
           let cp_prv = JSON.parse(JSON.stringify(prv))
           cp_prv.push(msg)
@@ -216,7 +217,7 @@ const ChatsEditor = ({ auth_data, with_userid }) => {
         socket.off("new_data_event", handleNewDataEvent);
       };
     }
-  }, [socket, my_room]);
+  }, [socket, auth_data]);
 
 
 
@@ -256,10 +257,10 @@ const ChatsEditor = ({ auth_data, with_userid }) => {
     dispatch({ type: 'SET_MESSAGE', payload: message });
   }
 
-  
+
   return (
     <WrapperChatShellWithSend title={"chats"} onSave={handleSubmit} setMessage={setMessage} message={message}>
-      {(!callStatus || callStatus == 'calling') && all_chats}
+      {all_chats}
       {callStatus == 'calling' && <PhoneCallUI
         callStatus={callStatus}
         with_userid={with_userid}

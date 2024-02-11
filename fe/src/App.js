@@ -270,7 +270,8 @@ const withGlobalSocket = (Component) => {
   };
 };
 
-function App({ login }) {
+function App({ login,auth_data }) {
+  // const [my_room, setMyRoomAs] = useState(null);
   const navigate = useNavigate();
   const allGlobalData = useSelector((state) => {
     console.log("state here dsf", state);
@@ -283,18 +284,35 @@ function App({ login }) {
     if (storedAuthData) {
       const parsedAuthData = JSON.parse(storedAuthData);
       login(parsedAuthData);
-      if (
-        allGlobalData &&
-        allGlobalData["incoming_calls"] &&
-        allGlobalData["incoming_calls"].length > 0
-      ) {
-        const incomingCallData = allGlobalData["incoming_calls"][0];
-        console.log("incomingCallDatadsfadsfa", incomingCallData); //NOTICE  JUST PROCESSING FIRST CALL IF MORE THERE SHOULD BE AN INFO THAT USER IS ON ANOTHER CALL
-        navigate("/incoming_call", { state: { incomingCallData } });
-      }
+      // if (
+      //   allGlobalData &&
+      //   allGlobalData["incoming_calls"] &&
+      //   allGlobalData["incoming_calls"].length > 0
+      // ) {
+      //   const incomingCallData = allGlobalData["incoming_calls"][0];
+      //   console.log("incomingCallDatadsfadsfa", incomingCallData); //NOTICE  JUST PROCESSING FIRST CALL IF MORE THERE SHOULD BE AN INFO THAT USER IS ON ANOTHER CALL
+      //   navigate("/incoming_call", { state: { incomingCallData } });
+      // }
     }
   }, [login, allGlobalData, navigate]); // Dependency on login ensures the effect is re-run when login changes
 
+  // useEffect(() => {
+  //   console.log('here we can load room id i guess',auth_data)
+  //   const getRoom = async () => {
+  //     const JWT_TOKEN = localStorage.getItem("token");
+  //     const token = `Bearer ${JWT_TOKEN}`;
+  //     const request_d = await getRequestUID(auth_data.id, token);
+  //     console.log('here is request_d',request_d)
+  //     // setMyRoomAs(request_d.id);
+  //   };
+
+  //   getRoom();
+  //   //make fetch call to request to get my_room
+
+  //   // and also save it in redux??
+
+  // }, [auth_data])
+  
   return (
     <Routes>
       <Route
