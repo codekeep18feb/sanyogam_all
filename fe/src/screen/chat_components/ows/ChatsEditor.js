@@ -136,7 +136,7 @@ const reducer = (state, action) => {
 };
 
 
-const ChatsEditor = ({ auth_data, with_userid, all_chats }) => {
+const ChatsEditor = ({ SetWithUserId, auth_data, with_userid, all_chats }) => {
   console.log('all_chatsdsafsdfsdf', all_chats)
   const [callStatus, setcallStatus] = useState(null)
   // const [socket, setSocket] = useState(null);
@@ -261,7 +261,12 @@ const ChatsEditor = ({ auth_data, with_userid, all_chats }) => {
 
 
   return (
-    <WrapperChatShellWithSend title={"chats"} onSave={handleSubmit} setMessage={setMessage} message={message}>
+    <WrapperChatShellWithSend title={"chats"} onSave={handleSubmit} setMessage={setMessage} message={message}
+    
+    onBack={()=>{
+      SetWithUserId(null)
+    }}
+    >
       {all_chats}
       {callStatus == 'calling' && <PhoneCallUI
         callStatus={callStatus}

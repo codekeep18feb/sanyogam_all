@@ -21,7 +21,8 @@ export default function WrapperChatShellWithSend({
   title,
   onSave,
   setMessage,
-  message
+  message,
+  onBack
 }) {
   console.log("title", title);
 
@@ -51,8 +52,9 @@ export default function WrapperChatShellWithSend({
           textAlign: "center",
         }}
       >
+        <div onClick={onBack}>backhere</div>
         {/* {deviceType==='mobile'?<HeaderMobile />:<HeaderDesktop />} */}
-        <HeaderMobileBack title={title} />
+        {/* <HeaderMobileBack title={title} /> */}
       </div>
 
       {/* Middle Content (Scrollable) */}

@@ -154,14 +154,12 @@ const ChatPARENTOWS = ({ auth_data }) => {
       {/* <Typography variant="h5" gutterBottom>
         with_userid - {with_userid} - {with_email}
       </Typography> */}
-      {with_userid && <ChatsEditor with_userid={with_userid} SetWithUserId={SetWithUserId} all_chats={chat_data[with_userid] || []} />}
+      {with_userid && <ChatsEditor SetWithUserId={SetWithUserId} with_userid={with_userid} all_chats={chat_data[with_userid] || []} />}
     </>
     // </Paper>
   );
 
-  console.log(
-    "this should only be running once as of now as we are setting the state only once",
-    onlineProfiles
+  console.log("this should only be running once as of now as we are setting the state only once",onlineProfiles
   );
   return (
     <Grid container spacing={3}>
