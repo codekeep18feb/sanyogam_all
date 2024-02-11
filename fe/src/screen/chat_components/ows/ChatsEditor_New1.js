@@ -194,7 +194,7 @@ const ChatsEditor = ({ auth_data, with_userid }) => {
       // Join the room corresponding to my_room
       socket.emit('join_room', { room: String(my_room) });
 
-      // Event handler for 'new_data_event'
+      // Event handler for 'new_chat_data_event'
       const handleNewDataEvent = (msg) => {
         console.log("Received data in room", my_room, msg);
         setChat_data(prv => {
@@ -205,13 +205,13 @@ const ChatsEditor = ({ auth_data, with_userid }) => {
         // Handle the new data as needed
       };
 
-      // Listen for 'new_data_event' events
-      socket.on("new_data_event", handleNewDataEvent);
+      // Listen for 'new_chat_data_event' events
+      socket.on("new_chat_data_event", handleNewDataEvent);
 
       // Clean up the socket connection on component unmount or when my_room changes
       return () => {
         socket.emit('leave_room', { room: String(my_room) });
-        socket.off("new_data_event", handleNewDataEvent);
+        socket.off("new_chat_data_event", handleNewDataEvent);
       };
     }
   }, [socket, my_room]);

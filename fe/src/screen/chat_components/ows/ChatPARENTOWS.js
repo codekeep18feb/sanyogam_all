@@ -28,7 +28,8 @@ const ChatPARENTOWS = ({ auth_data }) => {
       query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     })
   );
-  const [chat_data, setChat_data] = useState([])
+  const [chat_data, setChat_data] = useState({})
+  console.log('HEREISchat_data', chat_data)
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const fetchOnlineProfiles = () => {
@@ -102,25 +103,38 @@ const ChatPARENTOWS = ({ auth_data }) => {
       console.log('AREWEHERERE', auth_data.id)
       chat_socket.emit('join_room', { room: String(auth_data.id) });
 
-      // Event handler for 'new_data_event'
+      // Event handler for 'new_chat_data_event'
       const handleNewDataEvent = (data) => {
         const p_data = JSON.parse(data)
         console.log("Received data in room", auth_data.id, p_data.msg);
+
+
+
         setChat_data(prv => {
-          let cp_prv = JSON.parse(JSON.stringify(prv))
-          cp_prv.push(p_data.msg)
-          return cp_prv
-        })
+          let cp_prv = JSON.parse(JSON.stringify(prv)); // Deep copy of prv object
+
+          if (cp_prv.hasOwnProperty(p_data.frm_id)) { // Check if key exists in cp_prv
+            // If key exists, update its value
+            cp_prv[p_data.frm_id] = [...cp_prv[p_data.frm_id], p_data]; // Assuming p_data contains both key and value
+
+
+          } else {
+            // If key does not exist, add it to cp_prv
+            cp_prv[p_data.frm_id] = [p_data];
+          }
+
+          return cp_prv;
+        });
         // Handle the new data as needed
       };
 
-      // Listen for 'new_data_event' events
-      chat_socket.on("new_data_event", handleNewDataEvent);
+      // Listen for 'new_chat_data_event' events
+      chat_socket.on("new_chat_data_event", handleNewDataEvent);
 
       // Clean up the socket connection on component unmount or when my_room changes
       return () => {
         chat_socket.emit('leave_room', { room: String(auth_data.id) });
-        chat_socket.off("new_data_event", handleNewDataEvent);
+        chat_socket.off("new_chat_data_event", handleNewDataEvent);
       };
     }
   }, [chat_socket, auth_data]);
@@ -140,7 +154,7 @@ const ChatPARENTOWS = ({ auth_data }) => {
       {/* <Typography variant="h5" gutterBottom>
         with_userid - {with_userid} - {with_email}
       </Typography> */}
-      {with_userid && <ChatsEditor with_userid={with_userid} SetWithUserId={SetWithUserId} />}
+      {with_userid && <ChatsEditor with_userid={with_userid} SetWithUserId={SetWithUserId} all_chats={chat_data[with_userid] || []} />}
     </>
     // </Paper>
   );

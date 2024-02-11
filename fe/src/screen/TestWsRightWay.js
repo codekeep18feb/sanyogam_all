@@ -6,7 +6,7 @@ const TestWsRightWay = () => {
   const { for_roomid } = useParams();
 
   useEffect(() => {
-    const socket = io.connect("http://192.168.1.9:8001",{
+    const socket = io.connect("http://192.168.1.9:8001", {
       transports: ["websocket"], // Explicitly specify the transport
 
     });
@@ -14,14 +14,14 @@ const TestWsRightWay = () => {
     // Join the room corresponding to for_roomid
     socket.emit('join_room', { room: String(for_roomid) });
 
-    // Event handler for 'new_data_event'
+    // Event handler for 'new_chat_data_event'
     const handleNewDataEvent = (data) => {
       console.log("will see wht data comes back", for_roomid, data);
       // Handle the new data as needed
     };
 
-    // Listen for 'new_data_event' events
-    socket.on("new_data_event", handleNewDataEvent);
+    // Listen for 'new_chat_data_event' events
+    socket.on("new_chat_data_event", handleNewDataEvent);
 
     // Clean up the socket connection on component unmount
     return () => {

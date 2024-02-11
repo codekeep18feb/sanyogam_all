@@ -9,7 +9,7 @@ import { ImageCircle } from "../../chat_components/ImageCircle";
 import { Grid, Typography, TextField, Button } from "@mui/material";
 import React, { useState } from 'react';
 
-const makeTriggerCall = async (with_userid,frm_id,message) => {
+const makeTriggerCall = async (with_userid, frm_id, message) => {
   try {
     const data = {
       "frm_id": frm_id,
@@ -53,9 +53,9 @@ const ChatsEditor = ({ auth_data, with_userid }) => {
   );
 
   // useEffect(() => {
-    
 
-  //   socket.on("new_data_event", (data) => {
+
+  //   socket.on("new_chat_data_event", (data) => {
   //     if (data) {
   //       console.log("dafsuyiiuytfasd", data, typeof data);
   //       if (data) {
@@ -95,21 +95,21 @@ const ChatsEditor = ({ auth_data, with_userid }) => {
   //   };
   // }, [socket]);
 
-  
+
 
   useEffect(() => {
 
     // Join the room corresponding to for_roomid
     socket.emit('join_room', { room: for_roomid });
 
-    // Event handler for 'new_data_event'
+    // Event handler for 'new_chat_data_event'
     const handleNewDataEvent = (data) => {
       console.log("New data received for room", for_roomid, data);
       // Handle the new data as needed
     };
 
-    // Listen for 'new_data_event' events
-    socket.on("new_data_event", handleNewDataEvent);
+    // Listen for 'new_chat_data_event' events
+    socket.on("new_chat_data_event", handleNewDataEvent);
 
     // Clean up the socket connection on component unmount
     return () => {
@@ -127,7 +127,7 @@ const ChatsEditor = ({ auth_data, with_userid }) => {
   const handleSubmit = () => {
     // Handle the submission of the message, you can dispatch an action or perform any other logic here.
     console.log("Submitted message:", message);
-    makeTriggerCall(with_userid,auth_data.id,message)
+    makeTriggerCall(with_userid, auth_data.id, message)
 
 
   };

@@ -136,7 +136,8 @@ const reducer = (state, action) => {
 };
 
 
-const ChatsEditor = ({ auth_data, with_userid }) => {
+const ChatsEditor = ({ auth_data, with_userid, all_chats }) => {
+  console.log('all_chatsdsafsdfsdf', all_chats)
   const [callStatus, setcallStatus] = useState(null)
   // const [socket, setSocket] = useState(null);
   const [my_room, setMyRoomAs] = useState(null);
@@ -197,7 +198,7 @@ const ChatsEditor = ({ auth_data, with_userid }) => {
   //     console.log('AREWEHERERE', auth_data.id)
   //     socket.emit('join_room', { room: String(auth_data.id) });
 
-  //     // Event handler for 'new_data_event'
+  //     // Event handler for 'new_chat_data_event'
   //     const handleNewDataEvent = (data) => {
   //       const p_data = JSON.parse(data)
   //       console.log("Received data in room", auth_data.id, p_data.msg);
@@ -209,13 +210,13 @@ const ChatsEditor = ({ auth_data, with_userid }) => {
   //       // Handle the new data as needed
   //     };
 
-  //     // Listen for 'new_data_event' events
-  //     socket.on("new_data_event", handleNewDataEvent);
+  //     // Listen for 'new_chat_data_event' events
+  //     socket.on("new_chat_data_event", handleNewDataEvent);
 
   //     // Clean up the socket connection on component unmount or when my_room changes
   //     return () => {
   //       socket.emit('leave_room', { room: String(my_room) });
-  //       socket.off("new_data_event", handleNewDataEvent);
+  //       socket.off("new_chat_data_event", handleNewDataEvent);
   //     };
   //   }
   // }, [socket, auth_data]);
@@ -238,7 +239,7 @@ const ChatsEditor = ({ auth_data, with_userid }) => {
   const classes = useStyles();
 
 
-  const all_chats = chat_data.map(i => {
+  all_chats = all_chats.map(i => {
     return (
       <div style={{ marginTop: "15px", border: "1px solid red", display: "flex", justifyContent: "flex-end" }}>
         <div
@@ -248,7 +249,7 @@ const ChatsEditor = ({ auth_data, with_userid }) => {
             width: "80%",
             borderBottomLeftRadius: "25%"
           }}
-        >{i}</div>
+        >{i.msg}</div>
       </div>
     )
   })

@@ -52,7 +52,7 @@ async def handle_trigger_now(token,for_userid,message):
     # print('areweheretoo',request_d['id'])
 
     # Emit the message only to the specific room (for_userid)
-    socketio.emit('new_data_event', json.dumps(data),room=str(for_userid)) #, room=equest_d['id'])
+    socketio.emit('new_chat_data_event', json.dumps(data),room=str(for_userid)) #, room=equest_d['id'])
 
 @app.route('/new_data_event_trigger/<for_userid>', methods=['POST'])
 def handle_some_event(for_userid):
@@ -256,7 +256,7 @@ def handle_message(for_userid):
 #     # and send it to the right user room/session???
     
     
-#     socketio.emit('new_data_event', json.dumps(global_events_bucket2))  # Echo the message bv
+#     socketio.emit('new_chat_data_event', json.dumps(global_events_bucket2))  # Echo the message bv
     
     #  # # first_incoming_call = None
     # cp_s_pool = copy.copy(s_pool)
@@ -274,7 +274,7 @@ def handle_message(for_userid):
     
     # # socketio.emit('signal_pool', json.dumps(s_pool))
 
-# @socketio.on('new_data_event')
+# @socketio.on('new_chat_data_event')
 # def handle_message(for_userid):
 #     # Example asynchronous API call without using a separate thread
 #     asyncio.run(async_emit_new_data_event(for_userid))
