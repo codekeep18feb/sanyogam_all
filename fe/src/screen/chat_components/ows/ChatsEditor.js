@@ -79,22 +79,18 @@ const useStyles = makeStyles({
 });
 
 
-const getRequestUID = async (with_userid, token) => {
+const sendAGlobalEvent = async (with_userid, token, data) => {
   try {
-    // const data = {
-    //   "frm_id": frm_id,
-    //   "to_id": with_userid,
-    //   "message": message
-    // }
+
     const response = await fetch(
-      `http://192.168.1.9:8000/api/get_request_info_by_id/${with_userid}`,
+      `http://192.168.1.9:8001/new_global_event_data/${with_userid}`,
       {
-        method: "GET",
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: token,
         },
-        // body: JSON.stringify(data),
+        body: JSON.stringify(data),
 
       }
     );
@@ -259,13 +255,29 @@ const ChatsEditor = ({ SetWithUserId, auth_data, with_userid, all_chats }) => {
     dispatch({ type: 'SET_MESSAGE', payload: message });
   }
 
+  const handleOnClick = async () => {
+    console.log('on click on video icon')
+    const data = {}
+    const sdp = "myhardcodedfull_sdp"
+    const JWT_TOKEN = localStorage.getItem("token");
+    const token = `Bearer ${JWT_TOKEN}`;
+    await sendAGlobalEvent(with_userid, token, data)
+
+    // pass sdp to right room and on right event
+    // then the other party listening to it should get it 
+    // probably glbal event like thing
+
+
+
+  }
+
 
   return (
     <WrapperChatShellWithSend title={"chats"} onSave={handleSubmit} setMessage={setMessage} message={message}
-    
-    onBack={()=>{
-      SetWithUserId(null)
-    }}
+
+      onBack={() => {
+        SetWithUserId(null)
+      }}
     >
       {all_chats}
       {callStatus == 'calling' && <PhoneCallUI
@@ -273,14 +285,7 @@ const ChatsEditor = ({ SetWithUserId, auth_data, with_userid, all_chats }) => {
         with_userid={with_userid}
       />}
       <VideoCallIcon
-        onClick={()=>{
-          console.log('on click on video icon')
-          // pass sdp to right room and on right event
-          // then the other party listening to it should get it 
-          // probably glbal event like thing
-
-        }
-      }
+        onClick={handleOnClick}
         style={{ fontSize: "35px", color: "#1F4294" }}
         onClick={() => {
           console.log('got video click')

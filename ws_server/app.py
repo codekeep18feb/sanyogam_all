@@ -75,20 +75,13 @@ async def handle_global_event_data(token,for_userid,data):
     # request_d = await make_get_request_info_by_id_call(token,for_userid)
     
     me = await make_me_api_call(token)
-    print('ddddo you see me now then you are learning async ??',
-          me,
-          for_userid)
-    print('heremendfdsmessageow',data,for_userid)
+    # print('ddddo you see me now then you are learning async ??', me, for_userid)
+    print('whjdgdrfdfghfd',data,for_userid,token,me['id'])
     
-    # data = request.get_json()
-    # data['to_userid'] = for_userid
-    # data['frm_userid'] = me['id']
-    # data['msg'] = "incomingcalls"
-    # print('here is your data', data, type(data))
-    # data = json.dumps(data)
-    # print('areweheretoo',request_d['id'])
-
-    # Emit the message only to the specific room (for_userid)
+    data = request.get_json()
+    data['to_userid'] = for_userid
+    data['frm_userid'] = me['id']
+    print("datasgdsdfsdafsdffgg",data, "@",for_userid)
     socketio.emit('global_event_data', json.dumps(data)
                   ,room=str(for_userid)
                   ) #, room=equest_d['id'])
@@ -98,7 +91,7 @@ async def handle_global_event_data(token,for_userid,data):
 def handle_global_event(for_userid):
     auth_header = request.headers.get('Authorization')
     # me = await make_me_api_call('Bearer '+auth_header)
-    print('isitrighthere',for_userid)
+    print('isitrighthere',auth_header)
     data = request.json  # Assuming the message is sent in the request body as JSON
 
     print('dddoauth_header',data)
@@ -392,7 +385,7 @@ async def async_emit_fetch_profile_chats(*args):
     
     with_user_id = args[0]
     message = 'merersg'
-    
+    print('AREQWREWRWER')
     api_result = await make_me_api_call(auth_token)
     me =  DictWithDotAccess(api_result)
     
