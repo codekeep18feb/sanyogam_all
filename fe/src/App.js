@@ -270,9 +270,46 @@ const withGlobalSocket = (Component) => {
   };
 };
 
-function App({ login,auth_data }) {
+const getRequestUID = async (with_userid, token) => {
+  try {
+
+    const response = await fetch(
+      `http://192.168.1.9:8000/api/get_request_info_by_id/${with_userid}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        },
+        // body: JSON.stringify(data),
+
+      }
+    );
+
+    if (response.status === 200) {
+      const data = await response.json();
+      console.log("successfully fetched user");
+      return data
+    } else {
+      console.log("Error fetching chat history");
+      return null;
+    }
+  } catch (error) {
+    console.error("An error occurred:", error);
+  } finally {
+    // setLoading(false);
+  }
+};
+
+function App({ login, auth_data }) {
+  const [my_room, setMyRoomAs] = useState(null);
+
   // const [my_room, setMyRoomAs] = useState(null);
+
+
   const navigate = useNavigate();
+  const [gSocket, setgSocket] = useState(null);
+
   const allGlobalData = useSelector((state) => {
     console.log("state here dsf", state);
     return state.globalData;
@@ -296,6 +333,65 @@ function App({ login,auth_data }) {
     }
   }, [login, allGlobalData, navigate]); // Dependency on login ensures the effect is re-run when login changes
 
+
+  useEffect(() => {
+    if (!gSocket && auth_data) {
+      const newSocket = io.connect('http://192.168.1.9:8001', {
+        query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
+
+      // newSocket.on("global_event_data", (data) => {
+      //   if (data) {
+      //     console.log("Datasdfasdf recdsfeived:", data);
+      //   }
+      // });
+
+      setgSocket(newSocket);
+    }
+
+    return () => {
+      if (gSocket) {
+        gSocket.disconnect();
+      }
+    };
+  }, [gSocket, auth_data]); // Dependency only on gSocket
+
+  // useEffect(() => {
+  //   const updateRoom = async () => {
+  //     const JWT_TOKEN = localStorage.getItem("token");
+  //     const token = `Bearer ${JWT_TOKEN}`;
+  //     console.log('ahdfgsdfgfdg', token, auth_data.id)
+  //     // const request_d = await getRequestUID(auth_data.id, token);
+  //     // setMyRoomAs(request_d.id);
+  //   };
+
+  //   updateRoom();
+  // }, [auth_data]);
+
+  useEffect(() => {
+    if (gSocket && auth_data) {
+      // Join the room corresponding to my_room
+      gSocket.emit('join_room', { room: String(auth_data.id) });
+
+      // Event handler for 'new_chat_data_event'
+      const handleNewDataEvent = (data) => {
+        if (data) {
+          console.log("Datasdfasdf recdsfehere now!!!", data, auth_data.id);
+        }
+      }
+
+      gSocket.on("global_event_data", handleNewDataEvent);
+      // Listen for 'new_chat_data_event' events
+      // gSocket.on("new_chat_data_event", handleNewDataEvent);
+
+      // Clean up the socket connection on component unmount or when my_room changes
+      return () => {
+        gSocket.emit('leave_room', { room: String(my_room) });
+        gSocket.off("global_event_data", handleNewDataEvent);
+      };
+    }
+  }, [gSocket, auth_data]);
+
   // useEffect(() => {
   //   console.log('here we can load room id i guess',auth_data)
   //   const getRoom = async () => {
@@ -312,7 +408,7 @@ function App({ login,auth_data }) {
   //   // and also save it in redux??
 
   // }, [auth_data])
-  
+
   return (
     <Routes>
       <Route

@@ -273,6 +273,14 @@ const ChatsEditor = ({ SetWithUserId, auth_data, with_userid, all_chats }) => {
         with_userid={with_userid}
       />}
       <VideoCallIcon
+        onClick={()=>{
+          console.log('on click on video icon')
+          // pass sdp to right room and on right event
+          // then the other party listening to it should get it 
+          // probably glbal event like thing
+
+        }
+      }
         style={{ fontSize: "35px", color: "#1F4294" }}
         onClick={() => {
           console.log('got video click')

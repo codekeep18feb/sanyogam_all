@@ -68,6 +68,50 @@ def handle_some_event(for_userid):
     return "success", 200
 
 
+
+
+async def handle_global_event_data(token,for_userid,data):
+    #get request id
+    # request_d = await make_get_request_info_by_id_call(token,for_userid)
+    
+    me = await make_me_api_call(token)
+    print('ddddo you see me now then you are learning async ??',
+          me,
+          for_userid)
+    print('heremendfdsmessageow',data,for_userid)
+    
+    # data = request.get_json()
+    # data['to_userid'] = for_userid
+    # data['frm_userid'] = me['id']
+    # data['msg'] = "incomingcalls"
+    # print('here is your data', data, type(data))
+    # data = json.dumps(data)
+    # print('areweheretoo',request_d['id'])
+
+    # Emit the message only to the specific room (for_userid)
+    socketio.emit('global_event_data', json.dumps(data)
+                  ,room=str(for_userid)
+                  ) #, room=equest_d['id'])
+
+
+@app.route('/new_global_event_data/<for_userid>', methods=['POST'])
+def handle_global_event(for_userid):
+    auth_header = request.headers.get('Authorization')
+    # me = await make_me_api_call('Bearer '+auth_header)
+    print('isitrighthere',for_userid)
+    data = request.json  # Assuming the message is sent in the request body as JSON
+
+    print('dddoauth_header',data)
+    asyncio.run(handle_global_event_data(auth_header,for_userid,data))
+    
+
+    return "success", 200
+
+
+
+
+
+
 @socketio.on('custom_event')
 def handle_message(*args):
     # token = request.args.get('token')

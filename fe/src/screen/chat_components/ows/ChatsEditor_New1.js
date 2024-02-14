@@ -80,11 +80,7 @@ const useStyles = makeStyles({
 
 const getRequestUID = async (with_userid, token) => {
   try {
-    // const data = {
-    //   "frm_id": frm_id,
-    //   "to_id": with_userid,
-    //   "message": message
-    // }
+   
     const response = await fetch(
       `http://192.168.1.9:8000/api/get_request_info_by_id/${with_userid}`,
       {
