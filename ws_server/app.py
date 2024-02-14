@@ -98,7 +98,9 @@ def handle_global_event(for_userid):
     asyncio.run(handle_global_event_data(auth_header,for_userid,data))
     
 
-    return "success", 200
+    # return "success", 200
+    return {"success":True}, 200
+
 
 
 

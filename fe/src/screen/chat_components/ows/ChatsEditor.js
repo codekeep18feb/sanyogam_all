@@ -79,7 +79,7 @@ const useStyles = makeStyles({
 });
 
 
-const sendAGlobalEvent = async (with_userid, token, data) => {
+const sendAGlobalEventApi = async (with_userid, token, data) => {
   try {
 
     const response = await fetch(
@@ -97,7 +97,7 @@ const sendAGlobalEvent = async (with_userid, token, data) => {
 
     if (response.status === 200) {
       const data = await response.json();
-      console.log("successfully fetched user");
+      console.log("successfully posted global event");
       return data
     } else {
       console.log("Error fetching chat history");
@@ -256,13 +256,21 @@ const ChatsEditor = ({ SetWithUserId, auth_data, with_userid, all_chats }) => {
   }
 
   const handleOnClick = async () => {
-    console.log('on click on video icon')
-    const data = {}
-    const sdp = "myhardcodedfull_sdp"
+    // e.preventDefault()
+    const data = {
+      "type": "call",
+      "status": "incoming",
+      "video": true,
+      "audio": true,
+      "offer": "myhardcodedfull_sdp",
+      "answer": "answer"
+    }
+    console.log('on click on video icon!!!!!!', data)
+    // const sdp = "myhardcodedfull_sdp"
     const JWT_TOKEN = localStorage.getItem("token");
     const token = `Bearer ${JWT_TOKEN}`;
-    await sendAGlobalEvent(with_userid, token, data)
-
+    const res = await sendAGlobalEventApi(with_userid, token, data)
+    console.log("here is the final res", res)
     // pass sdp to right room and on right event
     // then the other party listening to it should get it 
     // probably glbal event like thing
@@ -286,13 +294,14 @@ const ChatsEditor = ({ SetWithUserId, auth_data, with_userid, all_chats }) => {
       />}
       <VideoCallIcon
         onClick={handleOnClick}
-        style={{ fontSize: "35px", color: "#1F4294" }}
-        onClick={() => {
-          console.log('got video click')
-          setcallStatus("calling")
+        style={{ fontSize: "35px", color: "red" }}
+      // onClick={() => {
+      //   console.log('got video click')
+      //   setcallStatus("calling")
 
-          //
-        }}
+      //
+      // }
+      // }
       />
 
 
