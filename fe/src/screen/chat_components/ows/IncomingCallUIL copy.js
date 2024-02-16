@@ -14,14 +14,18 @@ import { connect } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 
 function IncomingCallUIL({
-  incoming_call_data,
   auth_data,
-  // incoming_call_data.to_userid,
+  incoming_call_data,
+  loading,
+  // with_email,
+  with_userid,
+  SetWithUserId,
+  SetWithEmail,
 }) {
   // const location = useLocation();
-  // const incoming_call_data = location.state?.incoming_call_data;
+  // const incoming_call_data = incoming_call_data
 
-  // console.log('waht is type of',incoming_call_data)
+  console.log('waht is type of', incoming_call_data)
   const [connection_open, setConnectionOpened] = useState(false);
   console.log("is it opened?", connection_open);
   // const [videoMode, setVideoMode] = useState(false);
@@ -36,7 +40,7 @@ function IncomingCallUIL({
   // console.log("this shoudl not rerender if other twos are toaking", videoMode);
 
   const [socket, setSocket] = useState(
-    io.connect("http://192.168.1.13:8000", {
+    io.connect('http://192.168.1.9:8001', {
       query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     })
   );
@@ -73,15 +77,15 @@ function IncomingCallUIL({
       if (e.candidate) {
         console.log(
           "whatisthestatus?" + JSON.stringify(rc.localDescription),
-          `${auth_data.id}_${incoming_call_data.to_userid}`
+          `${auth_data.id}_${with_userid}`
         );
         //THIS IS WHERE WILL MAKE
         // const to_user_id = await fetchUserId(token, with_email);
         const answer = JSON.stringify(rc.localDescription);
         const offer_obj = { answer: answer, action: "UPDATE" };
         const offer_str = JSON.stringify(offer_obj);
-        console.log("hereisyourans", offer_str);
-        // socket.emit("signal_pool", offer_str, incoming_call_data.to_userid);
+        console.log("AREWEHERE");
+        // socket.emit("signal_pool", offer_str, with_userid);
         // saveRTCUserAns(
         //   false,
         //   JSON.stringify(rc.localDescription),
@@ -89,34 +93,32 @@ function IncomingCallUIL({
         // );
       }
     };
-    console.log('iwonderif', typeof (incoming_call_data.offer), incoming_call_data.offer)
     const p_offer = JSON.parse(incoming_call_data.offer);
-    console.log("whatisitnow", p_offer, typeof (p_offer))
     // const offer_str = await fetchRTCOffer();
-    // console.log(p_offer, 'what is the diff', offer_str)
-    rc.setRemoteDescription(JSON.parse(p_offer.sdp)).then((a) => {
-      console.log("set remoteDescription with local offer");
-      console.log(
-        "Signaling State after setting remoteDescription",
-        rc.signalingState
-      );
-    });
+    console.log(p_offer, 'abcdef',)
+    // rc.setRemoteDescription(p_offer).then((a) => {
+    //   console.log("set remoteDescription with local offer");
+    //   console.log(
+    //     "Signaling State after setting remoteDescription",
+    //     rc.signalingState
+    //   );
+    // });
 
-    rc.createAnswer()
-      .then((a) => {
-        rc.setLocalDescription(a);
-        console.log(
-          "Signaling State after setting Local description set as a provisional answer.:",
-          rc.signalingState
-        );
-      })
-      .then((a) => {
-        console.log("answer created");
-        console.log(
-          "Signaling State after setting Local description set as a provisional answer.:",
-          rc.signalingState
-        );
-      });
+    // rc.createAnswer()
+    //   .then((a) => {
+    //     rc.setLocalDescription(a);
+    //     console.log(
+    //       "Signaling State after setting Local description set as a provisional answer.:",
+    //       rc.signalingState
+    //     );
+    //   })
+    //   .then((a) => {
+    //     console.log("answer created");
+    //     console.log(
+    //       "Signaling State after setting Local description set as a provisional answer.:",
+    //       rc.signalingState
+    //     );
+    //   });
     return [rc];
   };
 
@@ -199,14 +201,11 @@ function IncomingCallUIL({
     // startTheConnection();
   };
 
-  const chatScreenBody = (incoming_call_data) => {
+  const chatScreenBody = (
+    <div>
+      {loading && !incoming_call_data && <CircularProgress />}
 
-    console.log('iincoming_call_data', incoming_call_data, auth_data.id)
-    return (<div>
-
-      {!incoming_call_data && <CircularProgress />}
-
-      {incoming_call_data.to_userid == auth_data.id &&
+      {incoming_call_data.to_userid === auth_data.id &&
         incoming_call_data.offer &&
         !incoming_call_data.answer && (
           <div>
@@ -214,13 +213,14 @@ function IncomingCallUIL({
               {!connection_open && (
                 <PhoneCallUI
                   // callStatus={"INITIALIZING"}
-                  pickUpTheCall={pickUpTheCall}
-                // incoming_call_data.to_userid={incoming_call_data.to_userid}
+                  pickUpTheCall={() => console.log('pickUpTheCall')}
+                // pickUpTheCall={pickUpTheCall}
+                // with_userid={with_userid}
                 />
               )}
             </div>
             <div style={{ display: connection_open ? "block" : "none" }}>
-              <div>here is video RESPONDER - {JSON.stringify(connection_open)}</div>
+              <div>here is video RESPONDER</div>
 
               <div style={{ width: "100%", height: "100%" }}>
                 <video
@@ -233,10 +233,15 @@ function IncomingCallUIL({
             </div>
           </div>
         )}
-    </div>)
-  }
+    </div>
+  );
 
-  return <div>{chatScreenBody(incoming_call_data)}</div>;
+  return <div>
+
+    <div>some</div>
+    {chatScreenBody}
+
+  </div>;
 }
 
 const mapStateToProps = (state) => {

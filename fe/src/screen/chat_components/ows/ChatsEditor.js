@@ -135,7 +135,7 @@ const reducer = (state, action) => {
 const ChatsEditor = ({ SetWithUserId, auth_data, with_userid, all_chats }) => {
   const myVideoRef = useRef(null);
   const myRef = useRef(null);
-
+  const [current_cs, setCallingStatus] = useState(null)
   const [socket, setSocket] = useState(
     io.connect("http://192.168.1.13:8000", {
       query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
@@ -185,9 +185,19 @@ const ChatsEditor = ({ SetWithUserId, auth_data, with_userid, all_chats }) => {
             "video": true,
             "audio": true,
             "offer": offer_str,
-            "answer": "answer"
+            "answer":null
           }
+
           const res = await sendAGlobalEventApi(with_userid, token, data)
+          if(res['success']){
+            setCallingStatus("calling")
+
+          }
+          else{
+            setCallingStatus("failed")
+
+          }
+          
           console.log('HERE IS RES yeah ::::))))', res)
           // socket.emit("signal_pool", offer_str, with_userid);
 
@@ -488,6 +498,7 @@ const ChatsEditor = ({ SetWithUserId, auth_data, with_userid, all_chats }) => {
     const token = `Bearer ${JWT_TOKEN}`;
 
     // let cs = { status: null };
+    setCallingStatus("calling")
     await initializeWebRTC(token, "INITIATOR");
     // console.log("dowehave dc",dc)
 

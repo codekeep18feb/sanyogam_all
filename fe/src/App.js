@@ -302,6 +302,7 @@ const getRequestUID = async (with_userid, token) => {
 };
 
 function App({ login, auth_data }) {
+  const [incoming_call_data, setIncomingCall] = useState(null)
   const [my_room, setMyRoomAs] = useState(null);
 
   // const [my_room, setMyRoomAs] = useState(null);
@@ -369,6 +370,8 @@ function App({ login, auth_data }) {
   // }, [auth_data]);
 
   useEffect(() => {
+
+
     if (gSocket && auth_data) {
       // Join the room corresponding to my_room
       gSocket.emit('join_room', { room: String(auth_data.id) });
@@ -376,7 +379,14 @@ function App({ login, auth_data }) {
       // Event handler for 'new_chat_data_event'
       const handleNewDataEvent = (data) => {
         if (data) {
-          console.log("Datasdfasdf recdsfehere now!!!", data, auth_data.id);
+          const pdata = JSON.parse(data)
+          console.log(typeof (data), "Datasdfasdf recdsfehere now!!!", pdata, auth_data.id);
+          const incomingCallData = { frm_id: String(auth_data.id) };
+          console.log("incomingCallDatadsfadsfa", incomingCallData); //NOTICE  JUST PROCESSING FIRST CALL IF MORE THERE SHOULD BE AN INFO THAT USER IS ON ANOTHER CALL
+          if (incomingCallData) {
+            setIncomingCall(pdata)
+          }
+          // await initializeWebRTC(token, "RESPONDER");
         }
       }
 
@@ -409,144 +419,150 @@ function App({ login, auth_data }) {
 
   // }, [auth_data])
 
+
+
+
   return (
-    <Routes>
-      <Route
-        path="/"
-        element={
-          <WrapperMobileShell>
-            <Home />
-          </WrapperMobileShell>
-        }
-      />
-
-      <Route
-        path="/incoming_call"
-        element={
-          // <WrapperMobileShell>
-          <IncomingCallUI />
-          // </WrapperMobileShell>
-        }
-      />
-      <Route
-        path="/sendmsgws"
-        element={
-          <WrapperMobileShell>
-            <SendMsgWS />
-          </WrapperMobileShell>
-        }
-      />
-      <Route path="/login" element={<LoginScreen />} />
-      <Route path="/material" element={<MaterialUX />} />
-      <Route path="/faq" element={<FAQ />} />
-      <Route path="/signup" element={<SignupScreen />} />
-      <Route path="/pricing" element={<Pricing />} />
-      <Route path="/google_authorized" element={<GoogleAuthorize />} />
-      <Route path="/test_ws_right_way/:for_roomid" element={<TestWsRightWay />} />
-
-      <Route
-        path="/all_users"
-        element={
-          <PrivateRoute>
+    <>
+      {incoming_call_data && <IncomingCallUI incoming_call_data={incoming_call_data} />}
+      <Routes>
+        <Route
+          path="/"
+          element={
             <WrapperMobileShell>
-              <Users />
+              <Home />
             </WrapperMobileShell>
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/inbox"
-        element={
-          <PrivateRoute>
-            <WrapperMobileShell>
-              <Inbox />
-            </WrapperMobileShell>
-          </PrivateRoute>
-        }
-      />
+          }
+        />
 
-      <Route
-        path="/practice"
-        element={
-          // <WrapperMobileShell>
-          <PlayGround />
-        }
-      />
-      <Route
-        path="/practice2"
-        element={
-          <WrapperMobileShell>
-            <PlayGround2 />
-          </WrapperMobileShell>
-        }
-      />
-      <Route
-        path="/chat"
-        element={
-          <PrivateRoute>
+        <Route
+          path="/incoming_call"
+          element={
+            // <WrapperMobileShell>
+            <IncomingCallUI />
+            // </WrapperMobileShell>
+          }
+        />
+        <Route
+          path="/sendmsgws"
+          element={
             <WrapperMobileShell>
-              <Chat />
+              <SendMsgWS />
             </WrapperMobileShell>
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/chat_ows"
-        element={
-          <PrivateRoute>
-            {/* <WrapperMobileShell> */}
-            <ChatPARENTOWS />
-            {/* </WrapperMobileShell> */}
-          </PrivateRoute>
-        }
-      />
+          }
+        />
+        <Route path="/login" element={<LoginScreen />} />
+        <Route path="/material" element={<MaterialUX />} />
+        <Route path="/faq" element={<FAQ />} />
+        <Route path="/signup" element={<SignupScreen />} />
+        <Route path="/pricing" element={<Pricing />} />
+        <Route path="/google_authorized" element={<GoogleAuthorize />} />
+        <Route path="/test_ws_right_way/:for_roomid" element={<TestWsRightWay />} />
 
-      <Route
-        path="/chat_ws"
-        element={
-          <PrivateRoute>
-            <WrapperMobileShell>
-              <ChatWS />
-            </WrapperMobileShell>
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/video_chat"
-        element={
-          <PrivateRoute>
-            <WrapperMobileShell>
-              <Video />
-            </WrapperMobileShell>
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/back_tile"
-        element={
-          <WrapperMobileBackShell>
-            <BackTile />
-          </WrapperMobileBackShell>
-        }
-      />
+        <Route
+          path="/all_users"
+          element={
+            <PrivateRoute>
+              <WrapperMobileShell>
+                <Users />
+              </WrapperMobileShell>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/inbox"
+          element={
+            <PrivateRoute>
+              <WrapperMobileShell>
+                <Inbox />
+              </WrapperMobileShell>
+            </PrivateRoute>
+          }
+        />
 
-      <Route
-        path="/edit_profile"
-        element={
-          <WrapperMobileBackShell title={"Preview Profile"}>
-            <PreviewProfile />
-          </WrapperMobileBackShell>
-        }
-      />
-      <Route
-        path="/edit_family"
-        element={
-          // <WrapperMobileBackShellWithSave title={"Family Details"}>
-          <EditFamily />
-          // </WrapperMobileBackShellWithSave>
-        }
-      />
-    </Routes>
+        <Route
+          path="/practice"
+          element={
+            // <WrapperMobileShell>
+            <PlayGround />
+          }
+        />
+        <Route
+          path="/practice2"
+          element={
+            <WrapperMobileShell>
+              <PlayGround2 />
+            </WrapperMobileShell>
+          }
+        />
+        <Route
+          path="/chat"
+          element={
+            <PrivateRoute>
+              <WrapperMobileShell>
+                <Chat />
+              </WrapperMobileShell>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/chat_ows"
+          element={
+            <PrivateRoute>
+              {/* <WrapperMobileShell> */}
+              <ChatPARENTOWS />
+              {/* </WrapperMobileShell> */}
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/chat_ws"
+          element={
+            <PrivateRoute>
+              <WrapperMobileShell>
+                <ChatWS />
+              </WrapperMobileShell>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/video_chat"
+          element={
+            <PrivateRoute>
+              <WrapperMobileShell>
+                <Video />
+              </WrapperMobileShell>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/back_tile"
+          element={
+            <WrapperMobileBackShell>
+              <BackTile />
+            </WrapperMobileBackShell>
+          }
+        />
+
+        <Route
+          path="/edit_profile"
+          element={
+            <WrapperMobileBackShell title={"Preview Profile"}>
+              <PreviewProfile />
+            </WrapperMobileBackShell>
+          }
+        />
+        <Route
+          path="/edit_family"
+          element={
+            // <WrapperMobileBackShellWithSave title={"Family Details"}>
+            <EditFamily />
+            // </WrapperMobileBackShellWithSave>
+          }
+        />
+      </Routes>
+    </>
   );
 }
 

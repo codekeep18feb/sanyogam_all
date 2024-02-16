@@ -1,19 +1,20 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import IncomingCallUIL from './IncomingCallUIL';
- 
-function IncomingCallUI() {
-  const location = useLocation();
-  const incomingCallData = location.state?.incomingCallData;
+
+function IncomingCallUI({ incoming_call_data }) {
+  // const location = useLocation();
+  // const incomingCallData = location.state?.incomingCallData;
 
   // Use incomingCallData as needed
-  console.log('incomingCallData',incomingCallData)
+  console.log('incomingCallData', incoming_call_data)
   return (
-    // Your component JSX
-    // <div>incoming calldata - {typeof(incomingCallData.initiator)}</div>
-    <IncomingCallUIL with_userid={incomingCallData.frm_id} />
-    // JSON.stringify(incomingCallData)
-    // 
+
+    <div>
+
+      {incoming_call_data ? <IncomingCallUIL incoming_call_data={incoming_call_data} /> : "loading"}
+    </div>
+
   );
 }
 
