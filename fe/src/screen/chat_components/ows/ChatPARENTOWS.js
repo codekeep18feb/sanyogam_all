@@ -10,7 +10,7 @@ import {
 import UserChatTileInListCOWs from "./UserChatTileInListCOWS";
 
 import ChatsEditor from "./ChatsEditor";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 
 const ChatPARENTOWS = ({ auth_data }) => {
   const [onlineProfiles, setOnlineProfiles] = useState(null);
@@ -19,12 +19,16 @@ const ChatPARENTOWS = ({ auth_data }) => {
   const [chat_socket, setChatSocket] = useState(null);
 
 
-
+  // const allGlobalData = useSelector((state) => {
+  //   console.log("state here dsf", state);
+  //   return state.globalData;
+  // });
+  // console.log("does call got accepted??", allGlobalData);
 
 
   console.log("ChatPARENTOWS parent of profiles and chats");
   const [socket, setSocket] = useState(
-    io.connect('http://192.168.1.9:8001', {
+    io.connect('http://192.168.1.11:8001', {
       query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     })
   );
@@ -70,7 +74,7 @@ const ChatPARENTOWS = ({ auth_data }) => {
 
 
     const connectChatSocket = () => {
-      const newChatSocket = io.connect('http://192.168.1.9:8001', {
+      const newChatSocket = io.connect('http://192.168.1.11:8001', {
         query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       setChatSocket(newChatSocket);
@@ -159,7 +163,7 @@ const ChatPARENTOWS = ({ auth_data }) => {
     // </Paper>
   );
 
-  console.log("this should only be running once as of now as we are setting the state only once",onlineProfiles
+  console.log("this should only be running once as of now as we are setting the state only once", onlineProfiles
   );
   return (
     <Grid container spacing={3}>

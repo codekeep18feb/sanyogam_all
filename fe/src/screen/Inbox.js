@@ -16,7 +16,7 @@ export default function Inbox() {
     const JWT_TOKEN = localStorage.getItem("token");
     const token = `Bearer ${JWT_TOKEN}`;
     const response = await fetch(
-      `http://192.168.1.9:8000/api/handle_request`,
+      `http://192.168.1.11:8000/api/handle_request`,
       {
         method: "GET",
         headers: {

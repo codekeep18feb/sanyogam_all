@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import io from "socket.io-client";
 
 const MonitorWSStatus = () => {
-  const [socket, setSocket] = useState(io.connect('http://192.168.1.9:8001'));
+  const [socket, setSocket] = useState(io.connect('http://192.168.1.11:8001'));
   const [messages, setMessages] = useState([]);
   const [messageInput, setMessageInput] = useState("");
   const [selectedPrefix, setSelectedPrefix] = useState("AC");

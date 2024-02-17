@@ -6,7 +6,7 @@ const TestWsRightWay = () => {
   const { for_roomid } = useParams();
 
   useEffect(() => {
-    const socket = io.connect("http://192.168.1.9:8001", {
+    const socket = io.connect("http://192.168.1.11:8001", {
       transports: ["websocket"], // Explicitly specify the transport
 
     });

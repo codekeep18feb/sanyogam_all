@@ -15,7 +15,7 @@ const NumberField = ({ id, label, defaultValue = 0, onChange, state_name }) => (
     variant="standard"
     defaultValue={defaultValue} // Add this line to set the default value
     onChange={(e) => onChange(e, state_name, "number_input")}
-    // fullWidth={true}
+  // fullWidth={true}
   />
 );
 
@@ -45,7 +45,7 @@ const submitProfileUpdateData = async (payload) => {
 
   try {
     const response = await fetch(
-      `http://192.168.1.9:8000/api/update_my_profile`,
+      `http://192.168.1.11:8000/api/update_my_profile`,
       {
         method: "POST",
         headers: {
@@ -158,7 +158,7 @@ const EditFamilyForm = () => {
     const JWT_TOKEN = localStorage.getItem("token");
     const token = `Bearer ${JWT_TOKEN}`;
     const response = await fetch(
-      `http://192.168.1.9:8000/api/update_my_profile`,
+      `http://192.168.1.11:8000/api/update_my_profile`,
       {
         method: "POST",
         headers: {

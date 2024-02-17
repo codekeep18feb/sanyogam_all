@@ -22,7 +22,7 @@ const makeTriggerCall = async (with_userid, frm_id, message) => {
     const token = `Bearer ${JWT_TOKEN}`;
     console.log('here is tokene', token)
     const response = await fetch(
-      `http://192.168.1.9:8001/new_data_event_trigger/${with_userid}`,
+      `http://192.168.1.11:8001/new_data_event_trigger/${with_userid}`,
       {
         method: "POST",
         headers: {
@@ -80,9 +80,9 @@ const useStyles = makeStyles({
 
 const getRequestUID = async (with_userid, token) => {
   try {
-   
+
     const response = await fetch(
-      `http://192.168.1.9:8000/api/get_request_info_by_id/${with_userid}`,
+      `http://192.168.1.11:8000/api/get_request_info_by_id/${with_userid}`,
       {
         method: "GET",
         headers: {
@@ -142,7 +142,7 @@ const ChatsEditor = ({ auth_data, with_userid }) => {
   const connectSocket = () => {
     console.log(dependentVariable); // Using dependentVariable in connectSocket
 
-    const newSocket = io.connect('http://192.168.1.9:8001', {
+    const newSocket = io.connect('http://192.168.1.11:8001', {
       query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
     setSocket(newSocket);
@@ -154,7 +154,7 @@ const ChatsEditor = ({ auth_data, with_userid }) => {
 
   useEffect(() => {
     const connectSocket = () => {
-      const newSocket = io.connect('http://192.168.1.9:8001', {
+      const newSocket = io.connect('http://192.168.1.11:8001', {
         query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       setSocket(newSocket);

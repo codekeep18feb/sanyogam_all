@@ -21,6 +21,37 @@ function IncomingCallUIL({
   // const location = useLocation();
   // const incoming_call_data = location.state?.incoming_call_data;
 
+  const sendAGlobalEventApi = async (with_userid, token, data) => {
+    try {
+
+      const response = await fetch(
+        `http://192.168.1.11:8001/new_global_event_data/${with_userid}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
+          body: JSON.stringify(data),
+
+        }
+      );
+
+      if (response.status === 200) {
+        const data = await response.json();
+        console.log("successfully posted global event");
+        return data
+      } else {
+        console.log("Error fetching chat history");
+        return null;
+      }
+    } catch (error) {
+      console.error("An error occurred:", error);
+    } finally {
+      // setLoading(false);
+    }
+  };
+
   // console.log('waht is type of',incoming_call_data)
   const [connection_open, setConnectionOpened] = useState(false);
   console.log("is it opened?", connection_open);
@@ -81,6 +112,18 @@ function IncomingCallUIL({
         const offer_obj = { answer: answer, action: "UPDATE" };
         const offer_str = JSON.stringify(offer_obj);
         console.log("hereisyourans", offer_str);
+        if (offer_str) {
+          const JWT_TOKEN = localStorage.getItem("token");
+          const token = `Bearer ${JWT_TOKEN}`;
+          const data = {
+            "type": "call",
+            "status": "accepted_incoming",
+            "answer": offer_str
+          }
+          console.log('shouldnot we send the offer as well to be verified', incoming_call_data.offer)
+
+          sendAGlobalEventApi(incoming_call_data.frm_userid, token, data)
+        }
         // socket.emit("signal_pool", offer_str, incoming_call_data.to_userid);
         // saveRTCUserAns(
         //   false,

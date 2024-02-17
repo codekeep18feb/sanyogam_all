@@ -40,7 +40,7 @@ function IncomingCallUIL({
   // console.log("this shoudl not rerender if other twos are toaking", videoMode);
 
   const [socket, setSocket] = useState(
-    io.connect('http://192.168.1.9:8001', {
+    io.connect('http://192.168.1.11:8001', {
       query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     })
   );

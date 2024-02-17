@@ -1,6 +1,6 @@
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import AudioCallIcon from "@mui/icons-material/Call";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import io from "socket.io-client";
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -23,7 +23,7 @@ const makeTriggerCall = async (with_userid, frm_id, message) => {
     const token = `Bearer ${JWT_TOKEN}`;
     console.log('dsfhere is with_userid', with_userid)
     const response = await fetch(
-      `http://192.168.1.9:8001/new_data_event_trigger/${with_userid}`,
+      `http://192.168.1.11:8001/new_data_event_trigger/${with_userid}`,
       {
         method: "POST",
         headers: {
@@ -83,7 +83,7 @@ const sendAGlobalEventApi = async (with_userid, token, data) => {
   try {
 
     const response = await fetch(
-      `http://192.168.1.9:8001/new_global_event_data/${with_userid}`,
+      `http://192.168.1.11:8001/new_global_event_data/${with_userid}`,
       {
         method: "POST",
         headers: {
@@ -142,6 +142,44 @@ const ChatsEditor = ({ SetWithUserId, auth_data, with_userid, all_chats }) => {
     })
   );
 
+  const allGlobalData = useSelector((state) => {
+    console.log("state here dsf", state);
+    return state.globalData;
+  });
+  console.log("does call got accepted?? inchats editory", allGlobalData);
+
+
+
+  const sendAGlobalEventApi = async (with_userid, token, data) => {
+    try {
+
+      const response = await fetch(
+        `http://192.168.1.11:8001/new_global_event_data/${with_userid}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
+          body: JSON.stringify(data),
+
+        }
+      );
+
+      if (response.status === 200) {
+        const data = await response.json();
+        console.log("successfully posted global event");
+        return data
+      } else {
+        console.log("Error fetching chat history");
+        return null;
+      }
+    } catch (error) {
+      console.error("An error occurred:", error);
+    } finally {
+      // setLoading(false);
+    }
+  };
 
   const initializeWebRTC = async (token, type) => {
     console.log('INSIDE initializeWebRTC')
@@ -185,19 +223,19 @@ const ChatsEditor = ({ SetWithUserId, auth_data, with_userid, all_chats }) => {
             "video": true,
             "audio": true,
             "offer": offer_str,
-            "answer":null
+            "answer": null
           }
 
           const res = await sendAGlobalEventApi(with_userid, token, data)
-          if(res['success']){
+          if (res['success']) {
             setCallingStatus("calling")
 
           }
-          else{
+          else {
             setCallingStatus("failed")
 
           }
-          
+
           console.log('HERE IS RES yeah ::::))))', res)
           // socket.emit("signal_pool", offer_str, with_userid);
 
@@ -214,7 +252,7 @@ const ChatsEditor = ({ SetWithUserId, auth_data, with_userid, all_chats }) => {
             lc.signalingState
           );
         });
-      return 1;
+      return [lc];
     } else if (type === "RESPONDER") {
       console.log("Ensure it's not called multiple times...");
       const rc = new RTCPeerConnection();
@@ -252,9 +290,24 @@ const ChatsEditor = ({ SetWithUserId, auth_data, with_userid, all_chats }) => {
           //THIS IS WHERE WILL MAKE
           // const to_user_id = await fetchUserId(token, with_email);
           const answer = JSON.stringify(rc.localDescription);
-          const offer_obj = { answer: answer, action: "UPDATE" };
+          const offer_obj = { answer: answer, with_userid: with_userid };
           const offer_str = JSON.stringify(offer_obj);
-          console.log("AREWEHERE");
+          console.log("AREWEHERE@answers");
+          const data = {
+            "type": "accepting",
+            "answer": offer_str
+          }
+
+          const res = await sendAGlobalEventApi(with_userid, token, data)
+          if (res['success']) {
+            setCallingStatus("accepted_call")
+
+          }
+          else {
+            setCallingStatus("accepting_failed")
+
+          }
+
           // socket.emit("signal_pool", offer_str, with_userid);
           // saveRTCUserAns(
           //   false,
@@ -356,7 +409,9 @@ const ChatsEditor = ({ SetWithUserId, auth_data, with_userid, all_chats }) => {
     });
   };
 
-  console.log('all_chatsdsafsdfsdf', all_chats)
+
+
+  console.log('on chatseditor myref', myRef.current)
   const [callStatus, setcallStatus] = useState(null)
   // const [socket, setSocket] = useState(null);
   const [my_room, setMyRoomAs] = useState(null);
@@ -365,86 +420,6 @@ const ChatsEditor = ({ SetWithUserId, auth_data, with_userid, all_chats }) => {
 
   const [dependentVariable, setDependentVariable] = useState("dependent");
   const [chat_data, setChat_data] = useState([])
-  // const connectSocket = () => {
-  //   console.log(dependentVariable); // Using dependentVariable in connectSocket
-
-  //   const newSocket = io.connect('http://192.168.1.9:8001', {
-  //     query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-  //   });
-  //   setSocket(newSocket);
-
-  //   return () => {
-  //     newSocket.disconnect();
-  //   };
-  // };
-
-  // useEffect(() => {
-  //   const connectSocket = () => {
-  //     const newSocket = io.connect('http://192.168.1.9:8001', {
-  //       query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-  //     });
-  //     setSocket(newSocket);
-
-  //     return () => {
-  //       newSocket.disconnect();
-  //     };
-  //   };
-
-  //   connectSocket();
-
-  //   return () => {
-  //     // Cleanup on component unmount
-  //     if (socket) {
-  //       socket.disconnect();
-  //     }
-  //   };
-  // }, []); // Empty dependency array to run only on mount and unmount
-
-  // useEffect(() => {
-  //   const getRoom = async () => {
-  //     const JWT_TOKEN = localStorage.getItem("token");
-  //     const token = `Bearer ${JWT_TOKEN}`;
-  //     const request_d = await getRequestUID(with_userid, token);
-  //     setMyRoomAs(request_d.id);
-  //   };
-
-  //   getRoom();
-  // }, [with_userid]);
-
-  // useEffect(() => {
-  //   if (socket && auth_data && auth_data.id) {
-  //     // Join the room corresponding to my_room
-  //     console.log('AREWEHERERE', auth_data.id)
-  //     socket.emit('join_room', { room: String(auth_data.id) });
-
-  //     // Event handler for 'new_chat_data_event'
-  //     const handleNewDataEvent = (data) => {
-  //       const p_data = JSON.parse(data)
-  //       console.log("Received data in room", auth_data.id, p_data.msg);
-  //       setChat_data(prv => {
-  //         let cp_prv = JSON.parse(JSON.stringify(prv))
-  //         cp_prv.push(p_data.msg)
-  //         return cp_prv
-  //       })
-  //       // Handle the new data as needed
-  //     };
-
-  //     // Listen for 'new_chat_data_event' events
-  //     socket.on("new_chat_data_event", handleNewDataEvent);
-
-  //     // Clean up the socket connection on component unmount or when my_room changes
-  //     return () => {
-  //       socket.emit('leave_room', { room: String(my_room) });
-  //       socket.off("new_chat_data_event", handleNewDataEvent);
-  //     };
-  //   }
-  // }, [socket, auth_data]);
-
-
-
-
-
-
 
 
   const handleSubmit = () => {
@@ -499,16 +474,17 @@ const ChatsEditor = ({ SetWithUserId, auth_data, with_userid, all_chats }) => {
 
     // let cs = { status: null };
     setCallingStatus("calling")
-    await initializeWebRTC(token, "INITIATOR");
+    const [lc] = await initializeWebRTC(token, "INITIATOR");
     // console.log("dowehave dc",dc)
 
-    // if (lc) {
-    //   console.log(lc, "what is this lc");
-    //   console.log(lc, typeof(lc),"myRef's current value:", myRef.current);
-    //   myRef.current = {
-    //     type: "INITIATOR",
-    //     channel: lc,
-    //   };
+    if (lc) {
+      console.log(lc, "what is this lc");
+      console.log(lc, typeof (lc), "myRef's current value:", myRef.current);
+      myRef.current = {
+        type: "INITIATOR",
+        channel: lc,
+      }
+    }
     //   attachRightListnersToRef();
     //   data['offer'] = lc
     //   const res = await sendAGlobalEventApi(with_userid, token, data)
@@ -523,6 +499,64 @@ const ChatsEditor = ({ SetWithUserId, auth_data, with_userid, all_chats }) => {
 
   }
 
+  useEffect(() => {
+    if (allGlobalData && allGlobalData.answer) {
+      const answer_obj = JSON.parse(allGlobalData.answer)
+      const answer = JSON.parse(answer_obj.answer)
+      console.log("isittriggering only if answer changes??", answer, typeof (answer));
+      if (answer){
+
+
+        myRef.current.channel
+          .setRemoteDescription(answer)
+          .then((a) => {
+            console.log("answer should be set now on initiator");
+            console.log(
+              "Signaling State after setting answer on setRemoteDescription:",
+              myRef.current.channel.signalingState
+            );
+          })
+          .catch((error) => {
+            console.error("Error setting remote description:", error);
+          });
+      }
+      // console.log(
+      //   "if INITIATOR I THING WE CAN INITIATE THE CONNECTION??,",
+      //   myRef.current,
+      //   myRef.current["type"] === "INITIATOR"
+      // );
+      // if (myRef.current["type"] === "INITIATOR") {
+      //   // let's perform the thrid step
+      //   console.log(
+      //     "hereAnswer",
+      //     myRef.current,
+      //     myRef.current.answer,
+      //     typeof myRef.current.answer
+      //   ); //myRef.current.send("douseeme!")
+      //   const answer = JSON.parse(myRef.current.answer);
+      //   console.log("DOWESEE ANSWER", answer);
+      //   // myRef.current.channel.send("douseeme!")
+      //   // answer = answer
+      //   console.log(
+      //     "Signaling State before setting remote description:",
+      //     myRef.current.channel.signalingState
+      //   );
+
+      //   myRef.current.channel
+      //     .setRemoteDescription(answer)
+      //     .then((a) => {
+      //       console.log("dowseseethantythere");
+      //       console.log(
+      //         "Signaling State after setting answer on setRemoteDescription:",
+      //         myRef.current.channel.signalingState
+      //       );
+      //     })
+      //     .catch((error) => {
+      //       console.error("Error setting remote description:", error);
+      //     });
+      // }
+    }
+  }, [allGlobalData.answer]);
 
   return (
     <WrapperChatShellWithSend title={"chats"} onSave={handleSubmit} setMessage={setMessage} message={message}

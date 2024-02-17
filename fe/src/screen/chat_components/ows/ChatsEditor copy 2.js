@@ -23,7 +23,7 @@ const withChatSocket = (Component) => {
 
   return function WithSocketComponent({ auth_data, with_userid, ...props }) {
     const [socket, setSocket] = useState(
-      io.connect('http://192.168.1.9:8001', {
+      io.connect('http://192.168.1.11:8001', {
         query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       })
     );
@@ -112,7 +112,7 @@ const ChatScreenHeader = ({
         "sdp": "sdpSADASAMUNH"
       }
       const response = await fetch(
-        `http://192.168.1.9:8001/new_data_event_trigger/${with_userid}`,
+        `http://192.168.1.11:8001/new_data_event_trigger/${with_userid}`,
         {
           method: "POST",
           headers: {
@@ -139,14 +139,14 @@ const ChatScreenHeader = ({
     }
   };
 
-  const handleCallConnect = (e,with_userid)=>{
-      console.log("arerewqrwer", with_userid);
-      e.preventDefault();
-      // const to_user_id = await fetchUserId(token, with_email);
+  const handleCallConnect = (e, with_userid) => {
+    console.log("arerewqrwer", with_userid);
+    e.preventDefault();
+    // const to_user_id = await fetchUserId(token, with_email);
 
-      // makeTriggerCall(with_userid)
-      console.log('wahtis sdp', signal_pool_s)
-      setVideoMode(true);
+    // makeTriggerCall(with_userid)
+    console.log('wahtis sdp', signal_pool_s)
+    setVideoMode(true);
   }
   return (
     <>
@@ -215,7 +215,7 @@ function ChatsEditor({
   console.log("this shoudl not rerender if other twos are toaking", videoMode);
 
   const [socket, setSocket] = useState(
-    io.connect('http://192.168.1.9:8001', {
+    io.connect('http://192.168.1.11:8001', {
       query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     })
   );
@@ -258,7 +258,7 @@ function ChatsEditor({
           // );
           const offer = JSON.stringify(lc.localDescription);
           setsignal_pool_s({
-            'sdp':offer
+            'sdp': offer
           })
           // const offer_obj = { sdp: offer, action: "ADD" };
           // const offer_str = JSON.stringify(offer_obj);
@@ -594,22 +594,22 @@ function ChatsEditor({
             {["INITIALIZING", "OUTGOINGCALL", null].includes(
               callStatus.status
             ) && (
-              <div>
-                <PhoneCallUI
-                  callStatus={callStatus}
-                  with_userid={with_userid}
-                />
-                {/* Add Accept and Disconnect buttons */}
                 <div>
-                  <IconButton color="primary" onClick={handleAcceptCall}>
-                    <PhoneIcon />
-                  </IconButton>
-                  <IconButton color="secondary" onClick={handleDisconnectCall}>
-                    <CallEndIcon2 />
-                  </IconButton>
+                  <PhoneCallUI
+                    callStatus={callStatus}
+                    with_userid={with_userid}
+                  />
+                  {/* Add Accept and Disconnect buttons */}
+                  <div>
+                    <IconButton color="primary" onClick={handleAcceptCall}>
+                      <PhoneIcon />
+                    </IconButton>
+                    <IconButton color="secondary" onClick={handleDisconnectCall}>
+                      <CallEndIcon2 />
+                    </IconButton>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
           </div>
           {/* <div style={{ display: connection_open ? "block" : "none" }}> */}
           <div

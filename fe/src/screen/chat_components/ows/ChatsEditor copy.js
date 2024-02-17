@@ -17,7 +17,7 @@ const makeTriggerCall = async (with_userid, frm_id, message) => {
       "message": message
     }
     const response = await fetch(
-      `http://192.168.1.9:8001/new_data_event_trigger/${with_userid}`,
+      `http://192.168.1.11:8001/new_data_event_trigger/${with_userid}`,
       {
         method: "POST",
         headers: {
@@ -47,7 +47,7 @@ const makeTriggerCall = async (with_userid, frm_id, message) => {
 
 const ChatsEditor = ({ auth_data, with_userid }) => {
   const [socket, setSocket] = useState(
-    io.connect('http://192.168.1.9:8001', {
+    io.connect('http://192.168.1.11:8001', {
       query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     })
   );

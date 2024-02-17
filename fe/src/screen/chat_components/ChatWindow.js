@@ -32,7 +32,7 @@ export default function ChatWindow({
 
     try {
       const response = await fetch(
-        `http://192.168.1.9:8000/api/del_rtc_entry/${id}`,
+        `http://192.168.1.11:8000/api/del_rtc_entry/${id}`,
         {
           method: "GET",
           headers: {
@@ -76,7 +76,7 @@ export default function ChatWindow({
 
     try {
       const response = await fetch(
-        `http://192.168.1.9:8000/api/rtc_user_info_by_id/${with_userid}`,
+        `http://192.168.1.11:8000/api/rtc_user_info_by_id/${with_userid}`,
         {
           method: "GET",
           headers: {
@@ -118,7 +118,7 @@ export default function ChatWindow({
 
     try {
       const response = await fetch(
-        `http://192.168.1.9:8000/api/add_rtc_user`,
+        `http://192.168.1.11:8000/api/add_rtc_user`,
         {
           method: "POST",
           headers: {
@@ -153,7 +153,7 @@ export default function ChatWindow({
 
     try {
       const response = await fetch(
-        `http://192.168.1.9:8000/api/add_rtc_user`,
+        `http://192.168.1.11:8000/api/add_rtc_user`,
         {
           method: "POST",
           headers: {
@@ -188,7 +188,7 @@ export default function ChatWindow({
 
     try {
       const response = await fetch(
-        `http://192.168.1.9:8000/api/rtc_user_info_by_id/${with_userid}`,
+        `http://192.168.1.11:8000/api/rtc_user_info_by_id/${with_userid}`,
         {
           method: "GET",
           headers: {
@@ -212,10 +212,10 @@ export default function ChatWindow({
     }
   };
   const fetchUserId = async (token, with_email) => {
-    // http://192.168.1.9:8000/api/users/query?q_email=deepaksingh.18feb%40gmail.com
+    // http://192.168.1.11:8000/api/users/query?q_email=deepaksingh.18feb%40gmail.com
     try {
       const response = await fetch(
-        `http://192.168.1.9:8000/api/users/query?q_email=${with_email}`,
+        `http://192.168.1.11:8000/api/users/query?q_email=${with_email}`,
         {
           method: "GET",
           headers: {
@@ -371,7 +371,7 @@ export default function ChatWindow({
         // const we = 'deepaksingh.18feb%40gmail.com'
         console.log("WHERE  IS withemail", with_email);
         const response = await fetch(
-          `http://192.168.1.9:8000/api/handle_request?to_email=${with_email}`,
+          `http://192.168.1.11:8000/api/handle_request?to_email=${with_email}`,
           {
             method: "GET",
             headers: {

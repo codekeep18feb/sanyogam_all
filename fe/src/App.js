@@ -1,7 +1,7 @@
 import React from "react";
 // import MaterialScreen from './screen/MaterialScreen'
 import MaterialUIExample from "./screen/MaterialUIExample";
-import { connect, useSelector } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
 import AdvancedMaterialUIExample from "./screen/AdvancedMaterialUIExample";
 import Pricing from "./screen/Pricing";
 import TabPanel from "./screen/TabPanel";
@@ -100,7 +100,7 @@ const withGlobalSocket = (Component) => {
       auth_data
     );
     const [socket, setSocket] = useState(
-      io.connect('http://192.168.1.9:8001', {
+      io.connect('http://192.168.1.11:8001', {
         query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       })
     );
@@ -274,7 +274,7 @@ const getRequestUID = async (with_userid, token) => {
   try {
 
     const response = await fetch(
-      `http://192.168.1.9:8000/api/get_request_info_by_id/${with_userid}`,
+      `http://192.168.1.11:8000/api/get_request_info_by_id/${with_userid}`,
       {
         method: "GET",
         headers: {
@@ -315,7 +315,7 @@ function App({ login, auth_data }) {
     console.log("state here dsf", state);
     return state.globalData;
   });
-  console.log("hope we can see them here.", allGlobalData);
+  console.log("hope we can see them here.", allGlobalData, Object.keys(allGlobalData).length);
   useEffect(() => {
     // Perform actions after the page is loaded
     const storedAuthData = localStorage.getItem("meUser");
@@ -332,12 +332,12 @@ function App({ login, auth_data }) {
       //   navigate("/incoming_call", { state: { incomingCallData } });
       // }
     }
-  }, [login, allGlobalData, navigate]); // Dependency on login ensures the effect is re-run when login changes
+  }, [login]); // Dependency on login ensures the effect is re-run when login changes
 
 
   useEffect(() => {
     if (!gSocket && auth_data) {
-      const newSocket = io.connect('http://192.168.1.9:8001', {
+      const newSocket = io.connect('http://192.168.1.11:8001', {
         query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
 
@@ -369,6 +369,25 @@ function App({ login, auth_data }) {
   //   updateRoom();
   // }, [auth_data]);
 
+  const dispatch = useDispatch();
+
+  const handleIncoming = (payload) => {
+    const incomingAction = {
+      type: "INCOMING",
+      payload: payload
+    };
+    dispatch(incomingAction);
+  };
+
+
+  const respondIncoming = (payload) => {
+    const incomingAction = {
+      type: "ACCEPTED_INCOMING",
+      payload: payload
+    };
+    dispatch(incomingAction);
+  };
+
   useEffect(() => {
 
 
@@ -380,12 +399,40 @@ function App({ login, auth_data }) {
       const handleNewDataEvent = (data) => {
         if (data) {
           const pdata = JSON.parse(data)
-          console.log(typeof (data), "Datasdfasdf recdsfehere now!!!", pdata, auth_data.id);
-          const incomingCallData = { frm_id: String(auth_data.id) };
-          console.log("incomingCallDatadsfadsfa", incomingCallData); //NOTICE  JUST PROCESSING FIRST CALL IF MORE THERE SHOULD BE AN INFO THAT USER IS ON ANOTHER CALL
-          if (incomingCallData) {
-            setIncomingCall(pdata)
+          console.log(typeof (data), "unique", pdata, auth_data.id);
+          if (Number(pdata.to_userid) == auth_data.id) {//just a validation check{
+
+            if (pdata.status == 'incoming' && pdata.offer) {
+              // setIncomingCall(pdata)
+              handleIncoming(pdata)
+
+            }
+
+            else if (pdata.status == 'accepted_incoming' && pdata.answer) {
+              console.log('HERE SHOULD BE ANS', pdata)
+              if (pdata.answer) {
+                const new_obj = { answer: pdata.answer, status: pdata.status,frm_userid: pdata.frm_userid,to_userid: pdata.to_userid, }
+                console.log('WHATISTHEREALREADY', pdata)
+                respondIncoming(new_obj)
+              }
+              // const new_obj = {...pdata}
+              // setIncomingCall(new_obj)
+
+            }
+            //else just update the answer
+            //let's send this answer to a redux state
+            //and from there chatparent can get and pass it to wherever the video is being
+            // rendered 
           }
+          else {
+            console.warn("There should be a log to record failing of this validation!!!")
+          }
+          //FIRST CHECK IF CALL IS MEANT FOR US JUST A VALIDATION CHECK
+
+          //IF NOT LET LOG IT SHOULD BE A LOG MESSAGE
+          //ELSE Number(pdata.to_userid) && pdata.status == 'incoming'
+
+
           // await initializeWebRTC(token, "RESPONDER");
         }
       }
@@ -424,7 +471,7 @@ function App({ login, auth_data }) {
 
   return (
     <>
-      {incoming_call_data && <IncomingCallUI incoming_call_data={incoming_call_data} />}
+      {Object.keys(allGlobalData).length && <IncomingCallUI incoming_call_data={allGlobalData} />}
       <Routes>
         <Route
           path="/"

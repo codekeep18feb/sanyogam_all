@@ -3,15 +3,15 @@ import io from "socket.io-client";
 
 const ListnerWS2 = () => {
   // const [socket, setSocket] = useState(
-  //   io.connect('http://192.168.1.9:8001')
+  //   io.connect('http://192.168.1.11:8001')
   // );
   const [socket, setSocket] = useState(
-    io.connect('http://192.168.1.9:8001', {
+    io.connect('http://192.168.1.11:8001', {
       query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     })
   );
 
-  // const [socket, setSocket] = useState(io.connect('http://192.168.1.9:8001'));
+  // const [socket, setSocket] = useState(io.connect('http://192.168.1.11:8001'));
   const [messages, setMessages] = useState([]);
   const [messageInput, setMessageInput] = useState("");
   const [room_id, setRoomId] = useState("");
