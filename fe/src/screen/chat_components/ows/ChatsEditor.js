@@ -10,7 +10,7 @@ import { Grid, Typography, TextField, Button } from "@mui/material";
 import React, { useEffect, useReducer, useRef, useState } from 'react';
 import WrapperChatShellWithSend from "../../WrapperChatShellWithSend";
 import VideoCallIcon from "@mui/icons-material/VideoCall";
-import PhoneCallUI from "../../../must/PhoneCallUI";
+import PhoneCallUI from "../../../must/incomingcallui_route/PhoneCallUI";
 
 const makeTriggerCall = async (with_userid, frm_id, message) => {
   try {
