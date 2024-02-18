@@ -506,7 +506,6 @@ const ChatsEditor = ({ SetWithUserId, auth_data, with_userid, all_chats }) => {
       console.log("isittriggering only if answer changes??", answer, typeof (answer));
       if (answer){
 
-
         myRef.current.channel
           .setRemoteDescription(answer)
           .then((a) => {
