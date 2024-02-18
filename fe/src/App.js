@@ -54,7 +54,7 @@ import SendMsgWS from "./component/SendMsgWS.js";
 // import ChatWS from "./screen/chat_components/ChatWS.js";
 import PlayGround2 from "./screen/PlayGround2.js";
 import ChatPARENTOWS from "./screen/chat_components/ows/ChatPARENTOWS.js";
-import IncomingCallUI from "./screen/chat_components/ows/IncomingCallUI";
+import IncomingCallUI from "./must/IncomingCallUI.js";
 import TestWsRightWay from "./screen/TestWsRightWay.js";
 // import ProfileBriefTile from './screen/ProfileBriefTile.js';
 
@@ -482,51 +482,12 @@ function App({ login, auth_data }) {
           }
         />
 
-        <Route
-          path="/incoming_call"
-          element={
-            // <WrapperMobileShell>
-            <IncomingCallUI />
-            // </WrapperMobileShell>
-          }
-        />
-        <Route
-          path="/sendmsgws"
-          element={
-            <WrapperMobileShell>
-              <SendMsgWS />
-            </WrapperMobileShell>
-          }
-        />
+
         <Route path="/login" element={<LoginScreen />} />
-        <Route path="/material" element={<MaterialUX />} />
         <Route path="/faq" element={<FAQ />} />
         <Route path="/signup" element={<SignupScreen />} />
         <Route path="/pricing" element={<Pricing />} />
         <Route path="/google_authorized" element={<GoogleAuthorize />} />
-        <Route path="/test_ws_right_way/:for_roomid" element={<TestWsRightWay />} />
-
-        <Route
-          path="/all_users"
-          element={
-            <PrivateRoute>
-              <WrapperMobileShell>
-                <Users />
-              </WrapperMobileShell>
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/inbox"
-          element={
-            <PrivateRoute>
-              <WrapperMobileShell>
-                <Inbox />
-              </WrapperMobileShell>
-            </PrivateRoute>
-          }
-        />
-
 
 
         <Route

@@ -1,17 +1,10 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import io from "socket.io-client";
-import NewChatScreen from "./NewChatScreen";
 import { CircularProgress, Grid } from "@mui/material";
-import ChatsOWSTile from "./ChatsOWSTile";
-import SendIcon from "@mui/icons-material/ArrowBack";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import VideoCallIcon from "@mui/icons-material/VideoCall";
-import { ImageCircle } from "../../chat_components/ImageCircle";
-import AudioCallIcon from "@mui/icons-material/Call";
-import { Typography } from "@material-ui/core";
-import PhoneCallUI from "../../PhoneCallUI";
+
+import PhoneCallUI from "./PhoneCallUI";
 import { connect } from "react-redux";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function IncomingCallUIL({
   incoming_call_data,
