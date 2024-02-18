@@ -18,10 +18,10 @@ import { setIncomingCall } from "./redux/counter/GlobalAction";
 // Import your components
 import HomeScreen from "./screen/HomeScreen.js";
 // import Login from './screen/LoginScreen.js';
-import Chat from "./screen/chat_components/Chat";
+// import Chat from "./screen/chat_components/Chat";
 import SignupScreen from "./screen/SignupScreen";
 // import HeaderDesktop from "./screen/HeaderDesktop.js"
-import Video from "./screen/video_components/Video.js";
+// import Video from "./screen/video_components/Video.js";
 import ModalDialog from "./screen/ModalDialog";
 import SnackbarExample from "./screen/SnackbarExample";
 import ItemList from "./screen/ItemList";
@@ -51,7 +51,7 @@ import PreviewProfile from "./component/PreviewProfile.js";
 import ProfileBriefTile from "./screen/ProfileBriefTile";
 import Home from "./screen/Home.js";
 import SendMsgWS from "./component/SendMsgWS.js";
-import ChatWS from "./screen/chat_components/ChatWS.js";
+// import ChatWS from "./screen/chat_components/ChatWS.js";
 import PlayGround2 from "./screen/PlayGround2.js";
 import ChatPARENTOWS from "./screen/chat_components/ows/ChatPARENTOWS.js";
 import IncomingCallUI from "./screen/chat_components/ows/IncomingCallUI";
@@ -411,7 +411,7 @@ function App({ login, auth_data }) {
             else if (pdata.status == 'accepted_incoming' && pdata.answer) {
               console.log('HERE SHOULD BE ANS', pdata)
               if (pdata.answer) {
-                const new_obj = { answer: pdata.answer, status: pdata.status,frm_userid: pdata.frm_userid,to_userid: pdata.to_userid, }
+                const new_obj = { answer: pdata.answer, status: pdata.status, frm_userid: pdata.frm_userid, to_userid: pdata.to_userid, }
                 console.log('WHATISTHEREALREADY', pdata)
                 respondIncoming(new_obj)
               }
@@ -527,31 +527,8 @@ function App({ login, auth_data }) {
           }
         />
 
-        <Route
-          path="/practice"
-          element={
-            // <WrapperMobileShell>
-            <PlayGround />
-          }
-        />
-        <Route
-          path="/practice2"
-          element={
-            <WrapperMobileShell>
-              <PlayGround2 />
-            </WrapperMobileShell>
-          }
-        />
-        <Route
-          path="/chat"
-          element={
-            <PrivateRoute>
-              <WrapperMobileShell>
-                <Chat />
-              </WrapperMobileShell>
-            </PrivateRoute>
-          }
-        />
+
+
         <Route
           path="/chat_ows"
           element={
@@ -563,26 +540,7 @@ function App({ login, auth_data }) {
           }
         />
 
-        <Route
-          path="/chat_ws"
-          element={
-            <PrivateRoute>
-              <WrapperMobileShell>
-                <ChatWS />
-              </WrapperMobileShell>
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/video_chat"
-          element={
-            <PrivateRoute>
-              <WrapperMobileShell>
-                <Video />
-              </WrapperMobileShell>
-            </PrivateRoute>
-          }
-        />
+
         <Route
           path="/back_tile"
           element={
