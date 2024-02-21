@@ -10,8 +10,8 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import store from "./redux/store";
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
-import PaymentForm from "./screen/PaymentForm"
-import WrapperMobileShell from "./must/homeroute/WrapperMobileShell";
+// import PaymentForm from "./screen/PaymentForm"
+// import WrapperMobileShell from "./must/homeroute/WrapperMobileShell";
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 
 // import PaymentIntentScreen from '.screen/PaymentIntentScreen'; // Import your PaymentIntentScreen component

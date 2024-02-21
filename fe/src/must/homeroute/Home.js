@@ -6,7 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import ProgressBar from '../../component/reusables/ProgressBar';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
 
-import AllMatchesScrollBarC from '../../screen/AllMatchesScrollBarC';
+import AllMatchesScrollBarC from './AllMatchesScrollBarC';
 // import CameraIcon from "@mui/icons-material/CameraAltRounded";
 // import ShareRIcon from "@mui/icons-material/Share";
 // import MenuIcon from "@mui/icons-material/MoreHoriz";

@@ -1,8 +1,8 @@
 import React from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import UserChatTileInListC from "./UserChatTileInListC";
-import MatchesFilterScrollBarOnChatC from "./MatchesFilterScrollBarOnChatC";
+import UserChatTileInListC from "../../screen/UserChatTileInListC";
+import MatchesFilterScrollBarOnChatC from "../../screen/MatchesFilterScrollBarOnChatC";
 
 function TabPanel({ profiles, SetWithUserId, SetWithEmail, with_userid }) {
   const [value, setValue] = React.useState(0);

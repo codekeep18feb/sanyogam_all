@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Footer from "../../screen/Footer";
+import Footer from "./Footer";
 import BottomMobile from "./BottomMobile";
 import HeaderMobileBack from "./HeaderMobileBack";
 const getDeviceType = () => {

@@ -1,15 +1,13 @@
 import React from "react";
 // import MaterialScreen from './screen/MaterialScreen'
-import MaterialUIExample from "./screen/MaterialUIExample";
+import MaterialUIExample from "./must/material_ux_examples/MaterialUIExample.js";
 import { connect, useDispatch, useSelector } from "react-redux";
-import AdvancedMaterialUIExample from "./screen/AdvancedMaterialUIExample";
+import AdvancedMaterialUIExample from "./must/material_ux_examples/AdvancedMaterialUIExample.js";
 import Pricing from "./must/pricing_route/Pricing.js";
-import TabPanel from "./screen/TabPanel";
+import TabPanel from "./must/material_ux_examples/TabPanel.js";
 import { Route, Routes, Navigate, useNavigate } from "react-router-dom";
-import Users from "./screen/Users";
 import io from "socket.io-client";
 
-import Inbox from "./screen/Inbox";
 
 import { login, logout } from "./redux/counter/AuthAction";
 
@@ -22,13 +20,13 @@ import HomeScreen from "./screen/HomeScreen.js";
 import SignupScreen from "./must/signup_route/SignupScreen.js";
 // import HeaderDesktop from "./screen/HeaderDesktop.js"
 // import Video from "./screen/video_components/Video.js";
-import ModalDialog from "./screen/ModalDialog";
-import SnackbarExample from "./screen/SnackbarExample";
-import ItemList from "./screen/ItemList";
-import StepperExample from "./screen/StepperExample";
-import AccordionExample from "./screen/AccordionExample";
-import TooltipExample from "./screen/TooltipExample";
-import SnackbarWithActions from "./screen/SnackbarWithActions";
+import ModalDialog from "./must/material_ux_examples/ModalDialog.js";
+import SnackbarExample from "./must/material_ux_examples/SnackbarExample.js";
+import ItemList from "./must/material_ux_examples/ItemList.js";
+import StepperExample from "./must/material_ux_examples/StepperExample.js";
+import AccordionExample from "./must/material_ux_examples/AccordionExample.js";
+import TooltipExample from "./must/material_ux_examples/TooltipExample.js";
+import SnackbarWithActions from "./must/material_ux_examples/SnackbarWithActions.js";
 // import DummyLogin from './practice/DummyLogin'
 import LoginScreen from "./must/login_route/LoginScreen.js";
 // import Footer from './screen/Footer'
@@ -39,23 +37,17 @@ import { useEffect, useState } from "react";
 // import { useState } from 'react'
 // import HeaderMobile from './screen/HeaderMobile.js'
 // import InboxPractice from './screen/InboxPractice.js'
-import PlayGround from "./screen/PlayGround.js";
 import BackTile from "./must/back_tile_route/BackTile.js";
 import WrapperMobileShell from "./must/homeroute/WrapperMobileShell.js";
 import WrapperMobileBackShell from "./must/back_tile_route/WrapperMobileBackShell.js";
 
-import WrapperMobileBackShellWithSave from "./must/edit_family_route/WrapperMobileBackShellWithSave.js";
 
 import EditFamily from "./must/edit_family_route/EditFamily.js";
 import PreviewProfile from "./must/back_tile_route/PreviewProfile.js";
-import ProfileBriefTile from "./screen/ProfileBriefTile";
 import Home from "./must/homeroute/Home.js";
-import SendMsgWS from "./component/SendMsgWS.js";
 // import ChatWS from "./screen/chat_components/ChatWS.js";
-import PlayGround2 from "./screen/PlayGround2.js";
 import ChatPARENTOWS from "./must/chat_ows_route/ChatPARENTOWS.js";
 import IncomingCallUI from "./must/incomingcallui_route/IncomingCallUI.js";
-import TestWsRightWay from "./screen/TestWsRightWay.js";
 // import ProfileBriefTile from './screen/ProfileBriefTile.js';
 
 const MaterialUX = () => {

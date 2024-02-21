@@ -4,11 +4,10 @@ import { connect, useSelector } from "react-redux";
 import io from "socket.io-client";
 import { makeStyles } from '@material-ui/core/styles';
 
-// import { ImageCircle } from "../../screen/chat_components/ImageCircle";
 
 import { Grid, Typography, TextField, Button } from "@mui/material";
 import React, { useEffect, useReducer, useRef, useState } from 'react';
-import WrapperChatShellWithSend from "../../screen/WrapperChatShellWithSend";
+import WrapperChatShellWithSend from "./WrapperChatShellWithSend";
 import VideoCallIcon from "@mui/icons-material/VideoCall";
 import PhoneCallUI from "../incomingcallui_route/PhoneCallUI";
 

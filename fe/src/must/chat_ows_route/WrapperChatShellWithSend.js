@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import HeaderDesktop from "./HeaderDesktop";
-import Footer from "./Footer";
-import HeaderMobile from "./HeaderMobile";
-import BottomMobile from "../must/back_tile_route/BottomMobile";
-import bgImg from "../images/sky_bg.jpg";
-import HeaderMobileBack from "../must/back_tile_route/HeaderMobileBack";
+import HeaderDesktop from "../homeroute/HeaderDesktop";
+import Footer from "../back_tile_route/Footer";
+import HeaderMobile from "../homeroute/HeaderMobile";
+import BottomMobile from "../back_tile_route/BottomMobile";
+import bgImg from "../../images/sky_bg.jpg";
+import HeaderMobileBack from "../back_tile_route/HeaderMobileBack";
 import { Button, Paper, TextField } from "@mui/material";
 
 const getDeviceType = () => {
