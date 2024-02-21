@@ -32,7 +32,7 @@ import SnackbarWithActions from "./screen/SnackbarWithActions";
 // import DummyLogin from './practice/DummyLogin'
 import LoginScreen from "./must/login_route/LoginScreen.js";
 // import Footer from './screen/Footer'
-import FAQ from "./component/FAQ";
+import FAQ from "./must/faq/FAQ.js";
 import GoogleAuthorize from "./screen/GoogleAuthorize";
 // import PaymentForm from './screen/PaymentForm'
 import { useEffect, useState } from "react";
