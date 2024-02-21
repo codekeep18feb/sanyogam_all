@@ -19,7 +19,7 @@ import { setIncomingCall } from "./redux/counter/GlobalAction";
 import HomeScreen from "./screen/HomeScreen.js";
 // import Login from './screen/LoginScreen.js';
 // import Chat from "./screen/chat_components/Chat";
-import SignupScreen from "./screen/SignupScreen";
+import SignupScreen from "./must/signup_route/SignupScreen.js";
 // import HeaderDesktop from "./screen/HeaderDesktop.js"
 // import Video from "./screen/video_components/Video.js";
 import ModalDialog from "./screen/ModalDialog";

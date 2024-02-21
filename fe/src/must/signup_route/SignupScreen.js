@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
-import { login, logout } from "../redux/counter/AuthAction";
+import { login, logout } from "../../redux/counter/AuthAction";
 import FormControl from "@mui/material/FormControl";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
