@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import HeaderDesktop from "../../screen/HeaderDesktop";
 import Footer from "../../screen/Footer";
 import HeaderMobile from "../../screen/HeaderMobile";
-import BottomMobile from "../../screen/BottomMobile";
+import BottomMobile from "../back_tile_route/BottomMobile";
 import bgImg from "../../images/sky_bg.jpg";
 const getDeviceType = () => {
   const width = window.innerWidth;
