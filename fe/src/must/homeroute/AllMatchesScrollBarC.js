@@ -4,7 +4,7 @@ import { Button, Typography } from '@mui/material';
 import ChatIcon from "@mui/icons-material/Chat";
 import FavoriteIcon from "@mui/icons-material/Call";
 import WhatsApp from "@mui/icons-material/WhatsApp";
-import HorizontalScroll from '../../component/reusables/HorizontalScroll';
+import HorizontalScroll from '../../must/homeroute/HorizontalScroll';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
 
 

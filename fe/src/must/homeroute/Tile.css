@@ -1,0 +1,8 @@
+/* Tile.css */
+.tile {
+    background-color: #f0f0f0; /* Set your desired background color */
+    padding: 16px; /* Add padding to create space around the content */
+    border: 1px solid #ccc; /* Add a border for the tile effect */
+    border-radius: 4px; /* Add border radius for rounded corners */
+  }
+  

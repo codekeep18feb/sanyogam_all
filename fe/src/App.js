@@ -14,7 +14,7 @@ import { login, logout } from "./redux/counter/AuthAction";
 import { setIncomingCall } from "./redux/counter/GlobalAction";
 
 // Import your components
-import HomeScreen from "./screen/HomeScreen.js";
+import HomeScreen from "./must/homeroute/HomeScreen.js";
 // import Login from './screen/LoginScreen.js';
 // import Chat from "./screen/chat_components/Chat";
 import SignupScreen from "./must/signup_route/SignupScreen.js";
