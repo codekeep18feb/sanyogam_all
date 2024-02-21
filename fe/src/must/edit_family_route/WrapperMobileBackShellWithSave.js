@@ -1,10 +1,5 @@
 import React, { useEffect, useState } from "react";
-import HeaderDesktop from "./HeaderDesktop";
-import Footer from "./Footer";
-import HeaderMobile from "./HeaderMobile";
-import BottomMobile from "../must/back_tile_route/BottomMobile";
-import bgImg from "../images/sky_bg.jpg";
-import HeaderMobileBack from "../must/back_tile_route/HeaderMobileBack";
+import HeaderMobileBack from "../back_tile_route/HeaderMobileBack";
 import { Button } from "@mui/material";
 const getDeviceType = () => {
   const width = window.innerWidth;

@@ -44,10 +44,10 @@ import BackTile from "./must/back_tile_route/BackTile.js";
 import WrapperMobileShell from "./must/homeroute/WrapperMobileShell.js";
 import WrapperMobileBackShell from "./must/back_tile_route/WrapperMobileBackShell.js";
 
-import WrapperMobileBackShellWithSave from "./screen/WrapperMobileBackShellWithSave.js";
+import WrapperMobileBackShellWithSave from "./must/edit_family_route/WrapperMobileBackShellWithSave.js";
 
-import EditFamily from "./component/EditFamily.js";
-import PreviewProfile from "./component/PreviewProfile.js";
+import EditFamily from "./must/edit_family_route/EditFamily.js";
+import PreviewProfile from "./must/back_tile_route/PreviewProfile.js";
 import ProfileBriefTile from "./screen/ProfileBriefTile";
 import Home from "./must/homeroute/Home.js";
 import SendMsgWS from "./component/SendMsgWS.js";

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Autocomplete, TextField, Grid, Typography } from "@mui/material";
 import { useLocation } from "react-router-dom";
-import WrapperMobileBackShellWithSave from "../screen/WrapperMobileBackShellWithSave";
+import WrapperMobileBackShellWithSave from "./WrapperMobileBackShellWithSave";
 import { useNavigate } from "react-router-dom";
 
 const NumberField = ({ id, label, defaultValue = 0, onChange, state_name }) => (
