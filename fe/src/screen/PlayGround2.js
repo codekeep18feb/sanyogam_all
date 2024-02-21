@@ -11,7 +11,7 @@ import MonitorWSStatus from '../component/MonitorWSStatus';
 import ListnerWS2 from '../component/ListnerWS2';
 import PhoneCallUI from "../must/incomingcallui_route/PhoneCallUI"
 import SendMsgWS from '../component/SendMsgWS';
-import ChatsEditor from './chat_components/ows/ChatsEditor';
+import ChatsEditor from '../must/chat_ows_route/ChatsEditor';
 
 const useStyles = makeStyles({
   scrollContainer: {

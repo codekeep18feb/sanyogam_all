@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import PaymentForm from './PaymentForm';
+import PaymentForm from '../../screen/PaymentForm';
 
 const Pricing = () => {
   const [showOverlay, setShowOverlay] = useState(false);

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
-import { login, logout } from "../redux/counter/AuthAction";
+import { login, logout } from "../../redux/counter/AuthAction";
 
 import { useLocation } from "react-router-dom";
 

@@ -12,7 +12,7 @@ import ListnerWS1 from '../component/ListnerWS1';
 
 import SendMsgWS from '../component/SendMsgWS';
 import RoomFeature from './RoomFeature';
-import ChatsEditor from './chat_components/ows/ChatsEditor';
+import ChatsEditor from '../must/chat_ows_route/ChatsEditor';
 
 const useStyles = makeStyles({
   scrollContainer: {

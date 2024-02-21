@@ -3,7 +3,7 @@ import React from "react";
 import MaterialUIExample from "./screen/MaterialUIExample";
 import { connect, useDispatch, useSelector } from "react-redux";
 import AdvancedMaterialUIExample from "./screen/AdvancedMaterialUIExample";
-import Pricing from "./screen/Pricing";
+import Pricing from "./must/pricing_route/Pricing.js";
 import TabPanel from "./screen/TabPanel";
 import { Route, Routes, Navigate, useNavigate } from "react-router-dom";
 import Users from "./screen/Users";
@@ -33,7 +33,7 @@ import SnackbarWithActions from "./screen/SnackbarWithActions";
 import LoginScreen from "./must/login_route/LoginScreen.js";
 // import Footer from './screen/Footer'
 import FAQ from "./must/faq/FAQ.js";
-import GoogleAuthorize from "./screen/GoogleAuthorize";
+import GoogleAuthorize from "./must/google_authrized_route/GoogleAuthorize.js";
 // import PaymentForm from './screen/PaymentForm'
 import { useEffect, useState } from "react";
 // import { useState } from 'react'
@@ -53,7 +53,7 @@ import Home from "./must/homeroute/Home.js";
 import SendMsgWS from "./component/SendMsgWS.js";
 // import ChatWS from "./screen/chat_components/ChatWS.js";
 import PlayGround2 from "./screen/PlayGround2.js";
-import ChatPARENTOWS from "./screen/chat_components/ows/ChatPARENTOWS.js";
+import ChatPARENTOWS from "./must/chat_ows_route/ChatPARENTOWS.js";
 import IncomingCallUI from "./must/incomingcallui_route/IncomingCallUI.js";
 import TestWsRightWay from "./screen/TestWsRightWay.js";
 // import ProfileBriefTile from './screen/ProfileBriefTile.js';
