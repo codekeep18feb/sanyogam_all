@@ -9,7 +9,7 @@ import People from "@mui/icons-material/PeopleAltOutlined";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import EditIcon from "@mui/icons-material/Edit";
 import Icon from "@mui/material/Icon";
-import ParentForWrapperOVG from "../../component/reusables/ParentForWrapperOVG";
+import ParentForWrapperOVG from "../reusables/ParentForWrapperOVG";
 
 export const SelectedIcon = ({ iconName = "missing", style_obj }) => {
   const iconComponents = {

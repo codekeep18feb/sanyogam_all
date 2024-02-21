@@ -3,7 +3,7 @@ import Grid from '@mui/material/Grid';
 import logo192 from '../../images/Vector.jpg';
 import { Button, Typography } from '@mui/material';
 import { makeStyles } from '@material-ui/core/styles';
-import ProgressBar from '../../component/reusables/ProgressBar';
+import ProgressBar from './ProgressBar';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
 
 import AllMatchesScrollBarC from './AllMatchesScrollBarC';

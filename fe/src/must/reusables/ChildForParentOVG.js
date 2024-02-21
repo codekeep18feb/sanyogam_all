@@ -2,7 +2,7 @@ import React from "react";
 import { Grid, Typography } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import { useNavigate } from "react-router-dom";
-import { SelectedIcon } from "../../must/back_tile_route/PreviewProfile";
+import { SelectedIcon } from "../back_tile_route/PreviewProfile";
 
 export default function ChildForParentOVG({ family_details, rules }) {
   console.log("family_detadfils", family_details, rules);
