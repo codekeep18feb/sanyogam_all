@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import { login, logout } from "../redux/counter/AuthAction";
+import { login, logout } from "../../redux/counter/AuthAction";
 import { useNavigate } from "react-router-dom";
 import FormControl from "@mui/material/FormControl";
 // import FormGroup from '@mui/material/FormGroup';

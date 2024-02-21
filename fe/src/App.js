@@ -30,7 +30,7 @@ import AccordionExample from "./screen/AccordionExample";
 import TooltipExample from "./screen/TooltipExample";
 import SnackbarWithActions from "./screen/SnackbarWithActions";
 // import DummyLogin from './practice/DummyLogin'
-import LoginScreen from "./screen/LoginScreen.js";
+import LoginScreen from "./must/login_route/LoginScreen.js";
 // import Footer from './screen/Footer'
 import FAQ from "./component/FAQ";
 import GoogleAuthorize from "./screen/GoogleAuthorize";
