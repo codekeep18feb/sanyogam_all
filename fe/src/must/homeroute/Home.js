@@ -1,12 +1,12 @@
 import React from 'react';
 import Grid from '@mui/material/Grid';
-import logo192 from '../images/Vector.jpg';
+import logo192 from '../../images/Vector.jpg';
 import { Button, Typography } from '@mui/material';
 import { makeStyles } from '@material-ui/core/styles';
-import ProgressBar from '../component/reusables/ProgressBar';
+import ProgressBar from '../../component/reusables/ProgressBar';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
 
-import AllMatchesScrollBarC from './AllMatchesScrollBarC';
+import AllMatchesScrollBarC from '../../screen/AllMatchesScrollBarC';
 // import CameraIcon from "@mui/icons-material/CameraAltRounded";
 // import ShareRIcon from "@mui/icons-material/Share";
 // import MenuIcon from "@mui/icons-material/MoreHoriz";
@@ -75,7 +75,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const iconText = {
-  color:"black"
+  color: "black"
 }
 
 const flexContainerStyle = {
@@ -168,9 +168,9 @@ export default function Home({ users, profile = { name: "Mona Soni (BPSADSFSG151
 
       </div>
 
-      <div style={{padding:"40px 0"}}>
+      <div style={{ padding: "40px 0" }}>
         <AllMatchesScrollBarC />
-        
+
       </div>
     </div>
   );

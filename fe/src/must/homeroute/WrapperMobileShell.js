@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import HeaderDesktop from "./HeaderDesktop";
-import Footer from "./Footer";
-import HeaderMobile from "./HeaderMobile";
-import BottomMobile from "./BottomMobile";
-import bgImg from "../images/sky_bg.jpg";
+import HeaderDesktop from "../../screen/HeaderDesktop";
+import Footer from "../../screen/Footer";
+import HeaderMobile from "../../screen/HeaderMobile";
+import BottomMobile from "../../screen/BottomMobile";
+import bgImg from "../../images/sky_bg.jpg";
 const getDeviceType = () => {
   const width = window.innerWidth;
   if (width >= 468) {

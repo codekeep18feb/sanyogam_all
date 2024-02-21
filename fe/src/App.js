@@ -41,7 +41,7 @@ import { useEffect, useState } from "react";
 // import InboxPractice from './screen/InboxPractice.js'
 import PlayGround from "./screen/PlayGround.js";
 import BackTile from "./component/reusables/BackTile.js";
-import WrapperMobileShell from "./screen/WrapperMobileShell.js";
+import WrapperMobileShell from "./must/homeroute/WrapperMobileShell.js";
 import WrapperMobileBackShell from "./screen/WrapperMobileBackShell.js";
 
 import WrapperMobileBackShellWithSave from "./screen/WrapperMobileBackShellWithSave.js";
@@ -49,7 +49,7 @@ import WrapperMobileBackShellWithSave from "./screen/WrapperMobileBackShellWithS
 import EditFamily from "./component/EditFamily.js";
 import PreviewProfile from "./component/PreviewProfile.js";
 import ProfileBriefTile from "./screen/ProfileBriefTile";
-import Home from "./screen/Home.js";
+import Home from "./must/homeroute/Home.js";
 import SendMsgWS from "./component/SendMsgWS.js";
 // import ChatWS from "./screen/chat_components/ChatWS.js";
 import PlayGround2 from "./screen/PlayGround2.js";
