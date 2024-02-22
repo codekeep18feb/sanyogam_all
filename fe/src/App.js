@@ -463,7 +463,7 @@ function App({ login, auth_data }) {
 
   return (
     <>
-      {Object.keys(allGlobalData).length && <IncomingCallUI incoming_call_data={allGlobalData} />}
+      {Object.keys(allGlobalData).length>0 && <IncomingCallUI incoming_call_data={allGlobalData} />}
       <Routes>
         <Route
           path="/"
