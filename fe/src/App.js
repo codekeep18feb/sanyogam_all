@@ -92,7 +92,7 @@ const withGlobalSocket = (Component) => {
       auth_data
     );
     const [socket, setSocket] = useState(
-      io.connect('http://192.168.1.11:8001', {
+      io.connect('http://192.168.184.35:8001', {
         query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       })
     );
@@ -266,7 +266,7 @@ const getRequestUID = async (with_userid, token) => {
   try {
 
     const response = await fetch(
-      `http://192.168.1.11:8000/api/get_request_info_by_id/${with_userid}`,
+      `http://192.168.184.35:8000/api/get_request_info_by_id/${with_userid}`,
       {
         method: "GET",
         headers: {
@@ -329,7 +329,7 @@ function App({ login, auth_data }) {
 
   useEffect(() => {
     if (!gSocket && auth_data) {
-      const newSocket = io.connect('http://192.168.1.11:8001', {
+      const newSocket = io.connect('http://192.168.184.35:8001', {
         query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
 

@@ -51,7 +51,7 @@ from common.utils import DictWithDotAccess
 # s_pool = []
 
 # async def make_me_api_call(authorization_token):
-#     api_url = 'http://192.168.1.11:3000/api/me'
+#     api_url = 'http://192.168.184.35:3000/api/me'
 
 #     headers = {
 #         'Authorization': f'{authorization_token}',
@@ -69,7 +69,7 @@ from common.utils import DictWithDotAccess
 
 
 # async def make_all_profiles_api_call(authorization_token, request_data):
-#     api_url = 'http://192.168.1.11:3000/api/fetch_online_profiles'
+#     api_url = 'http://192.168.184.35:3000/api/fetch_online_profiles'
 
 #     headers = {
 #         'Authorization': f'{authorization_token}',

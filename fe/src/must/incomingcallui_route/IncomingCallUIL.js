@@ -18,7 +18,7 @@ function IncomingCallUIL({
     try {
 
       const response = await fetch(
-        `http://192.168.1.11:8001/new_global_event_data/${with_userid}`,
+        `http://192.168.184.35:8001/new_global_event_data/${with_userid}`,
         {
           method: "POST",
           headers: {
