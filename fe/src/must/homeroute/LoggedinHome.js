@@ -106,7 +106,7 @@ export function ImageCircle({ user }) {
   );
 }
 
-export default function Home({ users, profile = { name: "Mona Soni (BPSADSFSG151)" } }) {
+export default function LoggedinHome({ users, profile = { name: "Mona Soni (BPSADSFSG151)" } }) {
 
   console.log('here is mona soni')
   const classes = useStyles();
@@ -116,6 +116,9 @@ export default function Home({ users, profile = { name: "Mona Soni (BPSADSFSG151
       <div className={classes.profileTile}>
         <Grid container style={{ flexDirection: "column", alignContent: "center", justifyContent: "center" }}>
           <Grid item style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <div style={{ paddingTop: "10px" }}>
+              <Typography variant="h6">logged in home</Typography>
+            </div>
             <div>
               <ImageCircle user={{ "online": true }} />
             </div>

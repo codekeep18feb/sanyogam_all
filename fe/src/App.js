@@ -48,7 +48,10 @@ import Home from "./must/homeroute/Home.js";
 // import ChatWS from "./screen/chat_components/ChatWS.js";
 import ChatPARENTOWS from "./must/chat_ows_route/ChatPARENTOWS.js";
 import IncomingCallUI from "./must/incomingcallui_route/IncomingCallUI.js";
+import LoggedinHome from "./must/homeroute/LoggedinHome.js";
 // import ProfileBriefTile from './screen/ProfileBriefTile.js';
+import AllUsers from './must/all_users_route/AllUsers';
+import ProfileDetail from './must/all_users_route/ProfileDetail';
 
 const MaterialUX = () => {
   return (
@@ -92,7 +95,7 @@ const withGlobalSocket = (Component) => {
       auth_data
     );
     const [socket, setSocket] = useState(
-      io.connect('http://192.168.184.35:8001', {
+      io.connect('http://192.168.1.11:8001', {
         query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       })
     );
@@ -266,7 +269,7 @@ const getRequestUID = async (with_userid, token) => {
   try {
 
     const response = await fetch(
-      `http://192.168.184.35:8000/api/get_request_info_by_id/${with_userid}`,
+      `http://192.168.1.11:8000/api/get_request_info_by_id/${with_userid}`,
       {
         method: "GET",
         headers: {
@@ -329,7 +332,7 @@ function App({ login, auth_data }) {
 
   useEffect(() => {
     if (!gSocket && auth_data) {
-      const newSocket = io.connect('http://192.168.184.35:8001', {
+      const newSocket = io.connect('http://192.168.1.11:8001', {
         query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
 
@@ -463,18 +466,19 @@ function App({ login, auth_data }) {
 
   return (
     <>
-      {Object.keys(allGlobalData).length>0 && <IncomingCallUI incoming_call_data={allGlobalData} />}
+      {Object.keys(allGlobalData).length > 0 && <IncomingCallUI incoming_call_data={allGlobalData} />}
       <Routes>
         <Route
           path="/"
           element={
-            <WrapperMobileShell>
-              <Home />
+            <WrapperMobileShell header={true}>
+              {auth_data ? <LoggedinHome /> : <Home />}
             </WrapperMobileShell>
           }
         />
 
-
+        <Route path="/profile_detail/:id" element={<ProfileDetail />} />
+        <Route path="/all_users" element={<AllUsers />} />
         <Route path="/login" element={<LoginScreen />} />
         <Route path="/faq" element={<FAQ />} />
         <Route path="/signup" element={<SignupScreen />} />

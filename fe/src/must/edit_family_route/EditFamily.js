@@ -45,7 +45,7 @@ const submitProfileUpdateData = async (payload) => {
 
   try {
     const response = await fetch(
-      `http://192.168.184.35:8000/api/update_my_profile`,
+      `http://192.168.1.11:8000/api/update_my_profile`,
       {
         method: "POST",
         headers: {
@@ -158,7 +158,7 @@ const EditFamilyForm = () => {
     const JWT_TOKEN = localStorage.getItem("token");
     const token = `Bearer ${JWT_TOKEN}`;
     const response = await fetch(
-      `http://192.168.184.35:8000/api/update_my_profile`,
+      `http://192.168.1.11:8000/api/update_my_profile`,
       {
         method: "POST",
         headers: {
