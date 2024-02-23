@@ -490,9 +490,9 @@ function App({ login, auth_data }) {
           path="/chat_ows"
           element={
             <PrivateRoute>
-              {/* <WrapperMobileShell> */}
-              <ChatPARENTOWS />
-              {/* </WrapperMobileShell> */}
+              <WrapperMobileShell>
+                <ChatPARENTOWS />
+              </WrapperMobileShell>
             </PrivateRoute>
           }
         />

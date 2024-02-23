@@ -70,13 +70,31 @@ def profile(id):
 @utils.authenticate
 def all_profiles(p_filter_obj, **kwargs):
     me = kwargs.get('me')
-    print('logged idn me',me)
+    print('logged idn me',me,kwargs)
     # auth_token = request.headers.get("Authorization")
     print('ME.PROFILE', me.profile)
     
     all_profiles_query = Profile.query
     all_profiles_data = handle_filtering(all_profiles_query,p_filter_obj,me.profile.id)
+    
     fres = profiles_schema.dump(all_profiles_data)
+    return fres
+
+
+@utils.authenticate
+def filter_profiles(**kwargs):
+    me = kwargs.get('me')
+    req_status = kwargs.get('req_status')
+    print('logged idn me',me,req_status)
+    print('ME.PROFILE', me.profile)
+    
+    all_profiles_query = Profile.query
+    
+    all_profiles_query = all_profiles_query.filter(Profile.id != me.profile.id)
+    all_profiles = all_profiles_query.all()
+    
+    fres = profiles_schema.dump(all_profiles)
+    
     return fres
 
 

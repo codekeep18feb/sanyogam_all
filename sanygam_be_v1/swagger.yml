@@ -715,7 +715,7 @@ paths:
         - JWTAuth: [] 
       tags:
         - "People"
-      summary: "Read the list of all profiles and with filters"
+      summary: "this is to search all the profiles"
       requestBody:
         description: "Profile Filter Obj"
         required: false
@@ -727,7 +727,34 @@ paths:
       responses:
         "200":
           description: "Successfully read profiles list"
+  
+  /filter_profiles:
+    post:
+      operationId: "handlers.profiles.filter_profiles"
+      security:
+        - JWTAuth: [] 
+      tags:
+        - "People"
+      summary: "here filetering all the profiles"
+      parameters:
+        - name: req_status
+          in: query
+          description: "all requests `status` filtering"
+          required: false
+          schema:
+            type: string
+            enum:
+              - SENT
+              - CANCELED
+              - RECEIVED  
+              - ACCEPTED
+              - REJECTED    
       
+      responses:
+        "200":
+          description: "Successfully read profiles list"
+      
+
 
   /fetch_online_profiles:
     post:
