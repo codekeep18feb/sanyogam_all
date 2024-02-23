@@ -7,7 +7,7 @@ from config import db, decode_token
 from .common import utils
 
 from models import User, users_schema, user_schema, UserSchema,Profile,ChatHistory,RTCUserInfo
-from models import UserRequests,UserRequestsSchema,ChatHistorySchema, RTCUserInfoSchema
+from models import ProfileRequests,UserRequestsSchema,ChatHistorySchema, RTCUserInfoSchema
 def get_timestamp():
     return datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
 
@@ -27,7 +27,7 @@ def rtc_user_info_by_id(with_id, **kwargs):
     # me = User.query.filter_by(email=json_dec_data['email']).first()
     print("ahmersp",me.id)
 
-    rtc_info = RTCUserInfo.query.filter_by(frm_user=me.id,to_user=with_id).first() or RTCUserInfo.query.filter_by(frm_user=with_id,to_user=me.id).first() 
+    rtc_info = RTCUserInfo.query.filter_by(frm_profile=me.id,to_profile=with_id).first() or RTCUserInfo.query.filter_by(frm_profile=with_id,to_profile=me.id).first() 
     rtc_usr_schema = RTCUserInfoSchema()
     return rtc_usr_schema.dump(rtc_info)
 
@@ -47,7 +47,7 @@ def get_my_rtc_offer(**kwargs):
     # me = User.query.filter_by(email=json_dec_data['email']).first()
     print("ahmersp",me.id)
 
-    rtc_info = RTCUserInfo.query.filter_by(to_user=me.id).first()
+    rtc_info = RTCUserInfo.query.filter_by(to_profile=me.id).first()
     rtc_usr_schema = RTCUserInfoSchema()
     return rtc_usr_schema.dump(rtc_info)
 
@@ -91,9 +91,9 @@ def add_rtc_user(payload, **kwargs):
     # json_dec_data = json.loads(decoded_data_str)
     # me = User.query.filter_by(email=json_dec_data['email']).first()
     print("me",me)
-    # Check if an RTCUserInfo entry already exists for the given frm_user
+    # Check if an RTCUserInfo entry already exists for the given frm_profile
     if payload['initiator']:
-        existing_request = RTCUserInfo.query.filter_by(frm_user=me.id,to_user=payload["to_user"]).first()
+        existing_request = RTCUserInfo.query.filter_by(frm_profile=me.id,to_profile=payload["to_profile"]).first()
         if existing_request:
             # Update the existing entry's sdp
             existing_request.sdp = payload["sdp"]
@@ -101,7 +101,7 @@ def add_rtc_user(payload, **kwargs):
             db.session.commit()
         else:
             # Create a new RTCUserInfo entry
-            new_request = RTCUserInfo(frm_user=me.id, sdp=payload["sdp"], initiator=payload["initiator"],to_user=payload["to_user"])
+            new_request = RTCUserInfo(frm_profile=me.id, sdp=payload["sdp"], initiator=payload["initiator"],to_profile=payload["to_profile"])
             db.session.add(new_request)
             db.session.commit()
 
@@ -110,7 +110,7 @@ def add_rtc_user(payload, **kwargs):
         }, 201
 
     else:
-        existing_request = RTCUserInfo.query.filter_by(to_user=me.id,frm_user=payload["to_user"]).first()
+        existing_request = RTCUserInfo.query.filter_by(to_profile=me.id,frm_profile=payload["to_profile"]).first()
         if existing_request:
             # Update the existing entry's sdp
             existing_request.answer = payload["sdp"]
@@ -118,7 +118,7 @@ def add_rtc_user(payload, **kwargs):
             # db.session.commit()
         else:
             # Create a new RTCUserInfo entry
-            new_request = RTCUserInfo(frm_user=me.id, answer=payload["sdp"], initiator=payload["initiator"],to_user=payload["to_user"])
+            new_request = RTCUserInfo(frm_profile=me.id, answer=payload["sdp"], initiator=payload["initiator"],to_profile=payload["to_profile"])
             db.session.add(new_request)
         db.session.commit()
 

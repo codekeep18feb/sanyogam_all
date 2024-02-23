@@ -5,7 +5,7 @@ from config import db, decode_token
 from . import User
 from models import Profile,ProfileSchema, profiles_schema
 from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity
-from models import UserRequests, UserRequestsSchema, OnlineUsersSchema, ProfileSchema, FamilyInformation
+from models import ProfileRequests, UserRequestsSchema, OnlineUsersSchema, ProfileSchema, FamilyInformation
 from sqlalchemy import or_
 from .common import utils
 
@@ -177,15 +177,15 @@ def read_all_profiles_old(**kwargs):
     me = kwargs.get('me')
     
     me = User.query.filter_by(email=me.email).first()
-    combined_query = UserRequests.query.filter(
-    or_(UserRequests.frm_user == me.id, UserRequests.to_user == me.id),
-    UserRequests.status == "ACCEPTED"
+    combined_query = ProfileRequests.query.filter(
+    or_(ProfileRequests.frm_profile == me.id, ProfileRequests.to_profile == me.id),
+    ProfileRequests.status == "ACCEPTED"
     )
 
     # Execute the query to get the results
     results = combined_query.all()
-    # send_by_me = UserRequests.query.filter_by(frm_user=me.id, status="ACCEPTED")
-    # sent_to_me = UserRequests.query.filter_by(to_user=me.id, status="ACCEPTED")
+    # send_by_me = ProfileRequests.query.filter_by(frm_profile=me.id, status="ACCEPTED")
+    # sent_to_me = ProfileRequests.query.filter_by(to_profile=me.id, status="ACCEPTED")
     print("sent_to_me",results)
     if not results:
         abort(400, f"no request exist {results}")
@@ -195,16 +195,16 @@ def read_all_profiles_old(**kwargs):
     elif results:
         accepted_profiles = []
         for result in results:
-            frm_user = result.act_frm_user
-            to_user = result.act_to_user
+            frm_profile = result.act_frm_user
+            to_profile = result.act_to_user
 
-            # Check if frm_user's email is not me.email and online is true
-            if frm_user.email != me.email:
-                accepted_profiles.append({"user_id":frm_user.id,"user_email":frm_user.email,"online":frm_user.online})
+            # Check if frm_profile's email is not me.email and online is true
+            if frm_profile.email != me.email:
+                accepted_profiles.append({"user_id":frm_profile.id,"user_email":frm_profile.email,"online":frm_profile.online})
 
-            # Check if to_user's email is not me.email and online is true
-            if to_user.email != me.email:
-                accepted_profiles.append({"user_id":to_user.id,"user_email":to_user.email,"online":to_user.online})
+            # Check if to_profile's email is not me.email and online is true
+            if to_profile.email != me.email:
+                accepted_profiles.append({"user_id":to_profile.id,"user_email":to_profile.email,"online":to_profile.online})
 
         # Remove duplicates if any
         # accepted_profiles = list(set(accepted_profiles))
@@ -228,15 +228,15 @@ def read_all_profiles_v1():
 def read_online_circle(**kwargs):
     me = kwargs.get('me')
     
-    combined_query = UserRequests.query.filter(
-    or_(UserRequests.frm_user == me.id, UserRequests.to_user == me.id),
-    UserRequests.status == "ACCEPTED"
+    combined_query = ProfileRequests.query.filter(
+    or_(ProfileRequests.frm_profile == me.id, ProfileRequests.to_profile == me.id),
+    ProfileRequests.status == "ACCEPTED"
     )
 
     # Execute the query to get the results
     results = combined_query.all()
-    # send_by_me = UserRequests.query.filter_by(frm_user=me.id, status="ACCEPTED")
-    # sent_to_me = UserRequests.query.filter_by(to_user=me.id, status="ACCEPTED")
+    # send_by_me = ProfileRequests.query.filter_by(frm_profile=me.id, status="ACCEPTED")
+    # sent_to_me = ProfileRequests.query.filter_by(to_profile=me.id, status="ACCEPTED")
     print("sent_to_me",results)
     if not results:
         abort(400, f"no request exist {results}")
@@ -246,16 +246,16 @@ def read_online_circle(**kwargs):
     elif results:
         online_emails = []
         for result in results:
-            frm_user = result.act_frm_user
-            to_user = result.act_to_user
+            frm_profile = result.act_frm_user
+            to_profile = result.act_to_user
 
-            # Check if frm_user's email is not me.email and online is true
-            if frm_user.email != me.email and frm_user.online:
-                online_emails.append(frm_user.email)
+            # Check if frm_profile's email is not me.email and online is true
+            if frm_profile.email != me.email and frm_profile.online:
+                online_emails.append(frm_profile.email)
 
-            # Check if to_user's email is not me.email and online is true
-            if to_user.email != me.email and to_user.online:
-                online_emails.append(to_user.email)
+            # Check if to_profile's email is not me.email and online is true
+            if to_profile.email != me.email and to_profile.online:
+                online_emails.append(to_profile.email)
 
         # Remove duplicates if any
         online_emails = list(set(online_emails))

@@ -28,22 +28,22 @@ class OnlineStatusEnum(enum.Enum):
     REJECTED = 5
 
 
-class UserRequests(db.Model):
+class ProfileRequests(db.Model):
     __tablename__ = "requests"
     id = db.Column(db.Integer, primary_key=True)
     status = db.Column(Enum(OnlineStatusEnum))
     # status = db.Column(Enum('pending', 'approved', 'rejected', name='request_status'), default='pending')
-    frm_user = db.Column(db.Integer, db.ForeignKey('user.id'))
-    act_frm_user = db.relationship('User', foreign_keys=[frm_user])
-    to_user = db.Column(db.Integer, db.ForeignKey('user.id'))
-    act_to_user = db.relationship('User', foreign_keys=[to_user])
+    frm_profile = db.Column(db.Integer, db.ForeignKey('profile.id'))
+    act_frm_user = db.relationship('Profile', foreign_keys=[frm_profile])
+    to_profile = db.Column(db.Integer, db.ForeignKey('profile.id'))
+    act_to_user = db.relationship('Profile', foreign_keys=[to_profile])
     timestamp = db.Column(
         db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow
     )
 
 
 # # Add an event listener to automatically populate act_user
-# @event.listens_for(UserRequests.frm_user, 'set')
+# @event.listens_for(ProfileRequests.frm_profile, 'set')
 # def set_act_user(target, value, oldvalue, initiator):
 #     target.act_user = value
 
@@ -67,11 +67,11 @@ class ChatHistory(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     msg = db.Column(db.String(100))
     frm_user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    frm_user = db.relationship('User', foreign_keys=[frm_user_id])
+    frm_profile = db.relationship('User', foreign_keys=[frm_user_id])
     status = db.Column(Enum(ChatEnum),default=ChatEnum.SENT)  
       
     to_user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    to_user = db.relationship('User', foreign_keys=[to_user_id])
+    to_profile = db.relationship('User', foreign_keys=[to_user_id])
 
     timestamp = db.Column(
         db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow
@@ -85,9 +85,9 @@ class RTCUserInfo(db.Model):
     initiator = db.Column(db.Boolean, default=True)
     sdp = db.Column(db.String(5000))
     answer = db.Column(db.String(5000))
-    frm_user = db.Column(db.Integer, db.ForeignKey('user.id'))
-    # act_frm_user = db.relationship('User', foreign_keys=[frm_user])
-    to_user = db.Column(db.Integer, db.ForeignKey('user.id'))
+    frm_profile = db.Column(db.Integer, db.ForeignKey('user.id'))
+    # act_frm_user = db.relationship('User', foreign_keys=[frm_profile])
+    to_profile = db.Column(db.Integer, db.ForeignKey('user.id'))
     timestamp = db.Column(
         db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow
     )

@@ -23,20 +23,20 @@ def get_request(with_id):
     me_user = User.query.filter_by(email=json_dec_data['email']).first()
     print('to_emaiadsfl',with_userid)
     if with_userid:
-        to_user =  User.query.filter_by(id=with_userid).first()
+        to_profile =  User.query.filter_by(id=with_userid).first()
 
-        print("frm_usdsfsdafer", me_user, "to_user", to_user)
+        print("frm_usdsfsdafer", me_user, "to_profile", to_profile)
 
         # Check if action query parameter is present
         # action = request.args.get("action",None)
 
         # if action is None:
             # GET request status when GET whithout query(action)
-            # all_requests_query = UserRequests.query
-        all_requests_query = UserRequests.query.filter(
+            # all_requests_query = ProfileRequests.query
+        all_requests_query = ProfileRequests.query.filter(
         or_(
-            (UserRequests.frm_user == me_user.id) & (UserRequests.to_user == to_user.id),
-            (UserRequests.frm_user == to_user.id) & (UserRequests.to_user == me_user.id)
+            (ProfileRequests.frm_profile == me_user.id) & (ProfileRequests.to_profile == to_profile.id),
+            (ProfileRequests.frm_profile == to_profile.id) & (ProfileRequests.to_profile == me_user.id)
             )
         ).first()
             
@@ -68,20 +68,20 @@ def handle_request():
     me_user = User.query.filter_by(email=json_dec_data['email']).first()
     print('to_emaiadsfl',to_email)
     if to_email:
-        to_user =  User.query.filter_by(email=to_email).first()
+        to_profile =  User.query.filter_by(email=to_email).first()
 
-        print("frm_usdsfsdafer", me_user, "to_user", to_user)
+        print("frm_usdsfsdafer", me_user, "to_profile", to_profile)
 
         # Check if action query parameter is present
         action = request.args.get("action",None)
 
         if action is None:
             # GET request status when GET whithout query(action)
-            # all_requests_query = UserRequests.query
-            all_requests_query = UserRequests.query.filter(
+            # all_requests_query = ProfileRequests.query
+            all_requests_query = ProfileRequests.query.filter(
             or_(
-                (UserRequests.frm_user == me_user.id) & (UserRequests.to_user == to_user.id),
-                (UserRequests.frm_user == to_user.id) & (UserRequests.to_user == me_user.id)
+                (ProfileRequests.frm_profile == me_user.id) & (ProfileRequests.to_profile == to_profile.id),
+                (ProfileRequests.frm_profile == to_profile.id) & (ProfileRequests.to_profile == me_user.id)
                 )
             ).first()
                 
@@ -92,17 +92,17 @@ def handle_request():
         else:
             # If action is provided, it's a respond_request
             print("actioDFn", action)
-            all_requests_query = UserRequests.query.filter(
+            all_requests_query = ProfileRequests.query.filter(
             or_(
-                (UserRequests.frm_user == me_user.id) & (UserRequests.to_user == to_user.id),
-                (UserRequests.frm_user == to_user.id) & (UserRequests.to_user == me_user.id)
+                (ProfileRequests.frm_profile == me_user.id) & (ProfileRequests.to_profile == to_profile.id),
+                (ProfileRequests.frm_profile == to_profile.id) & (ProfileRequests.to_profile == me_user.id)
                 )
             ).first()
             
             
             #sender case
             if not all_requests_query and action=='SENT':
-                to_user_request = UserRequests(to_user=to_user.id, frm_user=me_user.id, status='SENT')
+                to_user_request = ProfileRequests(to_profile=to_profile.id, frm_profile=me_user.id, status='SENT')
                 print('to_user_DSFrequest', to_user_request)
                 db.session.add(to_user_request)
                 db.session.commit()
@@ -120,7 +120,7 @@ def handle_request():
             #reciever case
             print('all_requests_query.status',all_requests_query.status)
             if all_requests_query and all_requests_query.status==OnlineStatusEnum.SENT and (action == 'ACCEPTED' or action == 'REJECTED'):
-                # if all_requests_query.to_user==me_user.id:
+                # if all_requests_query.to_profile==me_user.id:
                 #     abort(400, f"It's sent by you only so you can't `Accept` it")
 
                 all_requests_query.status = action
@@ -138,8 +138,8 @@ def handle_request():
             # else:
             #     abort(400, f"Current request status is {to_user_request.status.name}" if to_user_request else "Request not found")
     else:
-        all_requests_query = UserRequests.query.filter(
-        UserRequests.to_user == me_user.id
+        all_requests_query = ProfileRequests.query.filter(
+        ProfileRequests.to_profile == me_user.id
         ).all()
         print('all_requests_quedsfasdry',all_requests_query)
         return user_requests_schema.dump(all_requests_query)
@@ -166,12 +166,12 @@ def send_request(to_email):
     decoded = decode_token(token)
     decoded_data_str = decoded['sub']
     json_dec_data = json.loads(decoded_data_str)
-    frm_user = User.query.filter_by(email=json_dec_data['email']).first()
-    to_user =  User.query.filter_by(email=to_email).first()
+    frm_profile = User.query.filter_by(email=json_dec_data['email']).first()
+    to_profile =  User.query.filter_by(email=to_email).first()
 
-    print("frm_user",frm_user,"to_user",to_user)
+    print("frm_profile",frm_profile,"to_profile",to_profile)
     try:
-        new_request = UserRequests(frm_user=frm_user.id,to_user=to_user.id,status='SENT')
+        new_request = ProfileRequests(frm_profile=frm_profile.id,to_profile=to_profile.id,status='SENT')
         print("new_request",new_request)
         db.session.add(new_request)
         db.session.commit()
@@ -200,10 +200,10 @@ def respond_request(to_email):
     decoded = decode_token(token)
     decoded_data_str = decoded['sub']
     json_dec_data = json.loads(decoded_data_str)
-    frm_user = User.query.filter_by(email=json_dec_data['email']).first()
-    to_user =  User.query.filter_by(email=to_email).first()
-    print("what is the diff",UserRequests,to_user.id)
-    to_user_request = UserRequests.query.filter_by(frm_user=to_user.id).first() ##(frm_user=to_user.id)
+    frm_profile = User.query.filter_by(email=json_dec_data['email']).first()
+    to_profile =  User.query.filter_by(email=to_email).first()
+    print("what is the diff",ProfileRequests,to_profile.id)
+    to_user_request = ProfileRequests.query.filter_by(frm_profile=to_profile.id).first() ##(frm_profile=to_profile.id)
     print('to_user_reqsdfsduest',to_user_request.status)
     if to_user_request.status == OnlineStatusEnum.SENT:
         prv_user_request_s = to_user_request.status.name

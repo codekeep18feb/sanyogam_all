@@ -5,10 +5,10 @@ from marshmallow import fields
 from sqlalchemy import event,Enum  # Add this import statement
 from .user import User
 from .profile import Profile, FamilyInformation, Father
-from .requests import ChatHistory, OnlineStatusEnumField, UserRequests, RTCUserInfo, ChatBriefRec
+from .requests import ChatHistory, OnlineStatusEnumField, ProfileRequests, RTCUserInfo, ChatBriefRec
 
 
-# Add an event listener to the UserRequests table for inserts
+# Add an event listener to the ProfileRequests table for inserts
 @event.listens_for(User, 'after_insert')
 def after_user_insert(mapper, connection, target):
     print('targetdfgfd',target,mapper,connection)
@@ -69,38 +69,38 @@ class ChatHistorySchema(ma.SQLAlchemyAutoSchema):
         include_relationships = True
 
 class UserRequestsSchema(ma.SQLAlchemyAutoSchema):
-    frm_user = fields.String(attribute="act_frm_user.email")
-    to_user = fields.String(attribute="act_to_user.email")
+    frm_profile = fields.String(attribute="act_frm_user.email")
+    to_profile = fields.String(attribute="act_to_user.email")
     status = OnlineStatusEnumField(attribute="status")  # Use custom OnlineStatusEnumField for enum values
 
     class Meta:
-        model = UserRequests
+        model = ProfileRequests
         load_instance = True
         sqla_session = db.session
         include_relationships = True
         # exclude = ('timestamp',)  # Exclude the 'timestamp' field
 
 class OnlineUsersSchema(ma.SQLAlchemyAutoSchema):
-    # frm_user = fields.String(attribute="act_frm_user.email")
-    frm_user = fields.Method('frm_user')
+    # frm_profile = fields.String(attribute="act_frm_user.email")
+    frm_profile = fields.Method('frm_profile')
 
     def get_frm_user(self, obj):
         return {
-            'email': obj.frm_user.email,
-            'online': obj.frm_user.online,
+            'email': obj.frm_profile.email,
+            'online': obj.frm_profile.online,
         }
-    to_user =  fields.Method('to_user')
+    to_profile =  fields.Method('to_profile')
     def get_to_user(self, obj):
         return {
-            'email': obj.to_user.email,
-            'online': obj.to_user.online,
+            'email': obj.to_profile.email,
+            'online': obj.to_profile.online,
         }
     class Meta:
-        model = UserRequests
+        model = ProfileRequests
         load_instance = True
         sqla_session = db.session
         include_relationships = True
-        exclude = ('timestamp','status','frm_user','to_user')  # Exclude the 'timestamp' field
+        exclude = ('timestamp','status','frm_profile','to_profile')  # Exclude the 'timestamp' field
 
 class RTCUserInfoSchema(ma.SQLAlchemyAutoSchema):
     class Meta:

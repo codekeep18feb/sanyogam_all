@@ -100,14 +100,14 @@ components:
       required:
         # - initiator
         - sdp
-        - to_user
+        - to_profile
 
       properties:
         # initiator:
         #   type: "boolean"
         sdp:
           type: "string"
-        to_user:
+        to_profile:
           type: "integer"
 
     Login:

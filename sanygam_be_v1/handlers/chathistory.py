@@ -8,7 +8,7 @@ from config import db, decode_token
 from sqlalchemy import or_, and_
 
 from models import OnlineStatusEnum, User, users_schema, user_schema, UserSchema,Profile,ChatHistory
-from models import chat_histories_schema, UserRequests,UserRequestsSchema,ChatHistorySchema
+from models import chat_histories_schema, ProfileRequests,UserRequestsSchema,ChatHistorySchema
 
 def get_timestamp():
     return datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
@@ -95,12 +95,12 @@ def send_msg(payload,to_userid):
     decoded = decode_token(token)
     decoded_data_str = decoded['sub']
     json_dec_data = json.loads(decoded_data_str)
-    frm_user = User.query.filter_by(email=json_dec_data['email']).first()
-    to_user =  User.query.filter_by(id=to_userid).first()
-    print('HOPE THI SI SALL ARIGHT',to_user)
-    # existing_req = UserRequests.query.all()[0]# or UserRequests.query.filter_by(to_user=to_user.id).first() ##(frm_user=to_user.id)
-    # existing_req1 = UserRequests.query.filter_by(to_user=to_user.id).first()# or UserRequests.query.filter_by(to_user=to_user.id).first() ##(frm_user=to_user.id)
-    existing_req = UserRequests.query.filter_by(to_user=frm_user.id).first() or UserRequests.query.filter_by(to_user=to_user.id).first()
+    frm_profile = User.query.filter_by(email=json_dec_data['email']).first()
+    to_profile =  User.query.filter_by(id=to_userid).first()
+    print('HOPE THI SI SALL ARIGHT',to_profile)
+    # existing_req = ProfileRequests.query.all()[0]# or ProfileRequests.query.filter_by(to_profile=to_profile.id).first() ##(frm_profile=to_profile.id)
+    # existing_req1 = ProfileRequests.query.filter_by(to_profile=to_profile.id).first()# or ProfileRequests.query.filter_by(to_profile=to_profile.id).first() ##(frm_profile=to_profile.id)
+    existing_req = ProfileRequests.query.filter_by(to_profile=frm_profile.id).first() or ProfileRequests.query.filter_by(to_profile=to_profile.id).first()
 
     if not existing_req:
         abort(400, f"no request exist {existing_req}")
@@ -110,10 +110,10 @@ def send_msg(payload,to_userid):
     if not existing_req.status==OnlineStatusEnum.ACCEPTED:
         abort(400, f"request status {existing_req.status}")
     elif existing_req.status==OnlineStatusEnum.ACCEPTED:
-        print("frm_user",frm_user,"to_user",to_user)
+        print("frm_profile",frm_profile,"to_profile",to_profile)
         # print("here sicontent",content)
         new_chat = ChatHistory(msg=payload['msg'],
-                               frm_user_id=frm_user.id,to_user_id=to_user.id)
+                               frm_user_id=frm_profile.id,to_user_id=to_profile.id)
         print("new_chat",new_chat)
         db.session.add(new_chat)
         db.session.commit()
@@ -150,9 +150,9 @@ def request_info(with_email):
     decoded = decode_token(token)
     decoded_data_str = decoded['sub']
     json_dec_data = json.loads(decoded_data_str)
-    frm_user = User.query.filter_by(email=json_dec_data['email']).first()
-    to_user =  User.query.filter_by(email=with_email).first()
-    existing_req = UserRequests.query.filter_by(to_user=frm_user.id).first() or UserRequests.query.filter_by(to_user=to_user.id).first()
+    frm_profile = User.query.filter_by(email=json_dec_data['email']).first()
+    to_profile =  User.query.filter_by(email=with_email).first()
+    existing_req = ProfileRequests.query.filter_by(to_profile=frm_profile.id).first() or ProfileRequests.query.filter_by(to_profile=to_profile.id).first()
 
     if not existing_req:
         abort(400, f"no request exist {existing_req}")
