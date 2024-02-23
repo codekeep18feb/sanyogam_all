@@ -557,18 +557,21 @@ const ChatsEditor = ({ SetWithUserId, auth_data, with_userid, all_chats }) => {
   }, [allGlobalData.answer]);
 
   return (
-    <WrapperChatShellWithSend title={"chats"} onSave={handleSubmit} setMessage={setMessage} message={message}
-
+    <WrapperChatShellWithSend title={"chats"} 
+      onSave={handleSubmit} 
+      setMessage={setMessage} 
+      message={message}
+      onClick={handleOnClick}
       onBack={() => {
         SetWithUserId(null)
       }}
-    >
+      >
       {all_chats}
       {callStatus == 'calling' && <PhoneCallUI
         callStatus={callStatus}
         with_userid={with_userid}
       />}
-      <VideoCallIcon
+      {/* <VideoCallIcon
         onClick={handleOnClick}
         style={{ fontSize: "35px", color: "red" }}
       // onClick={() => {
@@ -578,7 +581,7 @@ const ChatsEditor = ({ SetWithUserId, auth_data, with_userid, all_chats }) => {
       //
       // }
       // }
-      />
+      /> */}
       <video
         ref={myVideoRef} // Add a ref to the video element
         autoPlay
