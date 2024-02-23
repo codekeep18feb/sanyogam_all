@@ -52,6 +52,7 @@ import LoggedinHome from "./must/homeroute/LoggedinHome.js";
 // import ProfileBriefTile from './screen/ProfileBriefTile.js';
 import AllUsers from './must/all_users_route/AllUsers';
 import ProfileDetail from './must/all_users_route/ProfileDetail';
+import Inbox from "./must/inbox_route/Inbox.js";
 
 const MaterialUX = () => {
   return (
@@ -478,7 +479,21 @@ function App({ login, auth_data }) {
         />
 
         <Route path="/profile_detail/:id" element={<ProfileDetail />} />
-        <Route path="/all_users" element={<AllUsers />} />
+        <Route path="/all_users" element={
+          <PrivateRoute>
+            <WrapperMobileShell>
+              <AllUsers />
+            </WrapperMobileShell>
+          </PrivateRoute>
+        } />
+
+        <Route path="/inbox" element={
+          <PrivateRoute>
+            <WrapperMobileShell>
+              <Inbox />
+            </WrapperMobileShell>
+          </PrivateRoute>
+        } />
         <Route path="/login" element={<LoginScreen />} />
         <Route path="/faq" element={<FAQ />} />
         <Route path="/signup" element={<SignupScreen />} />
