@@ -81,21 +81,53 @@ def all_profiles(p_filter_obj, **kwargs):
     return fres
 
 
+
+from sqlalchemy.orm import aliased
+
+
+
+
+
+
 @utils.authenticate
-def filter_profiles(**kwargs):
+def filter_profiles_v1(**kwargs):
     me = kwargs.get('me')
     req_status = kwargs.get('req_status')
-    print('logged idn me',me,req_status)
-    print('ME.PROFILE', me.profile)
+    print('logged in user:', me, req_status)
+    print('ME.PROFILE:', me.profile)
     
-    all_profiles_query = Profile.query
+    # Create an alias for ProfileRequests table
+    pr_alias = aliased(ProfileRequests)
     
-    all_profiles_query = all_profiles_query.filter(Profile.id != me.profile.id)
-    all_profiles = all_profiles_query.all()
+    # Query to filter profiles based on accepted requests
+    accepted_profiles_query = Profile.query \
+        .join(pr_alias, Profile.id == pr_alias.to_profile) \
+        .filter(pr_alias.status == req_status)
     
-    fres = profiles_schema.dump(all_profiles)
+    # Filter profiles based on user's email
+    # accepted_profiles_query = accepted_profiles_query.filter(Profile.user.has(User.email == "deepaksingh.18feb@gmail.com"))
+    
+    # Fetch filtered profiles
+    accepted_profiles = accepted_profiles_query.all()
+    
+    # Serialize the results
+    fres = profiles_schema.dump(accepted_profiles)
     
     return fres
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

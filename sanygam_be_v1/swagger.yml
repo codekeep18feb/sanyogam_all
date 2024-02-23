@@ -728,14 +728,14 @@ paths:
         "200":
           description: "Successfully read profiles list"
   
-  /filter_profiles:
-    post:
-      operationId: "handlers.profiles.filter_profiles"
+  /filter_profiles_v1:
+    get:
+      operationId: "handlers.profiles.filter_profiles_v1"
       security:
         - JWTAuth: [] 
       tags:
         - "People"
-      summary: "here filetering all the profiles"
+      summary: "using for testing "
       parameters:
         - name: req_status
           in: query
