@@ -86,9 +86,23 @@ export default function DataWrapperProfile({ family_details }) {
     },
   };
 
+  const locations = [{ title: "Noida" }, { title: "Delhi" }];
+  const affluenceOptions = [
+    { title: "LOWER_MIDDLE_CLASS" },
+    { title: "MIDDLE_CLASS" },
+    { title: "UPPER_MIDDLE_CLASS" },
+  ];
+
+  const opt_obj = {
+    family_location: locations,
+    native_place: locations,
+    affluence: affluenceOptions,
+  };
+
+  
   return (
     <div>
-      <UIWrapperProfile family_details={family_details} rules={rules} />
+      <UIWrapperProfile family_details={family_details} rules={rules} opt_obj={opt_obj}/>
     </div>
   );
 }

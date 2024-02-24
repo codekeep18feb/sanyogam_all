@@ -76,21 +76,23 @@ const submitProfileUpdateData = async (payload) => {
 const EditFamilyForm = () => {
   const nagivate = useNavigate();
 
-  const locations = [{ title: "Noida" }, { title: "Delhi" }];
-  const affluenceOptions = [
-    { title: "LOWER_MIDDLE_CLASS" },
-    { title: "MIDDLE_CLASS" },
-    { title: "UPPER_MIDDLE_CLASS" },
-  ];
+  // const locations = [{ title: "Noida" }, { title: "Delhi" }];
+  // const affluenceOptions = [
+  //   { title: "LOWER_MIDDLE_CLASS" },
+  //   { title: "MIDDLE_CLASS" },
+  //   { title: "UPPER_MIDDLE_CLASS" },
+  // ];
 
-  const opt_obj = {
-    family_location: locations,
-    native_place: locations,
-    affluence: affluenceOptions,
-  };
+  // const opt_obj = {
+  //   family_location: locations,
+  //   native_place: locations,
+  //   affluence: affluenceOptions,
+  // };
   // Use the useLocation hook to access the current location object
   const { state } = useLocation();
   const family_details = state && state.family_details;
+  const opt_obj = state && state.opt_obj;
+
   const rules = state && state.rules;
   const [formValues, setFormValues] = useState({});
 
@@ -112,6 +114,7 @@ const EditFamilyForm = () => {
       return obj;
     });
   };
+
   const all_childs = Object.keys(family_details).map((row) => {
     if (rules[row]["edit_type"] === "num_input") {
       return (
