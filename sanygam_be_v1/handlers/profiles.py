@@ -25,9 +25,10 @@ from functools import wraps
 
 
 
-
+@utils.authenticate
 def update_my_profile(profile_update_data, **kwargs):
     me = kwargs.get('me')
+    print("do we have it",me)
     gender =      profile_update_data.get('gender',me.profile.gender)
     fname =       profile_update_data.get('fname',me.profile.user.fname)
     lname =       profile_update_data.get('lname',me.profile.user.lname)
