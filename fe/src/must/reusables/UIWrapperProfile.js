@@ -4,14 +4,14 @@ import EditIcon from "@mui/icons-material/Edit";
 import { useNavigate } from "react-router-dom";
 import { SelectedIcon } from "../back_tile_route/PreviewProfile";
 
-export default function UIWrapperProfile({ family_details, rules,opt_obj }) {
+export default function UIWrapperProfile({ family_details, rules, opt_obj }) {
   console.log("family_detadfils", family_details, rules);
 
   const handleEditClick = () => {
     const new_rules = rules;
     delete new_rules["extra"];
-    navigate("/edit_family", {
-      state: { family_details: family_details, rules: new_rules,opt_obj },
+    navigate("/edit_profile", {
+      state: { family_details: family_details, rules: new_rules, opt_obj },
     });
   };
   const navigate = useNavigate();
@@ -46,11 +46,9 @@ export default function UIWrapperProfile({ family_details, rules,opt_obj }) {
               sx={{ opacity: 0.7, color: "grey" }}
             >
               {rule["label"] ? rule["label"] : row}
-            
             </Typography>
             <Typography variant="subtitle2">{val}</Typography>
           </div>
-          
         </div>
       );
     }

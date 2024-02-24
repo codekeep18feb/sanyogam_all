@@ -40,8 +40,7 @@ import BackTile from "./must/back_tile_route/BackTile.js";
 import WrapperMobileShell from "./must/homeroute/WrapperMobileShell.js";
 import WrapperMobileBackShell from "./must/back_tile_route/WrapperMobileBackShell.js";
 
-import EditFamily from "./must/edit_family_route/EditFamily.js";
-
+import EditProfile from "./must/edit_family_route/EditProfile.js";
 
 import PreviewProfile from "./must/back_tile_route/PreviewProfile.js";
 import Home from "./must/homeroute/Home.js";
@@ -529,7 +528,7 @@ function App({ login, auth_data }) {
         />
 
         <Route
-          path="/edit_profile"
+          path="/preview_profile"
           element={
             <WrapperMobileBackShell title={"Preview Profile"}>
               <PreviewProfile />
@@ -537,14 +536,13 @@ function App({ login, auth_data }) {
           }
         />
         <Route
-          path="/edit_family"
+          path="/edit_profile"
           element={
             // <WrapperMobileBackShellWithSave title={"Family Details"}>
-            <EditFamily />
+            <EditProfile />
             // </WrapperMobileBackShellWithSave>
           }
         />
-
       </Routes>
     </>
   );
