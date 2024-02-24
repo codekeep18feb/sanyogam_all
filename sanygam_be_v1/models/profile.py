@@ -18,6 +18,7 @@ class Profile(db.Model):
     family_info = db.relationship('FamilyInformation', uselist=False, back_populates='profile')
     chat_brief_rec = db.relationship('ChatBriefRec', uselist=False, back_populates='profile')
     father = db.relationship('Father', back_populates='profile', uselist=False)
+    form_components = db.relationship('AllFormComp', back_populates='profile', uselist=False)
 
 
 class FamilyInformation(db.Model):
@@ -44,4 +45,26 @@ class Father(db.Model):
     designation = db.Column(db.String(50), default=None)
     company_name = db.Column(db.String(50), default=None)
     job_type = db.Column(db.String(50), default=None)
+    
+
+class radioEnum(enum.Enum):
+    SENT = 1
+    CANCELED = 2
+    RECEIVED = 3
+    ACCEPTED = 4
+    REJECTED = 5
+
+
+class AllFormComp(db.Model):
+    __tablename__ = "form_components"
+    id = db.Column(db.Integer, primary_key=True)
+    profile_id = db.Column(db.Integer, db.ForeignKey('profile.id'))
+    profile = db.relationship('Profile', back_populates='form_components')
+    first_name = db.Column(db.String(50), default=None)
+    age = db.Column(db.String(50), default=None)
+    dob = db.Column(db.Date(), default=None)
+    tob  = db.Column(db.Time, default=None)
+    drop = db.Column(db.String(50), default=None)
+    radio = db.Column(Enum(radioEnum))
+
     

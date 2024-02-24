@@ -94,14 +94,7 @@ const EditFamilyForm = () => {
   const rules = state && state.rules;
   const [formValues, setFormValues] = useState({});
 
-  // Update form values when family_details changes
-  // useEffect(() => {
-  //   if (family_details) {
-  //     // Set the form values based on family_details
-  //     console.log('HEREISTHESTATE',state)
-  //     setFormValues(family_details);
-  //   }
-  // }, [family_details]);
+
 
   console.log(rules, "family_deadtailsdafd", state);
   const handleOnChange = (e, state_name, type, new_value = false) => {
@@ -136,7 +129,6 @@ const EditFamilyForm = () => {
     if (rules[row]["edit_type"] === "dropdown") {
       return (
         <div>
-          {/* {rules[row]['label'] } here itse {row} */}
           <AutocompleteField
             onChange={handleOnChange}
             options={opt_obj[row]}
@@ -146,7 +138,6 @@ const EditFamilyForm = () => {
             defaultValue={family_details[row]}
           />
 
-          {/* <NumberField id={rules[row]['label'] || row} label={rules[row]['label'] || row} defaultValue={family_details[row]}/> */}
         </div>
       );
     }

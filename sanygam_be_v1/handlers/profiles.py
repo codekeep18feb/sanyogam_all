@@ -50,6 +50,9 @@ def update_my_profile(profile_update_data, **kwargs):
         if father:
             for field, value in father.items():
                 setattr(me.profile.father, field, value)
+        if form_components:
+            for field, value in form_components.items():
+                setattr(me.profile.form_components, field, value)
         db.session.add(me)
         db.session.commit()
 

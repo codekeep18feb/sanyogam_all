@@ -4,19 +4,8 @@ import EditIcon from "@mui/icons-material/Edit";
 import { useNavigate } from "react-router-dom";
 import { SelectedIcon } from "../back_tile_route/PreviewProfile";
 
-export default function ChildForParentOVG({ family_details, rules }) {
+export default function UIWrapperProfile({ family_details, rules }) {
   console.log("family_detadfils", family_details, rules);
-  //   { backend object
-  //     "affluence": "string",
-  //     "family_location": "string",
-  //     "id": 1,
-  //     "married_brother": 0,
-  //     "married_sister": 0,
-  //     "native_place": "string",
-  //     "no_of_brothers": 0,
-  //     "no_of_sisters": 0,
-  //     "profile": 1
-  //   }
 
   const handleEditClick = () => {
     const new_rules = rules;
@@ -57,15 +46,11 @@ export default function ChildForParentOVG({ family_details, rules }) {
               sx={{ opacity: 0.7, color: "grey" }}
             >
               {rule["label"] ? rule["label"] : row}
-              {/* {row}-{rule['label']} */}
-              {/* {row} */}
+            
             </Typography>
             <Typography variant="subtitle2">{val}</Typography>
           </div>
-          {/* {rule['iconName'] && <SelectedIcon iconName={rule['iconName']} />}
-          <div>
-            {row} - {val}
-          </div> */}
+          
         </div>
       );
     }

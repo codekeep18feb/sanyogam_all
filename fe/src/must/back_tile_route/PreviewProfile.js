@@ -9,7 +9,7 @@ import People from "@mui/icons-material/PeopleAltOutlined";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import EditIcon from "@mui/icons-material/Edit";
 import Icon from "@mui/material/Icon";
-import ParentForWrapperOVG from "../reusables/ParentForWrapperOVG";
+import DataWrapperProfile from "../reusables/DataWrapperProfile";
 
 export const SelectedIcon = ({ iconName = "missing", style_obj }) => {
   const iconComponents = {
@@ -30,11 +30,7 @@ export const SelectedIcon = ({ iconName = "missing", style_obj }) => {
   }
 };
 
-export const FamilyPreview = ({
-  family_details,
-  iconComponent,
-  manupulated_str,
-}) => {
+export const FamilyPreview = ({ family_details }) => {
   console.log("family_details", family_details);
   const navigate = useNavigate();
 
@@ -42,7 +38,7 @@ export const FamilyPreview = ({
     navigate("/edit_family", { state: { family_details } });
   };
 
-  return <ParentForWrapperOVG family_details={family_details} />;
+  return <DataWrapperProfile family_details={family_details} />;
 };
 
 export default function PreviewProfile() {
