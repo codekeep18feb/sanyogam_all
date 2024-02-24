@@ -10,7 +10,7 @@ function IncomingCallUI({ incoming_call_data }) {
   console.log('incomingCallData', incoming_call_data)
   return (
 
-    <div>
+    <div style={{border:"1px solid green"}}>
 
       {incoming_call_data ? <IncomingCallUIL incoming_call_data={incoming_call_data} /> : "loading"}
     </div>

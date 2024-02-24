@@ -468,7 +468,8 @@ function App({ login, auth_data }) {
   return (
     <>
       {Object.keys(allGlobalData).length > 0 && <IncomingCallUI incoming_call_data={allGlobalData} />}
-      <Routes>
+
+      {(allGlobalData==undefined || allGlobalData==null || Object.keys(allGlobalData).length == 0) && <Routes>
         <Route
           path="/"
           element={
@@ -538,7 +539,8 @@ function App({ login, auth_data }) {
             // </WrapperMobileBackShellWithSave>
           }
         />
-      </Routes>
+      </Routes>}
+
     </>
   );
 }

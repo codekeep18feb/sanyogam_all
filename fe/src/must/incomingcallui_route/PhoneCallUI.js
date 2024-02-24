@@ -38,7 +38,7 @@ export default function PhoneCallUI({
     top: 0,
     left: 0,
     width: "100%",
-    height: "70vh",
+    height: "100vh",
     backgroundImage:
       'url("https://images.pexels.com/photos/3206118/pexels-photo-3206118.jpeg")', // Replace with your image path
     backgroundSize: "cover",
