@@ -30,17 +30,6 @@ export const SelectedIcon = ({ iconName = "missing", style_obj }) => {
   }
 };
 
-export const FamilyPreview = ({ family_details }) => {
-  console.log("family_details", family_details);
-  const navigate = useNavigate();
-
-  const handleEditClick = () => {
-    navigate("/edit_family", { state: { family_details } });
-  };
-
-  return <DataWrapperProfile family_details={family_details} />;
-};
-
 export default function PreviewProfile() {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState(null);
@@ -80,8 +69,17 @@ export default function PreviewProfile() {
     setData(data);
   }, []);
 
-  const profile_info_obj =
-    data && data["family_info"] ? data["family_info"] : null;
+  let profile_info_obj = null;
+  if (data) {
+    //HERE WE CAN EXTRACT THE FIELDS THAT ARE NEEDED TO GENERATE THE RIGHT OBJECT??
+    const { family_info } = data;
+    const new_p_obj = { family_info };
+    profile_info_obj = new_p_obj;
+  }
+  // const profile_info_obj =
+  //   data ? data : null;
+  // data && data["family_info"] ? data["family_info"] : null;
+  console.log("here is profile_info_obj", profile_info_obj);
   const a = "variable";
   return (
     <>
@@ -95,8 +93,8 @@ export default function PreviewProfile() {
         {profile_info_obj === null || loading ? (
           <div>loader...</div>
         ) : (
-          <FamilyPreview
-            family_details={profile_info_obj}
+          <DataWrapperProfile
+            family_details={profile_info_obj["family_info"] || null}
             iconComponent={
               <People
                 style={{ fontSize: "24px", color: "magenta", padding: "20px" }}
