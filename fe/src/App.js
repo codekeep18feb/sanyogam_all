@@ -8,7 +8,6 @@ import TabPanel from "./must/material_ux_examples/TabPanel.js";
 import { Route, Routes, Navigate, useNavigate } from "react-router-dom";
 import io from "socket.io-client";
 
-
 import { login, logout } from "./redux/counter/AuthAction";
 
 import { setIncomingCall } from "./redux/counter/GlobalAction";
@@ -41,7 +40,6 @@ import BackTile from "./must/back_tile_route/BackTile.js";
 import WrapperMobileShell from "./must/homeroute/WrapperMobileShell.js";
 import WrapperMobileBackShell from "./must/back_tile_route/WrapperMobileBackShell.js";
 
-
 import EditFamily from "./must/edit_family_route/EditFamily.js";
 import PreviewProfile from "./must/back_tile_route/PreviewProfile.js";
 import Home from "./must/homeroute/Home.js";
@@ -50,8 +48,8 @@ import ChatPARENTOWS from "./must/chat_ows_route/ChatPARENTOWS.js";
 import IncomingCallUI from "./must/incomingcallui_route/IncomingCallUI.js";
 import LoggedinHome from "./must/homeroute/LoggedinHome.js";
 // import ProfileBriefTile from './screen/ProfileBriefTile.js';
-import AllUsers from './must/all_users_route/AllUsers';
-import ProfileDetail from './must/all_users_route/ProfileDetail';
+import AllUsers from "./must/all_users_route/AllUsers";
+import ProfileDetail from "./must/all_users_route/ProfileDetail";
 import Inbox from "./must/inbox_route/Inbox.js";
 
 const MaterialUX = () => {
@@ -96,7 +94,7 @@ const withGlobalSocket = (Component) => {
       auth_data
     );
     const [socket, setSocket] = useState(
-      io.connect('http://192.168.1.11:8001', {
+      io.connect("http://192.168.1.2:8001", {
         query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       })
     );
@@ -124,15 +122,19 @@ const withGlobalSocket = (Component) => {
 
         socket.on("listen_global_events", (data) => {
           if (data) {
-            const p_data = JSON.parse(data)
-            console.log("my user id is ", auth_data.id, "will parse for incomming calls", p_data, typeof (p_data));
+            const p_data = JSON.parse(data);
+            console.log(
+              "my user id is ",
+              auth_data.id,
+              "will parse for incomming calls",
+              p_data,
+              typeof p_data
+            );
             if (data) {
-              if (auth_data.id == p_data['to_id']) {
-                console.log('arewqewrrewqr')
+              if (auth_data.id == p_data["to_id"]) {
+                console.log("arewqewrrewqr");
                 setIncomingCall(data);
-
               }
-
             }
             // setAllGlobalData((prv) => {
             //   if ( JSON.stringify(prv_data) !==  JSON.stringify(data)) {
@@ -161,7 +163,6 @@ const withGlobalSocket = (Component) => {
             //   console.log("let me see if it's alrightight")
             //   // setIncomingCall(obj);
             // }
-
 
             // here i just want to setAllGlobalData if pdata["incoming_calls"].length!= pr
             // setAllGlobalData((prevChats) => {
@@ -260,7 +261,7 @@ const withGlobalSocket = (Component) => {
         setIncomingCall={setIncomingCall}
         // loading={loading}
         {...props}
-      // with_userid={with_userid}
+        // with_userid={with_userid}
       />
     );
   };
@@ -268,9 +269,8 @@ const withGlobalSocket = (Component) => {
 
 const getRequestUID = async (with_userid, token) => {
   try {
-
     const response = await fetch(
-      `http://192.168.1.11:8000/api/get_request_info_by_id/${with_userid}`,
+      `http://192.168.1.2:8000/api/get_request_info_by_id/${with_userid}`,
       {
         method: "GET",
         headers: {
@@ -278,14 +278,13 @@ const getRequestUID = async (with_userid, token) => {
           Authorization: token,
         },
         // body: JSON.stringify(data),
-
       }
     );
 
     if (response.status === 200) {
       const data = await response.json();
       console.log("successfully fetched user");
-      return data
+      return data;
     } else {
       console.log("Error fetching chat history");
       return null;
@@ -298,11 +297,10 @@ const getRequestUID = async (with_userid, token) => {
 };
 
 function App({ login, auth_data }) {
-  const [incoming_call_data, setIncomingCall] = useState(null)
+  const [incoming_call_data, setIncomingCall] = useState(null);
   const [my_room, setMyRoomAs] = useState(null);
 
   // const [my_room, setMyRoomAs] = useState(null);
-
 
   const navigate = useNavigate();
   const [gSocket, setgSocket] = useState(null);
@@ -311,7 +309,11 @@ function App({ login, auth_data }) {
     console.log("state here dsf", state);
     return state.globalData;
   });
-  console.log("hope we can see them here.", allGlobalData, Object.keys(allGlobalData).length);
+  console.log(
+    "hope we can see them here.",
+    allGlobalData,
+    Object.keys(allGlobalData).length
+  );
   useEffect(() => {
     // Perform actions after the page is loaded
     const storedAuthData = localStorage.getItem("meUser");
@@ -330,10 +332,9 @@ function App({ login, auth_data }) {
     }
   }, [login]); // Dependency on login ensures the effect is re-run when login changes
 
-
   useEffect(() => {
     if (!gSocket && auth_data) {
-      const newSocket = io.connect('http://192.168.1.11:8001', {
+      const newSocket = io.connect("http://192.168.1.2:8001", {
         query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
 
@@ -370,68 +371,67 @@ function App({ login, auth_data }) {
   const handleIncoming = (payload) => {
     const incomingAction = {
       type: "INCOMING",
-      payload: payload
+      payload: payload,
     };
     dispatch(incomingAction);
   };
 
-
   const respondIncoming = (payload) => {
     const incomingAction = {
       type: "ACCEPTED_INCOMING",
-      payload: payload
+      payload: payload,
     };
     dispatch(incomingAction);
   };
 
   useEffect(() => {
-
-
     if (gSocket && auth_data) {
       // Join the room corresponding to my_room
-      gSocket.emit('join_room', { room: String(auth_data.id) });
+      gSocket.emit("join_room", { room: String(auth_data.id) });
 
       // Event handler for 'new_chat_data_event'
       const handleNewDataEvent = (data) => {
         if (data) {
-          const pdata = JSON.parse(data)
-          console.log(typeof (data), "unique", pdata, auth_data.id);
-          if (Number(pdata.to_userid) == auth_data.id) {//just a validation check{
+          const pdata = JSON.parse(data);
+          console.log(typeof data, "unique", pdata, auth_data.id);
+          if (Number(pdata.to_userid) == auth_data.id) {
+            //just a validation check{
 
-            if (pdata.status == 'incoming' && pdata.offer) {
+            if (pdata.status == "incoming" && pdata.offer) {
               // setIncomingCall(pdata)
-              handleIncoming(pdata)
-
-            }
-
-            else if (pdata.status == 'accepted_incoming' && pdata.answer) {
-              console.log('HERE SHOULD BE ANS', pdata)
+              handleIncoming(pdata);
+            } else if (pdata.status == "accepted_incoming" && pdata.answer) {
+              console.log("HERE SHOULD BE ANS", pdata);
               if (pdata.answer) {
-                const new_obj = { answer: pdata.answer, status: pdata.status, frm_userid: pdata.frm_userid, to_userid: pdata.to_userid, }
-                console.log('WHATISTHEREALREADY', pdata)
-                respondIncoming(new_obj)
+                const new_obj = {
+                  answer: pdata.answer,
+                  status: pdata.status,
+                  frm_userid: pdata.frm_userid,
+                  to_userid: pdata.to_userid,
+                };
+                console.log("WHATISTHEREALREADY", pdata);
+                respondIncoming(new_obj);
               }
               // const new_obj = {...pdata}
               // setIncomingCall(new_obj)
-
             }
             //else just update the answer
             //let's send this answer to a redux state
             //and from there chatparent can get and pass it to wherever the video is being
-            // rendered 
-          }
-          else {
-            console.warn("There should be a log to record failing of this validation!!!")
+            // rendered
+          } else {
+            console.warn(
+              "There should be a log to record failing of this validation!!!"
+            );
           }
           //FIRST CHECK IF CALL IS MEANT FOR US JUST A VALIDATION CHECK
 
           //IF NOT LET LOG IT SHOULD BE A LOG MESSAGE
           //ELSE Number(pdata.to_userid) && pdata.status == 'incoming'
 
-
           // await initializeWebRTC(token, "RESPONDER");
         }
-      }
+      };
 
       gSocket.on("global_event_data", handleNewDataEvent);
       // Listen for 'new_chat_data_event' events
@@ -439,7 +439,7 @@ function App({ login, auth_data }) {
 
       // Clean up the socket connection on component unmount or when my_room changes
       return () => {
-        gSocket.emit('leave_room', { room: String(my_room) });
+        gSocket.emit("leave_room", { room: String(my_room) });
         gSocket.off("global_event_data", handleNewDataEvent);
       };
     }
@@ -462,14 +462,13 @@ function App({ login, auth_data }) {
 
   // }, [auth_data])
 
-
-
-
   return (
     <>
-      {Object.keys(allGlobalData).length > 0 && <IncomingCallUI incoming_call_data={allGlobalData} />}
+      {Object.keys(allGlobalData).length > 0 && (
+        <IncomingCallUI incoming_call_data={allGlobalData} />
+      )}
 
-      {(allGlobalData==undefined || allGlobalData==null || Object.keys(allGlobalData).length == 0) && <Routes>
+      <Routes>
         <Route
           path="/"
           element={
@@ -480,27 +479,32 @@ function App({ login, auth_data }) {
         />
 
         <Route path="/profile_detail/:id" element={<ProfileDetail />} />
-        <Route path="/all_users" element={
-          <PrivateRoute>
-            <WrapperMobileShell>
-              <AllUsers />
-            </WrapperMobileShell>
-          </PrivateRoute>
-        } />
+        <Route
+          path="/all_users"
+          element={
+            <PrivateRoute>
+              <WrapperMobileShell>
+                <AllUsers />
+              </WrapperMobileShell>
+            </PrivateRoute>
+          }
+        />
 
-        <Route path="/inbox" element={
-          <PrivateRoute>
-            <WrapperMobileShell>
-              <Inbox />
-            </WrapperMobileShell>
-          </PrivateRoute>
-        } />
+        <Route
+          path="/inbox"
+          element={
+            <PrivateRoute>
+              <WrapperMobileShell>
+                <Inbox />
+              </WrapperMobileShell>
+            </PrivateRoute>
+          }
+        />
         <Route path="/login" element={<LoginScreen />} />
         <Route path="/faq" element={<FAQ />} />
         <Route path="/signup" element={<SignupScreen />} />
         <Route path="/pricing" element={<Pricing />} />
         <Route path="/google_authorized" element={<GoogleAuthorize />} />
-
 
         <Route
           path="/chat_ows"
@@ -512,7 +516,6 @@ function App({ login, auth_data }) {
             </PrivateRoute>
           }
         />
-
 
         <Route
           path="/back_tile"
@@ -539,8 +542,7 @@ function App({ login, auth_data }) {
             // </WrapperMobileBackShellWithSave>
           }
         />
-      </Routes>}
-
+      </Routes>
     </>
   );
 }

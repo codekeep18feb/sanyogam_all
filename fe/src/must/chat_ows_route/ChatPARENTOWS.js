@@ -18,22 +18,20 @@ const ChatPARENTOWS = ({ auth_data }) => {
   const [with_email, SetWithEmail] = useState(null);
   const [chat_socket, setChatSocket] = useState(null);
 
-
   // const allGlobalData = useSelector((state) => {
   //   console.log("state here dsf", state);
   //   return state.globalData;
   // });
   // console.log("does call got accepted??", allGlobalData);
 
-
   console.log("ChatPARENTOWS parent of profiles and chats");
   const [socket, setSocket] = useState(
-    io.connect('http://192.168.1.11:8001', {
+    io.connect("http://192.168.1.2:8001", {
       query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     })
   );
-  const [chat_data, setChat_data] = useState({})
-  console.log('HEREISchat_data', chat_data)
+  const [chat_data, setChat_data] = useState({});
+  console.log("HEREISchat_data", chat_data);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const fetchOnlineProfiles = () => {
@@ -72,9 +70,8 @@ const ChatPARENTOWS = ({ auth_data }) => {
       }
     });
 
-
     const connectChatSocket = () => {
-      const newChatSocket = io.connect('http://192.168.1.11:8001', {
+      const newChatSocket = io.connect("http://192.168.1.2:8001", {
         query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       setChatSocket(newChatSocket);
@@ -94,34 +91,29 @@ const ChatPARENTOWS = ({ auth_data }) => {
       }
     };
 
-
     return () => {
       clearInterval(intervalId);
     };
   }, []); // Include socket in the dependency array
 
-
   useEffect(() => {
     if (chat_socket && auth_data && auth_data.id) {
       // Join the room corresponding to my_room
-      console.log('AREWEHERERE', auth_data.id)
-      chat_socket.emit('join_room', { room: String(auth_data.id) });
+      console.log("AREWEHERERE", auth_data.id);
+      chat_socket.emit("join_room", { room: String(auth_data.id) });
 
       // Event handler for 'new_chat_data_event'
       const handleNewDataEvent = (data) => {
-        const p_data = JSON.parse(data)
+        const p_data = JSON.parse(data);
         console.log("Received data in room", auth_data.id, p_data.msg);
 
-
-
-        setChat_data(prv => {
+        setChat_data((prv) => {
           let cp_prv = JSON.parse(JSON.stringify(prv)); // Deep copy of prv object
 
-          if (cp_prv.hasOwnProperty(p_data.frm_id)) { // Check if key exists in cp_prv
+          if (cp_prv.hasOwnProperty(p_data.frm_id)) {
+            // Check if key exists in cp_prv
             // If key exists, update its value
             cp_prv[p_data.frm_id] = [...cp_prv[p_data.frm_id], p_data]; // Assuming p_data contains both key and value
-
-
           } else {
             // If key does not exist, add it to cp_prv
             cp_prv[p_data.frm_id] = [p_data];
@@ -137,12 +129,11 @@ const ChatPARENTOWS = ({ auth_data }) => {
 
       // Clean up the socket connection on component unmount or when my_room changes
       return () => {
-        chat_socket.emit('leave_room', { room: String(auth_data.id) });
+        chat_socket.emit("leave_room", { room: String(auth_data.id) });
         chat_socket.off("new_chat_data_event", handleNewDataEvent);
       };
     }
   }, [chat_socket, auth_data]);
-
 
   const all_online_profiles = onlineProfiles && (
     <UserChatTileInListCOWs
@@ -158,12 +149,20 @@ const ChatPARENTOWS = ({ auth_data }) => {
       {/* <Typography variant="h5" gutterBottom>
         with_userid - {with_userid} - {with_email}
       </Typography> */}
-      {with_userid && <ChatsEditor SetWithUserId={SetWithUserId} with_userid={with_userid} all_chats={chat_data[with_userid] || []} />}
+      {with_userid && (
+        <ChatsEditor
+          SetWithUserId={SetWithUserId}
+          with_userid={with_userid}
+          all_chats={chat_data[with_userid] || []}
+        />
+      )}
     </>
     // </Paper>
   );
 
-  console.log("this should only be running once as of now as we are setting the state only once", onlineProfiles
+  console.log(
+    "this should only be running once as of now as we are setting the state only once",
+    onlineProfiles
   );
   return (
     <Grid container spacing={3}>
@@ -192,8 +191,7 @@ const ChatPARENTOWS = ({ auth_data }) => {
       )}
     </Grid>
   );
-}
-
+};
 
 // export default ChatPARENTOWS
 const mapStateToProps = (state) => {

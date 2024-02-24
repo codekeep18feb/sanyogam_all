@@ -5,6 +5,7 @@ import { CircularProgress, Grid } from "@mui/material";
 import PhoneCallUI from "./PhoneCallUI";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import "./Modal.css"; // Import your modal styles
 
 function IncomingCallUIL({
   incoming_call_data,
@@ -16,9 +17,8 @@ function IncomingCallUIL({
 
   const sendAGlobalEventApi = async (with_userid, token, data) => {
     try {
-
       const response = await fetch(
-        `http://192.168.1.11:8001/new_global_event_data/${with_userid}`,
+        `http://192.168.1.2:8001/new_global_event_data/${with_userid}`,
         {
           method: "POST",
           headers: {
@@ -26,14 +26,13 @@ function IncomingCallUIL({
             Authorization: token,
           },
           body: JSON.stringify(data),
-
         }
       );
 
       if (response.status === 200) {
         const data = await response.json();
         console.log("successfully posted global event");
-        return data
+        return data;
       } else {
         console.log("Error fetching chat history");
         return null;
@@ -109,13 +108,16 @@ function IncomingCallUIL({
           const JWT_TOKEN = localStorage.getItem("token");
           const token = `Bearer ${JWT_TOKEN}`;
           const data = {
-            "type": "call",
-            "status": "accepted_incoming",
-            "answer": offer_str
-          }
-          console.log('shouldnot we send the offer as well to be verified', incoming_call_data.offer)
+            type: "call",
+            status: "accepted_incoming",
+            answer: offer_str,
+          };
+          console.log(
+            "shouldnot we send the offer as well to be verified",
+            incoming_call_data.offer
+          );
 
-          sendAGlobalEventApi(incoming_call_data.frm_userid, token, data)
+          sendAGlobalEventApi(incoming_call_data.frm_userid, token, data);
         }
         // socket.emit("signal_pool", offer_str, incoming_call_data.to_userid);
         // saveRTCUserAns(
@@ -125,9 +127,13 @@ function IncomingCallUIL({
         // );
       }
     };
-    console.log('iwonderif', typeof (incoming_call_data.offer), incoming_call_data.offer)
+    console.log(
+      "iwonderif",
+      typeof incoming_call_data.offer,
+      incoming_call_data.offer
+    );
     const p_offer = JSON.parse(incoming_call_data.offer);
-    console.log("whatisitnow", p_offer, typeof (p_offer))
+    console.log("whatisitnow", p_offer, typeof p_offer);
     // const offer_str = await fetchRTCOffer();
     // console.log(p_offer, 'what is the diff', offer_str)
     rc.setRemoteDescription(JSON.parse(p_offer.sdp)).then((a) => {
@@ -236,41 +242,48 @@ function IncomingCallUIL({
   };
 
   const chatScreenBody = (incoming_call_data) => {
+    console.log("iincoming_call_data", incoming_call_data, auth_data.id);
+    return (
+      <div>
+        {!incoming_call_data && <CircularProgress />}
 
-    console.log('iincoming_call_data', incoming_call_data, auth_data.id)
-    return (<div>
+        {incoming_call_data.to_userid == auth_data.id &&
+          incoming_call_data.offer &&
+          !incoming_call_data.answer && (
+            <div className="modal">
+              <div className="modal-content">
+                {!connection_open && (
+                  <PhoneCallUI
+                    // callStatus={"INITIALIZING"}
+                    pickUpTheCall={pickUpTheCall}
+                    // incoming_call_data.to_userid={incoming_call_data.to_userid}
+                  />
+                )}
 
-      {!incoming_call_data && <CircularProgress />}
-
-      {incoming_call_data.to_userid == auth_data.id &&
-        incoming_call_data.offer &&
-        !incoming_call_data.answer && (
-          <div>
-            <div>
-              {!connection_open && (
-                <PhoneCallUI
-                  // callStatus={"INITIALIZING"}
-                  pickUpTheCall={pickUpTheCall}
-                // incoming_call_data.to_userid={incoming_call_data.to_userid}
-                />
-              )}
-            </div>
-            <div style={{ display: connection_open ? "block" : "none" }}>
-              <div>here is video RESPONDER - {JSON.stringify(connection_open)}</div>
-
-              <div style={{ width: "100%", height: "100%" }}>
-                <video
-                  ref={myVideoRef} // Add a ref to the video element
-                  autoPlay
-                  playsInline
-                  muted // You may want to remove this if it's not the local video
-                ></video>
+                <div
+                  style={{
+                    display: connection_open ? "block" : "none",
+                    border: "1px solid red",
+                  }}
+                >
+                  <video
+                    ref={myVideoRef}
+                    autoPlay
+                    playsInline
+                    muted
+                    style={{
+                      maxWidth: "100%",
+                      height: "auto",
+                      border: "2px solid blue",
+                    }} // Apply CSS styles to control width and maintain aspect ratio
+                  ></video>
+                </div>
               </div>
             </div>
-          </div>
-        )}
-    </div>)
-  }
+          )}
+      </div>
+    );
+  };
 
   return <div>{chatScreenBody(incoming_call_data)}</div>;
 }

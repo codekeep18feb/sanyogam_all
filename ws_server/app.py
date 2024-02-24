@@ -10,7 +10,7 @@ from flask_cors import CORS
 
 app = Flask(__name__)
 # socketio = SocketIO(app)  # Allowing all origins for simplicity, replace "*" with a list of allowed origins
-CORS(app, resources={r"/*": {"origins": ["http://192.168.1.11:3000", "http://192.168.1.11:8000","http://192.168.1.11:8001"]}})
+CORS(app, resources={r"/*": {"origins": ["http://192.168.1.2:3000", "http://192.168.1.2:8000","http://192.168.1.2:8001"]}})
 socketio = SocketIO(cors_allowed_origins="*")
 socketio.init_app(app)
 
@@ -125,7 +125,7 @@ def handle_message(*args):
 s_pool = []
 
 async def make_me_api_call(authorization_token):
-    api_url = 'http://192.168.1.11:3000/api/me'
+    api_url = 'http://192.168.1.2:3000/api/me'
 
     headers = {
         'Authorization': f'{authorization_token}',
@@ -142,7 +142,7 @@ async def make_me_api_call(authorization_token):
 
 
 async def make_get_request_info_by_id_call(authorization_token,with_userid):
-    api_url = 'http://192.168.1.11:8000/api/get_request_info_by_id/'+with_userid
+    api_url = 'http://192.168.1.2:8000/api/get_request_info_by_id/'+with_userid
 
     headers = {
         'Authorization': f'{authorization_token}',
@@ -160,7 +160,7 @@ async def make_get_request_info_by_id_call(authorization_token,with_userid):
 
 
 async def make_all_profiles_api_call(authorization_token, request_data):
-    api_url = 'http://192.168.1.11:3000/api/fetch_online_profiles'
+    api_url = 'http://192.168.1.2:3000/api/fetch_online_profiles'
 
     headers = {
         'Authorization': f'{authorization_token}',

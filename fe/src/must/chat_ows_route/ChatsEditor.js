@@ -2,11 +2,10 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import AudioCallIcon from "@mui/icons-material/Call";
 import { connect, useSelector } from "react-redux";
 import io from "socket.io-client";
-import { makeStyles } from '@material-ui/core/styles';
-
+import { makeStyles } from "@material-ui/core/styles";
 
 import { Grid, Typography, TextField, Button } from "@mui/material";
-import React, { useEffect, useReducer, useRef, useState } from 'react';
+import React, { useEffect, useReducer, useRef, useState } from "react";
 import WrapperChatShellWithSend from "./WrapperChatShellWithSend";
 import VideoCallIcon from "@mui/icons-material/VideoCall";
 import PhoneCallUI from "../incomingcallui_route/PhoneCallUI";
@@ -14,15 +13,15 @@ import PhoneCallUI from "../incomingcallui_route/PhoneCallUI";
 const makeTriggerCall = async (with_userid, frm_id, message) => {
   try {
     const data = {
-      "frm_id": frm_id,
-      "to_id": with_userid,
-      "message": message
-    }
+      frm_id: frm_id,
+      to_id: with_userid,
+      message: message,
+    };
     const JWT_TOKEN = localStorage.getItem("token");
     const token = `Bearer ${JWT_TOKEN}`;
-    console.log('dsfhere is with_userid', with_userid)
+    console.log("dsfhere is with_userid", with_userid);
     const response = await fetch(
-      `http://192.168.1.11:8001/new_data_event_trigger/${with_userid}`,
+      `http://192.168.1.2:8001/new_data_event_trigger/${with_userid}`,
       {
         method: "POST",
         headers: {
@@ -30,14 +29,13 @@ const makeTriggerCall = async (with_userid, frm_id, message) => {
           Authorization: token,
         },
         body: JSON.stringify(data),
-
       }
     );
 
     if (response.status === 200) {
       const data = await response.json();
       console.log("successfully fetched user");
-      return data
+      return data;
     } else {
       console.log("Error fetching chat history");
       return null;
@@ -51,38 +49,36 @@ const makeTriggerCall = async (with_userid, frm_id, message) => {
 
 const useStyles = makeStyles({
   root: {
-    display: 'flex',
-    flexDirection: 'column',
-    height: '60vh', // Set the container height to 100% of the viewport height
-    overflowY: 'auto', // Add vertical scrollbar if content overflows
+    display: "flex",
+    flexDirection: "column",
+    height: "60vh", // Set the container height to 100% of the viewport height
+    overflowY: "auto", // Add vertical scrollbar if content overflows
   },
   segment1: {
-    flex: '0 0 10%', // 10% height, don't grow or shrink
-    backgroundColor: 'lightblue',
+    flex: "0 0 10%", // 10% height, don't grow or shrink
+    backgroundColor: "lightblue",
   },
   segment2: {
-    flex: '1 0 80%', // 80% height, grow as needed, don't shrink
-    backgroundColor: 'lightgreen',
+    flex: "1 0 80%", // 80% height, grow as needed, don't shrink
+    backgroundColor: "lightgreen",
   },
   segment3: {
-    flex: '0 0 10%', // 10% height, don't grow or shrink
-    backgroundColor: 'lightcoral',
+    flex: "0 0 10%", // 10% height, don't grow or shrink
+    backgroundColor: "lightcoral",
   },
   bottom: {
-    position: 'sticky',
+    position: "sticky",
     bottom: 0,
-    height: '10vh', // Set the height to 10% of the viewport height
-    backgroundColor: 'white',
-    padding: '10px', // Add some padding for spacing
+    height: "10vh", // Set the height to 10% of the viewport height
+    backgroundColor: "white",
+    padding: "10px", // Add some padding for spacing
   },
 });
 
-
 const sendAGlobalEventApi = async (with_userid, token, data) => {
   try {
-
     const response = await fetch(
-      `http://192.168.1.11:8001/new_global_event_data/${with_userid}`,
+      `http://192.168.1.2:8001/new_global_event_data/${with_userid}`,
       {
         method: "POST",
         headers: {
@@ -90,14 +86,13 @@ const sendAGlobalEventApi = async (with_userid, token, data) => {
           Authorization: token,
         },
         body: JSON.stringify(data),
-
       }
     );
 
     if (response.status === 200) {
       const data = await response.json();
       console.log("successfully posted global event");
-      return data
+      return data;
     } else {
       console.log("Error fetching chat history");
       return null;
@@ -110,31 +105,30 @@ const sendAGlobalEventApi = async (with_userid, token, data) => {
 };
 
 const initialState = {
-  message: '',
+  message: "",
 };
 
 const reducer = (state, action) => {
   switch (action.type) {
-    case 'SET_MESSAGE':
+    case "SET_MESSAGE":
       return {
         ...state,
         message: action.payload,
       };
-    case 'RESET_MESSAGE':
+    case "RESET_MESSAGE":
       return {
         ...state,
-        message: '',
+        message: "",
       };
     default:
       return state;
   }
 };
 
-
 const ChatsEditor = ({ SetWithUserId, auth_data, with_userid, all_chats }) => {
   const myVideoRef = useRef(null);
   const myRef = useRef(null);
-  const [current_cs, setCallingStatus] = useState(null)
+  const [current_cs, setCallingStatus] = useState(null);
   const [socket, setSocket] = useState(
     io.connect("http://192.168.1.13:8000", {
       query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
@@ -147,13 +141,10 @@ const ChatsEditor = ({ SetWithUserId, auth_data, with_userid, all_chats }) => {
   });
   console.log("does call got accepted?? inchats editory", allGlobalData);
 
-
-
   const sendAGlobalEventApi = async (with_userid, token, data) => {
     try {
-
       const response = await fetch(
-        `http://192.168.1.11:8001/new_global_event_data/${with_userid}`,
+        `http://192.168.1.2:8001/new_global_event_data/${with_userid}`,
         {
           method: "POST",
           headers: {
@@ -161,14 +152,13 @@ const ChatsEditor = ({ SetWithUserId, auth_data, with_userid, all_chats }) => {
             Authorization: token,
           },
           body: JSON.stringify(data),
-
         }
       );
 
       if (response.status === 200) {
         const data = await response.json();
         console.log("successfully posted global event");
-        return data
+        return data;
       } else {
         console.log("Error fetching chat history");
         return null;
@@ -181,7 +171,7 @@ const ChatsEditor = ({ SetWithUserId, auth_data, with_userid, all_chats }) => {
   };
 
   const initializeWebRTC = async (token, type) => {
-    console.log('INSIDE initializeWebRTC')
+    console.log("INSIDE initializeWebRTC");
     if (type === "INITIATOR") {
       console.log("Ensure it's not called multiple times...");
 
@@ -217,25 +207,22 @@ const ChatsEditor = ({ SetWithUserId, auth_data, with_userid, all_chats }) => {
           const offer_str = JSON.stringify(offer_obj);
           console.log("this is offer str", offer_str);
           const data = {
-            "type": "call",
-            "status": "incoming",
-            "video": true,
-            "audio": true,
-            "offer": offer_str,
-            "answer": null
+            type: "call",
+            status: "incoming",
+            video: true,
+            audio: true,
+            offer: offer_str,
+            answer: null,
+          };
+
+          const res = await sendAGlobalEventApi(with_userid, token, data);
+          if (res["success"]) {
+            setCallingStatus("calling");
+          } else {
+            setCallingStatus("failed");
           }
 
-          const res = await sendAGlobalEventApi(with_userid, token, data)
-          if (res['success']) {
-            setCallingStatus("calling")
-
-          }
-          else {
-            setCallingStatus("failed")
-
-          }
-
-          console.log('HERE IS RES yeah ::::))))', res)
+          console.log("HERE IS RES yeah ::::))))", res);
           // socket.emit("signal_pool", offer_str, with_userid);
 
           // addRTCUserInfo(true, JSON.stringify(lc.localDescription), to_user_id);
@@ -293,18 +280,15 @@ const ChatsEditor = ({ SetWithUserId, auth_data, with_userid, all_chats }) => {
           const offer_str = JSON.stringify(offer_obj);
           console.log("AREWEHERE@answers");
           const data = {
-            "type": "accepting",
-            "answer": offer_str
-          }
+            type: "accepting",
+            answer: offer_str,
+          };
 
-          const res = await sendAGlobalEventApi(with_userid, token, data)
-          if (res['success']) {
-            setCallingStatus("accepted_call")
-
-          }
-          else {
-            setCallingStatus("accepting_failed")
-
+          const res = await sendAGlobalEventApi(with_userid, token, data);
+          if (res["success"]) {
+            setCallingStatus("accepted_call");
+          } else {
+            setCallingStatus("accepting_failed");
           }
 
           // socket.emit("signal_pool", offer_str, with_userid);
@@ -408,81 +392,84 @@ const ChatsEditor = ({ SetWithUserId, auth_data, with_userid, all_chats }) => {
     });
   };
 
-
-
-  console.log('on chatseditor myref', myRef.current)
-  const [callStatus, setcallStatus] = useState(null)
+  console.log("on chatseditor myref", myRef.current);
+  const [callStatus, setcallStatus] = useState(null);
   // const [socket, setSocket] = useState(null);
   const [my_room, setMyRoomAs] = useState(null);
   const [state, dispatch] = useReducer(reducer, initialState);
   const { message } = state;
 
   const [dependentVariable, setDependentVariable] = useState("dependent");
-  const [chat_data, setChat_data] = useState([])
-
+  const [chat_data, setChat_data] = useState([]);
 
   const handleSubmit = () => {
     // Handle the submission of the message
     console.log("Submitted message:", message);
     makeTriggerCall(with_userid, auth_data.id, message);
     // setMessage("")
-    dispatch({ type: 'RESET_MESSAGE' });
+    dispatch({ type: "RESET_MESSAGE" });
   };
 
   const classes = useStyles();
 
-
-  all_chats = all_chats.map(i => {
+  all_chats = all_chats.map((i) => {
     return (
-      <div style={{ marginTop: "15px", border: "1px solid red", display: "flex", justifyContent: "flex-end" }}>
+      <div
+        style={{
+          marginTop: "15px",
+          border: "1px solid red",
+          display: "flex",
+          justifyContent: "flex-end",
+        }}
+      >
         <div
           style={{
             backgroundColor: "#ceebeb",
             padding: "15px 20px",
             width: "80%",
-            borderBottomLeftRadius: "25%"
+            borderBottomLeftRadius: "25%",
           }}
-        >{i.msg}</div>
+        >
+          {i.msg}
+        </div>
       </div>
-    )
-  })
-
+    );
+  });
 
   const setMessage = (message) => {
-    dispatch({ type: 'SET_MESSAGE', payload: message });
-  }
+    dispatch({ type: "SET_MESSAGE", payload: message });
+  };
 
   const handleOnClick = async () => {
     // e.preventDefault()
 
     //LET'S GRAB initiatorSdpOffer
 
-
     const data = {
-      "type": "call",
-      "status": "incoming",
-      "video": true,
-      "audio": true,
-      "offer": "myhardcodedfull_sdp",
-      "answer": "answer"
-    }
-    console.log('on click on video icon!!!!!!', data)
+      type: "call",
+      status: "incoming",
+      video: true,
+      audio: true,
+      offer: "myhardcodedfull_sdp",
+      answer: "answer",
+    };
+    console.log("on click on video icon!!!!!!", data);
     // const sdp = "myhardcodedfull_sdp"
     const JWT_TOKEN = localStorage.getItem("token");
     const token = `Bearer ${JWT_TOKEN}`;
 
     // let cs = { status: null };
-    setCallingStatus("calling")
+    setCallingStatus("calling");
     const [lc] = await initializeWebRTC(token, "INITIATOR");
     // console.log("dowehave dc",dc)
 
     if (lc) {
       console.log(lc, "what is this lc");
-      console.log(lc, typeof (lc), "myRef's current value:", myRef.current);
+      console.log(lc, typeof lc, "myRef's current value:", myRef.current);
       myRef.current = {
         type: "INITIATOR",
         channel: lc,
-      }
+      };
     }
     //   attachRightListnersToRef();
     //   data['offer'] = lc
@@ -491,20 +478,20 @@ const ChatsEditor = ({ SetWithUserId, auth_data, with_userid, all_chats }) => {
     //   // cs.status = "OUTGOINGCALL";
     // }
     // pass sdp to right room and on right event
-    // then the other party listening to it should get it 
+    // then the other party listening to it should get it
     // probably glbal event like thing
-
-
-
-  }
+  };
 
   useEffect(() => {
     if (allGlobalData && allGlobalData.answer) {
-      const answer_obj = JSON.parse(allGlobalData.answer)
-      const answer = JSON.parse(answer_obj.answer)
-      console.log("isittriggering only if answer changes??", answer, typeof (answer));
+      const answer_obj = JSON.parse(allGlobalData.answer);
+      const answer = JSON.parse(answer_obj.answer);
+      console.log(
+        "isittriggering only if answer changes??",
+        answer,
+        typeof answer
+      );
       if (answer) {
-
         myRef.current.channel
           .setRemoteDescription(answer)
           .then((a) => {
@@ -557,43 +544,42 @@ const ChatsEditor = ({ SetWithUserId, auth_data, with_userid, all_chats }) => {
   }, [allGlobalData.answer]);
 
   return (
-    <WrapperChatShellWithSend title={"chats"} 
-      onSave={handleSubmit} 
-      setMessage={setMessage} 
+    <WrapperChatShellWithSend
+      title={"chats"}
+      onSave={handleSubmit}
+      setMessage={setMessage}
       message={message}
       onClick={handleOnClick}
       onBack={() => {
-        SetWithUserId(null)
+        SetWithUserId(null);
       }}
-      >
+    >
       {all_chats}
-      {callStatus == 'calling' && <PhoneCallUI
-        callStatus={callStatus}
-        with_userid={with_userid}
-      />}
-      {/* <VideoCallIcon
-        onClick={handleOnClick}
-        style={{ fontSize: "35px", color: "red" }}
-      // onClick={() => {
-      //   console.log('got video click')
-      //   setcallStatus("calling")
+      {callStatus == "calling" && (
+        <PhoneCallUI callStatus={callStatus} with_userid={with_userid} />
+      )}
 
-      //
-      // }
-      // }
-      /> */}
-      <video
-        ref={myVideoRef} // Add a ref to the video element
-        autoPlay
-        playsInline
-        muted // You may want to remove this if it's not the local video
-      ></video>
-
-
+      
+      <div
+        style={{
+          border: "1px solid red",
+        }}
+      >
+        <video
+          ref={myVideoRef}
+          autoPlay
+          playsInline
+          muted
+          style={{
+            maxWidth: "100%",
+            height: "auto",
+            border: "2px solid blue",
+          }} // Apply CSS styles to control width and maintain aspect ratio
+        ></video>
+      </div>
     </WrapperChatShellWithSend>
   );
 };
-
 
 const mapStateToProps = (state) => {
   return {
