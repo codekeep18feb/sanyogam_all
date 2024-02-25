@@ -76,9 +76,7 @@ export default function PreviewProfile() {
     const new_p_obj = { family_info };
     profile_info_obj = new_p_obj;
   }
-  // const profile_info_obj =
-  //   data ? data : null;
-  // data && data["family_info"] ? data["family_info"] : null;
+
   console.log("here is profile_info_obj", profile_info_obj);
   const a = "variable";
 
@@ -157,6 +155,37 @@ export default function PreviewProfile() {
         },
       },
     },
+
+
+    // father: {
+    //   company_name: {
+    //     type: "str",
+    //     edit_type: "str_input",
+    //     display: true,
+    //     iconName: "location",
+    //   },
+
+    //   designation: {
+    //     type: "str",
+    //     edit_type: "str_input",
+    //     display: true,
+    //     iconName: "location",
+    //   },
+
+    //   first_name: {
+    //     type: "str",
+    //     edit_type: "str_input",
+    //     display: true,
+    //     iconName: "location",
+    //   },
+
+    //   last_name: {
+    //     type: "str",
+    //     edit_type: "str_input",
+    //     display: true,
+    //     iconName: "location",
+    //   }
+    // },
   };
 
   const locations = [{ title: "Noida" }, { title: "Delhi" }];
@@ -172,21 +201,22 @@ export default function PreviewProfile() {
     affluence: affluenceOptions,
   };
 
+  if (!profile_info_obj) {
+    return <div>here</div>;
+  }
   return (
     <>
-      <div
-        style={{
-          margin: "10px",
-          padding: "15px 0",
-          boxShadow: "0px 1px 10px rgba(0, 0, 0, 0.3)",
-        }}
-      >
-        {profile_info_obj === null || loading ? (
-          <div>loader...</div>
-        ) : (
+      {["family_info"].map((i) => (
+        <div
+          style={{
+            margin: "10px",
+            padding: "15px 0",
+            boxShadow: "0px 1px 10px rgba(0, 0, 0, 0.3)",
+          }}
+        >
           <UIWrapperProfile
-            family_details={profile_info_obj["family_info"] || null}
-            rules={rules["family_info"] || null}
+            family_details={profile_info_obj[i] || null}
+            rules={rules[i] || null}
             opt_obj={opt_obj || null}
             iconComponent={
               <People
@@ -195,8 +225,8 @@ export default function PreviewProfile() {
             }
             manupulated_str={`Manupulated string ${a}`}
           />
-        )}
-      </div>
+        </div>
+      ))}
     </>
   );
 }
