@@ -28,6 +28,7 @@ import TooltipExample from "./must/material_ux_examples/TooltipExample.js";
 import SnackbarWithActions from "./must/material_ux_examples/SnackbarWithActions.js";
 // import DummyLogin from './practice/DummyLogin'
 import LoginScreen from "./must/login_route/LoginScreen.js";
+import PlayGround from "./must/playground_route/PlayGround.js"
 // import Footer from './screen/Footer'
 import FAQ from "./must/faq/FAQ.js";
 import GoogleAuthorize from "./must/google_authrized_route/GoogleAuthorize.js";
@@ -531,7 +532,7 @@ function App({ login, auth_data }) {
           path="/preview_profile"
           element={
             <WrapperMobileBackShell title={"Preview Profile"}>
-              <PreviewProfile />
+              <PreviewProfile non_editable={true}/>
             </WrapperMobileBackShell>
           }
         />
@@ -543,7 +544,17 @@ function App({ login, auth_data }) {
             // </WrapperMobileBackShellWithSave>
           }
         />
+      
+      <Route
+          path="/playground"
+          element={
+            // <WrapperMobileBackShellWithSave title={"Family Details"}>
+            <PlayGround />
+            // </WrapperMobileBackShellWithSave>
+          }
+        />
       </Routes>
+
     </>
   );
 }

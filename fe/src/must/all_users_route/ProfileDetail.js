@@ -1,8 +1,14 @@
 import React, { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom"; // Import useNavigate
 import { useState } from "react";
-import { Button, Snackbar } from "@material-ui/core";
-
+import { Button, Grid, Snackbar, Typography } from "@material-ui/core";
+import { ProfileImageComp } from "../playground_route/PlayGround";
+import ShareRIcon from "@mui/icons-material/Share";
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import PhotoScrollBar from "../homeroute/PhotoScrollBar";
+import PreviewProfile from "../back_tile_route/PreviewProfile"
+// import PreviewProfile from "./must/back_tile_route/PreviewProfile.js";
+// 
 export default function ProfileDetail() {
   // Access the id parameter using useParams hook
   const { id } = useParams();
@@ -81,9 +87,85 @@ export default function ProfileDetail() {
   if (profileDetail) {
     return (
       <div>
-        <h2>Profile Detail</h2>
+        {/* <h2>Profile Detail</h2>
         <p>Profile ID: {profileDetail.id}</p>
-        <p>Email: {profileDetail.user_email}</p>
+        <p>Email: {profileDetail.user_email}</p> */}
+        <div style={{ marginTop: "20px" }}>
+          <ProfileImageComp
+            data={{
+              name: "pulkot soni",
+              location: "noida",
+              age: "32",
+              height: "5'7",
+              religion: "Hindu",
+              occupation: "Software Develop",
+            }}
+          />
+
+          <div
+            style={{
+              border: "1px solid red",
+              width: "90vw",
+              margin: "0 auto",
+              boxShadow: "0px 1px 10px rgba(0, 0, 0, 0.3)",
+              borderRadius: "5px",
+            }}
+          >
+            <Grid container xs={12} alignItems="center">
+              <Grid item xs={8}>
+                <Typography variant="body">More Photos</Typography>
+              </Grid>
+              <Grid
+                item
+                xs={3}
+                container
+                flexDirection={"column"}
+                justifyContent="space-around"
+              >
+                <Grid item xs={1}>
+                  <ShareRIcon
+                    // onClick={onBack}
+                    style={{
+                      cursor: "pointer",
+                      padding: 10,
+                      borderRadius: "50%",
+                      border: "1px solid black",
+                      backgroundColor: "white",
+                      color: "blue",
+                    }}
+                  />
+                </Grid>
+
+                <Grid item xs={1}>
+                  <MoreHorizIcon
+                    // onClick={onBack}
+                    style={{
+                      cursor: "pointer",
+                      padding: 10,
+                      borderRadius: "50%",
+                      backgroundColor: "red",
+                      color: "white",
+                    }}
+                  />
+                </Grid>
+              </Grid>
+            </Grid>
+
+
+            <div style={{ padding: "40px 0" }}>
+              <PhotoScrollBar />
+
+            </div>
+
+
+            <div>
+
+            <PreviewProfile non_editable={false}/>
+
+            </div>
+          </div>
+        </div>
+
         <Button
           variant="contained"
           color="secondary"
@@ -103,8 +185,8 @@ export default function ProfileDetail() {
           onClose={handleCloseSnackbar}
           message={snackbarMessage}
         />
+
         <div>
-          {/* Previous Profile Button */}
           {parseInt(id, 10) > 1 && (
             <Button
               variant="contained"
@@ -114,7 +196,7 @@ export default function ProfileDetail() {
               Previous Profile
             </Button>
           )}
-          {/* Next Profile Button */}
+
           <Button variant="contained" color="primary" onClick={goToNextProfile}>
             Next Profile
           </Button>

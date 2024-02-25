@@ -4,7 +4,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import { useNavigate } from "react-router-dom";
 import { SelectedIcon } from "../back_tile_route/PreviewProfile";
 
-export default function UIWrapperProfile({ object_key, edit_data, rules, opt_obj }) {
+export default function UIWrapperProfile({ object_key, edit_data, rules, opt_obj,non_editable }) {
   console.log("family_detadfils", edit_data, rules);
 
   const handleEditClick = () => {
@@ -106,10 +106,11 @@ export default function UIWrapperProfile({ object_key, edit_data, rules, opt_obj
             <div>{object_key}</div>
           </Grid>
 
-          <div style={{ display: "flex" }}>
+          {non_editable && <div style={{ display: "flex", }}>
             <div
               style={{ opacity: 0.8, cursor: "pointer" }}
               onClick={handleEditClick}
+
             >
               <Typography variant="subtitle2">Edit</Typography>
             </div>
@@ -123,7 +124,7 @@ export default function UIWrapperProfile({ object_key, edit_data, rules, opt_obj
               }}
               onClick={handleEditClick}
             />
-          </div>
+          </div>}
         </Grid>
         {all_childs_extra}
         {all_childs}

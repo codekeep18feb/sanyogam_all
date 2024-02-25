@@ -30,7 +30,7 @@ export const SelectedIcon = ({ iconName = "missing", style_obj }) => {
   }
 };
 
-export default function PreviewProfile() {
+export default function PreviewProfile({non_editable}) {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState(null);
   const fetchProfileData = async () => {
@@ -257,13 +257,17 @@ export default function PreviewProfile() {
       {Object.keys(profile_info_obj).map((i) => {
         return (
           <div
-            style={{
+            style={non_editable?{
               margin: "10px",
               padding: "15px 0",
               boxShadow: "0px 1px 10px rgba(0, 0, 0, 0.3)",
+            }:{
+              margin: "10px",
+              padding: "15px 0",
             }}
           >
             <UIWrapperProfile
+            non_editable={non_editable}
               object_key={i}
               edit_data={profile_info_obj[i] || null}
               rules={rules[i] || null}

@@ -104,7 +104,9 @@ export default function ProfileDetail() {
           message={snackbarMessage}
         />
         <div>
-          {/* Previous Profile Button */}
+
+
+
           {parseInt(id, 10) > 1 && (
             <Button
               variant="contained"
@@ -114,10 +116,9 @@ export default function ProfileDetail() {
               Previous Profile
             </Button>
           )}
-          {/* Next Profile Button */}
-          <Button variant="contained" color="primary" onClick={goToNextProfile}>
-            Next Profile
-          </Button>
+
+
+         
         </div>
       </div>
     );
