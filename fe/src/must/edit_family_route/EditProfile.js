@@ -88,17 +88,19 @@ const AutocompleteField = ({
 //   }
 // };
 
-const EditFamilyForm = () => {
+const EditForm = () => {
   const nagivate = useNavigate();
   const { state } = useLocation();
   const edit_data = state && state.edit_data;
   const opt_obj = state && state.opt_obj;
   const rules = state && state.rules;
+  const object_key = state && state.object_key;
+  
   const [formValues, setFormValues] = useState({});
 
 
 
-  console.log(rules, "family_deadtailsdafd", state);
+  console.log(rules, "family_deadtailedit_datasdafd", edit_data);
   const handleOnChange = (e, state_name, type, new_value = false) => {
     e.preventDefault();
     console.log("thisstate_name changed", type);
@@ -189,8 +191,8 @@ const EditFamilyForm = () => {
   };
 
   return (
-    <WrapperMobileBackShellWithSave title={"Edit "+"family_info"} onSave={()=>{
-      onSave("family_info")
+    <WrapperMobileBackShellWithSave title={"Edit "+object_key} onSave={()=>{
+      onSave(object_key)
     }}>
       <div style={{ padding: "10px" }}>
         <Grid container flexDirection={"column"}>
@@ -201,4 +203,4 @@ const EditFamilyForm = () => {
   );
 };
 
-export default EditFamilyForm;
+export default EditForm;

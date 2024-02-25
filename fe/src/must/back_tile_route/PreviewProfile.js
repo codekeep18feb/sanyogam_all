@@ -215,6 +215,7 @@ export default function PreviewProfile() {
           }}
         >
           <UIWrapperProfile
+            object_key={i}
             edit_data={profile_info_obj[i] || null}
             rules={rules[i] || null}
             opt_obj={opt_obj || null}

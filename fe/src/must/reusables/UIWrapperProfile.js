@@ -4,14 +4,14 @@ import EditIcon from "@mui/icons-material/Edit";
 import { useNavigate } from "react-router-dom";
 import { SelectedIcon } from "../back_tile_route/PreviewProfile";
 
-export default function UIWrapperProfile({ edit_data, rules, opt_obj }) {
+export default function UIWrapperProfile({ object_key, edit_data, rules, opt_obj }) {
   console.log("family_detadfils", edit_data, rules);
 
   const handleEditClick = () => {
     const new_rules = rules;
     delete new_rules["extra"];
     navigate("/edit_profile", {
-      state: { edit_data: edit_data, rules: new_rules, opt_obj },
+      state: { edit_data: edit_data, rules: new_rules, opt_obj,object_key },
     });
   };
   const navigate = useNavigate();
