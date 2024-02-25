@@ -72,8 +72,14 @@ export default function PreviewProfile() {
   let profile_info_obj = null;
   if (data) {
     //HERE WE CAN EXTRACT THE FIELDS THAT ARE NEEDED TO GENERATE THE RIGHT OBJECT??
-    const { family_info } = data;
-    const new_p_obj = { family_info };
+    const {
+      family_info,
+      father: { company_name, designation, first_name, last_name },
+    } = data;
+    const new_p_obj = {
+      family_info,
+      father: { company_name, designation, first_name, last_name },
+    };
     profile_info_obj = new_p_obj;
   }
 
@@ -156,36 +162,35 @@ export default function PreviewProfile() {
       },
     },
 
+    father: {
+      company_name: {
+        type: "str",
+        edit_type: "str_input",
+        display: true,
+        iconName: "location",
+      },
 
-    // father: {
-    //   company_name: {
-    //     type: "str",
-    //     edit_type: "str_input",
-    //     display: true,
-    //     iconName: "location",
-    //   },
+      designation: {
+        type: "str",
+        edit_type: "str_input",
+        display: true,
+        iconName: "location",
+      },
 
-    //   designation: {
-    //     type: "str",
-    //     edit_type: "str_input",
-    //     display: true,
-    //     iconName: "location",
-    //   },
+      first_name: {
+        type: "str",
+        edit_type: "str_input",
+        display: true,
+        iconName: "location",
+      },
 
-    //   first_name: {
-    //     type: "str",
-    //     edit_type: "str_input",
-    //     display: true,
-    //     iconName: "location",
-    //   },
-
-    //   last_name: {
-    //     type: "str",
-    //     edit_type: "str_input",
-    //     display: true,
-    //     iconName: "location",
-    //   }
-    // },
+      last_name: {
+        type: "str",
+        edit_type: "str_input",
+        display: true,
+        iconName: "location",
+      },
+    },
   };
 
   const locations = [{ title: "Noida" }, { title: "Delhi" }];
@@ -206,28 +211,34 @@ export default function PreviewProfile() {
   }
   return (
     <>
-      {["family_info"].map((i) => (
-        <div
-          style={{
-            margin: "10px",
-            padding: "15px 0",
-            boxShadow: "0px 1px 10px rgba(0, 0, 0, 0.3)",
-          }}
-        >
-          <UIWrapperProfile
-            object_key={i}
-            edit_data={profile_info_obj[i] || null}
-            rules={rules[i] || null}
-            opt_obj={opt_obj || null}
-            iconComponent={
-              <People
-                style={{ fontSize: "24px", color: "magenta", padding: "20px" }}
-              />
-            }
-            manupulated_str={`Manupulated string ${a}`}
-          />
-        </div>
-      ))}
+      {Object.keys(profile_info_obj).map((i) => {
+        return (
+          <div
+            style={{
+              margin: "10px",
+              padding: "15px 0",
+              boxShadow: "0px 1px 10px rgba(0, 0, 0, 0.3)",
+            }}
+          >
+            <UIWrapperProfile
+              object_key={i}
+              edit_data={profile_info_obj[i] || null}
+              rules={rules[i] || null}
+              opt_obj={opt_obj || null}
+              iconComponent={
+                <People
+                  style={{
+                    fontSize: "24px",
+                    color: "magenta",
+                    padding: "20px",
+                  }}
+                />
+              }
+              manupulated_str={`Manupulated string ${a}`}
+            />
+          </div>
+        );
+      })}
     </>
   );
 }

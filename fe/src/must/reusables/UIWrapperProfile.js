@@ -54,40 +54,45 @@ export default function UIWrapperProfile({ object_key, edit_data, rules, opt_obj
     }
   });
 
-  const all_childs_extra = Object.keys(rules["extra"]).map((row) => {
-    // const val = rules['extra']
-    const row_obj = rules["extra"][row];
-    console.log("row_odbj", edit_data);
-    const depends_on_val_obj = {};
-    // row_obj['depends_on'].for_each
-    row_obj["depends_on"].forEach(function (currentValue, index, array) {
-      // Your code here
-      depends_on_val_obj[currentValue] = edit_data[currentValue];
-    });
+  let all_childs_extra = null
 
-    // row_obj['depends_on'].map((i)=>edit_data[i])
-    // const depends_on_val_obj = row_obj['depends_on'].map((i)=>edit_data[i])
-    console.log("hererwer", depends_on_val_obj);
-    return (
-      <div style={{ display: "flex", padding: "10px 0" }}>
-        {row_obj["iconName"] && (
-          <SelectedIcon
-            iconName={row_obj["iconName"]}
-            style_obj={{ fontSize: "24px", color: "magenta", padding: "20px" }}
-          />
-        )}
-        <div>
-          <Typography variant="subtitle2" sx={{ opacity: 0.7, color: "grey" }}>
-            {row_obj["label"] ? row_obj["label"] : row}
-          </Typography>
-          <Typography variant="subtitle2">
-            {/* {val} */}
-            {row_obj["transform"](row_obj["exp"], depends_on_val_obj)}
-          </Typography>
+  if ("extra" in rules){
+
+    all_childs_extra = Object.keys(rules["extra"]).map((row) => {
+      // const val = rules['extra']
+      const row_obj = rules["extra"][row];
+      console.log("row_odbj", edit_data);
+      const depends_on_val_obj = {};
+      // row_obj['depends_on'].for_each
+      row_obj["depends_on"].forEach(function (currentValue, index, array) {
+        // Your code here
+        depends_on_val_obj[currentValue] = edit_data[currentValue];
+      });
+  
+      // row_obj['depends_on'].map((i)=>edit_data[i])
+      // const depends_on_val_obj = row_obj['depends_on'].map((i)=>edit_data[i])
+      console.log("hererwer", depends_on_val_obj);
+      return (
+        <div style={{ display: "flex", padding: "10px 0" }}>
+          {row_obj["iconName"] && (
+            <SelectedIcon
+              iconName={row_obj["iconName"]}
+              style_obj={{ fontSize: "24px", color: "magenta", padding: "20px" }}
+            />
+          )}
+          <div>
+            <Typography variant="subtitle2" sx={{ opacity: 0.7, color: "grey" }}>
+              {row_obj["label"] ? row_obj["label"] : row}
+            </Typography>
+            <Typography variant="subtitle2">
+              {/* {val} */}
+              {row_obj["transform"](row_obj["exp"], depends_on_val_obj)}
+            </Typography>
+          </div>
         </div>
-      </div>
-    );
-  });
+      );
+    })
+  }
 
   return (
     <>
@@ -98,7 +103,7 @@ export default function UIWrapperProfile({ object_key, edit_data, rules, opt_obj
           sx={{ padding: "5px 10px 0 10px" }}
         >
           <Grid item>
-            <div>Family Info</div>
+            <div>{object_key}</div>
           </Grid>
 
           <div style={{ display: "flex" }}>
