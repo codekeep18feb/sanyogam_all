@@ -35,7 +35,7 @@ def update_my_profile(profile_update_data, **kwargs):
     family_info = profile_update_data.get('family_info',None)
     father = profile_update_data.get('father',None)
     form_components = profile_update_data.get('form_components',None)
-    print("family_info",family_info,gender,fname,me.profile.family_info)
+    print("family_info form_components",form_components)
     
     
     # profile = Profile.query.filter_by(id=id).first()

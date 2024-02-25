@@ -4,7 +4,7 @@ from config import db, ma
 from marshmallow import fields
 from sqlalchemy import event,Enum  # Add this import statement
 from .user import User
-from .profile import Profile, FamilyInformation, Father
+from .profile import Profile, FamilyInformation, Father, AllFormComp
 from .requests import ChatHistory, OnlineStatusEnumField, ProfileRequests, RTCUserInfo, ChatBriefRec
 
 
@@ -45,6 +45,14 @@ class FatherSchema(ma.SQLAlchemyAutoSchema):
         sqla_session = db.session
         include_relationships = True
 
+
+class AllFormCompSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = AllFormComp
+        load_instance = True
+        sqla_session = db.session
+        include_relationships = True
+
 class ProfileSchema(ma.SQLAlchemyAutoSchema):
     user_email = fields.String(attribute="user.email")
     user_fname = fields.String(attribute="user.fname")
@@ -53,6 +61,7 @@ class ProfileSchema(ma.SQLAlchemyAutoSchema):
 
     family_info = fields.Nested(FamilyInformationSchema)
     father = fields.Nested(FatherSchema)
+    form_components = fields.Nested(AllFormCompSchema)
 
     class Meta:
         model = Profile

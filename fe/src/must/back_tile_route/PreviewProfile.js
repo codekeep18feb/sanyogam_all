@@ -177,6 +177,16 @@ export default function PreviewProfile() {
         iconName: "location",
       },
     },
+
+    form_components: {
+      first_name: {
+        type: "str",
+        edit_type: "str_input",
+        display: true,
+        iconName: "people",
+      }
+    },
+    
   };
 
   

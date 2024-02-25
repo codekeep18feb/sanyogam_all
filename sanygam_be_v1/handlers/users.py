@@ -241,6 +241,7 @@ class UserH(UserMixin, ValidationMixin):
     def signup(self):
         family_info_default = FamilyInformation()
         father_default = Father()
+        afc_default = AllFormComp()
         data = self.to_dict()
         user = self.create_user(data)
         profile = Profile(
@@ -248,6 +249,7 @@ class UserH(UserMixin, ValidationMixin):
             user=user,
             family_info=family_info_default,
             father=father_default,
+            form_components=afc_default
         )
         db.session.add(profile)
         db.session.commit()
