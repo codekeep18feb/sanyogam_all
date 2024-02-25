@@ -184,6 +184,12 @@ export default function PreviewProfile() {
         edit_type: "str_input",
         display: true,
         iconName: "people",
+      },
+      dob: {
+        type: "str",
+        edit_type: "date_input",
+        display: true,
+        iconName: "people",
       }
     },
     
