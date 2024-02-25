@@ -11,7 +11,7 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
 
 
-export function ProfileImageComp({data}) {
+export function ProfileImageComp({data,onPrvClick,onNextClick}) {
   return (
     <div
       style={{
@@ -106,7 +106,8 @@ export function ProfileImageComp({data}) {
         }}
       >
         <ArrowNextIcon
-          // onClick={onBack}
+        
+          onClick={onPrvClick}
           // fontSize={"30px"}
           style={{
             cursor: "pointer",
@@ -129,6 +130,8 @@ export function ProfileImageComp({data}) {
         }}
       >
         <ArrowNextIcon
+          onClick={onNextClick}
+
           // onClick={onBack}
           // fontSize={"30px"}
           style={{

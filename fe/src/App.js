@@ -480,7 +480,17 @@ function App({ login, auth_data }) {
           }
         />
 
-        <Route path="/profile_detail/:id" element={<ProfileDetail />} />
+        <Route path="/profile_detail/:id" element={
+        
+        <PrivateRoute>
+        <WrapperMobileShell>
+        <ProfileDetail />
+        </WrapperMobileShell>
+      </PrivateRoute>
+      
+      }
+
+         />
         <Route
           path="/all_users"
           element={

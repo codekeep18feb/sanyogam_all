@@ -92,6 +92,9 @@ export default function ProfileDetail() {
         <p>Email: {profileDetail.user_email}</p> */}
         <div style={{ marginTop: "20px" }}>
           <ProfileImageComp
+            
+            onPrvClick={goToPreviousProfile}
+            onNextClick={goToNextProfile}
             data={{
               name: "pulkot soni",
               location: "noida",
