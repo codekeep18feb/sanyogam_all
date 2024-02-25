@@ -19,6 +19,21 @@ const NumberField = ({ id, label, defaultValue = 0, onChange, state_name }) => (
   />
 );
 
+const TextInputField = ({ id, label, defaultValue = 0, onChange, state_name }) => (
+  <TextField
+    id={id}
+    label={label}
+    type="string"
+    InputLabelProps={{
+      shrink: true,
+    }}
+    variant="standard"
+    defaultValue={defaultValue} // Add this line to set the default value
+    onChange={(e) => onChange(e, state_name, "str_input")}
+    // fullWidth={true}
+  />
+);
+
 const AutocompleteField = ({
   options,
   id,
@@ -38,45 +53,45 @@ const AutocompleteField = ({
   />
 );
 
-const submitProfileUpdateData = async (payload) => {
-  console.log("am I being payload", payload);
-  const JWT_TOKEN = localStorage.getItem("token");
-  const token = `Bearer ${JWT_TOKEN}`;
+// const submitProfileUpdateData = async (payload) => {
+//   console.log("am I being payload", payload);
+//   const JWT_TOKEN = localStorage.getItem("token");
+//   const token = `Bearer ${JWT_TOKEN}`;
 
-  try {
-    const response = await fetch(
-      `http://192.168.1.2:8000/api/update_my_profile`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: token,
-        },
-        body: JSON.stringify({
-          gender: "FeMale",
-          family_info1: { no_of_sisters: 10000 },
-        }),
-      }
-    );
+//   try {
+//     const response = await fetch(
+//       `http://192.168.1.2:8000/api/update_my_profile`,
+//       {
+//         method: "POST",
+//         headers: {
+//           "Content-Type": "application/json",
+//           Authorization: token,
+//         },
+//         body: JSON.stringify({
+//           gender: "FeMale",
+//           family_info1: { no_of_sisters: 10000 },
+//         }),
+//       }
+//     );
 
-    if (response.status === 200) {
-      const data = await response.json();
-      console.log("successfully updated profile", data);
-    } else {
-      console.log("Error updating profile");
-    }
-  } catch (error) {
-    console.error("An error occurred:", error);
-  } finally {
-    console.log("we can toggle loading if want");
-    // setLoading(false);
-  }
-};
+//     if (response.status === 200) {
+//       const data = await response.json();
+//       console.log("successfully updated profile", data);
+//     } else {
+//       console.log("Error updating profile");
+//     }
+//   } catch (error) {
+//     console.error("An error occurred:", error);
+//   } finally {
+//     console.log("we can toggle loading if want");
+//     // setLoading(false);
+//   }
+// };
 
 const EditFamilyForm = () => {
   const nagivate = useNavigate();
   const { state } = useLocation();
-  const family_details = state && state.family_details;
+  const edit_data = state && state.edit_data;
   const opt_obj = state && state.opt_obj;
   const rules = state && state.rules;
   const [formValues, setFormValues] = useState({});
@@ -100,7 +115,7 @@ const EditFamilyForm = () => {
     });
   };
 
-  const all_childs = Object.keys(family_details).map((row) => {
+  const all_childs = Object.keys(edit_data).map((row) => {
     if (rules[row]["edit_type"] === "num_input") {
       return (
         <div>
@@ -109,11 +124,26 @@ const EditFamilyForm = () => {
             onChange={handleOnChange}
             id={rules[row]["label"] || row}
             label={rules[row]["label"] || row}
-            defaultValue={family_details[row]}
+            defaultValue={edit_data[row]}
           />
         </div>
       );
     }
+
+    if (rules[row]["edit_type"] === "str_input") {
+      return (
+        <div>
+          <TextInputField
+            state_name={row}
+            onChange={handleOnChange}
+            id={rules[row]["label"] || row}
+            label={rules[row]["label"] || row}
+            defaultValue={edit_data[row]}
+          />
+        </div>
+      );
+    }
+
     if (rules[row]["edit_type"] === "dropdown") {
       return (
         <div>
@@ -123,7 +153,7 @@ const EditFamilyForm = () => {
             id={row}
             label={row}
             state_name={row}
-            defaultValue={family_details[row]}
+            defaultValue={edit_data[row]}
           />
 
         </div>
@@ -131,7 +161,7 @@ const EditFamilyForm = () => {
     }
   });
 
-  const onSave = async () => {
+  const onSave = async (family_info) => {
     console.log("onsave ran here we can see the ", { family_info: formValues });
     // const data = await submitProfileUpdateData({family_info:formValues})
     const JWT_TOKEN = localStorage.getItem("token");
@@ -159,7 +189,9 @@ const EditFamilyForm = () => {
   };
 
   return (
-    <WrapperMobileBackShellWithSave title={"Family Details"} onSave={onSave}>
+    <WrapperMobileBackShellWithSave title={"Edit "+"family_info"} onSave={()=>{
+      onSave("family_info")
+    }}>
       <div style={{ padding: "10px" }}>
         <Grid container flexDirection={"column"}>
           {all_childs}

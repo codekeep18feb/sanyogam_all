@@ -4,20 +4,20 @@ import EditIcon from "@mui/icons-material/Edit";
 import { useNavigate } from "react-router-dom";
 import { SelectedIcon } from "../back_tile_route/PreviewProfile";
 
-export default function UIWrapperProfile({ family_details, rules, opt_obj }) {
-  console.log("family_detadfils", family_details, rules);
+export default function UIWrapperProfile({ edit_data, rules, opt_obj }) {
+  console.log("family_detadfils", edit_data, rules);
 
   const handleEditClick = () => {
     const new_rules = rules;
     delete new_rules["extra"];
     navigate("/edit_profile", {
-      state: { family_details: family_details, rules: new_rules, opt_obj },
+      state: { edit_data: edit_data, rules: new_rules, opt_obj },
     });
   };
   const navigate = useNavigate();
 
-  const all_childs = Object.keys(family_details).map((row) => {
-    const val = family_details[row];
+  const all_childs = Object.keys(edit_data).map((row) => {
+    const val = edit_data[row];
     const rule = rules[row];
     const display = rule["display"];
     console.log("HWERWEQ", rules, row, val);
@@ -57,16 +57,16 @@ export default function UIWrapperProfile({ family_details, rules, opt_obj }) {
   const all_childs_extra = Object.keys(rules["extra"]).map((row) => {
     // const val = rules['extra']
     const row_obj = rules["extra"][row];
-    console.log("row_odbj", family_details);
+    console.log("row_odbj", edit_data);
     const depends_on_val_obj = {};
     // row_obj['depends_on'].for_each
     row_obj["depends_on"].forEach(function (currentValue, index, array) {
       // Your code here
-      depends_on_val_obj[currentValue] = family_details[currentValue];
+      depends_on_val_obj[currentValue] = edit_data[currentValue];
     });
 
-    // row_obj['depends_on'].map((i)=>family_details[i])
-    // const depends_on_val_obj = row_obj['depends_on'].map((i)=>family_details[i])
+    // row_obj['depends_on'].map((i)=>edit_data[i])
+    // const depends_on_val_obj = row_obj['depends_on'].map((i)=>edit_data[i])
     console.log("hererwer", depends_on_val_obj);
     return (
       <div style={{ display: "flex", padding: "10px 0" }}>

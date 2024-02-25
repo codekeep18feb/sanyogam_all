@@ -215,7 +215,7 @@ export default function PreviewProfile() {
           }}
         >
           <UIWrapperProfile
-            family_details={profile_info_obj[i] || null}
+            edit_data={profile_info_obj[i] || null}
             rules={rules[i] || null}
             opt_obj={opt_obj || null}
             iconComponent={
