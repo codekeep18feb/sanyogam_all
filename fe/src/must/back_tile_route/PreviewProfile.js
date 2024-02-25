@@ -190,6 +190,12 @@ export default function PreviewProfile() {
         edit_type: "date_input",
         display: true,
         iconName: "people",
+      },
+      tob: {
+        type: "str",
+        edit_type: "time_input",
+        display: true,
+        iconName: "people",
       }
     },
     

@@ -7,6 +7,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import moment from "moment";
+import { TimePicker } from "@mui/x-date-pickers";
 
 const NumberField = ({ id, label, defaultValue = 0, onChange, state_name }) => (
   <TextField
@@ -68,6 +69,30 @@ const DateInputField = ({
     />
   </LocalizationProvider>
 );
+
+const TimeInputField = ({
+  id,
+  label,
+  defaultValue = "",
+  onChange,
+  state_name,
+}) => (
+  <LocalizationProvider dateAdapter={AdapterDayjs}>
+    <TimePicker
+      value={defaultValue}
+      onChange={(new_value) => {
+        console.log("AREWAREWR", new_value, state_name, "date", new_value);
+        let date = new_value; // value from your state
+        let formattedDate = moment(date).format("HH:MM");
+        console.log(date); // before: Sat Jul 17 2021 12:21:00
+        console.log("formattedDate", formattedDate); // after: 17/07/2021
+        onChange(state_name, "date", formattedDate);
+      }}
+    />
+  </LocalizationProvider>
+);
+
+
 
 const AutocompleteField = ({
   options,
@@ -183,6 +208,20 @@ const EditForm = () => {
       );
     }
 
+    if (rules[row]["edit_type"] === "time_input") {
+      return (
+        <div>
+          <TimeInputField
+            state_name={row}
+            onChange={handleOnChange}
+            id={rules[row]["label"] || row}
+            label={rules[row]["label"] || row}
+            defaultValue={edit_data[row]}
+          />
+        </div>
+      );
+    }
+
     if (rules[row]["edit_type"] === "str_input") {
       return (
         <div>
@@ -214,7 +253,7 @@ const EditForm = () => {
   });
 
   const onSave = async (family_info) => {
-    console.log("onsave ran here we can see the ", { family_info: formValues });
+    console.log("onsave ran here we can see the ", { [family_info]: formValues });
     // const data = await submitProfileUpdateData({family_info:formValues})
     const JWT_TOKEN = localStorage.getItem("token");
     const token = `Bearer ${JWT_TOKEN}`;
@@ -226,7 +265,7 @@ const EditForm = () => {
           "Content-Type": "application/json",
           Authorization: token,
         },
-        body: JSON.stringify({ family_info: formValues }),
+        body: JSON.stringify({ [family_info]: formValues }),
       }
     );
 

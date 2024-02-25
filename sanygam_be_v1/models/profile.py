@@ -62,8 +62,8 @@ class AllFormComp(db.Model):
     profile = db.relationship('Profile', back_populates='form_components')
     first_name = db.Column(db.String(50), default=None)
     age = db.Column(db.String(50), default=None)
-    dob = db.Column(db.Date(), default=None)
-    tob  = db.Column(db.Time, default=None)
+    dob = db.Column(db.String(20), default=None)
+    tob  = db.Column(db.String(50), default=None)
     drop = db.Column(db.String(50), default=None)
     radio = db.Column(Enum(radioEnum))
 
