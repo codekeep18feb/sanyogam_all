@@ -70,20 +70,6 @@ export default function PreviewProfile() {
   }, []);
 
   let profile_info_obj = null;
-  if (data) {
-    //HERE WE CAN EXTRACT THE FIELDS THAT ARE NEEDED TO GENERATE THE RIGHT OBJECT??
-    const {
-      family_info,
-      father: { company_name, designation, first_name, last_name },
-    } = data;
-    const new_p_obj = {
-      family_info,
-      father: { company_name, designation, first_name, last_name },
-    };
-    profile_info_obj = new_p_obj;
-  }
-
-  console.log("here is profile_info_obj", profile_info_obj);
   const a = "variable";
 
   const transform_content = (expression, values) => {
@@ -193,6 +179,41 @@ export default function PreviewProfile() {
     },
   };
 
+  
+  if (data) {
+    //HERE WE CAN EXTRACT THE FIELDS THAT ARE NEEDED TO GENERATE THE RIGHT OBJECT??
+    const rules_keys_obj = {}
+    Object.keys(rules).forEach(key=>{
+      const sub_obj = JSON.parse(JSON.stringify(rules[key]))
+      if('extra' in sub_obj){
+        delete sub_obj['extra']
+      }
+      rules_keys_obj[key]=sub_obj
+    
+    })
+      
+
+    
+    console.log('dow ehave it rules_keys_obj',rules_keys_obj)
+ 
+    let new_p_obj= {}
+    for (const o_key in rules_keys_obj) {
+      const sub_data_obj = data[o_key]
+      new_p_obj[o_key]={}
+      for (const i_key in rules_keys_obj[o_key]) {
+        if (i_key in sub_data_obj){
+          new_p_obj[o_key][i_key]=sub_data_obj[i_key]
+        }
+ 
+      }
+    }
+
+    console.log('arewhereherenownew_p_obj',new_p_obj)
+    profile_info_obj = new_p_obj;
+  }
+
+  console.log("here is profile_info_obj", profile_info_obj);
+  
   const locations = [{ title: "Noida" }, { title: "Delhi" }];
   const affluenceOptions = [
     { title: "LOWER_MIDDLE_CLASS" },
