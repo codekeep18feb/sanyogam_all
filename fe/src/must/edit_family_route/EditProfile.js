@@ -1,15 +1,12 @@
-
-
 import React, { useEffect, useState } from "react";
 import { Autocomplete, TextField, Grid, Typography } from "@mui/material";
 import { useLocation } from "react-router-dom";
 import WrapperMobileBackShellWithSave from "./WrapperMobileBackShellWithSave";
 import { useNavigate } from "react-router-dom";
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import moment from "moment";
-
 
 const NumberField = ({ id, label, defaultValue = 0, onChange, state_name }) => (
   <TextField
@@ -21,17 +18,18 @@ const NumberField = ({ id, label, defaultValue = 0, onChange, state_name }) => (
     }}
     variant="standard"
     defaultValue={defaultValue} // Add this line to set the default value
-    onChange={(e) => onChange(e, state_name, "number_input")}
+    onChange={(e) => onChange(state_name, "number_input", e.target.value)}
     // fullWidth={true}
   />
 );
 
-
-
-
-
-
-const TextInputField = ({ id, label, defaultValue = 0, onChange, state_name }) => (
+const TextInputField = ({
+  id,
+  label,
+  defaultValue = 0,
+  onChange,
+  state_name,
+}) => (
   <TextField
     id={id}
     label={label}
@@ -42,36 +40,34 @@ const TextInputField = ({ id, label, defaultValue = 0, onChange, state_name }) =
     variant="standard"
     defaultValue={defaultValue} // Add this line to set the default value
     onChange={(e) => {
-      console.log('HERE IS EVENT IN TEXT',e.target.value)
-      onChange(e, state_name, "str_input")
+      console.log("HERE IS EVENT IN TEXT", e.target.value);
+      onChange(state_name, "str_input", e.target.value);
     }}
     // fullWidth={true}
   />
 );
 
-const DateInputField = ({ id, label, defaultValue = "", onChange, state_name }) => (
- 
-
+const DateInputField = ({
+  id,
+  label,
+  defaultValue = "",
+  onChange,
+  state_name,
+}) => (
   <LocalizationProvider dateAdapter={AdapterDayjs}>
-  <DatePicker
-  
-  value={defaultValue}
-
-
-
-  onChange={(new_value) => {
-    console.log('AREWAREWR',new_value, state_name, "date", new_value)
-    let date = new_value; // value from your state
-    let formattedDate = moment(date).format('DD/MM/YYYY');
-    console.log(date) // before: Sat Jul 17 2021 12:21:00
-    console.log('formattedDate',formattedDate) // after: 17/07/2021
-    onChange(new_value, state_name, "date", formattedDate)
-  }}
-
-/>
-</LocalizationProvider>
+    <DatePicker
+      value={defaultValue}
+      onChange={(new_value) => {
+        console.log("AREWAREWR", new_value, state_name, "date", new_value);
+        let date = new_value; // value from your state
+        let formattedDate = moment(date).format("DD/MM/YYYY");
+        console.log(date); // before: Sat Jul 17 2021 12:21:00
+        console.log("formattedDate", formattedDate); // after: 17/07/2021
+        onChange(state_name, "date", formattedDate);
+      }}
+    />
+  </LocalizationProvider>
 );
-
 
 const AutocompleteField = ({
   options,
@@ -85,7 +81,7 @@ const AutocompleteField = ({
     options={options.map((option) => option.title)}
     id={id}
     value={defaultValue} // Set the default value
-    onChange={(e, new_value) => onChange(e, state_name, "dropdown", new_value)}
+    onChange={(e, new_value) => onChange(state_name, "dropdown", new_value)}
     renderInput={(params) => (
       <TextField {...params} label={label} variant="standard" />
     )}
@@ -134,26 +130,24 @@ const EditForm = () => {
   const opt_obj = state && state.opt_obj;
   const rules = state && state.rules;
   const object_key = state && state.object_key;
-  
+
   const [formValues, setFormValues] = useState({});
 
-
-
   console.log(rules, "family_deadtailedit_datasdafd", edit_data);
-  const handleOnChange = (e, state_name, type, new_value = false) => {
+  const handleOnChange = (state_name, type, new_value) => {
     // e.preventDefault();
     console.log("thisstate_name changed", type);
     setFormValues((prv) => {
       const obj = JSON.parse(JSON.stringify(prv));
-      if (type === "dropdown") {
-        obj[state_name] = new_value;
-      } 
-      else if (type === "date") {
-        obj[state_name] = new_value;
-      }
-      else {
-        obj[state_name] = e.target.value;
-      }
+      obj[state_name] = new_value;
+
+      // if (type === "dropdown") {
+      //   obj[state_name] = new_value;
+      // } else if (type === "date") {
+      //   obj[state_name] = new_value;
+      // } else {
+      //   obj[state_name] = new_value;
+      // }
 
       // console.log("hereisprv", prv, state_name, e.target.value);
       return obj;
@@ -214,7 +208,6 @@ const EditForm = () => {
             state_name={row}
             defaultValue={edit_data[row]}
           />
-
         </div>
       );
     }
@@ -248,9 +241,12 @@ const EditForm = () => {
   };
 
   return (
-    <WrapperMobileBackShellWithSave title={"Edit "+object_key} onSave={()=>{
-      onSave(object_key)
-    }}>
+    <WrapperMobileBackShellWithSave
+      title={"Edit " + object_key}
+      onSave={() => {
+        onSave(object_key);
+      }}
+    >
       <div style={{ padding: "10px" }}>
         <Grid container flexDirection={"column"}>
           {all_childs}
