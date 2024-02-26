@@ -52,6 +52,7 @@ import LoggedinHome from "./must/homeroute/LoggedinHome.js";
 // import ProfileBriefTile from './screen/ProfileBriefTile.js';
 import AllUsers from "./must/all_users_route/AllUsers";
 import ProfileDetail from "./must/all_users_route/ProfileDetail";
+import POCVanilaTextChat from "./must/poc/POCVanilaTextChat.js";
 import Inbox from "./must/inbox_route/Inbox.js";
 
 const MaterialUX = () => {
@@ -485,12 +486,16 @@ function App({ login, auth_data }) {
         <PrivateRoute>
         <WrapperMobileShell>
         <ProfileDetail />
+
         </WrapperMobileShell>
       </PrivateRoute>
       
       }
 
          />
+
+        <Route path="/poc" element={<POCVanilaTextChat />} />
+
         <Route
           path="/all_users"
           element={
