@@ -21,7 +21,7 @@ function Login({ login, logout }) {
 
   const handleLogin = async () => {
     try {
-      const response = await fetch("http://192.168.1.2:8000/api/login", {
+      const response = await fetch("http://192.168.1.5:8000/api/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -34,7 +34,7 @@ function Login({ login, logout }) {
         // Save the token to local storage
 
         if (data) {
-          const response = await fetch("http://192.168.1.2:8000/api/me", {
+          const response = await fetch("http://192.168.1.5:8000/api/me", {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
@@ -69,7 +69,7 @@ function Login({ login, logout }) {
         setError("Invalid email or password");
       }
 
-      // const response2 = await fetch('http://192.168.1.2:8000/api/profiles', {
+      // const response2 = await fetch('http://192.168.1.5:8000/api/profiles', {
       //   method: 'GET',
       //   headers: {
       //     'Content-Type': 'application/json',

@@ -13,7 +13,7 @@ export default function Inbox() {
     const token = `Bearer ${JWT_TOKEN}`;
 
     const response = await fetch(
-      `http://192.168.1.2:8000/api/filter_profiles_v1?req_status=${suffix}`,
+      `http://192.168.1.5:8000/api/filter_profiles_v1?req_status=${suffix}`,
       {
         method: "GET",
         headers: {

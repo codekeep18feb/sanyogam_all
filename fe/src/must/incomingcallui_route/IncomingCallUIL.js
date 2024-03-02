@@ -18,7 +18,7 @@ function IncomingCallUIL({
   const sendAGlobalEventApi = async (with_userid, token, data) => {
     try {
       const response = await fetch(
-        `http://192.168.1.2:8001/new_global_event_data/${with_userid}`,
+        `http://192.168.1.5:8001/new_global_event_data/${with_userid}`,
         {
           method: "POST",
           headers: {
@@ -59,7 +59,7 @@ function IncomingCallUIL({
   // console.log("this shoudl not rerender if other twos are toaking", videoMode);
 
   const [socket, setSocket] = useState(
-    io.connect("http://192.168.1.13:8000", {
+    io.connect("ws://192.168.1.13:8000", {
       query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     })
   );
@@ -256,7 +256,7 @@ function IncomingCallUIL({
                   <PhoneCallUI
                     // callStatus={"INITIALIZING"}
                     pickUpTheCall={pickUpTheCall}
-                    // incoming_call_data.to_userid={incoming_call_data.to_userid}
+                  // incoming_call_data.to_userid={incoming_call_data.to_userid}
                   />
                 )}
 

@@ -45,7 +45,7 @@ function HeaderMobileBack({ auth_data, logout, title }) {
       const token = `Bearer ${JWT_TOKEN}`;
       console.log("token", token);
 
-      const response = await fetch("http://192.168.1.2:8000/api/logout", {
+      const response = await fetch("http://192.168.1.5:8000/api/logout", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

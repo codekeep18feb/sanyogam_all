@@ -30,7 +30,7 @@ export const SelectedIcon = ({ iconName = "missing", style_obj }) => {
   }
 };
 
-export default function PreviewProfile({non_editable}) {
+export default function PreviewProfile({ non_editable }) {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState(null);
   const fetchProfileData = async () => {
@@ -39,7 +39,7 @@ export default function PreviewProfile({non_editable}) {
     const token = `Bearer ${JWT_TOKEN}`;
 
     try {
-      const response = await fetch(`http://192.168.1.2:8000/api/my_profile`, {
+      const response = await fetch(`http://192.168.1.5:8000/api/my_profile`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -198,44 +198,44 @@ export default function PreviewProfile({non_editable}) {
         iconName: "people",
       }
     },
-    
+
   };
 
-  
+
   if (data) {
     //HERE WE CAN EXTRACT THE FIELDS THAT ARE NEEDED TO GENERATE THE RIGHT OBJECT??
     const rules_keys_obj = {}
-    Object.keys(rules).forEach(key=>{
+    Object.keys(rules).forEach(key => {
       const sub_obj = JSON.parse(JSON.stringify(rules[key]))
-      if('extra' in sub_obj){
+      if ('extra' in sub_obj) {
         delete sub_obj['extra']
       }
-      rules_keys_obj[key]=sub_obj
-    
-    })
-      
+      rules_keys_obj[key] = sub_obj
 
-    
-    console.log('dow ehave it rules_keys_obj',rules_keys_obj)
- 
-    let new_p_obj= {}
+    })
+
+
+
+    console.log('dow ehave it rules_keys_obj', rules_keys_obj)
+
+    let new_p_obj = {}
     for (const o_key in rules_keys_obj) {
       const sub_data_obj = data[o_key]
-      new_p_obj[o_key]={}
+      new_p_obj[o_key] = {}
       for (const i_key in rules_keys_obj[o_key]) {
-        if (i_key in sub_data_obj){
-          new_p_obj[o_key][i_key]=sub_data_obj[i_key]
+        if (i_key in sub_data_obj) {
+          new_p_obj[o_key][i_key] = sub_data_obj[i_key]
         }
- 
+
       }
     }
 
-    console.log('arewhereherenownew_p_obj',new_p_obj)
+    console.log('arewhereherenownew_p_obj', new_p_obj)
     profile_info_obj = new_p_obj;
   }
 
   console.log("here is profile_info_obj", profile_info_obj);
-  
+
   const locations = [{ title: "Noida" }, { title: "Delhi" }];
   const affluenceOptions = [
     { title: "LOWER_MIDDLE_CLASS" },
@@ -257,17 +257,17 @@ export default function PreviewProfile({non_editable}) {
       {Object.keys(profile_info_obj).map((i) => {
         return (
           <div
-            style={non_editable?{
+            style={non_editable ? {
               margin: "10px",
               padding: "15px 0",
               boxShadow: "0px 1px 10px rgba(0, 0, 0, 0.3)",
-            }:{
+            } : {
               margin: "10px",
               padding: "15px 0",
             }}
           >
             <UIWrapperProfile
-            non_editable={non_editable}
+              non_editable={non_editable}
               object_key={i}
               edit_data={profile_info_obj[i] || null}
               rules={rules[i] || null}

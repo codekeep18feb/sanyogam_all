@@ -97,7 +97,7 @@ const withGlobalSocket = (Component) => {
       auth_data
     );
     const [socket, setSocket] = useState(
-      io.connect("http://192.168.1.2:8001", {
+      io.connect("ws://192.168.1.5:8001", {
         query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       })
     );
@@ -264,7 +264,7 @@ const withGlobalSocket = (Component) => {
         setIncomingCall={setIncomingCall}
         // loading={loading}
         {...props}
-        // with_userid={with_userid}
+      // with_userid={with_userid}
       />
     );
   };
@@ -273,7 +273,7 @@ const withGlobalSocket = (Component) => {
 const getRequestUID = async (with_userid, token) => {
   try {
     const response = await fetch(
-      `http://192.168.1.2:8000/api/get_request_info_by_id/${with_userid}`,
+      `http://192.168.1.5:8000/api/get_request_info_by_id/${with_userid}`,
       {
         method: "GET",
         headers: {
@@ -337,7 +337,7 @@ function App({ login, auth_data }) {
 
   useEffect(() => {
     if (!gSocket && auth_data) {
-      const newSocket = io.connect("http://192.168.1.2:8001", {
+      const newSocket = io.connect("ws://192.168.1.5:8001", {
         query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
 
@@ -482,17 +482,17 @@ function App({ login, auth_data }) {
         />
 
         <Route path="/profile_detail/:id" element={
-        
-        <PrivateRoute>
-        <WrapperMobileShell>
-        <ProfileDetail />
 
-        </WrapperMobileShell>
-      </PrivateRoute>
-      
-      }
+          <PrivateRoute>
+            <WrapperMobileShell>
+              <ProfileDetail />
 
-         />
+            </WrapperMobileShell>
+          </PrivateRoute>
+
+        }
+
+        />
 
         <Route path="/poc" element={<POCVanilaTextChat />} />
 
@@ -547,7 +547,7 @@ function App({ login, auth_data }) {
           path="/preview_profile"
           element={
             <WrapperMobileBackShell title={"Preview Profile"}>
-              <PreviewProfile non_editable={true}/>
+              <PreviewProfile non_editable={true} />
             </WrapperMobileBackShell>
           }
         />
@@ -559,8 +559,8 @@ function App({ login, auth_data }) {
             // </WrapperMobileBackShellWithSave>
           }
         />
-      
-      <Route
+
+        <Route
           path="/playground"
           element={
             // <WrapperMobileBackShellWithSave title={"Family Details"}>
