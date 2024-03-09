@@ -1,6 +1,6 @@
 
 import json
-from models import User
+# from models import User
 from flask import request
 from functools import wraps
 from config import db, decode_token
@@ -18,14 +18,14 @@ def authenticate(func):
         decoded = decode_token(token)
         decoded_data_str = decoded['sub']
         json_dec_data = json.loads(decoded_data_str)
-        me = User.query.filter_by(email=json_dec_data['email']).first()
+        # me = User.query.filter_by(email=json_dec_data['email']).first()
 
         # print('ME.PROFILE', me.profile)
 
         # You may want to modify the following line depending on your use case
         
         # Add 'me' to kwargs
-        kwargs['me'] = me
+        kwargs['me'] = "mehard"
         
         return func(*args, **kwargs)
 

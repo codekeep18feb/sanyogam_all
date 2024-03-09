@@ -1,6 +1,6 @@
 
 import json
-from models import User
+# from models import User
 from flask import request
 from functools import wraps
 from config import db, decode_token

@@ -9,7 +9,7 @@ from flask import render_template,abort,jsonify # Remove: import Flask
 # import config
 
 from datetime import datetime
-from models import User, Profile,ProfileSchema, chat_histories_schema, profiles_schema, ChatHistory
+# from models import Profile,ProfileSchema, chat_histories_schema, profiles_schema, ChatHistory
 from sqlalchemy import or_, and_
 
 import json
@@ -18,7 +18,7 @@ from flask_migrate import Migrate
 # from flask_socketio import SocketIO, emit  # Import SocketIO
 from flask_socketio import SocketIO, join_room, disconnect
 from flask import request
-from handlers.profiles import handle_filtering
+# from handlers.profiles import handle_filtering
 
 from config import app, db,decode_token, socketio, connex_app,basedir  # Assuming your Flask app instance is named 'app'
 migrate = Migrate(app, db)
@@ -51,7 +51,7 @@ from common.utils import DictWithDotAccess
 # s_pool = []
 
 # async def make_me_api_call(authorization_token):
-#     api_url = 'http://192.168.1.2:3000/api/me'
+#     api_url = 'http://192.168.1.10:3000/api/me'
 
 #     headers = {
 #         'Authorization': f'{authorization_token}',
@@ -69,7 +69,7 @@ from common.utils import DictWithDotAccess
 
 
 # async def make_all_profiles_api_call(authorization_token, request_data):
-#     api_url = 'http://192.168.1.2:3000/api/fetch_online_profiles'
+#     api_url = 'http://192.168.1.10:3000/api/fetch_online_profiles'
 
 #     headers = {
 #         'Authorization': f'{authorization_token}',

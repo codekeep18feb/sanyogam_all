@@ -21,7 +21,7 @@ const makeTriggerCall = async (with_userid, frm_id, message) => {
     const token = `Bearer ${JWT_TOKEN}`;
     console.log("dsfhere is with_userid", with_userid);
     const response = await fetch(
-      `http://192.168.1.2:8001/new_data_event_trigger/${with_userid}`,
+      `http://192.168.1.10:8001/new_data_event_trigger/${with_userid}`,
       {
         method: "POST",
         headers: {
@@ -78,7 +78,7 @@ const useStyles = makeStyles({
 const sendAGlobalEventApi = async (with_userid, token, data) => {
   try {
     const response = await fetch(
-      `http://192.168.1.2:8001/new_global_event_data/${with_userid}`,
+      `http://192.168.1.10:8001/new_global_event_data/${with_userid}`,
       {
         method: "POST",
         headers: {
@@ -144,7 +144,7 @@ const ChatsEditor = ({ SetWithUserId, auth_data, with_userid, all_chats }) => {
   const sendAGlobalEventApi = async (with_userid, token, data) => {
     try {
       const response = await fetch(
-        `http://192.168.1.2:8001/new_global_event_data/${with_userid}`,
+        `http://192.168.1.10:8001/new_global_event_data/${with_userid}`,
         {
           method: "POST",
           headers: {
@@ -559,7 +559,7 @@ const ChatsEditor = ({ SetWithUserId, auth_data, with_userid, all_chats }) => {
         <PhoneCallUI callStatus={callStatus} with_userid={with_userid} />
       )}
 
-      
+
       <div
         style={{
           border: "1px solid red",

@@ -12,8 +12,8 @@ class Profile(db.Model):
     __tablename__ = "profile"
     id = db.Column(db.Integer, primary_key=True)
     gender = db.Column(db.String(16))
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    user = db.relationship('User', back_populates='profile')
+    user_id = db.Column(db.Integer)
+    # user = db.relationship('User', back_populates='profile')
     image = db.Column(db.String(200))
     family_info = db.relationship('FamilyInformation', uselist=False, back_populates='profile')
     chat_brief_rec = db.relationship('ChatBriefRec', uselist=False, back_populates='profile')

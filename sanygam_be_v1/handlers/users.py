@@ -239,9 +239,9 @@ class UserH(UserMixin, ValidationMixin):
         }
 
     def signup(self):
-        family_info_default = FamilyInformation()
-        father_default = Father()
-        afc_default = AllFormComp()
+        # family_info_default = FamilyInformation()
+        # father_default = Father()
+        # afc_default = AllFormComp()
         data = self.to_dict()
         user = self.create_user(data)
         profile = Profile(
@@ -268,19 +268,22 @@ class UserH(UserMixin, ValidationMixin):
             return user_dict
 
     def logout(self):
-        user = self.get_user(self.email)
-        user.online = False
-        db.session.add(user)
-        db.session.commit()
+        # user = self.get_user(self.email)
+        # user.online = False
+        # db.session.add(user)
+        # db.session.commit()
+        pass
 
     def login(self):
-        user = User.query.filter_by(email=self.email, password=self.password).first()
-        if not user:
-            return "No Such User Found!", 401
-        user.online = True
-        db.session.add(user)
-        db.session.commit()
-        return {"token": generate_token({"email": self.email})}
+        # user = User.query.filter_by(email=self.email, password=self.password).first()
+        # if not user:
+        #     return "No Such User Found!", 401
+        # user.online = True
+        # db.session.add(user)
+        # db.session.commit()
+        # return {"token": generate_token({"email": self.email})}
+        return {"token": "dummytoke"}
+
 
 
 # Route functions

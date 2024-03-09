@@ -26,7 +26,7 @@ const ChatPARENTOWS = ({ auth_data }) => {
 
   console.log("ChatPARENTOWS parent of profiles and chats");
   const [socket, setSocket] = useState(
-    io.connect("http://192.168.1.2:8001", {
+    io.connect("http://192.168.1.10:8001", {
       query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     })
   );
@@ -71,7 +71,7 @@ const ChatPARENTOWS = ({ auth_data }) => {
     });
 
     const connectChatSocket = () => {
-      const newChatSocket = io.connect("http://192.168.1.2:8001", {
+      const newChatSocket = io.connect("http://192.168.1.10:8001", {
         query: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       setChatSocket(newChatSocket);

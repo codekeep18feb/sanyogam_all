@@ -18,7 +18,7 @@ function IncomingCallUIL({
   const sendAGlobalEventApi = async (with_userid, token, data) => {
     try {
       const response = await fetch(
-        `http://192.168.1.2:8001/new_global_event_data/${with_userid}`,
+        `http://192.168.1.10:8001/new_global_event_data/${with_userid}`,
         {
           method: "POST",
           headers: {
@@ -256,7 +256,7 @@ function IncomingCallUIL({
                   <PhoneCallUI
                     // callStatus={"INITIALIZING"}
                     pickUpTheCall={pickUpTheCall}
-                    // incoming_call_data.to_userid={incoming_call_data.to_userid}
+                  // incoming_call_data.to_userid={incoming_call_data.to_userid}
                   />
                 )}
 

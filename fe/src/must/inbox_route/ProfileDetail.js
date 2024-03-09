@@ -17,7 +17,7 @@ export default function ProfileDetail() {
     const token = `Bearer ${JWT_TOKEN}`;
 
     const response = await fetch(
-      `http://192.168.1.2:8000/api/handle_request?to_email=${to_email}&action=${status}`,
+      `http://192.168.1.10:8000/api/handle_request?to_email=${to_email}&action=${status}`,
       {
         method: "GET",
         headers: {
@@ -46,7 +46,7 @@ export default function ProfileDetail() {
     const JWT_TOKEN = localStorage.getItem("token");
     const token = `Bearer ${JWT_TOKEN}`;
 
-    const response = await fetch(`http://192.168.1.2:8000/api/profile/${id}`, {
+    const response = await fetch(`http://192.168.1.10:8000/api/profile/${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -118,7 +118,7 @@ export default function ProfileDetail() {
           )}
 
 
-         
+
         </div>
       </div>
     );

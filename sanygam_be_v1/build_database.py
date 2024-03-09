@@ -1,6 +1,6 @@
 from datetime import datetime
 from config import app, db
-from models.models import User  # Import the Profile model
+# from models.models import User  # Import the Profile model
 
 # Define the data for users and their profiles
 PEOPLE_PROFILE_NOTES = [
